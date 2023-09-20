@@ -16,4 +16,8 @@
     <PackageReference Include="NLog" Version="5.2.4" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\SWP391.OnlineShop.Core\SWP391.OnlineShop.Core.csproj" />
+  </ItemGroup>
+
 </Project>

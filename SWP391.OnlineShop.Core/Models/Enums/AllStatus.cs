@@ -28,3 +28,15 @@ public enum CategoryType
     ProductCategory = 0,
     PostCategory = 1
 }
+
+public enum OrderStatus
+{
+    InCartDetail = 0,
+    InCartContact = 1,
+    InCartCompletion = 2,
+    WaitingConfirmBySaler = 3,
+    WaitingShipperToDeliver = 4,
+    Delivering = 5,
+    Delivered = 6,
+    Received = 7
+}
