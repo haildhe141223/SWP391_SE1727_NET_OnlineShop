@@ -1,10 +1,17 @@
+using SWP391.OnlineShop.Core.Contexts;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 
 var app = builder.Build();
-
+if (app.Environment.IsDevelopment())
+{
+    app.UseDeveloperExceptionPage();
+    var db = new OnlineShopDbInitializer();
+    db.Seed();
+}
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
 {
