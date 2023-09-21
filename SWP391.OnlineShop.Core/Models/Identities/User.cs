@@ -5,6 +5,8 @@ namespace SWP391.OnlineShop.Core.Models.Identities;
 
 public class User : IdentityUser<int>
 {
+    public string Image { get; set; }
+
     public User()
     {
         FeedBacks = new HashSet<FeedBack>();

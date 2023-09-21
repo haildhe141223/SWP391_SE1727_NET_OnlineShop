@@ -7,6 +7,13 @@ public interface IUnitOfWork : IDisposable
 {
     OnlineShopContext Context { get; }
     IProductRepository Products { get; }
+    ICategoryRepository Categories { get; }
+    IEmailRepository Emails { get; }
+    IFeedBackRepository FeedBacks { get; }
+    IOrderRepository Orders { get; }
+    IPostRepository Posts { get; }
+    ITagRepository Tags { get; }
+    IVoucherRepository Vouchers { get; }
     void Complete();
     Task<int> CompleteAsync();
 }

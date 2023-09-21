@@ -6,4 +6,25 @@
     <ImplicitUsings>enable</ImplicitUsings>
   </PropertyGroup>
 
+  <ItemGroup>
+    <PackageReference Include="Hangfire" Version="1.8.5" />
+    <PackageReference Include="MailKit" Version="4.2.0" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="6.0.22" />
+    <PackageReference Include="NLog" Version="5.2.4" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Configs\HangFire\" />
+    <Folder Include="Jobs\BaseJobs\" />
+    <Folder Include="Jobs\Implements\" />
+    <Folder Include="Logs\" />
+    <Folder Include="Controllers\" />
+    <Folder Include="Models\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\SWP391.OnlineShop.Common\SWP391.OnlineShop.Common.csproj" />
+    <ProjectReference Include="..\SWP391.OnlineShop.ServiceInterface\SWP391.OnlineShop.ServiceInterface.csproj" />
+  </ItemGroup>
+
 </Project>
