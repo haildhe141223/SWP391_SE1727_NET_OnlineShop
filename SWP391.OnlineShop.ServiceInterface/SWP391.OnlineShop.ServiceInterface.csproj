@@ -9,8 +9,6 @@
   <ItemGroup>
     <Folder Include="Loggers\" />
     <Folder Include="BaseServices\" />
-    <Folder Include="Interfaces\" />
-    <Folder Include="Services\" />
   </ItemGroup>
 
   <ItemGroup>
@@ -22,6 +20,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\SWP391.OnlineShop.Core\SWP391.OnlineShop.Core.csproj" />
+    <ProjectReference Include="..\SWP391.OnlineShop.ServiceModel\SWP391.OnlineShop.ServiceModel.csproj" />
   </ItemGroup>
 
 </Project>
