@@ -48,6 +48,8 @@ public class OnlineShopDbInitializer
 
         #endregion
 
+        context.SaveChanges();
+
         #region Add UserRoles
 
         var userRole = new UserRole
