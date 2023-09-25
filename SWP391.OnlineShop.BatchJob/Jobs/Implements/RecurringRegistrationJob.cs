@@ -43,12 +43,12 @@ public class RecurringRegistrationJob : IJobRegistration
 /// </summary>
 public class RecurringRegistrationWindowServiceJob : IJobRegistration
 {
-    public IEnumerable<IJobWebService> Jobs { get; set; }
-    public ILoggerService Logger { get; set; }
+    public IEnumerable<IJobWebService>? Jobs { get; set; }
+    public ILoggerService? Logger { get; set; }
 
     public RecurringRegistrationWindowServiceJob(
-        IEnumerable<IJobWebService> jobs,
-        ILoggerService logger
+        IEnumerable<IJobWebService>? jobs,
+        ILoggerService? logger
     )
     {
         Jobs = jobs;
@@ -59,6 +59,8 @@ public class RecurringRegistrationWindowServiceJob : IJobRegistration
     {
         try
         {
+            if (Jobs == null) return;
+
             foreach (var job in Jobs)
             {
                 RecurringJob.AddOrUpdate(job.JobName,
@@ -68,7 +70,7 @@ public class RecurringRegistrationWindowServiceJob : IJobRegistration
         }
         catch (Exception e)
         {
-            Logger.LogError($"Error in IJobWindowService Initiate: {e}");
+            Logger?.LogError($"Error in IJobWindowService Initiate: {e}");
         }
     }
 }
