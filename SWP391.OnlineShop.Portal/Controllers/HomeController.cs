@@ -1,21 +1,28 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using ServiceStack;
 using SWP391.OnlineShop.Portal.Models;
 using System.Diagnostics;
+using static SWP391.OnlineShop.ServiceModel.ServiceModels.ProductModels;
 
 namespace SWP391.OnlineShop.Portal.Controllers
 {
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
+        private readonly IJsonServiceClient _client;
 
-        public HomeController(ILogger<HomeController> logger)
+        public HomeController(ILogger<HomeController> logger, IJsonServiceClient client)
         {
             _logger = logger;
+            _client = client;
         }
 
         public IActionResult Index()
         {
-            return View();
+            var products = _client.GetAsync(new GetAllProduct {
+            
+            });
+            return View(products);
         }
 
         public IActionResult Contact()
