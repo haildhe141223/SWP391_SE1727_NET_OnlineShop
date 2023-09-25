@@ -9,32 +9,34 @@ namespace SWP391.OnlineShop.ServiceModel.ServiceModels
     public class OrderModels
     {
         [Route("/Order/GetCartDetailByUser", "GET")]
-        public class GetCartDetailByUser : IReturn<List<OrderDetailViewModel>>
+        public class GetCartDetailByUser : IReturn<List<OrderViewModel>>
         {
             public string? Email { get; set; }
         }
 
         [Route("/Order/GetCartContactByUser", "GET")]
-        public class GetCartContactByUser : IReturn<List<OrderDetailViewModel>>
+        public class GetCartContactByUser : IReturn<List<OrderViewModel>>
         {
             public string? Email { get; set; }
         }
 
         [Route("/Order/GetCartCompletionByUser", "GET")]
-        public class GetCartCompletionByUser : IReturn<List<OrderDetailViewModel>>
+        public class GetCartCompletionByUser : IReturn<List<OrderViewModel>>
         {
             public string? Email { get; set; }
         }
 
         [Route("/Order/PostAddToCart", "Post")]
-        public class PostAddToCart : IReturn<List<OrderDetailViewModel>>
+        public class PostAddToCart : IReturn<OrderViewModel>
         {
+            public string? Email { get; set; }
             public List<OrderDetail>? OrderDetails { get; set; }
-            public string CustomerName { get; set; }
-            public string CustomerAddress { get; set; }
+            public string? CustomerName { get; set; }
+            public string? CustomerAddress { get; set; }
             public Gender CustomerGender { get; set; }
-            public string CustomerEmail { get; set; }
+            public string? CustomerEmail { get; set; }
             public decimal TotalCost { get; set; }
+            public OrderStatus OrderStatus { get; set; }
         }
 
         [Route("/Order/PutUpdateCart", "Put")]
@@ -42,11 +44,13 @@ namespace SWP391.OnlineShop.ServiceModel.ServiceModels
         {
             public int Id { get; set; }
             public List<OrderDetail>? OrderDetails { get; set; }
-            public string CustomerName { get; set; }
-            public string CustomerAddress { get; set; }
+            public string? CustomerName { get; set; }
+            public string? CustomerAddress { get; set; }
             public Gender CustomerGender { get; set; }
-            public string CustomerEmail { get; set; }
+            public string? CustomerEmail { get; set; }
             public decimal TotalCost { get; set; }
+            public OrderStatus OrderStatus { get; set; }
+
         }
 
         [Route("/Order/DeleteCart", "Delete")]
