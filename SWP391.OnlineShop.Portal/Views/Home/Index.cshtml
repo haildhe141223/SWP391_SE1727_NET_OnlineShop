@@ -1,4 +1,5 @@
-﻿<!-- start banner Area -->
+﻿@model List<SWP391.OnlineShop.ServiceModel.ViewModels.Products.ProductViewModel>
+<!-- start banner Area -->
 <section class="banner-area">
     <div class="container">
         <div class="row fullscreen align-items-center justify-content-start">
@@ -186,40 +187,42 @@
             </div>
             <div class="row">
                 <!-- single product -->
-                <div class="col-lg-3 col-md-6">
-                    <div class="single-product">
-                        <img class="img-fluid" src="~/template/img/product/p1.jpg" alt="">
-                        <div class="product-details">
-                            <h6>
-                                addidas New Hammer sole
-                                for Sports person
-                            </h6>
-                            <div class="price">
-                                <h6>$150.00</h6>
-                                <h6 class="l-through">$210.00</h6>
-                            </div>
-                            <div class="prd-bottom">
+                @foreach (var product in Model)
+                {
+                    <div class="col-lg-3 col-md-6">
+                        <div class="single-product">
+                            <img class="img-fluid" src="@product.Thumbnail" alt="">
+                            <div class="product-details">
+                                <h6>
+                                    @product.ProductName
+                                </h6>
+                                <div class="price">
+                                    <h6>@product.SalePrice</h6>
+                                    <h6 class="l-through">@product.Price</h6>
+                                </div>
+                                <div class="prd-bottom">
 
-                                <a href="" class="social-info">
-                                    <span class="ti-bag"></span>
-                                    <p class="hover-text">add to bag</p>
-                                </a>
-                                <a href="" class="social-info">
-                                    <span class="lnr lnr-heart"></span>
-                                    <p class="hover-text">Wishlist</p>
-                                </a>
-                                <a href="" class="social-info">
-                                    <span class="lnr lnr-sync"></span>
-                                    <p class="hover-text">compare</p>
-                                </a>
-                                <a href="" class="social-info">
-                                    <span class="lnr lnr-move"></span>
-                                    <p class="hover-text">view more</p>
-                                </a>
+                                    <a href="" class="social-info">
+                                        <span class="ti-bag"></span>
+                                        <p class="hover-text">add to bag</p>
+                                    </a>
+                                    <a href="" class="social-info">
+                                        <span class="lnr lnr-heart"></span>
+                                        <p class="hover-text">Wishlist</p>
+                                    </a>
+                                    <a href="" class="social-info">
+                                        <span class="lnr lnr-sync"></span>
+                                        <p class="hover-text">compare</p>
+                                    </a>
+                                    <a href="" class="social-info">
+                                        <span class="lnr lnr-move"></span>
+                                        <p class="hover-text">view more</p>
+                                    </a>
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
+                }
                 <!-- single product -->
                 <div class="col-lg-3 col-md-6">
                     <div class="single-product">
