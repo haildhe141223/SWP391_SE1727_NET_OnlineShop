@@ -37,7 +37,7 @@ namespace SWP391.OnlineShop.ServiceInterface.Services
             _logger = logger;
             _userManager = userManager;
         }
-        public async Task<ProductViewModel> Delete(ProductModels.DeleteProduct request)
+        public async Task<ProductViewModel> Delete(DeleteProduct request)
         {
             var result = new ProductViewModel();
             try
@@ -61,7 +61,7 @@ namespace SWP391.OnlineShop.ServiceInterface.Services
             return result;
         }
 
-        public  List<ProductViewModel> Get(ProductModels.GetAllProduct request)
+        public List<ProductViewModel> Get(GetAllProduct request)
         {
             var result = new List<ProductViewModel>();
             try
@@ -80,7 +80,7 @@ namespace SWP391.OnlineShop.ServiceInterface.Services
             return result;
         }
 
-        public ProductViewModel Get(ProductModels.GetProductById request)
+        public ProductViewModel Get(GetProductById request)
         {
             var result = new ProductViewModel();
             try
@@ -99,7 +99,7 @@ namespace SWP391.OnlineShop.ServiceInterface.Services
             return result;
         }
 
-        public async Task<ProductViewModel> Post(ProductModels.PostAddProduct request)
+        public async Task<ProductViewModel> Post(PostAddProduct request)
         {
             var result = new ProductViewModel();
             try
@@ -124,7 +124,7 @@ namespace SWP391.OnlineShop.ServiceInterface.Services
             return result;
         }
 
-        public async Task<ProductViewModel> Put(ProductModels.PutUpdateProduct request)
+        public async Task<ProductViewModel> Put(PutUpdateProduct request)
         {
             var result = new ProductViewModel();
             try

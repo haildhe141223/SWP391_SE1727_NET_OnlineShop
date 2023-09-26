@@ -35,7 +35,7 @@ namespace SWP391.OnlineShop.ServiceInterface.Services
             _userManager = userManager;
         }
 
-        public async Task<PostViewModel> Delete(PostModels.DeletePost request)
+        public async Task<PostViewModel> Delete(DeletePost request)
         {
             var result = new PostViewModel();
             try
@@ -59,7 +59,7 @@ namespace SWP391.OnlineShop.ServiceInterface.Services
             return result;
         }
 
-        public List<PostViewModel> Get(PostModels.GetAllPost request)
+        public List<PostViewModel> Get(GetAllPost request)
         {
             var result = new List<PostViewModel>();
             try
@@ -78,7 +78,7 @@ namespace SWP391.OnlineShop.ServiceInterface.Services
             return result;
         }
 
-        public PostViewModel Get(PostModels.GetPostById request)
+        public PostViewModel Get(GetPostById request)
         {
             var result = new PostViewModel();
             try
@@ -97,7 +97,7 @@ namespace SWP391.OnlineShop.ServiceInterface.Services
             return result;
         }
 
-        public async Task<PostViewModel> Post(PostModels.PostAddPost request)
+        public async Task<PostViewModel> Post(PostAddPost request)
         {
             var result = new PostViewModel();
             try
@@ -122,7 +122,7 @@ namespace SWP391.OnlineShop.ServiceInterface.Services
             return result;
         }
 
-        public async Task<PostViewModel> Put(PostModels.PutUpdatePost request)
+        public async Task<PostViewModel> Put(PutUpdatePost request)
         {
             var result = new PostViewModel();
             try
