@@ -10,7 +10,8 @@ public class AutoMapperConfigs : Profile
     public AutoMapperConfigs()
     {
         //// Order
-        CreateMap<Order, OrderDetailViewModel>().ReverseMap();
+        CreateMap<Order, OrderViewModel>().ReverseMap();
+        CreateMap<OrderDetail, OrderDetailViewModel>().ReverseMap();
         //// Product
         CreateMap<Product, ProductViewModel>().ReverseMap();
         CreateMap<Post, PostViewModel>().ReverseMap();

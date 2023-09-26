@@ -17,6 +17,7 @@ public class OrderRepository : GenericRepository<Order, int>, IOrderRepository
     {
         var result = Context.Orders.
             Include(o => o.OrderDetails).
+            ThenInclude(od => od.Product).
             Include(o => o.User).
             Where(o => o.OrderStatus == OrderStatus.InCartCompletion
             && o.User.Email.Equals(email)).
@@ -28,6 +29,7 @@ public class OrderRepository : GenericRepository<Order, int>, IOrderRepository
     {
         var result = Context.Orders.
             Include(o => o.OrderDetails).
+            ThenInclude(od => od.Product).
             Include(o => o.User).
             Where(o => o.OrderStatus == OrderStatus.InCartContact
             && o.User.Email.Equals(email)).
@@ -39,6 +41,7 @@ public class OrderRepository : GenericRepository<Order, int>, IOrderRepository
     {
         var result = Context.Orders.
             Include(o => o.OrderDetails).
+            ThenInclude(od => od.Product).
             Include(o => o.User).
             Where(o => o.OrderStatus == OrderStatus.InCartDetail).
             ToList();
@@ -56,7 +59,8 @@ public class OrderRepository : GenericRepository<Order, int>, IOrderRepository
     public IEnumerable<Order> GetOrdersByStatus(OrderStatus status)
     {
         var result = Context.Orders
-            .Include(o => o.OrderDetails)
+            .Include(o => o.OrderDetails).
+            ThenInclude(od => od.Product)
             .Where(o => o.OrderStatus == status)
             .ToList();
         return result;
