@@ -66,7 +66,45 @@ namespace SWP391.OnlineShop.ServiceInterface.Services
             var result = new List<ProductViewModel>();
             try
             {
-                var product = _unitOfWork.Products.GetAll().ToList();
+                var product = _unitOfWork.Products.GetAll().OrderByDescending(x => x.CreatedDateTime).ToList();
+                result = _mapper.Map<List<ProductViewModel>>(product);
+                //result.StatusCode = StatusCode.Success;
+                return result;
+                //result.StatusCode = StatusCode.InternalServerError;
+
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message);
+            }
+            return result;
+        }
+
+        public ProductViewModel Get(GetHotDealProduct request)
+        {
+            var result = new ProductViewModel();
+            try
+            {
+                var product = _unitOfWork.Products.GetHotDealProduct();
+                result = _mapper.Map<ProductViewModel>(product);
+                //result.StatusCode = StatusCode.Success;
+                return result;
+                //result.StatusCode = StatusCode.InternalServerError;
+
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message);
+            }
+            return result;
+        }
+
+        public List<ProductViewModel> Get(GetDealProductOfWeek request)
+        {
+            var result = new List<ProductViewModel>();
+            try
+            {
+                var product = _unitOfWork.Products.GetDealProductOfWeek();
                 result = _mapper.Map<List<ProductViewModel>>(product);
                 //result.StatusCode = StatusCode.Success;
                 return result;
@@ -106,16 +144,16 @@ namespace SWP391.OnlineShop.ServiceInterface.Services
             {
                 var product = new Product()
                 {
-                     ProductName = request.ProductName,
-                     Thumbnail = result.Thumbnail,
-                     Amount = request.Amount,
-                     Price = request.Price,
-                     SalePrice = request.SalePrice,
-                     CategoryId = request.CategoryId,
+                    ProductName = request.ProductName,
+                    Thumbnail = result.Thumbnail,
+                    Amount = request.Amount,
+                    Price = request.Price,
+                    SalePrice = request.SalePrice,
+                    CategoryId = request.CategoryId,
                     Status = Core.Models.Enums.Status.Active
                 };
                 await _unitOfWork.Products.AddAsync(product);
-                
+
             }
             catch (Exception ex)
             {
