@@ -10,7 +10,9 @@ public interface IOrderRepository : IGenericRepository<Order, int>
 
     public IEnumerable<OrderDetail> GetOrderDetailByOrderId(int orderId);
 
-    public IEnumerable<Order> GetCartDetail();
-    public IEnumerable<Order> GetCartContact();
-    public IEnumerable<Order> GetCartCompletion();
+    public IEnumerable<Order> GetCartDetailByUser(string email);
+    public IEnumerable<Order> GetCartContactByUser(string email);
+    public IEnumerable<Order> GetCartCompletionByUser(string email);
+
+    public IEnumerable<Order> GetOrdersByUser(string email);
 }

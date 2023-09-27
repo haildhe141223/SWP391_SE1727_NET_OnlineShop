@@ -1,4 +1,5 @@
 ﻿using SWP391.OnlineShop.Core.Models.BaseEntities;
+using SWP391.OnlineShop.Core.Models.Enums;
 
 namespace SWP391.OnlineShop.Core.Models.Entities;
 
@@ -11,4 +12,5 @@ public class OrderDetail : BaseEntity<int>
     public int Quantity { get; set; }
     public decimal SalePrice { get; set; }
     public decimal UnitPrice { get; set; }
+    public OrderStatus? OrderStatus { get; set; }
 }
