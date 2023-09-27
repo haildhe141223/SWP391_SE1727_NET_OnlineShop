@@ -9,19 +9,19 @@ namespace SWP391.OnlineShop.ServiceModel.ServiceModels
     public class OrderModels
     {
         [Route("/Order/GetCartDetailByUser", "GET")]
-        public class GetCartDetailByUser : IReturn<List<OrderViewModel>>
+        public class GetCartDetailByUser : IReturn<OrderViewModel>
         {
             public string? Email { get; set; }
         }
 
         [Route("/Order/GetCartContactByUser", "GET")]
-        public class GetCartContactByUser : IReturn<List<OrderViewModel>>
+        public class GetCartContactByUser : IReturn<OrderViewModel>
         {
             public string? Email { get; set; }
         }
 
         [Route("/Order/GetCartCompletionByUser", "GET")]
-        public class GetCartCompletionByUser : IReturn<List<OrderViewModel>>
+        public class GetCartCompletionByUser : IReturn<OrderViewModel>
         {
             public string? Email { get; set; }
         }

@@ -6,9 +6,9 @@ namespace SWP391.OnlineShop.ServiceInterface.Interfaces
 {
     public interface IOrderService
     {
-        List<OrderViewModel> Get(GetCartDetailByUser request);
-        List<OrderViewModel> Get(GetCartContactByUser request);
-        List<OrderViewModel> Get(GetCartCompletionByUser request);
+        OrderViewModel Get(GetCartDetailByUser request);
+        OrderViewModel Get(GetCartContactByUser request);
+        OrderViewModel Get(GetCartCompletionByUser request);
         Task<OrderViewModel> Post(PostAddToCart request);
         Task<OrderViewModel> Put(PutUpdateCart request);
         Task<BaseResultModel> Delete(DeleteCart request);

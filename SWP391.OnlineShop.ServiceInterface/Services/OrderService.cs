@@ -67,22 +67,21 @@ namespace SWP391.OnlineShop.ServiceInterface.Services
             return result;
         }
 
-        public List<OrderViewModel> Get(GetCartDetailByUser request)
+        public OrderViewModel Get(GetCartDetailByUser request)
         {
-            var result = new List<OrderViewModel>();
+            var result = new OrderViewModel();
             _logger.LogInfo("Get Cart Detail By User");
             try
             {
-                var orderModel = _unitOfWork.Orders.GetCartDetailByUser(request.Email).ToList();
-                if (orderModel.Any())
-                {
-                    foreach (var order in orderModel)
-                    {
-                        var orderVM = _mapper.Map<OrderViewModel>(order);
-                        result.Add(orderVM);
-                    }
-                }
-            }
+				var model = _unitOfWork.Orders.GetCartDetailByUser(request.Email)
+					 .OrderByDescending(o => o.OrderDateTime)
+					 .ToList()
+					 .FirstOrDefault();
+				if (model is not null)
+				{
+					result = _mapper.Map<OrderViewModel>(model);
+				}
+			}
             catch (Exception ex)
             {
                 _logger.LogError($"GetCartDetailByUser error {ex.Message}");
@@ -90,22 +89,21 @@ namespace SWP391.OnlineShop.ServiceInterface.Services
             return result;
         }
 
-        public List<OrderViewModel> Get(GetCartContactByUser request)
+        public OrderViewModel Get(GetCartContactByUser request)
         {
-            var result = new List<OrderViewModel>();
+            var result = new OrderViewModel();
             _logger.LogInfo("Get Cart Contact By User");
             try
             {
-                var orderModel = _unitOfWork.Orders.GetCartContactByUser(request.Email).ToList();
-                if (orderModel.Any())
-                {
-                    foreach (var order in orderModel)
-                    {
-                        var orderVM = _mapper.Map<OrderViewModel>(order);
-                        result.Add(orderVM);
-                    }
-                }
-            }
+				var model = _unitOfWork.Orders.GetCartContactByUser(request.Email)
+				   .OrderByDescending(o => o.OrderDateTime)
+				   .ToList()
+				   .FirstOrDefault();
+				if (model is not null)
+				{
+					result = _mapper.Map<OrderViewModel>(model);
+				}
+			}
             catch (Exception ex)
             {
                 _logger.LogError($"GetCartContactByUser error {ex.Message}");
@@ -113,21 +111,20 @@ namespace SWP391.OnlineShop.ServiceInterface.Services
             return result;
         }
 
-        public List<OrderViewModel> Get(GetCartCompletionByUser request)
+        public OrderViewModel Get(GetCartCompletionByUser request)
         {
-            var result = new List<OrderViewModel>();
+            var result = new OrderViewModel();
             _logger.LogInfo("Get Cart Completion By User");
             try
             {
-                var orderModel = _unitOfWork.Orders.GetCartCompletionByUser(request.Email).ToList();
-                if (orderModel.Any())
+                var model = _unitOfWork.Orders.GetCartCompletionByUser(request.Email)
+                    .OrderByDescending(o => o.OrderDateTime)
+                    .ToList()
+                    .FirstOrDefault();
+                if(model is not null)
                 {
-                    foreach (var order in orderModel)
-                    {
-                        var orderVM = _mapper.Map<OrderViewModel>(order);
-                        result.Add(orderVM);
-                    }
-                }
+                    result = _mapper.Map<OrderViewModel>(model);
+				}
             }
             catch (Exception ex)
             {
