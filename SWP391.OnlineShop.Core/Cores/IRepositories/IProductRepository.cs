@@ -1,7 +1,7 @@
 ﻿using SWP391.OnlineShop.Core.Cores.Infrastructures;
 using SWP391.OnlineShop.Core.Models.Entities;
 
- 
+
 
 namespace SWP391.OnlineShop.Core.Cores.IRepositories;
 
@@ -24,4 +24,8 @@ public interface IProductRepository : IGenericRepository<Product, int>
 
 
     Task<List<Product>> GetProductsWithPaging(int skip, int take);
+
+    Task<Product> GetHotDealProduct();
+
+    Task<List<Product>> GetDealProductOfWeek();
 }

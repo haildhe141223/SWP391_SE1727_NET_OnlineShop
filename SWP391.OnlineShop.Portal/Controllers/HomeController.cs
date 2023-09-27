@@ -3,6 +3,7 @@ using ServiceStack;
 using SWP391.OnlineShop.Portal.Models;
 using SWP391.OnlineShop.ServiceInterface.Loggers;
 using SWP391.OnlineShop.ServiceModel.ServiceModels;
+using SWP391.OnlineShop.ServiceModel.ViewModels.Products;
 using System.Diagnostics;
 
 namespace SWP391.OnlineShop.Portal.Controllers
@@ -23,7 +24,23 @@ namespace SWP391.OnlineShop.Portal.Controllers
         public async Task<IActionResult> Index()
         {
             _logger.LogInfo("1. Home Index - Start");
-            var products = await _client.GetAsync(new GetAllProduct ());
+
+            //Get all products
+            var latestProducts = await _client.GetAsync(new GetAllProduct());
+
+            //Get hot deal product
+            var hotDealProduct = await _client.GetAsync(new GetHotDealProduct());
+
+            //Get deal product of week
+            var dealProductOfWeeks = await _client.GetAsync(new GetDealProductOfWeek());
+
+            var products = new HomeViewModel
+            {
+                LatestProducts = latestProducts,
+                HotDealProduct = hotDealProduct,
+                ProductsOfWeek = dealProductOfWeeks
+            };
+
             return View(products);
         }
 

@@ -94,4 +94,16 @@ public class PostRepository : GenericRepository<Post, int>, IPostRepository
         }
     }
 
+    public Task<List<Post>> GetPostsByAuthor(string author)
+    {
+        var result = new List<Post>();
+        if (Context.Posts == null) return Task.FromResult(result);
+
+        var posts = Context.Posts.Where(x => x.Author.ToLower().Equals(author.ToLower()))
+            .ToList();
+
+        result = posts.ToList();
+
+        return Task.FromResult(result);
+    }
 }
