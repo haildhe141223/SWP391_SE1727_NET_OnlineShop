@@ -34,7 +34,7 @@ namespace SWP391.OnlineShop.Portal.Controllers
 
 		public async Task<IActionResult> Index()
 		{
-			var email = "";/* User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Email)?.Value;
+			var email = "admin@gmail.com";/* User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Email)?.Value;
             if(string.IsNullOrEmpty(email))
             {
                 return RedirectToAction("Login", "Account");
@@ -83,6 +83,27 @@ namespace SWP391.OnlineShop.Portal.Controllers
 		public IActionResult Confirmation()
 		{
 			return View();
+		}
+
+		[HttpPost]
+		public async Task<IActionResult> DeleteOrderDetail(int id)
+		{
+			var result = await _client.DeleteAsync(new DeleteOrderDetail()
+			{
+				Id = id
+			});
+			return Ok(result);
+		}
+
+		[HttpPost]
+		public async Task<IActionResult> UpdateQuantity(int id, int quantity)
+		{
+			var api = await _client.PutAsync(new PutUpdateQuantity()
+			{
+				Id = id,
+				Quantity = quantity
+			});
+			return Ok(api);
 		}
 	}
 }

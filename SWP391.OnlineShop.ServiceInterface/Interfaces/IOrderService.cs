@@ -11,6 +11,8 @@ namespace SWP391.OnlineShop.ServiceInterface.Interfaces
         OrderViewModel Get(GetCartCompletionByUser request);
         Task<OrderViewModel> Post(PostAddToCart request);
         Task<OrderViewModel> Put(PutUpdateCart request);
+        Task<BaseResultModel> Put(PutUpdateQuantity request);
         Task<BaseResultModel> Delete(DeleteCart request);
-    }
+		Task<BaseResultModel> Delete(DeleteOrderDetail request);
+	}
 }
