@@ -37,20 +37,20 @@ namespace SWP391.OnlineShop.ServiceInterface.Services
             _unitOfWork = unitOfWork;
         }
 
-        public async Task<BaseResultModel> Delete(DeleteCart request)
+        public async Task<BaseResultModel> Delete(DeleteOrderDetail request)
         {
             var result = new BaseResultModel();
             _logger.LogInfo("Delete Order");
             try
             {
-                var order = await _unitOfWork.Orders.FindAsync(request.Id);
-                if (order != null)
+                var orderDetail =  _unitOfWork.Orders.GetOrderDetailByOrderDetailId(request.Id);
+                if (orderDetail == null)
                 {
-                    result.ErrorMessage = "Order not exist";
-                    result.StatusCode = Common.Enums.StatusCode.BadRequest;
+                    result.ErrorMessage = "Order Detail not exist";
+                    result.StatusCode = Common.Enums.StatusCode.NotFound;
                     return result;
                 }
-                await _unitOfWork.Orders.DeleteAsync(order);
+                 _unitOfWork.Orders.DeleteOrderDetail(request.Id);
                 var row = await _unitOfWork.CompleteAsync();
                 if (row > 0)
                 {
@@ -66,8 +66,36 @@ namespace SWP391.OnlineShop.ServiceInterface.Services
             }
             return result;
         }
-
-        public OrderViewModel Get(GetCartDetailByUser request)
+		public async Task<BaseResultModel> Delete(DeleteCart request)
+		{
+			var result = new BaseResultModel();
+			_logger.LogInfo("Delete Order");
+			try
+			{
+				var order = await _unitOfWork.Orders.FindAsync(request.Id);
+				if (order != null)
+				{
+					result.ErrorMessage = "Order not exist";
+					result.StatusCode = Common.Enums.StatusCode.BadRequest;
+					return result;
+				}
+				await _unitOfWork.Orders.DeleteAsync(order);
+				var row = await _unitOfWork.CompleteAsync();
+				if (row > 0)
+				{
+					result.StatusCode = Common.Enums.StatusCode.Success;
+					return result;
+				}
+				result.StatusCode = Common.Enums.StatusCode.InternalServerError;
+				return result;
+			}
+			catch (Exception ex)
+			{
+				_logger.LogError($"Delete Cart Error {ex.Message}");
+			}
+			return result;
+		}
+		public OrderViewModel Get(GetCartDetailByUser request)
         {
             var result = new OrderViewModel();
             _logger.LogInfo("Get Cart Detail By User");
@@ -199,5 +227,28 @@ namespace SWP391.OnlineShop.ServiceInterface.Services
             }
             return result;
         }
-    }
+		public async Task<BaseResultModel> Put(PutUpdateQuantity request)
+		{
+			var result = new OrderViewModel();
+			try
+			{
+				var orderDetail = _unitOfWork.Orders.GetOrderDetailByOrderDetailId(request.Id);
+
+				if (orderDetail == null)
+				{
+					result.StatusCode = StatusCode.NotFound;
+					return result;
+				}
+                orderDetail.Quantity = request.Quantity;
+				var rows = await _unitOfWork.CompleteAsync();
+				result.StatusCode = rows > 0 ? StatusCode.Success : StatusCode.InternalServerError;
+			}
+			catch (Exception ex)
+			{
+				_logger.LogError($"PutUpdateCart error {ex.Message}");
+			}
+			return result;
+		}
+		
+	}
 }
