@@ -14,6 +14,7 @@ public interface IUnitOfWork : IDisposable
     IPostRepository Posts { get; }
     ITagRepository Tags { get; }
     IVoucherRepository Vouchers { get; }
+    ISettingRepository Settings { get; }
     void Complete();
     Task<int> CompleteAsync();
 }
