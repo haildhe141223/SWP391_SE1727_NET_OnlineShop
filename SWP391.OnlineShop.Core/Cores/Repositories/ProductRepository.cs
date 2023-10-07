@@ -129,14 +129,17 @@ public class ProductRepository : GenericRepository<Product, int>, IProductReposi
     }
 
 
-    public Task<Product> GetHotDealProduct()
+    public Task<List<Product>> GetHotDealProduct()
     {
-        var result = new Product();
+        var result = new List<Product>();
         if (Context.OrderDetails == null) return Task.FromResult(result);
         var products = Context
                         .OrderDetails
-                        .MaxBy(x => x.ProductId)
-                        .Product;
+                        .GroupBy(x => x.Product.Id)
+                        .OrderByDescending(g => g.Count())
+                        .SelectMany(g => g.Select(p => p.Product))
+                        .Take(5)
+                        .ToList();
 
         result = products;
 
@@ -166,5 +169,17 @@ public class ProductRepository : GenericRepository<Product, int>, IProductReposi
         return Task.FromResult(result);
     }
 
+    public Task<List<Product>> GetProductFeedbackById(int productId)
+    {
+        var result = new List<Product>();
+        if (Context.Products == null) return Task.FromResult(result);
 
+        var products = Context.Products
+            .Where(x => x.Id == productId).Include(x => x.FeedBacks)
+            .ToList();
+
+        result = products.ToList();
+
+        return Task.FromResult(result);
+    }
 }
