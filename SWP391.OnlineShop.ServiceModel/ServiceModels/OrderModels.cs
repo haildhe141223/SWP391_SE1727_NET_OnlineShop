@@ -26,7 +26,13 @@ namespace SWP391.OnlineShop.ServiceModel.ServiceModels
             public string? Email { get; set; }
         }
 
-        [Route("/Order/PostAddToCart", "POST")]
+		[Route("/Order/GetCartInfo", "GET")]
+		public class GetCartInfo : IReturn<OrderViewModel>
+		{
+			public int Id { get; set; }
+		}
+
+		[Route("/Order/PostAddToCart", "POST")]
         public class PostAddToCart : IReturn<OrderViewModel>
         {
             public string? Email { get; set; }
@@ -51,6 +57,15 @@ namespace SWP391.OnlineShop.ServiceModel.ServiceModels
             public decimal TotalCost { get; set; }
             public OrderStatus OrderStatus { get; set; }
 
+        }
+
+		[Route("/Order/PutUpdateCartToContact", "PUT")]
+		public class PutUpdateCartToContact : IReturn<BaseResultModel>
+		{
+			public int Id { get; set; }
+			public decimal TotalCost { get; set; }
+			public OrderStatus OrderStatus { get; set; }
+            public string? Address { get; set; }
         }
 
 		[Route("/Order/PutUpdateQuantity", "PUT")]
