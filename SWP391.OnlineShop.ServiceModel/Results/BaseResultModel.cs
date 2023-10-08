@@ -5,5 +5,5 @@ namespace SWP391.OnlineShop.ServiceModel.Results;
 public class BaseResultModel
 {
     public StatusCode StatusCode { get; set; }
-    public string? ErrorMessage { get; set; }
+    public string ErrorMessage { get; set; }
 }

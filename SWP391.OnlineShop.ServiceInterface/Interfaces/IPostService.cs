@@ -1,10 +1,6 @@
-﻿using SWP391.OnlineShop.ServiceModel.ServiceModels;
+﻿using SWP391.OnlineShop.ServiceModel.Results;
+using SWP391.OnlineShop.ServiceModel.ServiceModels;
 using SWP391.OnlineShop.ServiceModel.ViewModels.Products;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace SWP391.OnlineShop.ServiceInterface.Interfaces
 {
@@ -78,6 +74,6 @@ namespace SWP391.OnlineShop.ServiceInterface.Interfaces
         /// </summary>
         /// <param name="request"></param>
         /// <returns>appendix of selected id</returns>
-        Task<PostViewModel> Put(PutUpdatePost request);
+        BaseResultModel Put(PutUpdatePost request);
     }
 }
