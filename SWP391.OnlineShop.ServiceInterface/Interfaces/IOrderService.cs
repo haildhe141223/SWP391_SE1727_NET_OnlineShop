@@ -6,11 +6,15 @@ namespace SWP391.OnlineShop.ServiceInterface.Interfaces
 {
     public interface IOrderService
     {
-        Task<List<OrderDetailViewModel>> Get(GetCartDetailByUser request);
-        Task<List<OrderDetailViewModel>> Get(GetCartContactByUser request);
-        Task<List<OrderDetailViewModel>> Get(GetCartCompletionByUser request);
-        Task<List<OrderDetailViewModel>> Post(PostAddToCart request);
-        Task<List<OrderDetailViewModel>> Put(PutUpdateCart request);
+        OrderViewModel Get(GetCartDetailByUser request);
+        OrderViewModel Get(GetCartContactByUser request);
+        OrderViewModel Get(GetCartCompletionByUser request);
+		OrderViewModel Get(GetCartInfo request);
+		Task<OrderViewModel> Post(PostAddToCart request);
+        Task<OrderViewModel> Put(PutUpdateCart request);
+        Task<OrderViewModel> Put(PutUpdateCartToContact request);
+        Task<BaseResultModel> Put(PutUpdateQuantity request);
         Task<BaseResultModel> Delete(DeleteCart request);
-    }
+		Task<BaseResultModel> Delete(DeleteOrderDetail request);
+	}
 }

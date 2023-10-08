@@ -125,6 +125,39 @@ namespace SWP391.OnlineShop.Core.Migrations
                     b.ToTable("UserTokens", (string)null);
                 });
 
+            modelBuilder.Entity("SWP391.OnlineShop.Core.Models.Entities.Address", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<DateTime>("CreatedDateTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("FullAddress")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsDefault")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime>("ModifiedDateTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Addresses");
+                });
+
             modelBuilder.Entity("SWP391.OnlineShop.Core.Models.Entities.Category", b =>
                 {
                     b.Property<int>("Id")
@@ -151,6 +184,36 @@ namespace SWP391.OnlineShop.Core.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Categories");
+                });
+
+            modelBuilder.Entity("SWP391.OnlineShop.Core.Models.Entities.District", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<DateTime>("CreatedDateTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("DistrictName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("ModifiedDateTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("ProvinceId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ProvinceId");
+
+                    b.ToTable("Districts");
                 });
 
             modelBuilder.Entity("SWP391.OnlineShop.Core.Models.Entities.Email", b =>
@@ -275,7 +338,7 @@ namespace SWP391.OnlineShop.Core.Migrations
                     b.Property<DateTime>("OrderDateTime")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("OrderStatus")
+                    b.Property<int?>("OrderStatus")
                         .HasColumnType("int");
 
                     b.Property<int>("Status")
@@ -306,6 +369,9 @@ namespace SWP391.OnlineShop.Core.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<int>("OrderId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("OrderStatus")
                         .HasColumnType("int");
 
                     b.Property<int>("ProductId")
@@ -514,6 +580,31 @@ namespace SWP391.OnlineShop.Core.Migrations
                     b.ToTable("ProductVouchers");
                 });
 
+            modelBuilder.Entity("SWP391.OnlineShop.Core.Models.Entities.Province", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<DateTime>("CreatedDateTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("ModifiedDateTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("ProvinceName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Provinces");
+                });
+
             modelBuilder.Entity("SWP391.OnlineShop.Core.Models.Entities.Tag", b =>
                 {
                     b.Property<int>("Id")
@@ -611,6 +702,36 @@ namespace SWP391.OnlineShop.Core.Migrations
                     b.HasIndex("CreatedBy");
 
                     b.ToTable("Vouchers");
+                });
+
+            modelBuilder.Entity("SWP391.OnlineShop.Core.Models.Entities.Ward", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<DateTime>("CreatedDateTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("DistrictId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("ModifiedDateTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
+
+                    b.Property<string>("WardName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("DistrictId");
+
+                    b.ToTable("Wards");
                 });
 
             modelBuilder.Entity("SWP391.OnlineShop.Core.Models.Identities.Role", b =>
@@ -763,6 +884,28 @@ namespace SWP391.OnlineShop.Core.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("SWP391.OnlineShop.Core.Models.Entities.Address", b =>
+                {
+                    b.HasOne("SWP391.OnlineShop.Core.Models.Identities.User", "User")
+                        .WithMany("Addresses")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("SWP391.OnlineShop.Core.Models.Entities.District", b =>
+                {
+                    b.HasOne("SWP391.OnlineShop.Core.Models.Entities.Province", "Province")
+                        .WithMany("Districts")
+                        .HasForeignKey("ProvinceId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Province");
                 });
 
             modelBuilder.Entity("SWP391.OnlineShop.Core.Models.Entities.FeedBack", b =>
@@ -921,11 +1064,27 @@ namespace SWP391.OnlineShop.Core.Migrations
                     b.Navigation("User");
                 });
 
+            modelBuilder.Entity("SWP391.OnlineShop.Core.Models.Entities.Ward", b =>
+                {
+                    b.HasOne("SWP391.OnlineShop.Core.Models.Entities.District", "District")
+                        .WithMany("Wards")
+                        .HasForeignKey("DistrictId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("District");
+                });
+
             modelBuilder.Entity("SWP391.OnlineShop.Core.Models.Entities.Category", b =>
                 {
                     b.Navigation("Posts");
 
                     b.Navigation("Products");
+                });
+
+            modelBuilder.Entity("SWP391.OnlineShop.Core.Models.Entities.District", b =>
+                {
+                    b.Navigation("Wards");
                 });
 
             modelBuilder.Entity("SWP391.OnlineShop.Core.Models.Entities.Order", b =>
@@ -949,6 +1108,11 @@ namespace SWP391.OnlineShop.Core.Migrations
                     b.Navigation("ProductVouchers");
                 });
 
+            modelBuilder.Entity("SWP391.OnlineShop.Core.Models.Entities.Province", b =>
+                {
+                    b.Navigation("Districts");
+                });
+
             modelBuilder.Entity("SWP391.OnlineShop.Core.Models.Entities.Tag", b =>
                 {
                     b.Navigation("PostTags");
@@ -965,6 +1129,8 @@ namespace SWP391.OnlineShop.Core.Migrations
 
             modelBuilder.Entity("SWP391.OnlineShop.Core.Models.Identities.User", b =>
                 {
+                    b.Navigation("Addresses");
+
                     b.Navigation("FeedBacks");
 
                     b.Navigation("Orders");
