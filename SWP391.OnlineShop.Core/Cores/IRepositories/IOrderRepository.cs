@@ -6,13 +6,19 @@ namespace SWP391.OnlineShop.Core.Cores.IRepositories;
 
 public interface IOrderRepository : IGenericRepository<Order, int>
 {
-    public IEnumerable<Order> GetOrdersByStatus(OrderStatus status);
+	IEnumerable<Order> GetOrdersByStatus(OrderStatus status);
 
-    public IEnumerable<OrderDetail> GetOrderDetailByOrderId(int orderId);
+	IEnumerable<OrderDetail> GetOrderDetailByOrderId(int orderId);
 
-    public IEnumerable<Order> GetCartDetailByUser(string email);
-    public IEnumerable<Order> GetCartContactByUser(string email);
-    public IEnumerable<Order> GetCartCompletionByUser(string email);
+	IEnumerable<Order> GetCartDetailByUser(string email);
+	IEnumerable<Order> GetCartContactByUser(string email);
+	IEnumerable<Order> GetCartCompletionByUser(string email);
 
-    public IEnumerable<Order> GetOrdersByUser(string email);
+	IEnumerable<Order> GetOrdersByUser(string email);
+	void DeleteOrderDetail(int id);
+	void UpdateOrderDetailQuantity(int id, int quantity);
+	void UpdateOrderStatusBy(int id, OrderStatus orderStatus);
+	OrderDetail GetOrderDetailByOrderDetailId(int orderDetailId);
+
+	Order GetOrderInfoById(int id);
 }
