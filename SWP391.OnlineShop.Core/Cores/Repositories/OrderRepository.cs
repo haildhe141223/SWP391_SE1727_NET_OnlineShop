@@ -105,4 +105,19 @@ public class OrderRepository : GenericRepository<Order, int>, IOrderRepository
 		var orderDetail = Context.OrderDetails.Find(id);
 		orderDetail.Quantity = quantity;
 	}
+
+	public Order GetOrderInfoById(int id)
+	{
+		var result = Context.Orders
+			.Include(o => o.OrderDetails)
+			.ThenInclude(o => o.Product)
+			.Where(o => o.Id == id && o.Status == Status.Active).FirstOrDefault();
+		return result;
+	}
+
+	public void UpdateOrderStatusBy(int id, OrderStatus orderStatus)
+	{
+		var orderDetail = Context.OrderDetails.Find(id);
+		orderDetail.OrderStatus = orderStatus;
+	}
 }

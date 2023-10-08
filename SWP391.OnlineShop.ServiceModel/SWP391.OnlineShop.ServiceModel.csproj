@@ -7,6 +7,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="PayPal" Version="2.0.0-rc2" />
     <PackageReference Include="ServiceStack" Version="6.10.0" />
   </ItemGroup>
 

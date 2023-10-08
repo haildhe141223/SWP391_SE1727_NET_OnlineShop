@@ -8,13 +8,12 @@ using SWP391.OnlineShop.ServiceInterface.BaseServices;
 using SWP391.OnlineShop.ServiceInterface.Interfaces;
 using SWP391.OnlineShop.ServiceInterface.Loggers;
 using SWP391.OnlineShop.ServiceModel.Results;
-using SWP391.OnlineShop.ServiceModel.ServiceModels;
 using SWP391.OnlineShop.ServiceModel.ViewModels.Cart;
 using static SWP391.OnlineShop.ServiceModel.ServiceModels.OrderModels;
 
 namespace SWP391.OnlineShop.ServiceInterface.Services
 {
-    public class OrderService : BaseService, IOrderService
+	public class OrderService : BaseService, IOrderService
     {
         private readonly ILoggerService _logger;
         private readonly IMapper _mapper;
@@ -161,7 +160,31 @@ namespace SWP391.OnlineShop.ServiceInterface.Services
             return result;
         }
 
-        public async Task<OrderViewModel> Post(PostAddToCart request)
+		public OrderViewModel Get(GetCartInfo request)
+        {
+			var result = new OrderViewModel();
+			_logger.LogInfo("Get Cart Completion By User");
+			try
+			{
+                var model = _unitOfWork.Orders.GetOrderInfoById(request.Id);
+				if (model is not null)
+				{
+					result = _mapper.Map<OrderViewModel>(model);
+                }
+                else
+                {
+                    result.ErrorMessage = "Not found";
+                    result.StatusCode = StatusCode.NotFound;
+                }
+			}
+			catch (Exception ex)
+			{
+				_logger.LogError($"GetCartCompletionByUser error {ex.Message}");
+			}
+			return result;
+		}
+
+		public async Task<OrderViewModel> Post(PostAddToCart request)
         {
             var result = new OrderViewModel();
             try
@@ -227,6 +250,34 @@ namespace SWP391.OnlineShop.ServiceInterface.Services
             }
             return result;
         }
+
+		public async Task<OrderViewModel> Put(PutUpdateCartToContact request)
+        {
+			var result = new OrderViewModel();
+			try
+			{
+				var order = _unitOfWork.Orders.GetById(request.Id);
+				if (order == null)
+				{
+					result.StatusCode = StatusCode.InternalServerError;
+					return result;
+				}
+				order.OrderStatus = request.OrderStatus;
+				order.TotalCost = request.TotalCost;
+                if (!string.IsNullOrEmpty(request.Address))
+                {
+                    order.CustomerAddress = request.Address;
+                }
+				_unitOfWork.Orders.Update(order);
+				var rows = await _unitOfWork.CompleteAsync();
+				result.StatusCode = rows > 0 ? StatusCode.Success : StatusCode.InternalServerError;
+			}
+			catch (Exception ex)
+			{
+				_logger.LogError($"PutUpdateCartToContact error {ex.Message}");
+			}
+			return result;
+		}
 		public async Task<BaseResultModel> Put(PutUpdateQuantity request)
 		{
 			var result = new OrderViewModel();
@@ -250,5 +301,6 @@ namespace SWP391.OnlineShop.ServiceInterface.Services
 			return result;
 		}
 		
+
 	}
 }
