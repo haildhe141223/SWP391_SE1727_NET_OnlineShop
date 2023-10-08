@@ -1,7 +1,5 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Identity;
-using Newtonsoft.Json;
-using SWP391.OnlineShop.Common.Enums;
 using SWP391.OnlineShop.Core.Cores.UnitOfWork;
 using SWP391.OnlineShop.Core.Models.Entities;
 using SWP391.OnlineShop.Core.Models.Identities;
@@ -10,12 +8,6 @@ using SWP391.OnlineShop.ServiceInterface.Interfaces;
 using SWP391.OnlineShop.ServiceInterface.Loggers;
 using SWP391.OnlineShop.ServiceModel.ServiceModels;
 using SWP391.OnlineShop.ServiceModel.ViewModels.Products;
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace SWP391.OnlineShop.ServiceInterface.Services
 {
@@ -37,7 +29,7 @@ namespace SWP391.OnlineShop.ServiceInterface.Services
             _logger = logger;
             _userManager = userManager;
         }
-        public async Task<ProductViewModel> Delete(ProductModels.DeleteProduct request)
+        public async Task<ProductViewModel> Delete(DeleteProduct request)
         {
             var result = new ProductViewModel();
             try
@@ -61,12 +53,12 @@ namespace SWP391.OnlineShop.ServiceInterface.Services
             return result;
         }
 
-        public  List<ProductViewModel> Get(ProductModels.GetAllProduct request)
+        public List<ProductViewModel> Get(GetAllProduct request)
         {
             var result = new List<ProductViewModel>();
             try
             {
-                var product = _unitOfWork.Products.GetAll().ToList();
+                var product = _unitOfWork.Products.GetAll().OrderByDescending(x => x.CreatedDateTime).ToList();
                 result = _mapper.Map<List<ProductViewModel>>(product);
                 //result.StatusCode = StatusCode.Success;
                 return result;
@@ -80,7 +72,45 @@ namespace SWP391.OnlineShop.ServiceInterface.Services
             return result;
         }
 
-        public ProductViewModel Get(ProductModels.GetProductById request)
+        public List<ProductViewModel> Get(GetHotDealProduct request)
+        {
+            var result = new List<ProductViewModel>();
+            try
+            {
+                var products = _unitOfWork.Products.GetHotDealProduct();
+                result = _mapper.Map<List<ProductViewModel>>(products);
+                //result.StatusCode = StatusCode.Success;
+                return result;
+                //result.StatusCode = StatusCode.InternalServerError;
+
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message);
+            }
+            return result;
+        }
+
+        public List<ProductViewModel> Get(GetDealProductOfWeek request)
+        {
+            var result = new List<ProductViewModel>();
+            try
+            {
+                var product = _unitOfWork.Products.GetDealProductOfWeek();
+                result = _mapper.Map<List<ProductViewModel>>(product);
+                //result.StatusCode = StatusCode.Success;
+                return result;
+                //result.StatusCode = StatusCode.InternalServerError;
+
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message);
+            }
+            return result;
+        }
+
+        public ProductViewModel Get(GetProductById request)
         {
             var result = new ProductViewModel();
             try
@@ -99,23 +129,17 @@ namespace SWP391.OnlineShop.ServiceInterface.Services
             return result;
         }
 
-        public async Task<ProductViewModel> Post(ProductModels.PostAddProduct request)
+        public ProductViewModel Get(GetProductFeedbackById request)
         {
             var result = new ProductViewModel();
             try
             {
-                var product = new Product()
+                var product = _unitOfWork.Products.GetProductFeedbackById(request.ProductId);
+                if (product != null)
                 {
-                     ProductName = request.ProductName,
-                     Thumbnail = result.Thumbnail,
-                     Amount = request.Amount,
-                     Price = request.Price,
-                     SalePrice = request.SalePrice,
-                     CategoryId = request.CategoryId,
-                    Status = Core.Models.Enums.Status.Active
-                };
-                await _unitOfWork.Products.AddAsync(product);
-                
+                    result = _mapper.Map<ProductViewModel>(product);
+                    //result.StatusCode = StatusCode.Success;
+                }
             }
             catch (Exception ex)
             {
@@ -124,22 +148,46 @@ namespace SWP391.OnlineShop.ServiceInterface.Services
             return result;
         }
 
-        public async Task<ProductViewModel> Put(ProductModels.PutUpdateProduct request)
+        public async Task<ProductViewModel> Post(PostAddProduct request)
         {
             var result = new ProductViewModel();
             try
             {
-                var product = _unitOfWork.Products.GetById(request.Id);
-                if (product == null)
+                var product = new Product()
                 {
-                    //result.StatusCode = StatusCode.InternalServerError;
-                    //return result;
-                }
-                product.ProductName = request.ProductName;
+                    ProductName = request.ProductName,
+                    Thumbnail = result.Thumbnail,
+                    Amount = request.Amount,
+                    Price = request.Price,
+                    SalePrice = request.SalePrice,
+                    CategoryId = request.CategoryId,
+                    Status = Core.Models.Enums.Status.Active
+                };
+                await _unitOfWork.Products.AddAsync(product);
 
-                _unitOfWork.Products.Update(product);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message);
+            }
+            return result;
+        }
+
+        public async Task<ProductViewModel> Put(PutUpdateProduct request)
+        {
+            var result = new ProductViewModel();
+            try
+            {
+                var product = await _unitOfWork.Products.GetByIdAsync(request.Id);
+
+                if (product != null)
+                {
+                    product.ProductName = request.ProductName;
+
+                    _unitOfWork.Products.Update(product);
+                }
+
                 var rows = await _unitOfWork.CompleteAsync();
-                //result.StatusCode = rows > 0 ? StatusCode.Success : StatusCode.InternalServerError;
             }
             catch (Exception ex)
             {
