@@ -75,10 +75,10 @@ public class PostRepository : GenericRepository<Post, int>, IPostRepository
 
         result = posts.ToList();
 
-        return Task.FromResult(result); throw new NotImplementedException();
+        return Task.FromResult(result);
     }
 
-    public override void Add(Post? entity)
+    public override void Add(Post entity)
     {
         if (entity != null && Context.Posts != null)
         {
@@ -86,7 +86,7 @@ public class PostRepository : GenericRepository<Post, int>, IPostRepository
         }
     }
 
-    public override async Task AddAsync(Post? entity)
+    public override async Task AddAsync(Post entity)
     {
         if (entity != null && Context.Posts != null)
         {
