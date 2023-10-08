@@ -37,20 +37,20 @@ namespace SWP391.OnlineShop.ServiceInterface.Services
             _unitOfWork = unitOfWork;
         }
 
-        public async Task<BaseResultModel> Delete(DeleteCart request)
+        public async Task<BaseResultModel> Delete(DeleteOrderDetail request)
         {
             var result = new BaseResultModel();
             _logger.LogInfo("Delete Order");
             try
             {
-                var order = await _unitOfWork.Orders.FindAsync(request.Id);
-                if (order != null)
+                var orderDetail =  _unitOfWork.Orders.GetOrderDetailByOrderDetailId(request.Id);
+                if (orderDetail == null)
                 {
-                    result.ErrorMessage = "Order not exist";
-                    result.StatusCode = Common.Enums.StatusCode.BadRequest;
+                    result.ErrorMessage = "Order Detail not exist";
+                    result.StatusCode = Common.Enums.StatusCode.NotFound;
                     return result;
                 }
-                await _unitOfWork.Orders.DeleteAsync(order);
+                 _unitOfWork.Orders.DeleteOrderDetail(request.Id);
                 var row = await _unitOfWork.CompleteAsync();
                 if (row > 0)
                 {
@@ -66,23 +66,50 @@ namespace SWP391.OnlineShop.ServiceInterface.Services
             }
             return result;
         }
-
-        public List<OrderViewModel> Get(GetCartDetailByUser request)
+		public async Task<BaseResultModel> Delete(DeleteCart request)
+		{
+			var result = new BaseResultModel();
+			_logger.LogInfo("Delete Order");
+			try
+			{
+				var order = await _unitOfWork.Orders.FindAsync(request.Id);
+				if (order != null)
+				{
+					result.ErrorMessage = "Order not exist";
+					result.StatusCode = Common.Enums.StatusCode.BadRequest;
+					return result;
+				}
+				await _unitOfWork.Orders.DeleteAsync(order);
+				var row = await _unitOfWork.CompleteAsync();
+				if (row > 0)
+				{
+					result.StatusCode = Common.Enums.StatusCode.Success;
+					return result;
+				}
+				result.StatusCode = Common.Enums.StatusCode.InternalServerError;
+				return result;
+			}
+			catch (Exception ex)
+			{
+				_logger.LogError($"Delete Cart Error {ex.Message}");
+			}
+			return result;
+		}
+		public OrderViewModel Get(GetCartDetailByUser request)
         {
-            var result = new List<OrderViewModel>();
+            var result = new OrderViewModel();
             _logger.LogInfo("Get Cart Detail By User");
             try
             {
-                var orderModel = _unitOfWork.Orders.GetCartDetailByUser(request.Email).ToList();
-                if (orderModel.Any())
-                {
-                    foreach (var order in orderModel)
-                    {
-                        var orderVM = _mapper.Map<OrderViewModel>(order);
-                        result.Add(orderVM);
-                    }
-                }
-            }
+				var model = _unitOfWork.Orders.GetCartDetailByUser(request.Email)
+					 .OrderByDescending(o => o.OrderDateTime)
+					 .ToList()
+					 .FirstOrDefault();
+				if (model is not null)
+				{
+					result = _mapper.Map<OrderViewModel>(model);
+				}
+			}
             catch (Exception ex)
             {
                 _logger.LogError($"GetCartDetailByUser error {ex.Message}");
@@ -90,22 +117,21 @@ namespace SWP391.OnlineShop.ServiceInterface.Services
             return result;
         }
 
-        public List<OrderViewModel> Get(GetCartContactByUser request)
+        public OrderViewModel Get(GetCartContactByUser request)
         {
-            var result = new List<OrderViewModel>();
+            var result = new OrderViewModel();
             _logger.LogInfo("Get Cart Contact By User");
             try
             {
-                var orderModel = _unitOfWork.Orders.GetCartContactByUser(request.Email).ToList();
-                if (orderModel.Any())
-                {
-                    foreach (var order in orderModel)
-                    {
-                        var orderVM = _mapper.Map<OrderViewModel>(order);
-                        result.Add(orderVM);
-                    }
-                }
-            }
+				var model = _unitOfWork.Orders.GetCartContactByUser(request.Email)
+				   .OrderByDescending(o => o.OrderDateTime)
+				   .ToList()
+				   .FirstOrDefault();
+				if (model is not null)
+				{
+					result = _mapper.Map<OrderViewModel>(model);
+				}
+			}
             catch (Exception ex)
             {
                 _logger.LogError($"GetCartContactByUser error {ex.Message}");
@@ -113,21 +139,20 @@ namespace SWP391.OnlineShop.ServiceInterface.Services
             return result;
         }
 
-        public List<OrderViewModel> Get(GetCartCompletionByUser request)
+        public OrderViewModel Get(GetCartCompletionByUser request)
         {
-            var result = new List<OrderViewModel>();
+            var result = new OrderViewModel();
             _logger.LogInfo("Get Cart Completion By User");
             try
             {
-                var orderModel = _unitOfWork.Orders.GetCartCompletionByUser(request.Email).ToList();
-                if (orderModel.Any())
+                var model = _unitOfWork.Orders.GetCartCompletionByUser(request.Email)
+                    .OrderByDescending(o => o.OrderDateTime)
+                    .ToList()
+                    .FirstOrDefault();
+                if(model is not null)
                 {
-                    foreach (var order in orderModel)
-                    {
-                        var orderVM = _mapper.Map<OrderViewModel>(order);
-                        result.Add(orderVM);
-                    }
-                }
+                    result = _mapper.Map<OrderViewModel>(model);
+				}
             }
             catch (Exception ex)
             {
@@ -202,5 +227,28 @@ namespace SWP391.OnlineShop.ServiceInterface.Services
             }
             return result;
         }
-    }
+		public async Task<BaseResultModel> Put(PutUpdateQuantity request)
+		{
+			var result = new OrderViewModel();
+			try
+			{
+				var orderDetail = _unitOfWork.Orders.GetOrderDetailByOrderDetailId(request.Id);
+
+				if (orderDetail == null)
+				{
+					result.StatusCode = StatusCode.NotFound;
+					return result;
+				}
+                orderDetail.Quantity = request.Quantity;
+				var rows = await _unitOfWork.CompleteAsync();
+				result.StatusCode = rows > 0 ? StatusCode.Success : StatusCode.InternalServerError;
+			}
+			catch (Exception ex)
+			{
+				_logger.LogError($"PutUpdateCart error {ex.Message}");
+			}
+			return result;
+		}
+		
+	}
 }
