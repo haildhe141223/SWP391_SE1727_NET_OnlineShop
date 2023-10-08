@@ -1,4 +1,6 @@
-﻿using System;
+﻿using SWP391.OnlineShop.Core.Models.Entities;
+using SWP391.OnlineShop.Core.Models.Enums;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,6 +10,7 @@ using SWP391.OnlineShop.Core.Models.Entities;
 
 namespace SWP391.OnlineShop.ServiceModel.ViewModels.Products
 {
+
 	public class ProductViewModel
 	{
 		public int Id { get; set; }
@@ -18,8 +21,10 @@ namespace SWP391.OnlineShop.ServiceModel.ViewModels.Products
 		public int Amount { get; set; }
 		public decimal Price { get; set; }
 		public decimal SalePrice { get; set; }
+    public Status Status { get; set; }
 		public SWP391.OnlineShop.Core.Models.Entities.Category? Category { get; set; }
 		public ICollection<FeedBack>? FeedBacks { get; set; }
 
 	}
+
 }

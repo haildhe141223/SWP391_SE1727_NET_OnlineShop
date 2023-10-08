@@ -28,6 +28,63 @@ namespace SWP391.OnlineShop.Portal.Controllers
 
             return View(latestProducts);
         }
-        
+
+        public IActionResult AddProduct()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> AddProduct(ProductViewModel request)
+        {
+            await _client.PostAsync(new PostAddProduct
+            {
+                ProductName = request.ProductName,
+                Description = request.Description,
+                Amount = request.Amount,
+                Price = request.Price,
+                SalePrice = request.SalePrice,
+                Thumbnail = request.Thumbnail,
+                CategoryId = request.CategoryId,
+            });
+            return RedirectToAction("Index");
+        }
+
+        public async Task<IActionResult> EditProduct(int id)
+        {
+
+            var product = await _client.GetAsync(new GetProductById
+            {
+                ProductId = id
+            });
+            return View(product);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> EditProduct(ProductViewModel request)
+        {
+            await _client.PutAsync(new PutUpdateProduct
+            {
+                ProductName = request.ProductName,
+                Description = request.Description,
+                Amount = request.Amount,
+                Price = request.Price,
+                SalePrice = request.SalePrice,
+                Thumbnail = request.Thumbnail,
+                CategoryId = request.CategoryId
+            });
+            return RedirectToAction("Index");
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> DeleteProduct(int id)
+        {
+            var product = await _client.DeleteAsync(new DeleteProduct
+            {
+                ProductId = id
+            });
+            return RedirectToAction("Index");
+        }
+
     }
 }
