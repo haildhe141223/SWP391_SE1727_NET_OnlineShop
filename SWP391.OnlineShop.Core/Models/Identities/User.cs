@@ -13,9 +13,11 @@ public class User : IdentityUser<int>
         Orders = new HashSet<Order>();
         UserVouchers = new HashSet<UserVoucher>();
         Vouchers = new HashSet<Voucher>();
+		Addresses = new HashSet<Address>();
     }
     public ICollection<FeedBack> FeedBacks { get; set; }
     public ICollection<Order> Orders { get; set; }
     public ICollection<UserVoucher> UserVouchers { get; set; }
     public ICollection<Voucher> Vouchers { get; set; }
+    public ICollection<Address> Addresses { get; set; }
 }
