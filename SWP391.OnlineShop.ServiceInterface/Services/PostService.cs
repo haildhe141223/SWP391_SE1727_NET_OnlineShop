@@ -35,7 +35,7 @@ namespace SWP391.OnlineShop.ServiceInterface.Services
             _userManager = userManager;
         }
 
-        public async Task<PostViewModel> Delete(PostModels.DeletePost request)
+        public async Task<PostViewModel> Delete(DeletePost request)
         {
             var result = new PostViewModel();
             try
@@ -59,7 +59,7 @@ namespace SWP391.OnlineShop.ServiceInterface.Services
             return result;
         }
 
-        public List<PostViewModel> Get(PostModels.GetAllPost request)
+        public List<PostViewModel> Get(GetAllPost request)
         {
             var result = new List<PostViewModel>();
             try
@@ -78,7 +78,7 @@ namespace SWP391.OnlineShop.ServiceInterface.Services
             return result;
         }
 
-        public PostViewModel Get(PostModels.GetPostById request)
+        public PostViewModel Get(GetPostById request)
         {
             var result = new PostViewModel();
             try
@@ -97,7 +97,109 @@ namespace SWP391.OnlineShop.ServiceInterface.Services
             return result;
         }
 
-        public async Task<PostViewModel> Post(PostModels.PostAddPost request)
+        public List<PostViewModel> Get(GetPagingPost request)
+        {
+            var result = new List<PostViewModel>();
+            try
+            {
+                var post = _unitOfWork.Posts.GetAll()
+                            .Skip(request.Skip)
+                            .Take(request.Take)
+                            .ToList();
+                result = _mapper.Map<List<PostViewModel>>(post);
+                //result.StatusCode = StatusCode.Success;
+                return result;
+                //result.StatusCode = StatusCode.InternalServerError;
+
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message);
+            }
+            return result;
+        }
+
+        public List<PostViewModel> Get(GetPostByCategory request)
+        {
+            var result = new List<PostViewModel>();
+            try
+            {
+                var post = _unitOfWork.Posts
+                    .GetPostsByCategoryId(request.CategoryId);
+                if (post != null)
+                {
+                    result = _mapper.Map<List<PostViewModel>>(post);
+                    //result.StatusCode = StatusCode.Success;
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message);
+            }
+            return result;
+        }
+
+        public List<PostViewModel> Get(GetPostByAuthor request)
+        {
+            var result = new List<PostViewModel>();
+            try
+            {
+                var post = _unitOfWork.Posts
+                    .GetPostsByAuthor(request.Author);
+                if (post != null)
+                {
+                    result = _mapper.Map<List<PostViewModel>>(post);
+                    //result.StatusCode = StatusCode.Success;
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message);
+            }
+            return result;
+        }
+
+        public List<PostViewModel> Get(GetPostByStatus request)
+        {
+            var result = new List<PostViewModel>();
+            try
+            {
+                var post = _unitOfWork.Posts
+                    .GetPostByStatus(request.Status);
+                if (post != null)
+                {
+                    result = _mapper.Map<List<PostViewModel>>(post);
+                    //result.StatusCode = StatusCode.Success;
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message);
+            }
+            return result;
+        }
+
+        public List<PostViewModel> Get(GetPostByTitle request)
+        {
+            var result = new List<PostViewModel>();
+            try
+            {
+                var post = _unitOfWork.Posts
+                    .GetPostByName(request.Title);
+                if (post != null)
+                {
+                    result = _mapper.Map<List<PostViewModel>>(post);
+                    //result.StatusCode = StatusCode.Success;
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message);
+            }
+            return result;
+        }
+
+        public async Task<PostViewModel> Post(PostAddPost request)
         {
             var result = new PostViewModel();
             try
@@ -122,7 +224,7 @@ namespace SWP391.OnlineShop.ServiceInterface.Services
             return result;
         }
 
-        public async Task<PostViewModel> Put(PostModels.PutUpdatePost request)
+        public async Task<PostViewModel> Put(PutUpdatePost request)
         {
             var result = new PostViewModel();
             try

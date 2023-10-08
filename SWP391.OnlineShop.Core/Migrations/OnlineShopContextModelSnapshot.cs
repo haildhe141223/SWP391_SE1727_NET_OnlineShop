@@ -275,7 +275,7 @@ namespace SWP391.OnlineShop.Core.Migrations
                     b.Property<DateTime>("OrderDateTime")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("OrderStatus")
+                    b.Property<int?>("OrderStatus")
                         .HasColumnType("int");
 
                     b.Property<int>("Status")
@@ -306,6 +306,9 @@ namespace SWP391.OnlineShop.Core.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<int>("OrderId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("OrderStatus")
                         .HasColumnType("int");
 
                     b.Property<int>("ProductId")
