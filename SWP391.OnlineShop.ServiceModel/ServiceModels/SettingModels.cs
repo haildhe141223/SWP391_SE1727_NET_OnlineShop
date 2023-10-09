@@ -38,6 +38,7 @@ namespace SWP391.OnlineShop.ServiceModel.ServiceModels
             public decimal Value { get; set; }
             public int? OrderId { get; set; }
             public string? Status { get; set; }
+            public int Id { get; set; }
         }
 
         [Route("/Setting/DeleteSetting", "DELETE")]

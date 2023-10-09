@@ -15,7 +15,7 @@ namespace SWP391.OnlineShop.Core.Models.Entities
         public string Type { get; set; }
         public decimal Value { get; set; }
         public int? OrderId { get; set; }
-        public Status Status { get; set; }
+        public Status SettingStatus { get; set; }
         public Order Order { get; set; }
     }
 }

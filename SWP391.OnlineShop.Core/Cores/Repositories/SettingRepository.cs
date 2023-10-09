@@ -20,114 +20,107 @@ namespace SWP391.OnlineShop.Core.Cores.Repositories
 
         }
 
-
-        public async Task<string> GetSettingNameByProductId(int productId)
+        public Task<List<Setting>> GetSettingByOrderId(int orderId)
         {
-            var result = string.Empty;
-            if (Context.Products != null)
+            var result = new List<Setting>();
+            if (Context.Setting == null) return Task.FromResult(result);
+
+
+
+            var settings = Context.Setting.Where(x => x.OrderId == orderId)
+                .ToList();
+
+
+
+            result = settings.ToList();
+
+
+
+            return Task.FromResult(result);
+        }
+
+        public Task<List<Setting>> GetSettingByStatus(string status)
+        {
+            var result = new List<Setting>();
+            if (Context.Setting == null) return Task.FromResult(result);
+
+
+
+            var settings = Context.Setting.Where(x => x.Status.ToString() == status)
+                .ToList();
+
+
+
+            result = settings.ToList();
+
+
+
+            return Task.FromResult(result);
+        }
+
+        public Task<List<Setting>> GetSettingByType(string type)
+        {
+            var result = new List<Setting>();
+            if (Context.Setting == null) return Task.FromResult(result);
+
+
+
+            var settings = Context.Setting.Where(x => x.Type.ToString() == type)
+                .ToList();
+
+
+
+            result = settings.ToList();
+
+
+
+            return Task.FromResult(result);
+        }
+
+        public async Task<int> GetSettingIdByType(string type)
+        {
+            var result = 0;
+
+
+
+            if (Context.Setting != null)
             {
-                result = await Context.Products
-                     .Where(p => p.Id == productId)
-                     .Select(p => p.ProductName)
-                     .FirstOrDefaultAsync();
+                result = await Context.Setting
+                    .Where(p => p.Type != null &&
+                                p.Type.ToLower().Equals(type.ToLower()))
+                    .Select(p => p.Id)
+                    .FirstOrDefaultAsync();
             }
 
 
 
-            return result ?? string.Empty;
+            return result;
         }
 
-
-
-        public Task<List<Product>> GetProductNameByCategoryId(int categoryId)
+        public Task<List<Setting>> GetSettingWithPaging(int skip, int take)
         {
-            var result = new List<Product>();
-            if (Context.Products == null) return Task.FromResult(result);
+            var result = new List<Setting>();
+            if (Context.Setting == null) return Task.FromResult(result);
 
 
 
-            var products = Context.Products.Where(x => x.CategoryId == categoryId)
+            var settings = Context.Setting.Skip(skip).Take(take)
                 .ToList();
 
 
 
-            result = products.ToList();
+            result = settings.ToList();
 
 
 
             return Task.FromResult(result);
         }
-
-
-
-        public Task<List<Product>> GetProductsByName(string productName)
-        {
-            var result = new List<Product>();
-            if (Context.Products == null) return Task.FromResult(result);
-
-
-
-            var products = Context.Products.Where(x => x.ProductName.ToLower().Contains(productName.ToLower()))
-                .ToList();
-
-
-
-            result = products.ToList();
-
-
-
-            return Task.FromResult(result);
-        }
-
-
-
-        public Task<List<Product>> GetProductsByStatus(string status)
-        {
-            var result = new List<Product>();
-            if (Context.Products == null) return Task.FromResult(result);
-
-
-
-            var products = Context.Products.Where(x => x.Status.ToString() == status)
-                .ToList();
-
-
-
-            result = products.ToList();
-
-
-
-            return Task.FromResult(result);
-        }
-
-
-
-        public Task<List<Product>> GetProductsWithPaging(int skip, int take)
-        {
-            var result = new List<Product>();
-            if (Context.Products == null) return Task.FromResult(result);
-
-
-
-            var products = Context.Products.Skip(skip).Take(take)
-                .ToList();
-
-
-
-            result = products.ToList();
-
-
-
-            return Task.FromResult(result);
-        }
-
-
 
         public override void Add(Setting? entity)
         {
             if (entity != null && Context.Setting != null)
             {
-                Context.Products.Add(entity);
+                Context.Setting.Add(entity);
             }
         }
 
@@ -137,7 +130,7 @@ namespace SWP391.OnlineShop.Core.Cores.Repositories
         {
             if (entity != null && Context.Setting != null)
             {
-                await Context.Products.AddAsync(entity);
+                await Context.Setting.AddAsync(entity);
             }
         }
     }

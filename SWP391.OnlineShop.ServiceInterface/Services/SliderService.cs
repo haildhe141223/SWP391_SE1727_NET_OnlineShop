@@ -6,7 +6,7 @@ using SWP391.OnlineShop.ServiceInterface.Interfaces;
 using SWP391.OnlineShop.ServiceInterface.Loggers;
 using SWP391.OnlineShop.ServiceModel.ServiceModels;
 using SWP391.OnlineShop.ServiceModel.ViewModels.Customer;
-using SWP391.OnlineShop.ServiceModel.ViewModels.Products;
+using SWP391.OnlineShop.ServiceModel.ViewModels.Marketing;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,30 +15,30 @@ using System.Threading.Tasks;
 
 namespace SWP391.OnlineShop.ServiceInterface.Services
 {
-    public class SettingService : BaseService, ISettingService
+    public class SliderService : BaseService, ISliderService
     {
         private readonly IMapper _mapper;
         private readonly IUnitOfWork _unitOfWork;
         private readonly ILoggerService _logger;
 
-        public SettingService(IMapper mapper, IUnitOfWork unitOfWork, ILoggerService logger)
+        public SliderService(IMapper mapper, IUnitOfWork unitOfWork, ILoggerService logger)
         {
             _mapper = mapper;
             _unitOfWork = unitOfWork;
             _logger = logger;
         }
 
-        public async Task<SettingViewModel> Delete(SettingModels.DeleteSetting request)
+        public async Task<SliderViewModel> Delete(SliderModel.DeleteSlider request)
         {
-            var result = new SettingViewModel();
+            var result = new SliderViewModel();
             try
             {
-                _unitOfWork.Settings.Delete(request.SettingId);
+                _unitOfWork.Sliders.Delete(request.SliderId);
                 var rows = await _unitOfWork.CompleteAsync();
                 if (rows > 0)
                 {
-                    var setting = await _unitOfWork.Settings.GetByIdAsync(request.SettingId);
-                    result = _mapper.Map<SettingViewModel>(setting);
+                    var slider = await _unitOfWork.Sliders.GetByIdAsync(request.SliderId);
+                    result = _mapper.Map<SliderViewModel>(slider);
                     //result.StatusCode = StatusCode.Success;
                     return result;
                 }
@@ -52,13 +52,13 @@ namespace SWP391.OnlineShop.ServiceInterface.Services
             return result;
         }
 
-        public List<SettingViewModel> Get(SettingModels.GetAllSetting request)
+        public List<SliderViewModel> Get(SliderModel.GetAllSlider request)
         {
-            var result = new List<SettingViewModel>();
+            var result = new List<SliderViewModel>();
             try
             {
-                var setting = _unitOfWork.Settings.GetAll().ToList();
-                result = _mapper.Map<List<SettingViewModel>>(setting);
+                var slider = _unitOfWork.Sliders.GetAll().ToList();
+                result = _mapper.Map<List<SliderViewModel>>(slider);
                 //result.StatusCode = StatusCode.Success;
                 return result;
                 //result.StatusCode = StatusCode.InternalServerError;
@@ -71,15 +71,15 @@ namespace SWP391.OnlineShop.ServiceInterface.Services
             return result;
         }
 
-        public SettingViewModel Get(SettingModels.GetSettingById request)
+        public SliderViewModel Get(SliderModel.GetSliderById request)
         {
-            var result = new SettingViewModel();
+            var result = new SliderViewModel();
             try
             {
-                var appendix = _unitOfWork.Settings.GetById(request.SettingId);
+                var appendix = _unitOfWork.Sliders.GetById(request.SliderId);
                 if (appendix != null)
                 {
-                    result = _mapper.Map<SettingViewModel>(appendix);
+                    result = _mapper.Map<SliderViewModel>(appendix);
                     //result.StatusCode = StatusCode.Success;
                 }
             }
@@ -90,19 +90,19 @@ namespace SWP391.OnlineShop.ServiceInterface.Services
             return result;
         }
 
-        public async Task<SettingViewModel> Post(SettingModels.PostAddSetting request)
+        public async Task<SliderViewModel> Post(SliderModel.PostAddSlider request)
         {
-            var result = new SettingViewModel();
+            var result = new SliderViewModel();
             try
             {
-                var setting = new Setting()
+                var slider = new Slider()
                 {
-                    Type = request.Type,
-                    Value = result.Value,
-                    OrderId = request.OrderId,
-                    SettingStatus = Core.Models.Enums.Status.Active
+                    Title = request.Title,
+                    Image = result.Image,
+                    BlackLink = request.BlackLink,
+                    SliderStatus = Core.Models.Enums.Status.Active
                 };
-                await _unitOfWork.Settings.AddAsync(setting);
+                await _unitOfWork.Sliders.AddAsync(slider);
 
             }
             catch (Exception ex)
@@ -112,20 +112,20 @@ namespace SWP391.OnlineShop.ServiceInterface.Services
             return result;
         }
 
-        public async Task<SettingViewModel> Put(SettingModels.PutUpdateSetting request)
+        public async Task<SliderViewModel> Put(SliderModel.PutUpdateSlider request)
         {
-            var result = new SettingViewModel();
+            var result = new SliderViewModel();
             try
             {
-                var setting = _unitOfWork.Settings.GetById(request.Id);
-                if (setting == null)
+                var slider = _unitOfWork.Sliders.GetById(request.Id);
+                if (slider == null)
                 {
                     //result.StatusCode = StatusCode.InternalServerError;
                     //return result;
                 }
-                setting.Type = request.Type;
+                slider.Title = request.Title;
 
-                _unitOfWork.Settings.Update(setting);
+                _unitOfWork.Sliders.Update(slider);
                 var rows = await _unitOfWork.CompleteAsync();
                 //result.StatusCode = rows > 0 ? StatusCode.Success : StatusCode.InternalServerError;
             }
