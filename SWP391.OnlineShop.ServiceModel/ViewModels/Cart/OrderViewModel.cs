@@ -8,15 +8,15 @@ namespace SWP391.OnlineShop.ServiceModel.ViewModels.Cart
     {
         public int Id { get; set; }
         public int AddressId { get; set; }
-        public string? CustomerName { get; set; }
-        public string? CustomerAddress { get; set; }
+        public string CustomerName { get; set; }
+        public string CustomerAddress { get; set; }
         public Gender CustomerGender { get; set; }
-        public string? CustomerPhoneNumber { get; set; }
-        public string? CustomerEmail { get; set; }
+        public string CustomerPhoneNumber { get; set; }
+        public string CustomerEmail { get; set; }
         public decimal TotalCost { get; set; }
         public OrderStatus OrderStatus { get; set; }
-		public Status Status { get; set; }
-		public ICollection<OrderDetailViewModel>? OrderDetails { get; set; }
-		public ICollection<ProvinceViewModel>? Provinces { get; set; }
+        public Status Status { get; set; }
+        public ICollection<OrderDetailViewModel> OrderDetails { get; set; }
+        public ICollection<ProvinceViewModel> Provinces { get; set; }
     }
 }
