@@ -96,6 +96,7 @@
 			$("#paypal-btn").hide();
 			$("#cash-btn").show();
 		}
+	
 	});
 
 	$("input[name='selector']").change(function(e){
@@ -115,7 +116,7 @@
 			$.ajax({
 				url: '@Url.Action("MakePaypalPayment","Cart")',
 				type: 'POST',
-				data: { model: modelData },
+				data: { data: JSON.stringify(modelData) },
 				success: function (response) {
 					alert('Processing to Paypal');
 					//$.toaster({ priority: 'success', title: 'Created', message: "Back To Cart Detail Succesfully" });

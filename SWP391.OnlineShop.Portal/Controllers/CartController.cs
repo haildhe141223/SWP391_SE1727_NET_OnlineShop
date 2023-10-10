@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.CodeAnalysis;
+using Newtonsoft.Json;
 using PayPal.Core;
 using PayPal.v1.Payments;
 using ServiceStack;
@@ -209,10 +210,20 @@ namespace SWP391.OnlineShop.Portal.Controllers
         }
 
         #region Paypal Payment
-        public async Task<IActionResult> MakePaypalPayment(OrderViewModel model)
+        [HttpPost]
+        public async Task<IActionResult> MakePaypalPayment(string data)
         {
-            /*var user = await _userManager.GetUserAsync(User);*/
-            var email = "admin@gmail.com";
+			if (string.IsNullOrEmpty(data))
+			{
+				return StatusCode(500, "Empty Data");
+			}
+			var model = JsonConvert.DeserializeObject<OrderViewModel>(data);
+			if (model is null)
+			{
+				return StatusCode(500, "Empty Data");
+			}
+			/*var user = await _userManager.GetUserAsync(User);*/
+			var email = "admin@gmail.com";
             /*var email = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Email)?.Value;*/
             var user = await _userManager.FindByEmailAsync(email);
             if (user == null)
