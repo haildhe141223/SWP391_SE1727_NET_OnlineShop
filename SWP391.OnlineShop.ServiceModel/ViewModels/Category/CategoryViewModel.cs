@@ -1,11 +1,5 @@
 ﻿using SWP391.OnlineShop.Core.Models.Entities;
 using SWP391.OnlineShop.Core.Models.Enums;
-using SWP391.OnlineShop.ServiceModel.ViewModels.Products;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace SWP391.OnlineShop.ServiceModel.ViewModels.Category
 {
@@ -17,6 +11,5 @@ namespace SWP391.OnlineShop.ServiceModel.ViewModels.Category
 		public CategoryType CategoryType { get; set; }
 		//public ICollection<Post>? Posts { get; set; }
 		public int TotalProduct { get; set; }
-
-	}
+  }
 }

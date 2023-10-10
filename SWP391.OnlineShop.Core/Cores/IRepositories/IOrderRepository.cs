@@ -17,5 +17,8 @@ public interface IOrderRepository : IGenericRepository<Order, int>
 	IEnumerable<Order> GetOrdersByUser(string email);
 	void DeleteOrderDetail(int id);
 	void UpdateOrderDetailQuantity(int id, int quantity);
+	void UpdateOrderStatusBy(int id, OrderStatus orderStatus);
 	OrderDetail GetOrderDetailByOrderDetailId(int orderDetailId);
+
+	Order GetOrderInfoById(int id);
 }

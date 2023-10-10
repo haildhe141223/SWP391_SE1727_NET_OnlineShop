@@ -1,7 +1,5 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Identity;
-using Newtonsoft.Json;
-using SWP391.OnlineShop.Common.Enums;
 using SWP391.OnlineShop.Core.Cores.UnitOfWork;
 using SWP391.OnlineShop.Core.Models.Entities;
 using SWP391.OnlineShop.Core.Models.Identities;
@@ -10,12 +8,6 @@ using SWP391.OnlineShop.ServiceInterface.Interfaces;
 using SWP391.OnlineShop.ServiceInterface.Loggers;
 using SWP391.OnlineShop.ServiceModel.ServiceModels;
 using SWP391.OnlineShop.ServiceModel.ViewModels.Products;
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace SWP391.OnlineShop.ServiceInterface.Services
 {

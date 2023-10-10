@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -24,6 +24,5 @@ namespace SWP391.OnlineShop.ServiceModel.ViewModels.Products
 		public decimal SalePrice { get; set; }
 		public CategoryViewModel? Category { get; set; }
 		public List<FeedbackViewModel>? FeedBacks { get; set; }
-
 	}
 }
