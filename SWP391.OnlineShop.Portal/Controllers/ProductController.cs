@@ -19,10 +19,22 @@ namespace SWP391.OnlineShop.Portal.Controllers
             _client = client;
         }
 
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(int categoryId)
         {
-            //Get all products
-            var latestProducts = await _client.GetAsync(new GetAllProduct());
+            var latestProducts = new List<ProductViewModel>();
+            if (categoryId == 0)
+            {
+                //Get all products
+                latestProducts = await _client.GetAsync(new GetAllProduct());
+            }
+            else
+            {
+                //Get all products
+                latestProducts = await _client.GetAsync(new GetProductByCategoryId
+                {
+                    CategoryId = categoryId
+                });
+            }
 
             //Get all categories
             var categories = await _client.GetAsync(new GetAllCategory());
@@ -42,7 +54,7 @@ namespace SWP391.OnlineShop.Portal.Controllers
         public async Task<IActionResult> Details(int id)
         {
             //Get product detail
-            var product = await _client.GetAsync(new GetProductById
+            var product = await _client.GetAsync(new GetProductFeedbackById
             {
                 ProductId = id
             });

@@ -12,17 +12,17 @@ public class CategoryRepository : GenericRepository<Category, int>, ICategoryRep
     {
     }
 
-    //public override List<Category> GetAll()
-    //{
-    //    var result = new List<Category>();
-    //    if (Context.Categories == null) return result;
-    //    var products = Context
-    //                    .Categories
-    //                    .Include(x => x.Products)
-    //                    .ToList();
+    public override List<Category> GetAll()
+    {
+        var result = new List<Category>();
+        if (Context.Categories == null) return result;
+        var products = Context
+                        .Categories
+                        .Include(x => x.Products)
+                        .ToList();
 
-    //    result = products;
+        result = products;
 
-    //    return result;
-    //}
+        return result;
+    }
 }
