@@ -40,7 +40,12 @@ namespace SWP391.OnlineShop.ServiceInterface.Services
 			try
 			{
 				var categories = _unitOfWork.Categories.GetAll();
-				result = _mapper.Map<List<CategoryViewModel>>(categories);
+				foreach (var item in categories)
+				{
+					var categoryVm = _mapper.Map<CategoryViewModel>(item);
+					categoryVm.TotalProduct = item.Products.Count();
+					result.Add(categoryVm);
+				}
 				//result.StatusCode = StatusCode.Success;
 				return result;
 				//result.StatusCode = StatusCode.InternalServerError;

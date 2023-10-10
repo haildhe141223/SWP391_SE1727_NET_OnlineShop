@@ -11,7 +11,7 @@ public interface IProductRepository : IGenericRepository<Product, int>
 {
     Task<int> GetProductIdByProductName(string productName);
     Task<string> GetProductNameByProductId(int productId);
-    Task<List<Product>> GetProductNameByCategoryId(int categoryId);
+    List<Product> GetProductByCategoryId(int categoryId);
 
 
 
@@ -29,5 +29,5 @@ public interface IProductRepository : IGenericRepository<Product, int>
 
     Task<List<Product>> GetDealProductOfWeek();
 
-    Task<List<Product>> GetProductFeedbackById(int productId);
+    Product GetProductFeedbackById(int productId);
 }

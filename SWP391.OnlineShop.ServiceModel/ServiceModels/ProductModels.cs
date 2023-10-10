@@ -9,6 +9,12 @@ namespace SWP391.OnlineShop.ServiceModel.ServiceModels
 	{
 	}
 
+	[Route("/Product/GetProductByCategoryId", "GET")]
+	public class GetProductByCategoryId : IReturn<List<ProductViewModel>>
+	{
+		public int? CategoryId { get; set; }
+	}
+
 	[Route("/Product/GetHotDealProduct", "GET")]
 	public class GetHotDealProduct : IReturn<List<ProductViewModel>>
 	{

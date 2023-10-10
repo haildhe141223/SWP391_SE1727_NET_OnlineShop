@@ -17,6 +17,13 @@ namespace SWP391.OnlineShop.ServiceInterface.Interfaces
 		/// </summary>
 		/// <param name="request"></param>
 		/// <returns>Post Detail Standard & Criteria of Appendices</returns>
+		List<ProductViewModel> Get(GetProductByCategoryId request);
+
+		/// <summary>
+		/// Post Detail Standard & Criteria of Appendices
+		/// </summary>
+		/// <param name="request"></param>
+		/// <returns>Post Detail Standard & Criteria of Appendices</returns>
 		List<ProductViewModel> Get(GetHotDealProduct request);
 
 		/// <summary>

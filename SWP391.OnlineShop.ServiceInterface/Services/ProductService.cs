@@ -80,6 +80,25 @@ namespace SWP391.OnlineShop.ServiceInterface.Services
 			return result;
 		}
 
+		public List<ProductViewModel> Get(GetProductByCategoryId request)
+		{
+			var result = new List<ProductViewModel>();
+			try
+			{
+				var product = _unitOfWork.Products.GetProductByCategoryId(Convert.ToInt32(request.CategoryId));
+				result = _mapper.Map<List<ProductViewModel>>(product);
+				//result.StatusCode = StatusCode.Success;
+				return result;
+				//result.StatusCode = StatusCode.InternalServerError;
+
+			}
+			catch (Exception ex)
+			{
+				_logger.LogError(ex.Message);
+			}
+			return result;
+		}
+
 		public List<ProductViewModel> Get(GetHotDealProduct request)
 		{
 			var result = new List<ProductViewModel>();
@@ -123,10 +142,10 @@ namespace SWP391.OnlineShop.ServiceInterface.Services
 			var result = new ProductViewModel();
 			try
 			{
-				var appendix = _unitOfWork.Products.GetById(request.ProductId);
-				if (appendix != null)
+				var product = _unitOfWork.Products.GetById(request.ProductId);
+				if (product != null)
 				{
-					result = _mapper.Map<ProductViewModel>(appendix);
+					result = _mapper.Map<ProductViewModel>(product);
 					//result.StatusCode = StatusCode.Success;
 				}
 			}

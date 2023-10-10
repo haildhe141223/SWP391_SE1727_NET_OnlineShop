@@ -46,10 +46,10 @@ public class ProductRepository : GenericRepository<Product, int>, IProductReposi
     }
 
 
-    public Task<List<Product>> GetProductNameByCategoryId(int categoryId)
+    public List<Product> GetProductByCategoryId(int categoryId)
     {
         var result = new List<Product>();
-        if (Context.Products == null) return Task.FromResult(result);
+        if (Context.Products == null) return result;
 
         var products = Context.Products
             .Where(x => x.CategoryId == categoryId)
@@ -57,7 +57,7 @@ public class ProductRepository : GenericRepository<Product, int>, IProductReposi
 
         result = products.ToList();
 
-        return Task.FromResult(result);
+        return result;
     }
 
 
@@ -169,17 +169,16 @@ public class ProductRepository : GenericRepository<Product, int>, IProductReposi
         return Task.FromResult(result);
     }
 
-    public Task<List<Product>> GetProductFeedbackById(int productId)
+    public Product GetProductFeedbackById(int productId)
     {
-        var result = new List<Product>();
-        if (Context.Products == null) return Task.FromResult(result);
+        var result = new Product();
+        if (Context.Products == null) return result;
 
         var products = Context.Products
-            .Where(x => x.Id == productId).Include(x => x.FeedBacks)
-            .ToList();
+            .Where(x => x.Id == productId).Include(x => x.FeedBacks).FirstOrDefault();
 
-        result = products.ToList();
+        result = products;
 
-        return Task.FromResult(result);
+        return result;
     }
 }
