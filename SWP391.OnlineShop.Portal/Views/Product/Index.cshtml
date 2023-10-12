@@ -26,15 +26,8 @@
 						@foreach (var category in Model.Categories)
 						{
 							<li class="main-nav-list">
-								<a data-toggle="collapse" href="#fruitsVegetable" aria-expanded="false" aria-controls="fruitsVegetable">
-									<span class="lnr lnr-arrow-right"></span>@category.CategoryName<span class="number">
-										(
-										@if (category.Products != null)
-										{
-											category.Products.Count();
-										}
-										)
-									</span>
+								<a asp-controller="Product" asp-action="Index" asp-route-categoryId="@category.Id">
+									<span class="lnr lnr-arrow-right"></span>@category.CategoryName<span class="number">(@category.TotalProduct)</span>
 								</a>
 							</li>
 						}

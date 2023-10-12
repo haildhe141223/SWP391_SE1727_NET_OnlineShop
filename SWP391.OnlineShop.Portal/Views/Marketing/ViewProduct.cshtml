@@ -6,56 +6,60 @@
 
 <div class="m-headers" style="margin-top: 10% !important;">
     <h4 class="fw-bold ml-5">Manage Product</h4>
+    <a asp-controller="Marketing" asp-action="EditProduct" asp-route-id="@Model.Id" class="m-2">
+        <button class="btn btn-success">
+            <span>Edit</span>
+            <i class="fa-regular fa-pen-to-square"></i>
+        </button>
+    </a>
+    <a asp-controller="Marketing" asp-action="DeleteProduct" asp-route-id="@Model.Id" class="m-2">
+        <button class="btn btn-danger">
+            <span>Delete</span>
+            <i class="fa-regular fa-trash-can"></i>
+        </button>
+    </a>
 </div>
 
 <!-- DataTales Example -->
-<div class="card shadow mb-4">
+<div class="card shadow m-3">
     <div class="card-header py-3">
-        <h6 class="m-0 font-weight-bold text-primary">Create New Product</h6>
+        <h6 class="m-0 font-weight-bold text-primary">View Detail Product</h6>
     </div>
     <div class="card-body">
-        <form style="margin:auto !important; width:60% !important" asp-controller="Marketing" asp-action="AddProduct" method="post" enctype="multipart/form-data">
-            <div class="r-error my-4 text-danger text-center" asp-validation-summary="All">
-            </div>
             <div class="mb-3">
                 <label asp-for="ProductName" class="form-label">Product Name</label>
-                <input type="text" class="form-control" asp-for="ProductName" id="name" onchange="changeUrl('name', 'url')">
+                <input disabled type="text" class="form-control" asp-for="ProductName" id="name" onchange="changeUrl('name', 'url')">
                 <span asp-validation-for="ProductName" class="r-error d-block text-danger"></span>
             </div>
             <div class="mb-3">
                 <label asp-for="Thumbnail" class="form-label">Thumbnail</label>
-                <input asp-for="Thumbnail" type="text" class="form-control">
+                <input disabled asp-for="Thumbnail" type="text" class="form-control">
                 <span asp-validation-for="Thumbnail" class="r-error d-block text-danger"></span>
             </div>
             <div class="mb-3">
                 <label asp-for="Description" class="form-label"></label>
-                <input asp-for="Description" type="text" class="form-control" />
+                <input disabled asp-for="Description" type="text" class="form-control" />
                 <span asp-validation-for="Description" class="r-error d-block text-danger"></span>
             </div>
             <div class="mb-3">
                 <label asp-for="Amount" class="form-label"></label>
-                <input asp-for="Amount" type="number" min="1" class="form-control" />
+                <input disabled asp-for="Amount" type="number" min="1" class="form-control" />
                 <span asp-validation-for="Amount" class="r-error d-block text-danger"></span>
             </div>
             <div class="mb-3">
                 <label asp-for="Price" class="form-label"></label>
-                <input asp-for="Price" type="text" class="form-control" />
+                <input disabled asp-for="Price" type="text" class="form-control" />
                 <span asp-validation-for="Price" class="r-error d-block text-danger"></span>
             </div>
             <div class="mb-3">
                 <label asp-for="SalePrice" class="form-label"></label>
-                <input asp-for="SalePrice" type="text" class="form-control" />
+                <input disabled asp-for="SalePrice" type="text" class="form-control" />
                 <span asp-validation-for="SalePrice" class="r-error d-block text-danger"></span>
             </div>
             @* <div class="mb-3">
-                <label asp-for="CategoryId" class="form-label">Category</label><br />
-                <select asp-for="CategoryId" class="form-control" asp-items="@genreList"></select><br />
-            </div><br /> *@
-            <div class="mb-3">
-                <a type="button" class="btn btn-secondary" asp-action="">Back</a>
-                <button type="reset" class="btn btn-info">Reset</button>
-                <button type="submit" class="btn btn-primary">Submit</button>
-            </div>
-        </form>
+            <label asp-for="CategoryId" class="form-label">Category</label>
+            <select asp-for="CategoryId" class="form-control" asp-items="@genreList"></select>
+            </div> *@
+            <a type="button" class="btn btn-secondary" asp-action="">Back</a>
     </div>
 </div>
