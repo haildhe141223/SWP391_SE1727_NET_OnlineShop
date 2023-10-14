@@ -34,9 +34,10 @@ public enum OrderStatus
     InCartDetail = 0,
     InCartContact = 1,
     InCartCompletion = 2,
-    WaitingConfirmBySaler = 3,
+    WaitingConfirmBySalerUnPaid = 3,
     WaitingShipperToDeliver = 4,
     Delivering = 5,
     Delivered = 6,
-    Received = 7
+    Received = 7,
+    PaidOrderWaitingConfirm = 8,
 }

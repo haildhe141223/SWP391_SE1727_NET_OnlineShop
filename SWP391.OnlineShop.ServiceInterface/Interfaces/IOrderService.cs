@@ -75,5 +75,12 @@ namespace SWP391.OnlineShop.ServiceInterface.Interfaces
 		/// <param name="request"></param>
 		/// <returns>API Status Code</returns>
 		Task<BaseResultModel> Delete(DeleteOrderDetail request);
+
+		/// <summary>
+		/// Update Cart Status
+		/// </summary>
+		/// <param name="request"></param>
+		/// <returns>API Status Code</returns>
+		Task<BaseResultModel> Put(PutUpdateCartStatus request);
 	}
 }

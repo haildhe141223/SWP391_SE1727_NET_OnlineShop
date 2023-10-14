@@ -9,6 +9,7 @@ using ServiceStack;
 using SWP391.OnlineShop.Common.Constraints;
 using SWP391.OnlineShop.Core.Models.Identities;
 using SWP391.OnlineShop.ServiceInterface.Loggers;
+using SWP391.OnlineShop.ServiceModel.ServiceModels;
 using SWP391.OnlineShop.ServiceModel.ViewModels.Cart;
 using static SWP391.OnlineShop.ServiceModel.ServiceModels.AddressModel;
 using static SWP391.OnlineShop.ServiceModel.ServiceModels.OrderModels;
@@ -22,6 +23,7 @@ namespace SWP391.OnlineShop.Portal.Controllers
         private readonly ILoggerService _logger;
         private readonly IConfiguration _config;
         private readonly UserManager<User> _userManager;
+        private static Dictionary<string,int> paypalData = new Dictionary<string, int>();
 
         public CartController(
            SignInManager<User> signInManager,
@@ -49,6 +51,7 @@ namespace SWP391.OnlineShop.Portal.Controllers
             {
                 return RedirectToAction("Login", "Account");
             }
+            var productSlider = await _client.GetAsync(new GetAllProduct());
             var cartDetailOrders = await _client.GetAsync(new GetCartDetailByUser
             {
                 Email = email
@@ -63,6 +66,7 @@ namespace SWP391.OnlineShop.Portal.Controllers
             });
             if (cartCompleteOrders.OrderDetails?.Count <= 0 && cartDetailOrders.OrderDetails?.Count <= 0 && cartContactOrders.OrderDetails?.Count <= 0)
             {
+                cartDetailOrders.Sliders = productSlider.Take(8).ToList();
                 return View(cartDetailOrders);
             }
             else
@@ -83,7 +87,8 @@ namespace SWP391.OnlineShop.Portal.Controllers
                     cartContactOrders.CustomerPhoneNumber = user.PhoneNumber;
                     var province = await _client.GetAsync(new GetAllProvince());
                     cartContactOrders.Provinces = province;
-                    return View(cartContactOrders);
+                    cartContactOrders.Sliders = productSlider.Take(8).ToList();
+					return View(cartContactOrders);
                 }
                 return View(cartDetailOrders);
 
@@ -103,7 +108,8 @@ namespace SWP391.OnlineShop.Portal.Controllers
             {
                 Email = email
             });
-            var userAddress = await _client.GetAsync(new GetAddressByUser()
+			var productSlider = await _client.GetAsync(new GetAllProduct());
+			var userAddress = await _client.GetAsync(new GetAddressByUser()
             {
                 Email = email
             });
@@ -112,11 +118,30 @@ namespace SWP391.OnlineShop.Portal.Controllers
             cartCompleteOrders.AddressId = userAddress.Id;
             cartCompleteOrders.CustomerPhoneNumber = user.PhoneNumber;
             cartCompleteOrders.CustomerEmail = email;
+            cartCompleteOrders.Sliders = productSlider.Take(8).ToList();
             return View(cartCompleteOrders);
         }
 
-        public IActionResult Confirmation()
+        public async Task<IActionResult> Confirmation([FromQuery(Name = "token")] string token)
         {
+            if(paypalData.Keys.Contains(token))
+            {
+                var orderId = paypalData[token];
+                var order = await _client.GetAsync(new GetCartInfo()
+                {
+                    Id = orderId
+                });
+
+                var api = await _client.PutAsync(new PutUpdateCartStatus()
+                {
+                    Id = orderId,
+                    OrderStatus = Core.Models.Enums.OrderStatus.PaidOrderWaitingConfirm,
+                });
+                if (api.StatusCode == Common.Enums.StatusCode.Success)
+                {
+                    return Ok(api);
+                }
+            }
             return View();
         }
 
@@ -290,8 +315,9 @@ namespace SWP391.OnlineShop.Portal.Controllers
             var request = new PaymentCreateRequest();
             request.RequestBody(payment);
             var paypalDirectUrl = await GetPaypalDirectUrl(client, request);
-            #endregion
-            return Redirect(paypalDirectUrl);
+			#endregion
+			paypalData.Add( paypalDirectUrl.Split("&token=")[1], model.Id);
+			return Ok(paypalDirectUrl);
         }
 
         public IActionResult PaymentFailed()

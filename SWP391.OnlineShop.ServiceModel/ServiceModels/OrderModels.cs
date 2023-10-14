@@ -8,7 +8,7 @@ namespace SWP391.OnlineShop.ServiceModel.ServiceModels
 {
     public class OrderModels
     {
-        [Route("/Order/GetCartDetailByUser", "GET")]
+		[Route("/Order/GetCartDetailByUser", "GET")]
         public class GetCartDetailByUser : IReturn<OrderViewModel>
         {
             public string Email { get; set; }
@@ -56,10 +56,16 @@ namespace SWP391.OnlineShop.ServiceModel.ServiceModels
             public string CustomerEmail { get; set; }
             public decimal TotalCost { get; set; }
             public OrderStatus OrderStatus { get; set; }
-
         }
 
-        [Route("/Order/PutUpdateCartToContact", "PUT")]
+		[Route("/Order/PutUpdateCartStatus", "PUT")]
+		public class PutUpdateCartStatus : IReturn<BaseResultModel>
+		{
+			public int Id { get; set; }
+			public OrderStatus OrderStatus { get; set; }
+		}
+
+		[Route("/Order/PutUpdateCartToContact", "PUT")]
         public class PutUpdateCartToContact : IReturn<BaseResultModel>
         {
             public int Id { get; set; }

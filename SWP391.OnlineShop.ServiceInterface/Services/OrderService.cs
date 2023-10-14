@@ -263,8 +263,11 @@ namespace SWP391.OnlineShop.ServiceInterface.Services
 					return result;
 				}
 				order.OrderStatus = request.OrderStatus;
-				order.TotalCost = request.TotalCost;
-                if (!string.IsNullOrEmpty(request.Address))
+                if(request.TotalCost > 0)
+                {
+					order.TotalCost = request.TotalCost;
+				}
+				if (!string.IsNullOrEmpty(request.Address))
                 {
                     order.CustomerAddress = request.Address;
                 }
@@ -300,7 +303,28 @@ namespace SWP391.OnlineShop.ServiceInterface.Services
 			}
 			return result;
 		}
-		
 
+		public async Task<BaseResultModel> Put(PutUpdateCartStatus request)
+		{
+			var result = new OrderViewModel();
+			try
+			{
+				var order = _unitOfWork.Orders.GetById(request.Id);
+				if (order == null)
+				{
+					result.StatusCode = StatusCode.InternalServerError;
+					return result;
+				}
+				order.OrderStatus = request.OrderStatus;
+				_unitOfWork.Orders.Update(order);
+				var rows = await _unitOfWork.CompleteAsync();
+				result.StatusCode = rows > 0 ? StatusCode.Success : StatusCode.InternalServerError;
+			}
+			catch (Exception ex)
+			{
+				_logger.LogError($"PutUpdateCartStatus error {ex.Message}");
+			}
+			return result;
+		}
 	}
 }

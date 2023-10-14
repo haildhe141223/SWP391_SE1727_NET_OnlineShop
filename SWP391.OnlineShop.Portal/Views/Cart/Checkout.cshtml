@@ -1,4 +1,7 @@
 ﻿@model SWP391.OnlineShop.ServiceModel.ViewModels.Cart.OrderViewModel
+@{
+	var sliders = Model.Sliders.ToList();
+}
 <!-- Start Banner Area -->
 <section class="banner-area organic-breadcrumb">
 	<div class="container">
@@ -14,6 +17,113 @@
 	</div>
 </section>
 <!-- End Banner Area -->
+<section class="owl-carousel active-product-area section_gap">
+	<!-- single product slide -->
+	<div class="single-product-slider">
+		<div class="container">
+			<div class="row justify-content-center">
+				<div class="col-lg-6 text-center">
+					<div class="section-title">
+						<h1>Latest Products</h1>
+						<p>
+							Lastest Products Of All Category
+						</p>
+					</div>
+				</div>
+			</div>
+			<div class="row">
+				@for (int i = 0; i < sliders.Count()/2; i++)
+				{
+					<!-- single product -->
+					<div class="col-lg-3 col-md-6">
+						<div class="single-product">
+							<img class="img-fluid" src="@sliders[i].Thumbnail" alt="@sliders[i].ProductName">
+							<div class="product-details">
+								<h6>
+									@sliders[i].ProductName
+								</h6>
+								<div class="price">
+									<h6>$ @sliders[i].Price</h6>
+									@if (sliders[i].SalePrice > 0)
+									{
+										<h6 class="l-through">$ @sliders[i].SalePrice</h6>
+									}
+								</div>
+								<div class="prd-bottom">
+									<a href="" class="social-info">
+										<span class="lnr lnr-heart"></span>
+										<p class="hover-text">Wishlist</p>
+									</a>
+									<a href="" class="social-info">
+										<span class="lnr lnr-sync"></span>
+										<p class="hover-text">compare</p>
+									</a>
+									<a href="" class="social-info">
+										<span class="lnr lnr-move"></span>
+										<p class="hover-text">view more</p>
+									</a>
+								</div>
+							</div>
+						</div>
+					</div>
+				}
+			</div>
+		</div>
+	</div>
+	<!-- single product slide -->
+	<div class="single-product-slider">
+		<div class="container">
+			<div class="row justify-content-center">
+				<div class="col-lg-6 text-center">
+					<div class="section-title">
+						<h1>Lastest Products</h1>
+						<p>
+							Lastest Products Of All Category
+						</p>
+					</div>
+				</div>
+			</div>
+			<div class="row">
+				<!-- single product -->
+				@for (int i = sliders.Count() / 2; i < sliders.Count(); i++)
+				{
+					<!-- single product -->
+					<div class="col-lg-3 col-md-6">
+						<div class="single-product">
+							<img class="img-fluid" src="@sliders[i].Thumbnail" alt="@sliders[i].ProductName">
+							<div class="product-details">
+								<h6>
+									@sliders[i].ProductName
+								</h6>
+								<div class="price">
+									<h6>$ @sliders[i].Price</h6>
+									@if (sliders[i].SalePrice > 0)
+									{
+										<h6 class="l-through">$ @sliders[i].SalePrice</h6>
+									}
+								</div>
+								<div class="prd-bottom">
+									<a href="" class="social-info">
+										<span class="lnr lnr-heart"></span>
+										<p class="hover-text">Wishlist</p>
+									</a>
+									<a href="" class="social-info">
+										<span class="lnr lnr-sync"></span>
+										<p class="hover-text">compare</p>
+									</a>
+									<a href="" class="social-info">
+										<span class="lnr lnr-move"></span>
+										<p class="hover-text">view more</p>
+									</a>
+								</div>
+							</div>
+						</div>
+					</div>
+				}
+			</div>
+		</div>
+	</div>
+</section>
 <!--================Checkout Area =================-->
 <section class="checkout_area section_gap">
 	<div class="container">
@@ -35,10 +145,10 @@
 					</div>
 					<div class="col-md-12 form-group p_star">
 						<label for="add1">Address</label>
-						<input type="text" class="form-control" id="add1" name="add1" @Model.CustomerAddress>
+						<input type="text" class="form-control" id="add1" name="add1" value="@Model.CustomerAddress">
 					</div>
 					<div class="col-md-12 form-group">
-						<textarea class="form-control" name="message" id="message" rows="1" placeholder="Order Notes"></textarea>
+						<textarea class="form-control" name="message" id="message" rows="5" placeholder="Order Notes"></textarea>
 					</div>
 				</div>
 				<div class="col-lg-4">
@@ -48,7 +158,7 @@
 							<li><a href="#">Product <span>Total</span></a></li>
 							@foreach (var order in Model.OrderDetails)
 							{
-								<li><a href="#">@order.Product.ProductName <span class="middle">x @order.Quantity</span> <span class="last">$ @(order.UnitPrice*order.Quantity)</span></a></li>
+								<li><a href="#">@order.Product.ProductName <span class="middle">x @order.Quantity</span> <span class="last">$ @(order.UnitPrice * order.Quantity)</span></a></li>
 							}
 						</ul>
 						<ul class="list list_2">
@@ -87,19 +197,22 @@
 <!--================End Checkout Area =================-->
 
 <script type="text/javascript">
-	$(document).ready(function(){
+	$(document).ready(function () {
 		let checkboxValue = $("input[name='selector']:checked").val();
-		if(checkboxValue == "paypal"){
+		if (checkboxValue == "paypal") {
 			$("#paypal-btn").show();
 			$("#cash-btn").hide();
-		}else{
+		} else if (checkboxValue == "cash") {
 			$("#paypal-btn").hide();
 			$("#cash-btn").show();
+		}else{
+			$("#paypal-btn").hide();
+			$("#cash-btn").hide();
 		}
-	
+
 	});
 
-	$("input[name='selector']").change(function(e){
+	$("input[name='selector']").change(function (e) {
 		let checkboxValue = $("input[name='selector']:checked").val();
 		if (checkboxValue == "paypal") {
 			$("#paypal-btn").show();
@@ -110,7 +223,7 @@
 		}
 	});
 
-	$("#paypal-btn").click(function(e){
+	$("#paypal-btn").click(function (e) {
 		if (!e.detail || e.detail == 1) {
 			var modelData = JSON.parse($('#modelData').val());
 			$.ajax({
@@ -118,6 +231,7 @@
 				type: 'POST',
 				data: { data: JSON.stringify(modelData) },
 				success: function (response) {
+					window.location.href = response;
 					alert('Processing to Paypal');
 					//$.toaster({ priority: 'success', title: 'Created', message: "Back To Cart Detail Succesfully" });
 				},
