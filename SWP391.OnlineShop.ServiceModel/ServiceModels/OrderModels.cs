@@ -72,6 +72,7 @@ namespace SWP391.OnlineShop.ServiceModel.ServiceModels
             public decimal TotalCost { get; set; }
             public OrderStatus OrderStatus { get; set; }
             public string Address { get; set; }
+            public string OrderNotes { get; set; }
         }
 
         [Route("/Order/PutUpdateQuantity", "PUT")]
@@ -93,5 +94,12 @@ namespace SWP391.OnlineShop.ServiceModel.ServiceModels
         {
             public int Id { get; set; }
         }
-    }
+
+		[Route("/Order/PutUpdateOrderNotes", "PUT")]
+		public class PutUpdateOrderNotes : IReturn<BaseResultModel>
+		{
+			public int Id { get; set; }
+            public string OrderNotes { get; set; }
+        }
+	}
 }

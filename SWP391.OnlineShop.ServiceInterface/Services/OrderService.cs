@@ -256,7 +256,7 @@ namespace SWP391.OnlineShop.ServiceInterface.Services
 			var result = new OrderViewModel();
 			try
 			{
-				var order = _unitOfWork.Orders.GetById(request.Id);
+				var order = _unitOfWork.Orders.GetOrderInfoById(request.Id);
 				if (order == null)
 				{
 					result.StatusCode = StatusCode.InternalServerError;
@@ -271,6 +271,10 @@ namespace SWP391.OnlineShop.ServiceInterface.Services
                 {
                     order.CustomerAddress = request.Address;
                 }
+				if (!string.IsNullOrEmpty(request.OrderNotes))
+				{
+					order.OrderNotes = request.OrderNotes;
+				}
 				_unitOfWork.Orders.Update(order);
 				var rows = await _unitOfWork.CompleteAsync();
 				result.StatusCode = rows > 0 ? StatusCode.Success : StatusCode.InternalServerError;
@@ -309,7 +313,7 @@ namespace SWP391.OnlineShop.ServiceInterface.Services
 			var result = new OrderViewModel();
 			try
 			{
-				var order = _unitOfWork.Orders.GetById(request.Id);
+				var order = _unitOfWork.Orders.GetOrderInfoById(request.Id);
 				if (order == null)
 				{
 					result.StatusCode = StatusCode.InternalServerError;
@@ -323,6 +327,29 @@ namespace SWP391.OnlineShop.ServiceInterface.Services
 			catch (Exception ex)
 			{
 				_logger.LogError($"PutUpdateCartStatus error {ex.Message}");
+			}
+			return result;
+		}
+
+		public async Task<BaseResultModel> Put(PutUpdateOrderNotes request)
+		{
+			var result = new OrderViewModel();
+			try
+			{
+				var order = _unitOfWork.Orders.GetOrderInfoById(request.Id);
+				if (order == null)
+				{
+					result.StatusCode = StatusCode.InternalServerError;
+					return result;
+				}
+				order.OrderNotes = request.OrderNotes;
+				_unitOfWork.Orders.Update(order);
+				var rows = await _unitOfWork.CompleteAsync();
+				result.StatusCode = rows > 0 ? StatusCode.Success : StatusCode.InternalServerError;
+			}
+			catch (Exception ex)
+			{
+				_logger.LogError($"PutUpdateOrderNotes error {ex.Message}");
 			}
 			return result;
 		}

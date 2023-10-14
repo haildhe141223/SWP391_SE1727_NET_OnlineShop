@@ -7,11 +7,14 @@ using PayPal.Core;
 using PayPal.v1.Payments;
 using ServiceStack;
 using SWP391.OnlineShop.Common.Constraints;
+using SWP391.OnlineShop.Core.Models.Entities;
 using SWP391.OnlineShop.Core.Models.Identities;
 using SWP391.OnlineShop.ServiceInterface.Loggers;
 using SWP391.OnlineShop.ServiceModel.ServiceModels;
 using SWP391.OnlineShop.ServiceModel.ViewModels.Cart;
+using static ServiceStack.Svg;
 using static SWP391.OnlineShop.ServiceModel.ServiceModels.AddressModel;
+using static SWP391.OnlineShop.ServiceModel.ServiceModels.EmailModel;
 using static SWP391.OnlineShop.ServiceModel.ServiceModels.OrderModels;
 
 namespace SWP391.OnlineShop.Portal.Controllers
@@ -56,7 +59,8 @@ namespace SWP391.OnlineShop.Portal.Controllers
             {
                 Email = email
             });
-            var cartContactOrders = await _client.GetAsync(new GetCartContactByUser
+			cartDetailOrders.Sliders = productSlider.Take(8).ToList();
+			var cartContactOrders = await _client.GetAsync(new GetCartContactByUser
             {
                 Email = email
             });
@@ -73,10 +77,17 @@ namespace SWP391.OnlineShop.Portal.Controllers
             {
                 if (cartDetailOrders.OrderDetails == null || cartDetailOrders.OrderDetails?.Count <= 0)
                 {
-                    if (cartContactOrders.OrderDetails == null || cartContactOrders.OrderDetails?.Count <= 0)
+                    if ((cartContactOrders.OrderDetails == null || cartContactOrders.OrderDetails?.Count <= 0))
                     {
-                        return RedirectToAction("Checkout", "Cart");
-                    }
+                        if (cartCompleteOrders.OrderDetails != null && cartCompleteOrders.OrderDetails.Count >= 0)
+                        {
+							return RedirectToAction("Checkout", "Cart");
+                        }
+                        else
+                        {
+                            return View(cartDetailOrders);
+                        }
+					}
                     // get address by userEmail
                     var userAddress = await _client.GetAsync(new GetAddressByUser()
                     {
@@ -108,6 +119,10 @@ namespace SWP391.OnlineShop.Portal.Controllers
             {
                 Email = email
             });
+            if(cartCompleteOrders == null || cartCompleteOrders.OrderDetails == null || cartCompleteOrders.OrderDetails.Count <=0)
+            {
+                return RedirectToAction("Index", "Cart");
+            }
 			var productSlider = await _client.GetAsync(new GetAllProduct());
 			var userAddress = await _client.GetAsync(new GetAddressByUser()
             {
@@ -137,9 +152,27 @@ namespace SWP391.OnlineShop.Portal.Controllers
                     Id = orderId,
                     OrderStatus = Core.Models.Enums.OrderStatus.PaidOrderWaitingConfirm,
                 });
+                var emailBody = "Your Order has been paid successfully and waiting for delivery";
+				var email = "admin@gmail.com";
+				/*var email = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Email)?.Value;*/
+				var user = await _userManager.FindByEmailAsync(email);
+				if (user == null)
+				{
+					return RedirectToAction("Login", "Account");
+				}
+				var apiEmail = await _client.PostAsync(new PostAddEmail()
+				{
+					Body = emailBody,
+					Category = "Notification",
+					Subject = "Order Paid Successfully",
+					To = email,
+					Title = "Order Paid Successfully"
+				});
+                var productSlider = await _client.GetAsync(new GetAllProduct());
+                order.Sliders = productSlider.Take(8).ToList();
                 if (api.StatusCode == Common.Enums.StatusCode.Success)
                 {
-                    return Ok(api);
+                    return View(order);
                 }
             }
             return View();
@@ -234,9 +267,26 @@ namespace SWP391.OnlineShop.Portal.Controllers
             return RedirectToAction("Error", "Home");
         }
 
-        #region Paypal Payment
-        [HttpPost]
-        public async Task<IActionResult> MakePaypalPayment(string data)
+		[HttpPost]
+		public async Task<IActionResult> FinishCart(int orderId, decimal total, string note)
+		{
+			var api = await _client.PutAsync(new PutUpdateCartToContact()
+			{
+				Id = orderId,
+				OrderStatus = Core.Models.Enums.OrderStatus.WaitingConfirmBySalerUnPaid,
+				TotalCost = total,
+                OrderNotes = note
+			});
+			if (api.StatusCode == Common.Enums.StatusCode.Success)
+			{
+				return Ok(api);
+			}
+			return RedirectToAction("Error", "Home");
+		}
+
+		#region Paypal Payment
+		[HttpPost]
+        public async Task<IActionResult> MakePaypalPayment(string data, string notes)
         {
 			if (string.IsNullOrEmpty(data))
 			{
@@ -315,14 +365,40 @@ namespace SWP391.OnlineShop.Portal.Controllers
             var request = new PaymentCreateRequest();
             request.RequestBody(payment);
             var paypalDirectUrl = await GetPaypalDirectUrl(client, request);
+            if (!string.IsNullOrEmpty(notes))
+            {
+				var updateNotes = await _client.PutAsync(new PutUpdateOrderNotes()
+				{
+					Id = model.Id,
+					OrderNotes = notes
+
+				});
+			}
+          
 			#endregion
 			paypalData.Add( paypalDirectUrl.Split("&token=")[1], model.Id);
 			return Ok(paypalDirectUrl);
         }
 
-        public IActionResult PaymentFailed()
+        public async Task<IActionResult> PaymentFailed()
         {
-            return View();
+			var emailBody = "Your Order has been paid failed! Please try again or choose another payment method";
+			var email = "admin@gmail.com";
+			/*var email = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Email)?.Value;*/
+			var user = await _userManager.FindByEmailAsync(email);
+			if (user == null)
+			{
+				return RedirectToAction("Login", "Account");
+			}
+			var apiEmail = await _client.PostAsync(new PostAddEmail()
+			{
+				Body = emailBody,
+				Category = "Notification",
+				Subject = "Order Paid Failed",
+				To = email,
+				Title = "Order Paid Failed"
+			});
+			return View();
         }
 
         public async Task<string> GetPaypalDirectUrl(PayPalHttpClient client, PaymentCreateRequest request)
