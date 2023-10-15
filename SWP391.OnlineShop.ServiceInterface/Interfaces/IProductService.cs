@@ -67,6 +67,13 @@ namespace SWP391.OnlineShop.ServiceInterface.Interfaces
 		/// <param name="request"></param>
 		/// <returns>appendix of selected id</returns>
 		Task<ProductViewModel> Put(PutUpdateProduct request);
+
+		/// <summary>
+		/// Add new Comment
+		/// </summary>
+		/// <param name="request"></param>
+		/// <returns>appendix of selected id</returns>
+		void Post(Comment request);
 	}
 }
 

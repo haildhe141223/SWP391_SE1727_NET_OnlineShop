@@ -5,48 +5,30 @@
         <div class="row fullscreen align-items-center justify-content-start">
             <div class="col-lg-12">
                 <div class="active-banner-slider owl-carousel">
-                    <!-- single-slide -->
-                    <div class="row single-slide align-items-center d-flex">
-                        <div class="col-lg-5 col-md-6">
-                            <div class="banner-content">
-                                <h1>Nike New <br>Collection!</h1>
-                                <p>
-                                    Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et
-                                    dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation.
-                                </p>
-                                <div class="add-bag d-flex align-items-center">
-                                    <a class="add-btn" href=""><span class="lnr lnr-cross"></span></a>
-                                    <span class="add-text text-uppercase">Add to Bag</span>
+                    @foreach (var item in Model.LatestProducts.Take(3))
+                    {
+                        <!-- single-slide -->
+                        <div class="row single-slide align-items-center d-flex">
+                            <div class="col-lg-5 col-md-6">
+                                <div class="banner-content">
+                                    <h1>New <br>Collection!</h1>
+                                    <p>
+                                        @item.Description
+                                    </p>
+                                    <div class="add-bag d-flex align-items-center">
+                                        <a class="add-btn" href=""><span class="lnr lnr-cross"></span></a>
+                                        <span class="add-text text-uppercase">Add to Bag</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-7">
+                                <div class="banner-img">
+                                    <img class="img-fluid" src="@item.Thumbnail" alt="">
                                 </div>
                             </div>
                         </div>
-                        <div class="col-lg-7">
-                            <div class="banner-img">
-                                <img class="img-fluid" src="~/template/img/banner/banner-img.png" alt="">
-                            </div>
-                        </div>
-                    </div>
-                    <!-- single-slide -->
-                    <div class="row single-slide">
-                        <div class="col-lg-5">
-                            <div class="banner-content">
-                                <h1>Nike New <br>Collection!</h1>
-                                <p>
-                                    Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et
-                                    dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation.
-                                </p>
-                                <div class="add-bag d-flex align-items-center">
-                                    <a class="add-btn" href=""><span class="lnr lnr-cross"></span></a>
-                                    <span class="add-text text-uppercase">Add to Bag</span>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-lg-7">
-                            <div class="banner-img">
-                                <img class="img-fluid" src="~/template/img/banner/banner-img.png" alt="">
-                            </div>
-                        </div>
-                    </div>
+                    }
+
                 </div>
             </div>
         </div>
@@ -107,59 +89,79 @@
         <div class="row justify-content-center">
             <div class="col-lg-8 col-md-12">
                 <div class="row">
-                    <div class="col-lg-8 col-md-8">
-                        <div class="single-deal">
-                            <div class="overlay"></div>
-                            <img class="img-fluid w-100" src="~/template/img/category/c1.jpg" alt="">
-                            <a href="~/template/img/category/c1.jpg" class="img-pop-up" target="_blank">
-                                <div class="deal-details">
-                                    <h6 class="deal-title">Sneaker for Sports</h6>
+                    @foreach (var item in Model.Categories)
+                    {
+                        if(Model.Categories.IndexOf(item) != -1)
+                        {
+                            if (Model.Categories.IndexOf(item) == 0)
+                            {
+                                <div class="col-lg-8 col-md-8">
+                                    <div class="single-deal text-center">
+                                        <div class="overlay"></div>
+                                        <img class="" src="@item.Thumnail" alt="" style="width:300px !important; height:180px !important">
+                                        <a href="~/template/img/category/c1.jpg" class="img-pop-up" target="_blank">
+                                            <div class="deal-details">
+                                                <h6 class="deal-title">@item.CategoryName</h6>
+                                            </div>
+                                        </a>
+                                    </div>
                                 </div>
-                            </a>
-                        </div>
-                    </div>
-                    <div class="col-lg-4 col-md-4">
-                        <div class="single-deal">
-                            <div class="overlay"></div>
-                            <img class="img-fluid w-100" src="~/template/img/category/c2.jpg" alt="">
-                            <a href="~/template/img/category/c2.jpg" class="img-pop-up" target="_blank">
-                                <div class="deal-details">
-                                    <h6 class="deal-title">Sneaker for Sports</h6>
+                            }
+                            if (Model.Categories.IndexOf(item) == 1)
+                            {
+                                <div class="col-lg-4 col-md-4">
+                                    <div class="single-deal">
+                                        <div class="overlay"></div>
+                                        <img class="img-fluid w-100" src="@item.Thumnail" alt="" style="width:300px !important; height:180px !important">
+                                        <a href="~/template/img/category/c1.jpg" class="img-pop-up" target="_blank">
+                                            <div class="deal-details">
+                                                <h6 class="deal-title">@item.CategoryName</h6>
+                                            </div>
+                                        </a>
+                                    </div>
                                 </div>
-                            </a>
-                        </div>
-                    </div>
-                    <div class="col-lg-4 col-md-4">
-                        <div class="single-deal">
-                            <div class="overlay"></div>
-                            <img class="img-fluid w-100" src="~/template/img/category/c3.jpg" alt="">
-                            <a href="~/template/img/category/c3.jpg" class="img-pop-up" target="_blank">
-                                <div class="deal-details">
-                                    <h6 class="deal-title">Product for Couple</h6>
+                            }
+                            if (Model.Categories.IndexOf(item) == 2)
+                            {
+                                <div class="col-lg-4 col-md-4">
+                                    <div class="single-deal">
+                                        <div class="overlay"></div>
+                                        <img class="img-fluid w-100" src="@item.Thumnail" alt="" style="width:4300px !important; height:180px !important">
+                                        <a href="~/template/img/category/c1.jpg" class="img-pop-up" target="_blank">
+                                            <div class="deal-details">
+                                                <h6 class="deal-title">@item.CategoryName</h6>
+                                            </div>
+                                        </a>
+                                    </div>
                                 </div>
-                            </a>
-                        </div>
-                    </div>
-                    <div class="col-lg-8 col-md-8">
-                        <div class="single-deal">
-                            <div class="overlay"></div>
-                            <img class="img-fluid w-100" src="~/template/img/category/c4.jpg" alt="">
-                            <a href="~/template/img/category/c4.jpg" class="img-pop-up" target="_blank">
-                                <div class="deal-details">
-                                    <h6 class="deal-title">Sneaker for Sports</h6>
+                            }
+                            if (Model.Categories.IndexOf(item) == 3)
+                            {
+                                <div class="col-lg-8 col-md-8">
+                                    <div class="single-deal text-center">
+                                        <div class="overlay"></div>
+                                        <img class="" src="@item.Thumnail" alt="" style="width:300px !important; height:180px !important">
+                                        <a href="~/template/img/category/c1.jpg" class="img-pop-up" target="_blank">
+                                            <div class="deal-details">
+                                                <h6 class="deal-title">@item.CategoryName</h6>
+                                            </div>
+                                        </a>
+                                    </div>
                                 </div>
-                            </a>
-                        </div>
-                    </div>
+                            }
+                        }
+                        
+                    }
+                    
                 </div>
             </div>
             <div class="col-lg-4 col-md-6">
                 <div class="single-deal">
                     <div class="overlay"></div>
-                    <img class="img-fluid w-100" src="~/template/img/category/c5.jpg" alt="">
+                    <img class="img-fluid w-100" src="@Model.Categories.LastOrDefault()?.Thumnail" alt="">
                     <a href="~/template/img/category/c5.jpg" class="img-pop-up" target="_blank">
                         <div class="deal-details">
-                            <h6 class="deal-title">Sneaker for Sports</h6>
+                            <h6 class="deal-title">@Model.Categories.LastOrDefault()?.CategoryName</h6>
                         </div>
                     </a>
                 </div>
@@ -603,15 +605,14 @@
                 <div class="active-exclusive-product-slider">
                     <!-- single exclusive carousel -->
                     <div class="single-exclusive-slider">
-                        <img class="img-fluid" src="~/template/img/product/e-p1.png" alt="">
+                        <img class="img-fluid" src="@Model.LatestProducts?[0].Thumbnail" alt="">
                         <div class="product-details">
                             <div class="price">
-                                <h6>$150.00</h6>
-                                <h6 class="l-through">$210.00</h6>
+                                <h6>$@Model.LatestProducts?[0].SalePrice</h6>
+                                <h6 class="l-through">$@Model.LatestProducts?[0].Price</h6>
                             </div>
                             <h4>
-                                addidas New Hammer sole
-                                for Sports person
+                                @Model.LatestProducts?[0].Description
                             </h4>
                             <div class="add-bag d-flex align-items-center justify-content-center">
                                 <a class="add-btn" href=""><span class="ti-bag"></span></a>
@@ -621,15 +622,31 @@
                     </div>
                     <!-- single exclusive carousel -->
                     <div class="single-exclusive-slider">
-                        <img class="img-fluid" src="~/template/img/product/e-p1.png" alt="">
+                        <img class="img-fluid" src="@Model.LatestProducts?[1].Thumbnail" alt="">
                         <div class="product-details">
                             <div class="price">
-                                <h6>$150.00</h6>
-                                <h6 class="l-through">$210.00</h6>
+                                <h6>$@Model.LatestProducts?[1].SalePrice</h6>
+                                <h6 class="l-through">$@Model.LatestProducts?[1].Price</h6>
                             </div>
                             <h4>
-                                addidas New Hammer sole
-                                for Sports person
+                                @Model.LatestProducts?[1].Description
+                            </h4>
+                            <div class="add-bag d-flex align-items-center justify-content-center">
+                                <a class="add-btn" href=""><span class="ti-bag"></span></a>
+                                <span class="add-text text-uppercase">Add to Bag</span>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- single exclusive carousel -->
+                    <div class="single-exclusive-slider">
+                        <img class="img-fluid" src="@Model.LatestProducts?[2].Thumbnail" alt="">
+                        <div class="product-details">
+                            <div class="price">
+                                <h6>$@Model.LatestProducts?[2].SalePrice</h6>
+                                <h6 class="l-through">$@Model.LatestProducts?[2].Price</h6>
+                            </div>
+                            <h4>
+                                @Model.LatestProducts?[2].Description
                             </h4>
                             <div class="add-bag d-flex align-items-center justify-content-center">
                                 <a class="add-btn" href=""><span class="ti-bag"></span></a>
