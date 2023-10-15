@@ -1,11 +1,16 @@
-﻿<!-- Start Banner Area -->
+﻿@model SWP391.OnlineShop.ServiceModel.ViewModels.Cart.OrderViewModel
+@{
+    var sliders = Model.Sliders.ToList();
+    var address = Model.CustomerAddress.Split(',');
+}
+<!-- Start Banner Area -->
 <section class="banner-area organic-breadcrumb">
     <div class="container">
         <div class="breadcrumb-banner d-flex flex-wrap align-items-center justify-content-end">
             <div class="col-first">
                 <h1>Confirmation</h1>
                 <nav class="d-flex align-items-center">
-                    <a href="index.html">Home<span class="lnr lnr-arrow-right"></span></a>
+                    <a asp-action="Index" asp-controller="Home">Home<span class="lnr lnr-arrow-right"></span></a>
                     <a href="category.html">Confirmation</a>
                 </nav>
             </div>
@@ -13,41 +18,137 @@
     </div>
 </section>
 <!-- End Banner Area -->
+<section class="owl-carousel active-product-area section_gap">
+    <!-- single product slide -->
+    <div class="single-product-slider">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-lg-6 text-center">
+                    <div class="section-title">
+                        <h1>Latest Products</h1>
+                        <p>
+                            Lastest Products Of All Category
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                @for (int i = 0; i < sliders.Count() / 2; i++)
+                {
+                    <!-- single product -->
+                    <div class="col-lg-3 col-md-6">
+                        <div class="single-product">
+                            <a asp-action="Details" asp-controller="Product" asp-route-id="@sliders[i].Id"><img class="img-fluid" src="@sliders[i].Thumbnail" alt="@sliders[i].ProductName"></a>
+                            <div class="product-details">
+                                <h6>
+                                    <a asp-action="Details" asp-controller="Product" asp-route-id="@sliders[i].Id">@sliders[i].ProductName</a>
+                                </h6>
+                                <div class="price">
+                                    <h6>$ @sliders[i].Price</h6>
+                                    @if (sliders[i].SalePrice > 0)
+                                    {
+                                        <h6 class="l-through">$ @sliders[i].SalePrice</h6>
+                                    }
+                                </div>
+                                <div class="prd-bottom">
+                                    <a href="" class="social-info">
+                                        <span class="lnr lnr-heart"></span>
+                                        <p class="hover-text">Wishlist</p>
+                                    </a>
+                                    <a href="" class="social-info">
+                                        <span class="lnr lnr-sync"></span>
+                                        <p class="hover-text">compare</p>
+                                    </a>
+                                    <a href="" class="social-info">
+                                        <span class="lnr lnr-move"></span>
+                                        <p class="hover-text">view more</p>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+    <!-- single product slide -->
+    <div class="single-product-slider">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-lg-6 text-center">
+                    <div class="section-title">
+                        <h1>Lastest Products</h1>
+                        <p>
+                            Lastest Products Of All Category
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <!-- single product -->
+                @for (int i = sliders.Count() / 2; i < sliders.Count(); i++)
+                {
+                    <!-- single product -->
+                    <div class="col-lg-3 col-md-6">
+                        <div class="single-product">
+                            <a asp-action="Details" asp-controller="Product" asp-route-id="@sliders[i].Id"><img class="img-fluid" src="@sliders[i].Thumbnail" alt="@sliders[i].ProductName"></a>
+                            <div class="product-details">
+                                <h6>
+                                    <a asp-action="Details" asp-controller="Product" asp-route-id="@sliders[i].Id">@sliders[i].ProductName</a>
+                                </h6>
+                                <div class="price">
+                                    <h6>$ @sliders[i].Price</h6>
+                                    @if (sliders[i].SalePrice > 0)
+                                    {
+                                        <h6 class="l-through">$ @sliders[i].SalePrice</h6>
+                                    }
+                                </div>
+                                <div class="prd-bottom">
+                                    <a href="" class="social-info">
+                                        <span class="lnr lnr-heart"></span>
+                                        <p class="hover-text">Wishlist</p>
+                                    </a>
+                                    <a href="" class="social-info">
+                                        <span class="lnr lnr-sync"></span>
+                                        <p class="hover-text">compare</p>
+                                    </a>
+                                    <a href="" class="social-info">
+                                        <span class="lnr lnr-move"></span>
+                                        <p class="hover-text">view more</p>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</section>
 <!--================Order Details Area =================-->
 <section class="order_details section_gap">
     <div class="container">
         <h3 class="title_confirmation">Thank you. Your order has been received.</h3>
         <div class="row order_d_inner">
-            <div class="col-lg-4">
+            <div class="col-lg-6">
                 <div class="details_item">
                     <h4>Order Info</h4>
                     <ul class="list">
-                        <li><a href="#"><span>Order number</span> : 60235</a></li>
-                        <li><a href="#"><span>Date</span> : Los Angeles</a></li>
-                        <li><a href="#"><span>Total</span> : USD 2210</a></li>
-                        <li><a href="#"><span>Payment method</span> : Check payments</a></li>
+                        <li><a href="#"><span>Order number</span> : @Model.Id</a></li>
+                        <li><a href="#"><span>Date</span> : @Model.ModifiedDateTime.ToString("dd/MM/yyyy") </a></li>
+                        <li><a href="#"><span>Total</span> : @Model.TotalCost</a></li>
+                        <li><a href="#"><span>Payment method</span> : Paypal</a></li>
                     </ul>
                 </div>
             </div>
-            <div class="col-lg-4">
+            <div class="col-lg-6">
                 <div class="details_item">
                     <h4>Billing Address</h4>
                     <ul class="list">
-                        <li><a href="#"><span>Street</span> : 56/8</a></li>
-                        <li><a href="#"><span>City</span> : Los Angeles</a></li>
-                        <li><a href="#"><span>Country</span> : United States</a></li>
-                        <li><a href="#"><span>Postcode </span> : 36952</a></li>
-                    </ul>
-                </div>
-            </div>
-            <div class="col-lg-4">
-                <div class="details_item">
-                    <h4>Shipping Address</h4>
-                    <ul class="list">
-                        <li><a href="#"><span>Street</span> : 56/8</a></li>
-                        <li><a href="#"><span>City</span> : Los Angeles</a></li>
-                        <li><a href="#"><span>Country</span> : United States</a></li>
-                        <li><a href="#"><span>Postcode </span> : 36952</a></li>
+                        <li><a href="#"><span>Ward</span> : @address[0].Trim()</a></li>
+                        <li><a href="#"><span>District</span> : @address[1].Trim()</a></li>
+                        <li><a href="#"><span>Province</span> : @address[2].Trim()</a></li>
+                        <li><a href="#"><span>Phone Number </span> : @Model.CustomerPhoneNumber</a></li>
                     </ul>
                 </div>
             </div>
@@ -64,61 +165,20 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr>
-                            <td>
-                                <p>Pixelstore fresh Blackberry</p>
-                            </td>
-                            <td>
-                                <h5>x 02</h5>
-                            </td>
-                            <td>
-                                <p>$720.00</p>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-                                <p>Pixelstore fresh Blackberry</p>
-                            </td>
-                            <td>
-                                <h5>x 02</h5>
-                            </td>
-                            <td>
-                                <p>$720.00</p>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-                                <p>Pixelstore fresh Blackberry</p>
-                            </td>
-                            <td>
-                                <h5>x 02</h5>
-                            </td>
-                            <td>
-                                <p>$720.00</p>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-                                <h4>Subtotal</h4>
-                            </td>
-                            <td>
-                                <h5></h5>
-                            </td>
-                            <td>
-                                <p>$2160.00</p>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-                                <h4>Shipping</h4>
-                            </td>
-                            <td>
-                                <h5></h5>
-                            </td>
-                            <td>
-                                <p>Flat rate: $50.00</p>
-                            </td>
-                        </tr>
+                        @foreach (var item in Model.OrderDetails)
+                        {
+                            <tr>
+                                <td>
+                                   <a asp-action="Details" asp-controller="Product" asp-route-id="@item.Product.Id"> <p>@item.Product.ProductName</p></a>
+                                </td>
+                                <td>
+                                    <h5>x @item.Product.Amount</h5>
+                                </td>
+                                <td>
+                                    <p>$ @(item.Product.Amount * item.Product.Price)</p>
+                                </td>
+                            </tr>
+                        }
                         <tr>
                             <td>
                                 <h4>Total</h4>
@@ -127,7 +187,7 @@
                                 <h5></h5>
                             </td>
                             <td>
-                                <p>$2210.00</p>
+                                <p>$ @Model.TotalCost</p>
                             </td>
                         </tr>
                     </tbody>

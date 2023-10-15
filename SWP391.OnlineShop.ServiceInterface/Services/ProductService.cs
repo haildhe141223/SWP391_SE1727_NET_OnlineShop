@@ -90,6 +90,25 @@ namespace SWP391.OnlineShop.ServiceInterface.Services
             }
             return result;
         }
+        
+        public List<ProductViewModel> Get(GetProductByCategoryId request)
+        {
+          var result = new List<ProductViewModel>();
+          try
+          {
+            var product = _unitOfWork.Products.GetProductByCategoryId(Convert.ToInt32(request.CategoryId));
+            result = _mapper.Map<List<ProductViewModel>>(product);
+            //result.StatusCode = StatusCode.Success;
+            return result;
+            //result.StatusCode = StatusCode.InternalServerError;
+
+          }
+          catch (Exception ex)
+          {
+            _logger.LogError(ex.Message);
+          }
+          return result;
+        }
 
         public List<ProductViewModel> Get(GetDealProductOfWeek request)
         {
@@ -172,6 +191,20 @@ namespace SWP391.OnlineShop.ServiceInterface.Services
                 _logger.LogError(ex.Message);
             }
             return result;
+        }
+        
+        public void Post(Comment request)
+        {
+          FeedBack feedBack = new FeedBack
+          {
+            ProductId = request.ProductID,
+            CreatedDateTime = DateTime.Now,
+            Comment = request.Message,
+            UserId = _userManager.FindByEmailAsync(request.Email).Result.Id,
+            Status = Core.Models.Enums.Status.Active
+          };
+          _unitOfWork.FeedBacks.Add(feedBack);
+          _unitOfWork.Complete();
         }
 
         public async Task<ProductViewModel> Put(PutUpdateProduct request)
