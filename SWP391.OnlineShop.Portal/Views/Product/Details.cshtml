@@ -38,7 +38,14 @@
                     <h2>@Model.ProductDetail?.Price</h2>
                     <ul class="list">
                         <li><a class="active" href="#"><span>Category</span> : @Model.ProductDetail?.Category?.CategoryName</a></li>
-                        <li><a href="#"><span>Availibility</span> : In Stock</a></li>
+                        @if (Model.ProductDetail?.Amount > 0)
+                        {
+                            <li><a href="#"><span>Availibility</span> : In Stock</a></li>
+                        }
+                        else
+                        {
+                            <li><a href="#"><span>Availibility</span> : Sold Out</a></li>
+                        }
                     </ul>
                     <p>
                         @Model.ProductDetail?.Description
@@ -184,81 +191,34 @@
                 <div class="row">
                     <div class="col-lg-6">
                         <div class="comment_list">
-                            @* @foreach (var feedback in Model.ProductDetail.FeedBacks)
+                            @if (Model.ProductDetail?.FeedBacks != null)
                             {
-                            <div class="review_item">
-                            <div class="media">
-                            <div class="d-flex">
-                            <img src="~/template/img/product/review-1.png" alt="">
-                            </div>
-                            <div class="media-body">
-                            <h4>Blake Ruiz</h4>
-                            <h5>@feedback.CreatedDateTime</h5>
-                            <a class="reply_btn" href="#">Reply</a>
-                            </div>
-                            </div>
-                            <p>
-                            @feedback.Comment
-                            </p>
-                            </div>
-                            } *@
-                            <div class="review_item">
-                                <div class="media">
-                                    <div class="d-flex">
-                                        <img src="~/template/img/product/review-1.png" alt="">
+                                @foreach (var feedback in Model.ProductDetail.FeedBacks)
+                                {
+                                    <div class="review_item">
+                                        <div class="media">
+                                            <div class="d-flex">
+                                                <img src="~/template/img/product/review-1.png" alt="">
+                                            </div>
+                                            <div class="media-body">
+                                                <h4>Blake Ruiz</h4>
+                                                <h5>@feedback.CreatedDateTime</h5>
+                                                <a class="reply_btn" href="#">Reply</a>
+                                            </div>
+                                        </div>
+                                        <p>
+                                            @feedback.Comment
+                                        </p>
                                     </div>
-                                    <div class="media-body">
-                                        <h4>Blake Ruiz</h4>
-                                        <h5>12th Feb, 2018 at 05:56 pm</h5>
-                                        <a class="reply_btn" href="#">Reply</a>
-                                    </div>
-                                </div>
-                                <p>
-                                    Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et
-                                    dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea
-                                    commodo
-                                </p>
-                            </div>
-                            <div class="review_item reply">
-                                <div class="media">
-                                    <div class="d-flex">
-                                        <img src="~/template/img/product/review-2.png" alt="">
-                                    </div>
-                                    <div class="media-body">
-                                        <h4>Blake Ruiz</h4>
-                                        <h5>12th Feb, 2018 at 05:56 pm</h5>
-                                        <a class="reply_btn" href="#">Reply</a>
-                                    </div>
-                                </div>
-                                <p>
-                                    Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et
-                                    dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea
-                                    commodo
-                                </p>
-                            </div>
-                            <div class="review_item">
-                                <div class="media">
-                                    <div class="d-flex">
-                                        <img src="~/template/img/product/review-3.png" alt="">
-                                    </div>
-                                    <div class="media-body">
-                                        <h4>Blake Ruiz</h4>
-                                        <h5>12th Feb, 2018 at 05:56 pm</h5>
-                                        <a class="reply_btn" href="#">Reply</a>
-                                    </div>
-                                </div>
-                                <p>
-                                    Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et
-                                    dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea
-                                    commodo
-                                </p>
-                            </div>
+                                }
+                            }
+
                         </div>
                     </div>
                     <div class="col-lg-6">
                         <div class="review_box">
                             <h4>Post a comment</h4>
-                            <form class="row contact_form" action="contact_process.php" method="post" id="contactForm" novalidate="novalidate">
+                            <form asp-controller="Product" asp-action="AddComment" asp-route-productID="@Model.ProductDetail?.Id" class="row contact_form" method="post" id="contactForm" novalidate="novalidate">
                                 <div class="col-md-12">
                                     <div class="form-group">
                                         <input type="text" class="form-control" id="name" name="name" placeholder="Your Full name">
@@ -276,7 +236,7 @@
                                 </div>
                                 <div class="col-md-12">
                                     <div class="form-group">
-                                        <textarea class="form-control" name="message" id="message" rows="1" placeholder="Message"></textarea>
+                                        <textarea class="form-control" name="message" id="message" rows="3" placeholder="Message"></textarea>
                                     </div>
                                 </div>
                                 <div class="col-md-12 text-right">
@@ -332,46 +292,30 @@
                             </div>
                         </div>
                         <div class="review_list">
-                            <div class="review_item">
-                                <div class="media">
-                                    <div class="d-flex">
-                                        <img src="~/template/img/product/review-1.png" alt="">
+                            @if (Model.ProductDetail?.FeedBacks != null)
+                            {
+                                @foreach (var feedback in Model.ProductDetail.FeedBacks)
+                                {
+                                    <div class="review_item">
+                                        <div class="media">
+                                            <div class="d-flex">
+                                                <img src="~/template/img/product/review-1.png" alt="">
+                                            </div>
+                                            <div class="media-body">
+                                                <h4>Blake Ruiz</h4>
+                                                @for (int i = 0; i < feedback.RatedStar; i++)
+                                                {
+                                                    <i class="fa fa-star"></i>
+                                                }
+                                            </div>
+                                        </div>
+                                        <p>
+                                            @feedback.Comment
+                                        </p>
                                     </div>
-                                    <div class="media-body">
-                                        <h4>Blake Ruiz</h4>
-                                        <i class="fa fa-star"></i>
-                                        <i class="fa fa-star"></i>
-                                        <i class="fa fa-star"></i>
-                                        <i class="fa fa-star"></i>
-                                        <i class="fa fa-star"></i>
-                                    </div>
-                                </div>
-                                <p>
-                                    Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et
-                                    dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea
-                                    commodo
-                                </p>
-                            </div>
-                            <div class="review_item">
-                                <div class="media">
-                                    <div class="d-flex">
-                                        <img src="~/template/img/product/review-2.png" alt="">
-                                    </div>
-                                    <div class="media-body">
-                                        <h4>Blake Ruiz</h4>
-                                        <i class="fa fa-star"></i>
-                                        <i class="fa fa-star"></i>
-                                        <i class="fa fa-star"></i>
-                                        <i class="fa fa-star"></i>
-                                        <i class="fa fa-star"></i>
-                                    </div>
-                                </div>
-                                <p>
-                                    Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et
-                                    dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea
-                                    commodo
-                                </p>
-                            </div>
+                                }
+                            }
+
                             <div class="review_item">
                                 <div class="media">
                                     <div class="d-flex">

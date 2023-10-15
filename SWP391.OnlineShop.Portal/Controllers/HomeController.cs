@@ -8,51 +8,55 @@ using System.Diagnostics;
 
 namespace SWP391.OnlineShop.Portal.Controllers
 {
-    public class HomeController : Controller
-    {
-        private readonly IJsonServiceClient _client;
-        private readonly ILoggerService _logger;
+	public class HomeController : Controller
+	{
+		private readonly IJsonServiceClient _client;
+		private readonly ILoggerService _logger;
 
-        public HomeController(
-            IJsonServiceClient client,
-        ILoggerService logger)
-        {
-            _logger = logger;
-            _client = client;
-        }
+		public HomeController(
+			IJsonServiceClient client,
+		ILoggerService logger)
+		{
+			_logger = logger;
+			_client = client;
+		}
 
-        public async Task<IActionResult> Index()
-        {
-            _logger.LogInfo("1. Home Index - Start");
+		public async Task<IActionResult> Index()
+		{
+			_logger.LogInfo("1. Home Index - Start");
 
-            //Get all products
-            var latestProducts = await _client.GetAsync(new GetAllProduct());
+			//Get all products
+			var latestProducts = await _client.GetAsync(new GetAllProduct());
 
-            //Get hot deal product
-            var hotDealProduct = await _client.GetAsync(new GetHotDealProduct());
+			//Get hot deal product
+			var hotDealProduct = await _client.GetAsync(new GetHotDealProduct());
 
-            //Get deal product of week
-            var dealProductOfWeeks = await _client.GetAsync(new GetDealProductOfWeek());
+			//Get deal product of week
+			var dealProductOfWeeks = await _client.GetAsync(new GetDealProductOfWeek());
 
-            var products = new HomeViewModel
-            {
-                LatestProducts = latestProducts,
-                HotDealProduct = hotDealProduct,
-                ProductsOfWeek = dealProductOfWeeks
-            };
+			//Get all categories
+			var categories = await _client.GetAsync(new GetAllCategory());
 
-            return View(products);
-        }
+			var products = new HomeViewModel
+			{
+				LatestProducts = latestProducts,
+				HotDealProduct = hotDealProduct,
+				ProductsOfWeek = dealProductOfWeeks,
+				Categories = categories
+			};
 
-        public IActionResult Contact()
-        {
-            return View();
-        }
+			return View(products);
+		}
 
-        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-        public IActionResult Error()
-        {
-            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
-        }
-    }
+		public IActionResult Contact()
+		{
+			return View();
+		}
+
+		[ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
+		public IActionResult Error()
+		{
+			return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+		}
+	}
 }

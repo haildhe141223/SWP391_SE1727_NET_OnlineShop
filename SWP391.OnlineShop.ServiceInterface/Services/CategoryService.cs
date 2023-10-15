@@ -44,6 +44,7 @@ namespace SWP391.OnlineShop.ServiceInterface.Services
 				{
 					var categoryVm = _mapper.Map<CategoryViewModel>(item);
 					categoryVm.TotalProduct = item.Products.Count();
+					categoryVm.Thumnail = item.Products.FirstOrDefault()?.Thumbnail;
 					result.Add(categoryVm);
 				}
 				//result.StatusCode = StatusCode.Success;
