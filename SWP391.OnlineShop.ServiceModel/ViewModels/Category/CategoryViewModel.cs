@@ -1,5 +1,4 @@
-﻿using SWP391.OnlineShop.Core.Models.Entities;
-using SWP391.OnlineShop.Core.Models.Enums;
+﻿using SWP391.OnlineShop.Core.Models.Enums;
 
 namespace SWP391.OnlineShop.ServiceModel.ViewModels.Category
 {
@@ -11,5 +10,6 @@ namespace SWP391.OnlineShop.ServiceModel.ViewModels.Category
 		public CategoryType CategoryType { get; set; }
 		//public ICollection<Post>? Posts { get; set; }
 		public int TotalProduct { get; set; }
-  }
+		public string? Thumnail { get; set; }
+	}
 }

@@ -192,6 +192,20 @@ namespace SWP391.OnlineShop.ServiceInterface.Services
 			return result;
 		}
 
+		public void Post(Comment request)
+		{
+			FeedBack feedBack = new FeedBack
+			{
+				ProductId = request.ProductID,
+				CreatedDateTime = DateTime.Now,
+				Comment = request.Message,
+				UserId = _userManager.FindByEmailAsync(request.Email).Result.Id,
+				Status = Core.Models.Enums.Status.Active
+			};
+			_unitOfWork.FeedBacks.Add(feedBack);
+			_unitOfWork.Complete();
+		}
+
 		public async Task<ProductViewModel> Put(PutUpdateProduct request)
 		{
 			var result = new ProductViewModel();
