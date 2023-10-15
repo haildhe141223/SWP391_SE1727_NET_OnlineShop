@@ -67,7 +67,7 @@ namespace SWP391.OnlineShop.Portal.Controllers
                                        "Please contact admin for more information");
             }
 
-            var apiResult = await _client.PostAsync(new AccountModels.GetLogin { Email = request.Email });
+            var apiResult = await _client.GetAsync(new AccountModels.GetLogin { Email = request.Email });
 
             switch (apiResult.StatusCode)
             {
