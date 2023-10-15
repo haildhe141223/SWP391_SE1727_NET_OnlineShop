@@ -1,4 +1,5 @@
 ﻿using ServiceStack;
+using SWP391.OnlineShop.Core.Models.Enums;
 using SWP391.OnlineShop.ServiceModel.ViewModels.Products;
 
 namespace SWP391.OnlineShop.ServiceModel.ServiceModels
@@ -52,15 +53,15 @@ namespace SWP391.OnlineShop.ServiceModel.ServiceModels
 	[Route("/Product/PutUpdateProduct", "PUT")]
 	public class PutUpdateProduct : IReturn<ProductViewModel>
 	{
-
 		public string ProductName { get; set; }
-		public string Thumbnail { get; set; }
-		public string Description { get; set; }
-		public int Amount { get; set; }
-		public decimal Price { get; set; }
-		public decimal SalePrice { get; set; }
-		public int? CategoryId { get; set; }
-		public int Id { get; set; }
+    public string Thumbnail { get; set; }
+    public string Description { get; set; }
+    public int Amount { get; set; }
+    public decimal Price { get; set; }
+    public decimal SalePrice { get; set; }
+    public int? CategoryId { get; set; }
+    public int Id { get; set; }
+    public Status Status { get; set; }
 	}
 
 	[Route("/Product/DeleteProduct", "DELETE")]

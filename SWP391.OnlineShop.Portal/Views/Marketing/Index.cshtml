@@ -1,4 +1,5 @@
-﻿@model List<SWP391.OnlineShop.ServiceModel.ViewModels.Products.ProductViewModel>
+﻿@using SWP391.OnlineShop.Core.Models.Enums;
+@model List<SWP391.OnlineShop.ServiceModel.ViewModels.Products.ProductViewModel>
 @{
     Layout = "_Layout";
 }
@@ -11,7 +12,7 @@
             <i class="fa-regular fa-plus"></i>
         </button>
     </a>
-    
+
 </div>
 @*<div class="m-searchs">
     <div>
@@ -51,6 +52,7 @@
                         <th scope="col">Amount</th>
                         <th scope="col">Price</th>
                         <th scope="col">Sale Price</th>
+                        <th scope="col">Status</th>
                         <th scope="col">Action</th>
                     </tr>
                 </thead>
@@ -67,14 +69,14 @@
                             <td>@productViewModel.Amount</td>
                             <td>@productViewModel.Price</td>
                             <td>@productViewModel.SalePrice</td>
-                            @* @if (productViewModel.Status == Status.Active)
-                        {
-                        <td class="text-success">Active</td>
-                        }
-                        else
-                        {
-                        <td class="text-danger">InActive</td>
-                        } *@
+                            @if (productViewModel.Status == Status.Active)
+                            {
+                                <td class="text-success">Active</td>
+                            }
+                            else
+                            {
+                                <td class="text-danger">InActive</td>
+                            }
                             <td>
                                 <div class="table-action">
                                     @*Prevent modify admin account*@

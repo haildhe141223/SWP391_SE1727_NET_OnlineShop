@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using ServiceStack;
+using SWP391.OnlineShop.Core.Models.Enums;
 using SWP391.OnlineShop.ServiceInterface.Loggers;
 using SWP391.OnlineShop.ServiceModel.ServiceModels;
 using SWP391.OnlineShop.ServiceModel.ViewModels.Products;
@@ -47,7 +48,7 @@ namespace SWP391.OnlineShop.Portal.Controllers
                 Price = request.Price,
                 SalePrice = request.SalePrice,
                 Thumbnail = request.Thumbnail,
-                //CategoryId = request.CategoryId,
+                CategoryId = request.CategoryId,
             });
             return RedirectToAction("Index");
         }
@@ -64,7 +65,14 @@ namespace SWP391.OnlineShop.Portal.Controllers
 
         public async Task<IActionResult> EditProduct(int id)
         {
+            var listStatus = new List<Status>
+            {
+                Status.Active,
+                Status.Inactive
+            };
 
+            ViewData["GenreList"] = new SelectList(await _client.GetAsync(new GetAllCategory()), "Id", "CategoryName");
+            ViewData["StatusList"] = new SelectList(listStatus);
             var product = await _client.GetAsync(new GetProductById
             {
                 ProductId = id
@@ -83,12 +91,13 @@ namespace SWP391.OnlineShop.Portal.Controllers
                 Price = request.Price,
                 SalePrice = request.SalePrice,
                 Thumbnail = request.Thumbnail,
-                CategoryId = request.CategoryId
+                CategoryId = request.CategoryId,
+                Status = request.Status,
+                Id = request.Id
             });
             return RedirectToAction("Index");
         }
 
-        [HttpPost]
         public async Task<IActionResult> DeleteProduct(int id)
         {
             var product = await _client.DeleteAsync(new DeleteProduct
@@ -164,7 +173,6 @@ namespace SWP391.OnlineShop.Portal.Controllers
             return RedirectToAction("ManagePost");
         }
 
-        [HttpPost]
         public async Task<IActionResult> DeletePost(int id)
         {
             var product = await _client.DeleteAsync(new DeletePost
