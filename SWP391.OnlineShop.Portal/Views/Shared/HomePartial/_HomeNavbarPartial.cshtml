@@ -1,7 +1,7 @@
 ﻿@using System.Security.Claims
 @using SWP391.OnlineShop.Common.Constraints
 @{
-    var role = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Email)?.Value;
+    var role = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Role)?.Value;
 }
 
 <!-- Start Header Area -->
@@ -64,7 +64,7 @@
                         </li>
                         @if (role == RoleConstraints.Admin)
                         {
-                            <li class="nav-item"><a asp-action="Index" asp-controller="Home" class="nav-link">Managements</a></li>
+                            <li class="nav-item"><a asp-action="Index" asp-controller="Dashboard" asp-area="Managements" class="nav-link">Managements</a></li>
                         }
                         <li class="nav-item"><a asp-action="Contact" asp-controller="Product" class="nav-link">Contact</a></li>
                     </ul>
