@@ -63,7 +63,7 @@
                         </button>
                     </div>
                     <div class="card_area d-flex align-items-center">
-                        <a class="primary-btn" href="#">Add to Cart</a>
+                        <a class="primary-btn" onclick="AddToCart(@Model.ProductDetail?.Id,@Model.ProductDetail?.Price)">Add to Cart</a>
                         <a class="icon_btn" href="#"><i class="lnr lnr lnr-diamond"></i></a>
                         <a class="icon_btn" href="#"><i class="lnr lnr lnr-heart"></i></a>
                     </div>
@@ -521,3 +521,33 @@
     </div>
 </section>
 <!-- End related-product Area -->
+
+<script type="text/javascript">
+    function AddToCart(productId, productPrice){
+        const data = {
+            productId: productId,
+            price: productPrice,
+            quantity: $('#sst').val(),
+        };
+        $.ajax({
+            url: '@Url.Action("AddToCard","Cart")',
+            type: 'POST',
+            data: data,
+            success: function (response) {
+                alert('Add To Cart Complete Succesfully');
+                //$.toaster({ priority: 'success', title: 'Created', message: "Back To Cart Detail Succesfully" });
+                setTimeout(function () {
+                    window.location.reload();
+                }, 1000);
+            },
+            failure: function (failed) {
+                alert(failed.responseText)
+                //$.toaster({ priority: 'warning', title: 'Warning', message: failed.responseText });
+            },
+            error: function (error) {
+                alert(error.responseText)
+                //$.toaster({ priority: 'danger', title: 'Error', message: error.responseText });
+            }
+        });
+    }
+</script>

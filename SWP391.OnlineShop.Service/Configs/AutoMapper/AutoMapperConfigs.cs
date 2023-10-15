@@ -2,6 +2,7 @@ using AutoMapper;
 using SWP391.OnlineShop.Core.Models.Entities;
 using SWP391.OnlineShop.ServiceModel.ViewModels.Cart;
 using SWP391.OnlineShop.ServiceModel.ViewModels.Category;
+using SWP391.OnlineShop.ServiceModel.ViewModels.Emails;
 using SWP391.OnlineShop.ServiceModel.ViewModels.Feedback;
 using SWP391.OnlineShop.ServiceModel.ViewModels.Products;
 
@@ -21,5 +22,8 @@ public class AutoMapperConfigs : Profile
 		CreateMap<Category, CategoryViewModel>().ReverseMap();
 		//// Feedback
 		CreateMap<FeedBack, FeedbackViewModel>().ReverseMap();
+
+		////Email
+		CreateMap<Email, EmailViewModel>().ReverseMap();
 	}
 }
