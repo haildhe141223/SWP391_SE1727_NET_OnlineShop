@@ -156,7 +156,7 @@ namespace SWP391.OnlineShop.ServiceInterface.Services
                 var product = new Product()
                 {
                     ProductName = request.ProductName,
-                    Thumbnail = result.Thumbnail,
+                    Thumbnail = request.Thumbnail,
                     Amount = request.Amount,
                     Price = request.Price,
                     SalePrice = request.SalePrice,
@@ -164,6 +164,7 @@ namespace SWP391.OnlineShop.ServiceInterface.Services
                     Status = Core.Models.Enums.Status.Active
                 };
                 await _unitOfWork.Products.AddAsync(product);
+                await _unitOfWork.CompleteAsync();
 
             }
             catch (Exception ex)
@@ -183,11 +184,18 @@ namespace SWP391.OnlineShop.ServiceInterface.Services
                 if (product != null)
                 {
                     product.ProductName = request.ProductName;
+                    product.Thumbnail = request.Thumbnail;
+                    product.Amount = request.Amount;
+                    product.Price = request.Price;
+                    product.SalePrice = request.SalePrice;
+                    product.CategoryId = request.CategoryId;
+                    product.Description = request.Description;
+                    product.Status = request.Status;
 
                     _unitOfWork.Products.Update(product);
+                    _unitOfWork.Complete();
                 }
 
-                var rows = await _unitOfWork.CompleteAsync();
             }
             catch (Exception ex)
             {
