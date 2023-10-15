@@ -8,6 +8,11 @@ namespace SWP391.OnlineShop.ServiceModel.ServiceModels
 {
     public class OrderModels
     {
+		[Route("/Order/GetAllOrderByUser", "GET")]
+		public class GetAllOrderByUser : IReturn<List<OrderViewModel>>
+		{
+			public string Email { get; set; }
+		}
 		[Route("/Order/GetCartDetailByUser", "GET")]
         public class GetCartDetailByUser : IReturn<OrderViewModel>
         {
