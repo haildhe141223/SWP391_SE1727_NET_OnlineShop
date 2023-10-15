@@ -284,6 +284,41 @@ namespace SWP391.OnlineShop.Portal.Controllers
 			return RedirectToAction("Error", "Home");
 		}
 
+        [HttpPost]
+        public async Task<IActionResult> AddToCard(int productId, decimal price, int quantity)
+        {
+			var email = "admin@gmail.com";
+			/*var email = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Email)?.Value;*/
+			var user = await _userManager.FindByEmailAsync(email);
+			if (user == null)
+			{
+				return RedirectToAction("Login", "Account");
+			}
+			var userAddress = await _client.GetAsync(new GetAddressByUser()
+			{
+				Email = email
+			});
+			var product = await _client.GetAsync(new GetProductById()
+            {
+                ProductId = productId
+            });
+           if(product.Amount < quantity)
+            {
+                return StatusCode(500, $"There's not enough product in store. Current in store {product.Amount}");
+            }
+            var addToCart = await _client.PostAsync(new PostAddToCart()
+            {
+                CustomerEmail = email,
+                CustomerAddress = userAddress.FullAddress,
+                CustomerName = user.NormalizedUserName,
+                OrderStatus = Core.Models.Enums.OrderStatus.InCartDetail,
+                Quantity = quantity,
+                Price = price,
+                ProductId = productId,
+            });
+            return Ok();
+        }
+
 		#region Paypal Payment
 		[HttpPost]
         public async Task<IActionResult> MakePaypalPayment(string data, string notes)

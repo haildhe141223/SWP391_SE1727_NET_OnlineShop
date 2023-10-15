@@ -35,8 +35,9 @@ namespace SWP391.OnlineShop.ServiceModel.ServiceModels
         [Route("/Order/PostAddToCart", "POST")]
         public class PostAddToCart : IReturn<OrderViewModel>
         {
-            public string Email { get; set; }
-            public List<OrderDetail> OrderDetails { get; set; }
+            public int ProductId { get; set; }
+            public decimal Price { get; set; }
+            public int Quantity { get; set; }
             public string CustomerName { get; set; }
             public string CustomerAddress { get; set; }
             public Gender CustomerGender { get; set; }
