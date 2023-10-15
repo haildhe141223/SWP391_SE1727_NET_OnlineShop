@@ -42,6 +42,24 @@ namespace SWP391.OnlineShop.Portal.Controllers
             _config = config;
         }
 
+        public async Task<IActionResult> MyOrders()
+        {
+			var email = "admin@gmail.com";/* User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Email)?.Value;
+            if(string.IsNullOrEmpty(email))
+            {
+                return RedirectToAction("Login", "Account");
+            }*/
+			var user = await _userManager.FindByEmailAsync(email);
+			if (user == null)
+			{
+				return RedirectToAction("Login", "Account");
+			}
+            var orders = await _client.GetAsync(new GetAllOrderByUser()
+            {
+                Email = email
+            });
+			return View(orders);
+        }
         public async Task<IActionResult> Index()
         {
             var email = "admin@gmail.com";/* User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Email)?.Value;
@@ -146,7 +164,19 @@ namespace SWP391.OnlineShop.Portal.Controllers
                 {
                     Id = orderId
                 });
-
+                foreach (var item in order.OrderDetails)
+                {
+                    var product = await _client.GetAsync(new GetProductById()
+                    {
+                        ProductId = item.Product.Id
+                    });
+                    var quantity = product.Amount - item.Quantity;
+                    var updateAmount = await _client.PutAsync(new PutUpdateProduct()
+                    {
+                        Amount = quantity,
+                        Id = product.Id
+                    });
+                }
                 var api = await _client.PutAsync(new PutUpdateCartStatus()
                 {
                     Id = orderId,
@@ -216,8 +246,11 @@ namespace SWP391.OnlineShop.Portal.Controllers
 
             foreach (var item in order.OrderDetails)
             {
-                total += item.Quantity * item.UnitPrice;
-            }
+                if(item.Status == Core.Models.Enums.Status.Active)
+                {
+					total += item.Quantity * item.UnitPrice;
+				}
+			}
 
             var api = await _client.PutAsync(new PutUpdateCartToContact()
             {

@@ -185,6 +185,31 @@ namespace SWP391.OnlineShop.ServiceInterface.Services
 			return result;
 		}
 
+		public List<OrderViewModel> Get(GetAllOrderByUser request)
+		{
+			var result = new List<OrderViewModel>();
+			_logger.LogInfo("GetAllOrderByUser");
+			try
+			{
+				var listModel = _unitOfWork.Orders.GetOrdersByUser(request.Email)
+					 .OrderByDescending(o => o.OrderDateTime)
+					 .ToList();
+				if (listModel is not null)
+				{
+					foreach (var item in listModel)
+					{
+						var order = _mapper.Map<OrderViewModel>(item);
+						result.Add(order);
+					}
+				}
+			}
+			catch (Exception ex)
+			{
+				_logger.LogError($"GetAllOrderByUser error {ex.Message}");
+			}
+			return result;
+		}
+
 		public async Task<OrderViewModel> Post(PostAddToCart request)
 		{
 			var result = new OrderViewModel();
@@ -220,7 +245,7 @@ namespace SWP391.OnlineShop.ServiceInterface.Services
 						var orderDetail = new OrderDetail()
 						{
 							ProductId = request.ProductId,
-							SalePrice = request.Price,
+							UnitPrice = request.Price,
 							Quantity = request.Quantity,
 							OrderId = result.Id
 						};
@@ -236,15 +261,15 @@ namespace SWP391.OnlineShop.ServiceInterface.Services
 					var isProductExist = false;
 					foreach (var item in orderInCartDetail.OrderDetails)
 					{
-						if (item.ProductId == request.ProductId)
+						if (item.ProductId == request.ProductId && item.Status == Core.Models.Enums.Status.Active)
 						{
 							isProductExist = true;
-							quantity = item.Quantity;
+							quantity = item.Quantity + request.Quantity;
+							orderInCartDetail.TotalCost += request.Price * request.Quantity;
+
 							break;
 						}
 					}
-					quantity += request.Quantity;
-					orderInCartDetail.TotalCost = request.Price * quantity;
 					_unitOfWork.Orders.Update(orderInCartDetail);
 					if (isProductExist)
 					{
@@ -258,7 +283,7 @@ namespace SWP391.OnlineShop.ServiceInterface.Services
 						var orderDetail = new OrderDetail()
 						{
 							ProductId = request.ProductId,
-							SalePrice = request.Price,
+							UnitPrice = request.Price,
 							Quantity = request.Quantity,
 							OrderId = orderInCartDetail.Id
 						};

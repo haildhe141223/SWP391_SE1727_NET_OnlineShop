@@ -89,5 +89,12 @@ namespace SWP391.OnlineShop.ServiceInterface.Interfaces
 		/// <param name="request"></param>
 		/// <returns>API Status Code</returns>
 		Task<BaseResultModel> Put(PutUpdateOrderNotes request);
+
+		/// <summary>
+		/// Get All order by user
+		/// </summary>
+		/// <param name="request"></param>
+		/// <returns>list of orders</returns>
+		List<OrderViewModel> Get(GetAllOrderByUser request);
 	}
 }

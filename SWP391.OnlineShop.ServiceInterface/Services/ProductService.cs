@@ -217,8 +217,14 @@ namespace SWP391.OnlineShop.ServiceInterface.Services
 					//result.StatusCode = StatusCode.InternalServerError;
 					//return result;
 				}
-				product.ProductName = request.ProductName;
-
+				if (string.IsNullOrEmpty(request.ProductName))
+				{
+					product.ProductName = request.ProductName;
+				}
+				if(request.Amount > 0)
+				{
+					product.Amount = request.Amount;
+				}
 				_unitOfWork.Products.Update(product);
 				var rows = await _unitOfWork.CompleteAsync();
 				//result.StatusCode = rows > 0 ? StatusCode.Success : StatusCode.InternalServerError;
