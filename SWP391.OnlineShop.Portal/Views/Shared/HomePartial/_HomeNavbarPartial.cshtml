@@ -1,4 +1,4 @@
-﻿@using System.Security.Claims
+@using System.Security.Claims
 @using SWP391.OnlineShop.Common.Constraints
 @{
     var role = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Role)?.Value;
@@ -30,6 +30,8 @@
                                 <li class="nav-item"><a asp-action="Checkout" asp-controller="Cart" class="nav-link">Product Checkout</a></li>
                                 <li class="nav-item"><a asp-action="Index" asp-controller="Cart" class="nav-link">Shopping Cart</a></li>
                                 <li class="nav-item"><a asp-action="Confirmation" asp-controller="Cart" class="nav-link">Confirmation</a></li>
+                                <li class="nav-item"><a asp-action="Index" asp-controller="Dashboard" asp-area="Managements" class="nav-link">Managements</a></li>
+                                <li class="nav-item"><a asp-action="MyOrders" asp-controller="Cart" class="nav-link">My Orders</a></li>
                             </ul>
                         </li>
                         <li class="nav-item submenu dropdown">

@@ -1,6 +1,7 @@
 ﻿using SWP391.OnlineShop.Core.Models.Enums;
 using SWP391.OnlineShop.ServiceModel.Results;
 using SWP391.OnlineShop.ServiceModel.ViewModels.Address;
+using SWP391.OnlineShop.ServiceModel.ViewModels.Products;
 
 namespace SWP391.OnlineShop.ServiceModel.ViewModels.Cart
 {
@@ -16,7 +17,10 @@ namespace SWP391.OnlineShop.ServiceModel.ViewModels.Cart
         public decimal TotalCost { get; set; }
         public OrderStatus OrderStatus { get; set; }
         public Status Status { get; set; }
+        public DateTime ModifiedDateTime { get; set; }
+
         public ICollection<OrderDetailViewModel> OrderDetails { get; set; }
         public ICollection<ProvinceViewModel> Provinces { get; set; }
+        public ICollection<ProductViewModel> Sliders { get; set; }
     }
 }

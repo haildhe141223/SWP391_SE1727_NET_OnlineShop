@@ -1,12 +1,11 @@
-﻿@using SWP391.OnlineShop.Core.Models.Enums;
-@model List<SWP391.OnlineShop.ServiceModel.ViewModels.Products.ProductViewModel>
+﻿@model List<SWP391.OnlineShop.ServiceModel.ViewModels.Products.PostViewModel>
 @{
     Layout = "_Layout";
 }
 
 <div class="m-headers ml-3" style="margin-top: 10% !important;">
-    <h4 class="fw-bold">Product Management</h4>
-    <a asp-controller="Marketing" asp-action="AddProduct">
+    <h4 class="fw-bold">Post Management</h4>
+    <a asp-controller="Marketing" asp-action="AddPost">
         <button class="btn btn-primary">
             <span>Add</span>
             <i class="fa-regular fa-plus"></i>
@@ -39,44 +38,43 @@
 </div>*@
 <div class="card shadow mb-4 mt-3">
     <div class="card-header py-3">
-        <h6 class="m-0 font-weight-bold text-primary">Products DataTables</h6>
+        <h6 class="m-0 font-weight-bold text-primary">Posts DataTables</h6>
     </div>
     <div class="card-body container-fluid">
         <div class="table-responsive">
             <table class="table table-hover table-bordered" id="dataTable" width="100%" cellspacing="0">
                 <thead class="table-secondary">
                     <tr>
-                        <th scope="col">Product Name</th>
-                        <th scope="col">Image</th>
+                        <th scope="col">Title</th>
+                        <th scope="col">Brief</th>
+                        <th scope="col">Featured</th>
+                        <th scope="col">Thumbnail</th>
                         <th scope="col">Description</th>
-                        <th scope="col">Amount</th>
-                        <th scope="col">Price</th>
-                        <th scope="col">Sale Price</th>
-                        <th scope="col">Status</th>
+                        <th scope="col">Author</th>
                         <th scope="col">Action</th>
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach (var productViewModel in Model)
+                    @foreach (var postViewModel in Model)
                     {
                         <tr>
                             @* <td>
                         <a asp-action="UserRoleDetails" asp-controller="Admin" asp-route-email="@userViewModel.Email">@userViewModel.UserName</a>
                         </td> *@
-                            <td>@productViewModel.ProductName</td>
-                            <td><img width="300" height="300" src="@productViewModel.Thumbnail"></td>
-                            <td>@productViewModel.Description</td>
-                            <td>@productViewModel.Amount</td>
-                            <td>@productViewModel.Price</td>
-                            <td>@productViewModel.SalePrice</td>
-                            @if (productViewModel.Status == Status.Active)
-                            {
-                                <td class="text-success">Active</td>
-                            }
-                            else
-                            {
-                                <td class="text-danger">InActive</td>
-                            }
+                            <td>@postViewModel.Title</td>
+                            <td>@postViewModel.Brief</td>
+                            <td>@postViewModel.Featured</td>
+                            <td>@postViewModel.Thumbnail</td>
+                            <td>@postViewModel.Description</td>
+                            <td>@postViewModel.Author</td>
+                            @* @if (productViewModel.Status == Status.Active)
+                        {
+                        <td class="text-success">Active</td>
+                        }
+                        else
+                        {
+                        <td class="text-danger">InActive</td>
+                        } *@
                             <td>
                                 <div class="table-action">
                                     @*Prevent modify admin account*@
@@ -89,10 +87,10 @@
                                 <i class="fa-regular fa-trash-can text-danger"></i>
                                 </a>
                                 } *@
-                                    <a asp-controller="Marketing" asp-action="EditProduct" asp-route-id="@productViewModel.Id">
+                                    <a asp-controller="Marketing" asp-action="EditPost" asp-route-id="@postViewModel.Id">
                                         <i class="fa-regular fa-pen-to-square"></i>
                                     </a>
-                                    <a asp-controller="Marketing" asp-action="DeleteProduct" asp-route-id="@productViewModel.Id">
+                                    <a asp-controller="Marketing" asp-action="DeletePost" asp-route-id="@postViewModel.Id">
                                         <i class="fa-regular fa-trash-can text-danger"></i>
                                     </a>
                                 </div>

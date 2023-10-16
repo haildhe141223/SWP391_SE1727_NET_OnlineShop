@@ -1,4 +1,5 @@
 ﻿using ServiceStack;
+using SWP391.OnlineShop.Core.Models.Enums;
 using SWP391.OnlineShop.ServiceModel.ViewModels.Products;
 
 namespace SWP391.OnlineShop.ServiceModel.ServiceModels
@@ -7,6 +8,12 @@ namespace SWP391.OnlineShop.ServiceModel.ServiceModels
     [Route("/Product/GetAllProduct", "GET")]
     public class GetAllProduct : IReturn<List<ProductViewModel>>
     {
+    }
+
+    [Route("/Product/GetProductByCategoryId", "GET")]
+    public class GetProductByCategoryId : IReturn<List<ProductViewModel>>
+    {
+        public int? CategoryId { get; set; }
     }
 
     [Route("/Product/GetHotDealProduct", "GET")]
@@ -46,7 +53,6 @@ namespace SWP391.OnlineShop.ServiceModel.ServiceModels
     [Route("/Product/PutUpdateProduct", "PUT")]
     public class PutUpdateProduct : IReturn<ProductViewModel>
     {
-
         public string ProductName { get; set; }
         public string Thumbnail { get; set; }
         public string Description { get; set; }
@@ -55,11 +61,22 @@ namespace SWP391.OnlineShop.ServiceModel.ServiceModels
         public decimal SalePrice { get; set; }
         public int? CategoryId { get; set; }
         public int Id { get; set; }
+        public Status Status { get; set; }
     }
 
     [Route("/Product/DeleteProduct", "DELETE")]
     public class DeleteProduct : IReturn<ProductViewModel>
     {
         public int ProductId { get; set; }
+    }
+
+    [Route("/Product/Comment", "POST")]
+    public class Comment : IReturnVoid
+    {
+        public string Name { get; set; }
+        public string Email { get; set; }
+        public string Phone { get; set; }
+        public string Message { get; set; }
+        public int ProductID { get; set; }
     }
 }
