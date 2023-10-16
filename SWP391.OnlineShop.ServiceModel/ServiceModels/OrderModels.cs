@@ -8,7 +8,12 @@ namespace SWP391.OnlineShop.ServiceModel.ServiceModels
 {
     public class OrderModels
     {
-        [Route("/Order/GetCartDetailByUser", "GET")]
+		[Route("/Order/GetAllOrderByUser", "GET")]
+		public class GetAllOrderByUser : IReturn<List<OrderViewModel>>
+		{
+			public string Email { get; set; }
+		}
+		[Route("/Order/GetCartDetailByUser", "GET")]
         public class GetCartDetailByUser : IReturn<OrderViewModel>
         {
             public string Email { get; set; }
@@ -35,8 +40,9 @@ namespace SWP391.OnlineShop.ServiceModel.ServiceModels
         [Route("/Order/PostAddToCart", "POST")]
         public class PostAddToCart : IReturn<OrderViewModel>
         {
-            public string Email { get; set; }
-            public List<OrderDetail> OrderDetails { get; set; }
+            public int ProductId { get; set; }
+            public decimal Price { get; set; }
+            public int Quantity { get; set; }
             public string CustomerName { get; set; }
             public string CustomerAddress { get; set; }
             public Gender CustomerGender { get; set; }
@@ -56,16 +62,23 @@ namespace SWP391.OnlineShop.ServiceModel.ServiceModels
             public string CustomerEmail { get; set; }
             public decimal TotalCost { get; set; }
             public OrderStatus OrderStatus { get; set; }
-
         }
 
-        [Route("/Order/PutUpdateCartToContact", "PUT")]
+		[Route("/Order/PutUpdateCartStatus", "PUT")]
+		public class PutUpdateCartStatus : IReturn<BaseResultModel>
+		{
+			public int Id { get; set; }
+			public OrderStatus OrderStatus { get; set; }
+		}
+
+		[Route("/Order/PutUpdateCartToContact", "PUT")]
         public class PutUpdateCartToContact : IReturn<BaseResultModel>
         {
             public int Id { get; set; }
             public decimal TotalCost { get; set; }
             public OrderStatus OrderStatus { get; set; }
             public string Address { get; set; }
+            public string OrderNotes { get; set; }
         }
 
         [Route("/Order/PutUpdateQuantity", "PUT")]
@@ -87,5 +100,12 @@ namespace SWP391.OnlineShop.ServiceModel.ServiceModels
         {
             public int Id { get; set; }
         }
-    }
+
+		[Route("/Order/PutUpdateOrderNotes", "PUT")]
+		public class PutUpdateOrderNotes : IReturn<BaseResultModel>
+		{
+			public int Id { get; set; }
+            public string OrderNotes { get; set; }
+        }
+	}
 }

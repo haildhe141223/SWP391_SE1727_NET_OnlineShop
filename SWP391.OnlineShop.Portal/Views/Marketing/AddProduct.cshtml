@@ -47,13 +47,15 @@
                 <input asp-for="SalePrice" type="text" class="form-control" />
                 <span asp-validation-for="SalePrice" class="r-error d-block text-danger"></span>
             </div>
-            @* <div class="mb-3">
-                <label asp-for="CategoryId" class="form-label">Category</label>
-                <select asp-for="CategoryId" class="form-control" asp-items="@genreList"></select>
-            </div> *@
-            <a type="button" class="btn btn-secondary" asp-action="">Back</a>
-            <button type="reset" class="btn btn-info">Reset</button>
-            <button type="submit" class="btn btn-primary">Submit</button>
+            <div class="mb-3">
+                <label asp-for="CategoryId" class="form-label">Category</label><br />
+                <select asp-for="CategoryId" class="form-control" asp-items="@genreList"></select><br />
+            </div><br />
+            <div class="mb-3">
+                <a type="button" class="btn btn-secondary" asp-action="">Back</a>
+                <button type="reset" class="btn btn-info">Reset</button>
+                <button type="submit" class="btn btn-primary">Submit</button>
+            </div>
         </form>
     </div>
 </div>

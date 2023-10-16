@@ -17,6 +17,13 @@ namespace SWP391.OnlineShop.ServiceInterface.Interfaces
 		/// </summary>
 		/// <param name="request"></param>
 		/// <returns>Post Detail Standard & Criteria of Appendices</returns>
+		List<ProductViewModel> Get(GetProductByCategoryId request);
+
+		/// <summary>
+		/// Post Detail Standard & Criteria of Appendices
+		/// </summary>
+		/// <param name="request"></param>
+		/// <returns>Post Detail Standard & Criteria of Appendices</returns>
 		List<ProductViewModel> Get(GetHotDealProduct request);
 
 		/// <summary>
@@ -60,6 +67,13 @@ namespace SWP391.OnlineShop.ServiceInterface.Interfaces
 		/// <param name="request"></param>
 		/// <returns>appendix of selected id</returns>
 		Task<ProductViewModel> Put(PutUpdateProduct request);
+
+		/// <summary>
+		/// Add new Comment
+		/// </summary>
+		/// <param name="request"></param>
+		/// <returns>appendix of selected id</returns>
+		void Post(Comment request);
 	}
 }
 
