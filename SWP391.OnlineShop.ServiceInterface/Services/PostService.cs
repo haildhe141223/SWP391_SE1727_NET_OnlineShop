@@ -212,6 +212,7 @@ namespace SWP391.OnlineShop.ServiceInterface.Services
                     Status = Core.Models.Enums.Status.Active
                 };
                 await _unitOfWork.Posts.AddAsync(post);
+                await _unitOfWork.CompleteAsync();
 
             }
             catch (Exception ex)

@@ -1,4 +1,7 @@
 ﻿@model SWP391.OnlineShop.ServiceModel.ViewModels.Cart.OrderViewModel
+@{
+	var sliders = Model.Sliders.ToList();
+}
 <style>
 	.mt-100 {
 		margin-top: 100px;
@@ -41,7 +44,7 @@
 			<div class="col-first">
 				<h1>Shopping Cart</h1>
 				<nav class="d-flex align-items-center">
-					<a href="index.html">Home<span class="lnr lnr-arrow-right"></span></a>
+					<a asp-action="Index" asp-controller="Home">Home<span class="lnr lnr-arrow-right"></span></a>
 					<a href="category.html">Cart</a>
 				</nav>
 			</div>
@@ -49,6 +52,113 @@
 	</div>
 </section>
 <!-- End Banner Area -->
+<section class="owl-carousel active-product-area section_gap">
+	<!-- single product slide -->
+	<div class="single-product-slider">
+		<div class="container">
+			<div class="row justify-content-center">
+				<div class="col-lg-6 text-center">
+					<div class="section-title">
+						<h1>Latest Products</h1>
+						<p>
+							Lastest Products Of All Category
+						</p>
+					</div>
+				</div>
+			</div>
+			<div class="row">
+				@for (int i = 0; i < sliders.Count() / 2; i++)
+				{
+					<!-- single product -->
+					<div class="col-lg-3 col-md-6">
+						<div class="single-product">
+							<a asp-action="Details" asp-controller="Product" asp-route-id="@sliders[i].Id"><img class="img-fluid" src="@sliders[i].Thumbnail" alt="@sliders[i].ProductName"></a>
+							<div class="product-details">
+								<h6>
+									<a asp-action="Details" asp-controller="Product" asp-route-id="@sliders[i].Id">@sliders[i].ProductName</a>
+								</h6>
+								<div class="price">
+									<h6>$ @sliders[i].Price</h6>
+									@if (sliders[i].SalePrice > 0)
+									{
+										<h6 class="l-through">$ @sliders[i].SalePrice</h6>
+									}
+								</div>
+								<div class="prd-bottom">
+									<a href="" class="social-info">
+										<span class="lnr lnr-heart"></span>
+										<p class="hover-text">Wishlist</p>
+									</a>
+									<a href="" class="social-info">
+										<span class="lnr lnr-sync"></span>
+										<p class="hover-text">compare</p>
+									</a>
+									<a href="" class="social-info">
+										<span class="lnr lnr-move"></span>
+										<p class="hover-text">view more</p>
+									</a>
+								</div>
+							</div>
+						</div>
+					</div>
+				}
+			</div>
+		</div>
+	</div>
+	<!-- single product slide -->
+	<div class="single-product-slider">
+		<div class="container">
+			<div class="row justify-content-center">
+				<div class="col-lg-6 text-center">
+					<div class="section-title">
+						<h1>Lastest Products</h1>
+						<p>
+							Lastest Products Of All Category
+						</p>
+					</div>
+				</div>
+			</div>
+			<div class="row">
+				<!-- single product -->
+				@for (int i = sliders.Count() / 2; i < sliders.Count(); i++)
+				{
+					<!-- single product -->
+					<div class="col-lg-3 col-md-6">
+						<div class="single-product">
+							<a asp-action="Details" asp-controller="Product" asp-route-id="@sliders[i].Id"><img class="img-fluid" src="@sliders[i].Thumbnail" alt="@sliders[i].ProductName"></a>
+							<div class="product-details">
+								<h6>
+									<a asp-action="Details" asp-controller="Product" asp-route-id="@sliders[i].Id">@sliders[i].ProductName</a>
+								</h6>
+								<div class="price">
+									<h6>$ @sliders[i].Price</h6>
+									@if (sliders[i].SalePrice > 0)
+									{
+										<h6 class="l-through">$ @sliders[i].SalePrice</h6>
+									}
+								</div>
+								<div class="prd-bottom">
+									<a href="" class="social-info">
+										<span class="lnr lnr-heart"></span>
+										<p class="hover-text">Wishlist</p>
+									</a>
+									<a href="" class="social-info">
+										<span class="lnr lnr-sync"></span>
+										<p class="hover-text">compare</p>
+									</a>
+									<a href="" class="social-info">
+										<span class="lnr lnr-move"></span>
+										<p class="hover-text">view more</p>
+									</a>
+								</div>
+							</div>
+						</div>
+					</div>
+				}
+			</div>
+		</div>
+	</div>
+</section>
 <!--================Cart Area =================-->
 @if (Model.OrderDetails != null && Model.OrderDetails.Count > 0)
 {
@@ -77,7 +187,7 @@
 													<img src="@item.Product?.Thumbnail" alt="" style="max-height: 101.6px;max-width:151.6px">
 												</div>
 												<div class="media-body">
-													<p>@item.Product?.ProductName</p>
+													<a asp-action="Details" asp-controller="Product" asp-route-id="@item.Product?.Id"><p>@item.Product?.ProductName</p></a>
 												</div>
 											</div>
 										</td>
