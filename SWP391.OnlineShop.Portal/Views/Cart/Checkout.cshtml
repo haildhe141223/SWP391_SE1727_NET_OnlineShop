@@ -1,4 +1,7 @@
 ﻿@model SWP391.OnlineShop.ServiceModel.ViewModels.Cart.OrderViewModel
+@{
+	var sliders = Model.Sliders.ToList();
+}
 <!-- Start Banner Area -->
 <section class="banner-area organic-breadcrumb">
 	<div class="container">
@@ -6,7 +9,7 @@
 			<div class="col-first">
 				<h1>Checkout</h1>
 				<nav class="d-flex align-items-center">
-					<a href="index.html">Home<span class="lnr lnr-arrow-right"></span></a>
+					<a asp-action="Index" asp-controller="Home">Home<span class="lnr lnr-arrow-right"></span></a>
 					<a href="single-product.html">Checkout</a>
 				</nav>
 			</div>
@@ -14,6 +17,113 @@
 	</div>
 </section>
 <!-- End Banner Area -->
+<section class="owl-carousel active-product-area section_gap">
+	<!-- single product slide -->
+	<div class="single-product-slider">
+		<div class="container">
+			<div class="row justify-content-center">
+				<div class="col-lg-6 text-center">
+					<div class="section-title">
+						<h1>Latest Products</h1>
+						<p>
+							Lastest Products Of All Category
+						</p>
+					</div>
+				</div>
+			</div>
+			<div class="row">
+				@for (int i = 0; i < sliders.Count()/2; i++)
+				{
+					<!-- single product -->
+					<div class="col-lg-3 col-md-6">
+						<div class="single-product">
+							<a asp-action="Details" asp-controller="Product" asp-route-id="@sliders[i].Id"><img class="img-fluid" src="@sliders[i].Thumbnail" alt="@sliders[i].ProductName"></a>
+							<div class="product-details">
+								<h6>
+									<a asp-action="Details" asp-controller="Product" asp-route-id="@sliders[i].Id">@sliders[i].ProductName</a>
+								</h6>
+								<div class="price">
+									<h6>$ @sliders[i].Price</h6>
+									@if (sliders[i].SalePrice > 0)
+									{
+										<h6 class="l-through">$ @sliders[i].SalePrice</h6>
+									}
+								</div>
+								<div class="prd-bottom">
+									<a href="" class="social-info">
+										<span class="lnr lnr-heart"></span>
+										<p class="hover-text">Wishlist</p>
+									</a>
+									<a href="" class="social-info">
+										<span class="lnr lnr-sync"></span>
+										<p class="hover-text">compare</p>
+									</a>
+									<a href="" class="social-info">
+										<span class="lnr lnr-move"></span>
+										<p class="hover-text">view more</p>
+									</a>
+								</div>
+							</div>
+						</div>
+					</div>
+				}
+			</div>
+		</div>
+	</div>
+	<!-- single product slide -->
+	<div class="single-product-slider">
+		<div class="container">
+			<div class="row justify-content-center">
+				<div class="col-lg-6 text-center">
+					<div class="section-title">
+						<h1>Lastest Products</h1>
+						<p>
+							Lastest Products Of All Category
+						</p>
+					</div>
+				</div>
+			</div>
+			<div class="row">
+				<!-- single product -->
+				@for (int i = sliders.Count() / 2; i < sliders.Count(); i++)
+				{
+					<!-- single product -->
+					<div class="col-lg-3 col-md-6">
+						<div class="single-product">
+							<a asp-action="Details" asp-controller="Product" asp-route-id="@sliders[i].Id"><img class="img-fluid" src="@sliders[i].Thumbnail" alt="@sliders[i].ProductName"></a>
+							<div class="product-details">
+								<h6>
+									<a asp-action="Details" asp-controller="Product" asp-route-id="@sliders[i].Id">@sliders[i].ProductName</a>
+								</h6>
+								<div class="price">
+									<h6>$ @sliders[i].Price</h6>
+									@if (sliders[i].SalePrice > 0)
+									{
+										<h6 class="l-through">$ @sliders[i].SalePrice</h6>
+									}
+								</div>
+								<div class="prd-bottom">
+									<a href="" class="social-info">
+										<span class="lnr lnr-heart"></span>
+										<p class="hover-text">Wishlist</p>
+									</a>
+									<a href="" class="social-info">
+										<span class="lnr lnr-sync"></span>
+										<p class="hover-text">compare</p>
+									</a>
+									<a href="" class="social-info">
+										<span class="lnr lnr-move"></span>
+										<p class="hover-text">view more</p>
+									</a>
+								</div>
+							</div>
+						</div>
+					</div>
+				}
+			</div>
+		</div>
+	</div>
+</section>
 <!--================Checkout Area =================-->
 <section class="checkout_area section_gap">
 	<div class="container">
@@ -23,24 +133,28 @@
 					<h3>Billing Details</h3>
 					<div class="col-md-6 form-group p_star">
 						<label for="name">Full Name</label>
-						<input type="text" class="form-control" id="name" name="name" value="@Model.CustomerName">
+						<input type="text" class="form-control" disabled id="name" name="name" value="@Model.CustomerName">
 					</div>
 					<div class="col-md-6 form-group p_star">
 						<label for="number">Phone Number</label>
-						<input type="text" class="form-control" id="number" name="number" value="@Model.CustomerPhoneNumber">
+						<input type="text" class="form-control" id="number" disabled name="number" value="@Model.CustomerPhoneNumber">
 					</div>
 					<div class="col-md-6 form-group p_star">
 						<label for="email">Email Address</label>
-						<input type="text" class="form-control" id="email" name="compemailany" value="@Model.CustomerEmail">
+						<input type="text" class="form-control" id="email" disabled name="compemailany" value="@Model.CustomerEmail">
 					</div>
 					<div class="col-md-12 form-group p_star">
 						<label for="add1">Address</label>
-						<input type="text" class="form-control" id="add1" name="add1" @Model.CustomerAddress>
+						<input type="text" class="form-control" id="add1" disabled name="add1" value="@Model.CustomerAddress">
 					</div>
 					<div class="col-md-12 form-group">
-						<textarea class="form-control" name="message" id="message" rows="1" placeholder="Order Notes"></textarea>
+						<textarea class="form-control" name="message" id="message" rows="5" placeholder="Order Notes"></textarea>
+					</div>
+					<div class="col-md-12 form-group">
+						<a class="primary-btn" id="back-btn">Update Cart</a>
 					</div>
 				</div>
+				
 				<div class="col-lg-4">
 					<div class="order_box">
 						<h2>Your Order</h2>
@@ -48,7 +162,7 @@
 							<li><a href="#">Product <span>Total</span></a></li>
 							@foreach (var order in Model.OrderDetails)
 							{
-								<li><a href="#">@order.Product.ProductName <span class="middle">x @order.Quantity</span> <span class="last">$ @(order.UnitPrice*order.Quantity)</span></a></li>
+								<li><a href="#">@order.Product.ProductName <span class="middle">x @order.Quantity</span> <span class="last">$ @(order.UnitPrice * order.Quantity)</span></a></li>
 							}
 						</ul>
 						<ul class="list list_2">
@@ -87,18 +201,22 @@
 <!--================End Checkout Area =================-->
 
 <script type="text/javascript">
-	$(document).ready(function(){
+	$(document).ready(function () {
 		let checkboxValue = $("input[name='selector']:checked").val();
-		if(checkboxValue == "paypal"){
+		if (checkboxValue == "paypal") {
 			$("#paypal-btn").show();
 			$("#cash-btn").hide();
-		}else{
+		} else if (checkboxValue == "cash") {
 			$("#paypal-btn").hide();
 			$("#cash-btn").show();
+		}else{
+			$("#paypal-btn").hide();
+			$("#cash-btn").hide();
 		}
+
 	});
 
-	$("input[name='selector']").change(function(e){
+	$("input[name='selector']").change(function (e) {
 		let checkboxValue = $("input[name='selector']:checked").val();
 		if (checkboxValue == "paypal") {
 			$("#paypal-btn").show();
@@ -109,16 +227,76 @@
 		}
 	});
 
-	$("#paypal-btn").click(function(e){
+	$("#paypal-btn").click(function (e) {
 		if (!e.detail || e.detail == 1) {
 			var modelData = JSON.parse($('#modelData').val());
+			var notes = $('#message').val();
 			$.ajax({
 				url: '@Url.Action("MakePaypalPayment","Cart")',
 				type: 'POST',
-				data: { model: modelData },
+				data: { data: JSON.stringify(modelData), notes: notes },
 				success: function (response) {
 					alert('Processing to Paypal');
+					window.location.href = response;
 					//$.toaster({ priority: 'success', title: 'Created', message: "Back To Cart Detail Succesfully" });
+				},
+				failure: function (failed) {
+					alert(failed.responseText)
+					//$.toaster({ priority: 'warning', title: 'Warning', message: failed.responseText });
+				},
+				error: function (error) {
+					alert(error.responseText)
+					//$.toaster({ priority: 'danger', title: 'Error', message: error.responseText });
+				}
+			});
+		}
+	});
+	$('#back-btn').click(function (e) {
+		if (!e.detail || e.detail == 1) {
+			const data = {
+				orderId: @Model.Id,
+				total: $("#total-cost").text().split(' ')[1]
+			};
+			$.ajax({
+				url: '@Url.Action("UpdateCart","Cart")',
+				type: 'POST',
+				data: data,
+				success: function (response) {
+					alert('Back To Cart Detail Succesfully');
+					//$.toaster({ priority: 'success', title: 'Created', message: "Back To Cart Detail Succesfully" });
+					setTimeout(function () {
+						window.location.reload();
+					}, 1000);
+				},
+				failure: function (failed) {
+					alert(failed.responseText)
+					//$.toaster({ priority: 'warning', title: 'Warning', message: failed.responseText });
+				},
+				error: function (error) {
+					alert(error.responseText)
+					//$.toaster({ priority: 'danger', title: 'Error', message: error.responseText });
+				}
+			});
+		}
+	});
+	$('#cash-btn').click(function (e) {
+		if (!e.detail || e.detail == 1) {
+			const data = {
+				orderId: @Model.Id,
+				total: $("#total-cost").text().split(' ')[1],
+				note: $('#message').val()
+			};
+			$.ajax({
+				url: '@Url.Action("FinishCart","Cart")',
+				type: 'POST',
+				data: data,
+				success: function (response) {
+					alert('Your Order has been confirmed');
+					window.location.href = "/home";
+					//$.toaster({ priority: 'success', title: 'Created', message: "Back To Cart Detail Succesfully" });
+					setTimeout(function () {
+						window.location.reload();
+					}, 1000);
 				},
 				failure: function (failed) {
 					alert(failed.responseText)

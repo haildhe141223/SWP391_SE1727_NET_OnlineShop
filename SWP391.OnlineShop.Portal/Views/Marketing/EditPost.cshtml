@@ -1,0 +1,59 @@
+﻿@model SWP391.OnlineShop.ServiceModel.ViewModels.Products.PostViewModel
+@{
+    Layout = "_Layout";
+    var genreList = ViewData["GenreList"] as SelectList;
+}
+
+<div class="m-headers" style="margin-top: 10% !important;">
+    <h4 class="fw-bold ml-5">Manage Post</h4>
+</div>
+
+<!-- DataTales Example -->
+<div class="card shadow mb-4">
+    <div class="card-header py-3">
+        <h6 class="m-0 font-weight-bold text-primary">Edit Post</h6>
+    </div>
+    <div class="card-body">
+        <form style="margin:auto !important; width:60% !important" asp-controller="Marketing" asp-action="EditPost" method="post" enctype="multipart/form-data">
+            <div class="r-error my-4 text-danger text-center" asp-validation-summary="All">
+            </div>
+            <div class="mb-3">
+                <label asp-for="Title" class="form-label">Post Title</label>
+                <input type="text" class="form-control" asp-for="Title" id="name" onchange="changeUrl('name', 'url')">
+                <span asp-validation-for="Title" class="r-error d-block text-danger"></span>
+            </div>
+            <div class="mb-3">
+                <label asp-for="Thumbnail" class="form-label">Thumbnail</label>
+                <input asp-for="Thumbnail" type="text" class="form-control">
+                <span asp-validation-for="Thumbnail" class="r-error d-block text-danger"></span>
+            </div>
+            <div class="mb-3">
+                <label asp-for="Description" class="form-label"></label>
+                <textarea asp-for="Description" type="text" class="form-control"></textarea>
+                <span asp-validation-for="Description" class="r-error d-block text-danger"></span>
+            </div>
+            <div class="mb-3">
+                <label asp-for="Brief" class="form-label"></label>
+                <input asp-for="Brief" type="text" class="form-control" />
+                <span asp-validation-for="Brief" class="r-error d-block text-danger"></span>
+            </div>
+            <div class="mb-3">
+                <label asp-for="Featured" class="form-label"></label>
+                <input asp-for="Featured" type="text" class="form-control" />
+                <span asp-validation-for="Featured" class="r-error d-block text-danger"></span>
+            </div>
+            <div class="mb-3">
+                <label asp-for="Author" class="form-label"></label>
+                <input asp-for="Author" type="text" class="form-control" />
+                <span asp-validation-for="Author" class="r-error d-block text-danger"></span>
+            </div>
+            @* <div class="mb-3">
+            <label asp-for="CategoryId" class="form-label">Category</label>
+            <select asp-for="CategoryId" class="form-control" asp-items="@genreList"></select>
+            </div> *@
+            <a type="button" class="btn btn-secondary" asp-action="">Back</a>
+            <button type="reset" class="btn btn-info">Reset</button>
+            <button type="submit" class="btn btn-primary">Submit</button>
+        </form>
+    </div>
+</div>

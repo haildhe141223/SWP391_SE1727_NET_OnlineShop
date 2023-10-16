@@ -338,6 +338,9 @@ namespace SWP391.OnlineShop.Core.Migrations
                     b.Property<DateTime>("OrderDateTime")
                         .HasColumnType("datetime2");
 
+                    b.Property<string>("OrderNotes")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<int?>("OrderStatus")
                         .HasColumnType("int");
 

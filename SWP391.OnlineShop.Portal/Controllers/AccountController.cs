@@ -67,7 +67,7 @@ namespace SWP391.OnlineShop.Portal.Controllers
                                        "Please contact admin for more information");
             }
 
-            var apiResult = await _client.PostAsync(new AccountModels.GetLogin { Email = request.Email });
+            var apiResult = await _client.GetAsync(new AccountModels.GetLogin { Email = request.Email });
 
             switch (apiResult.StatusCode)
             {
@@ -164,7 +164,7 @@ namespace SWP391.OnlineShop.Portal.Controllers
 
             _logger.LogInfo("Step 3 - ExternalLoginCallback");
 
-            var externalLoginResult = await _client.PostAsync(new AccountModels.GetExternalLogin
+            var externalLoginResult = await _client.GetAsync(new AccountModels.GetExternalLogin
             {
                 ExternalEmail = externalEmail.Value,
                 Username = externalUsername?.Value,
@@ -234,6 +234,20 @@ namespace SWP391.OnlineShop.Portal.Controllers
         public IActionResult ResetPassword()
         {
             return View();
+        }
+
+        #endregion
+
+        #region Logout
+
+        public async Task<IActionResult> Logout()
+        {
+            await _signInManager.SignOutAsync();
+            foreach (var cookie in Request.Cookies.Keys)
+            {
+                Response.Cookies.Delete(cookie);
+            }
+            return RedirectToAction("Index", "Home");
         }
 
         #endregion

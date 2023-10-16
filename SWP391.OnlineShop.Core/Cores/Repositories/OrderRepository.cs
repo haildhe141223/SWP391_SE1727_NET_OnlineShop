@@ -15,8 +15,8 @@ public class OrderRepository : GenericRepository<Order, int>, IOrderRepository
 
 	public IEnumerable<Order> GetCartCompletionByUser(string email)
 	{
-		var result = Context.Orders.
-			Include(o => o.OrderDetails).
+		var result = Context.Orders
+			.Include(o => o.OrderDetails.Where(od => od.Status == Status.Active)).
 			ThenInclude(od => od.Product).
 			Include(o => o.User).
 			Where(o => o.OrderStatus == OrderStatus.InCartCompletion
@@ -29,7 +29,7 @@ public class OrderRepository : GenericRepository<Order, int>, IOrderRepository
 	public IEnumerable<Order> GetCartContactByUser(string email)
 	{
 		var result = Context.Orders.
-			Include(o => o.OrderDetails).
+			Include(o => o.OrderDetails.Where(od => od.Status == Status.Active)).
 			ThenInclude(od => od.Product).
 			Include(o => o.User).
 			Where(o => o.OrderStatus == OrderStatus.InCartContact
@@ -42,7 +42,7 @@ public class OrderRepository : GenericRepository<Order, int>, IOrderRepository
 	public IEnumerable<Order> GetCartDetailByUser(string email)
 	{
 		var query = Context.Orders.
-			Include(o => o.OrderDetails).
+			Include(o => o.OrderDetails.Where(od => od.Status == Status.Active)).
 			ThenInclude(od => od.Product).
 			Include(o => o.User);
 		var result = query.Where(o => o.OrderStatus == OrderStatus.InCartDetail
@@ -74,7 +74,7 @@ public class OrderRepository : GenericRepository<Order, int>, IOrderRepository
 	public IEnumerable<Order> GetOrdersByStatus(OrderStatus status)
 	{
 		var result = Context.Orders
-			.Include(o => o.OrderDetails).
+			.Include(o => o.OrderDetails.Where(od => od.Status == Status.Active)).
 			ThenInclude(od => od.Product)
 			.Where(o => o.OrderStatus == status
 			&& o.Status == Status.Active)
@@ -85,13 +85,16 @@ public class OrderRepository : GenericRepository<Order, int>, IOrderRepository
 	public IEnumerable<Order> GetOrdersByUser(string email)
 	{
 		var result = Context.Orders.
-			Include(o => o.OrderDetails).
+			Include(o => o.OrderDetails.Where(od => od.Status == Status.Active)).
+			ThenInclude(o => o.Product).
 			Include(o => o.User).
-			Where(o => o.OrderStatus == OrderStatus.InCartDetail
+			Where(o => o.OrderStatus != OrderStatus.InCartDetail
+			&& o.OrderStatus != OrderStatus.InCartContact
+			&& o.OrderStatus != OrderStatus.InCartCompletion
 			 && o.Status == Status.Active
 			&& o.User.Email.Equals(email)).
 			ToList();
-		throw new NotImplementedException();
+		return result;
 	}
 
 	public void DeleteOrderDetail(int id)
@@ -109,7 +112,7 @@ public class OrderRepository : GenericRepository<Order, int>, IOrderRepository
 	public Order GetOrderInfoById(int id)
 	{
 		var result = Context.Orders
-			.Include(o => o.OrderDetails)
+			.Include(o => o.OrderDetails.Where(od => od.Status == Status.Active))
 			.ThenInclude(o => o.Product)
 			.Where(o => o.Id == id && o.Status == Status.Active).FirstOrDefault();
 		return result;
@@ -120,4 +123,5 @@ public class OrderRepository : GenericRepository<Order, int>, IOrderRepository
 		var orderDetail = Context.OrderDetails.Find(id);
 		orderDetail.OrderStatus = orderStatus;
 	}
+
 }

@@ -9,6 +9,7 @@
   <ItemGroup>
     <Folder Include="Logs\" />
     <Folder Include="Uploads\" />
+    <Folder Include="wwwroot\css\orderHistory\" />
     <Folder Include="wwwroot\template\js\" />
   </ItemGroup>
 

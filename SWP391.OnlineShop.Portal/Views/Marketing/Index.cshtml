@@ -1,14 +1,18 @@
-﻿@model List<SWP391.OnlineShop.ServiceModel.ViewModels.Products.ProductViewModel>
+﻿@using SWP391.OnlineShop.Core.Models.Enums;
+@model List<SWP391.OnlineShop.ServiceModel.ViewModels.Products.ProductViewModel>
 @{
     Layout = "_Layout";
 }
 
-<div class="m-headers" style="margin-top: 10% !important;">
+<div class="m-headers ml-3" style="margin-top: 10% !important;">
     <h4 class="fw-bold">Product Management</h4>
-    <button asp-controller="Marketing" asp-action="AddProduct" type="button" class="btn btn-primary" id="btn-user-add">
-        <span>Add</span>
-        <i class="fa-regular fa-plus"></i>
-    </button>
+    <a asp-controller="Marketing" asp-action="AddProduct">
+        <button class="btn btn-primary">
+            <span>Add</span>
+            <i class="fa-regular fa-plus"></i>
+        </button>
+    </a>
+
 </div>
 @*<div class="m-searchs">
     <div>
@@ -48,6 +52,7 @@
                         <th scope="col">Amount</th>
                         <th scope="col">Price</th>
                         <th scope="col">Sale Price</th>
+                        <th scope="col">Status</th>
                         <th scope="col">Action</th>
                     </tr>
                 </thead>
@@ -59,19 +64,19 @@
                         <a asp-action="UserRoleDetails" asp-controller="Admin" asp-route-email="@userViewModel.Email">@userViewModel.UserName</a>
                         </td> *@
                             <td>@productViewModel.ProductName</td>
-                            <td>@productViewModel.Thumbnail</td>
+                            <td><img width="300" height="300" src="@productViewModel.Thumbnail"></td>
                             <td>@productViewModel.Description</td>
                             <td>@productViewModel.Amount</td>
                             <td>@productViewModel.Price</td>
                             <td>@productViewModel.SalePrice</td>
-                            @* @if (productViewModel.Status == Status.Active)
-                        {
-                        <td class="text-success">Active</td>
-                        }
-                        else
-                        {
-                        <td class="text-danger">InActive</td>
-                        } *@
+                            @if (productViewModel.Status == Status.Active)
+                            {
+                                <td class="text-success">Active</td>
+                            }
+                            else
+                            {
+                                <td class="text-danger">InActive</td>
+                            }
                             <td>
                                 <div class="table-action">
                                     @*Prevent modify admin account*@
