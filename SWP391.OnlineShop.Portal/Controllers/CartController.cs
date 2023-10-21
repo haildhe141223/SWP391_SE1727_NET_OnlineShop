@@ -154,8 +154,13 @@ namespace SWP391.OnlineShop.Portal.Controllers
             cartCompleteOrders.Sliders = productSlider.Take(8).ToList();
             return View(cartCompleteOrders);
         }
+        public IActionResult OrderInformation()
+        {
+            return View();
+        }
 
-        public async Task<IActionResult> Confirmation([FromQuery(Name = "token")] string token)
+
+		public async Task<IActionResult> Confirmation([FromQuery(Name = "token")] string token)
         {
             if(paypalData.Keys.Contains(token))
             {
