@@ -12,6 +12,7 @@ namespace SWP391.OnlineShop.ServiceModel.ServiceModels
 {
     public class SliderModel
     {
+
         [Route("/Slider/GetAllSlider", "GET")]
         public class GetAllSlider : IReturn<List<SliderViewModel>>
         {

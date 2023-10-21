@@ -9,6 +9,7 @@ public class Voucher : BaseEntity<int>
     {
         ProductVouchers = new HashSet<ProductVoucher>();
         UserVouchers = new HashSet<UserVoucher>();
+        Settings = new HashSet<Setting>();
     }
 
     public string VoucherName { get; set; }
@@ -21,4 +22,6 @@ public class Voucher : BaseEntity<int>
 
     public ICollection<ProductVoucher> ProductVouchers { get; set; }
     public ICollection<UserVoucher> UserVouchers { get; set; }
+    public ICollection<Setting> Settings { get; set; }
+
 }

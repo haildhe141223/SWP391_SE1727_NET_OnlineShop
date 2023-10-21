@@ -17,7 +17,6 @@ namespace SWP391.OnlineShop.Core.Cores.Repositories
         {
 
 
-
         }
 
         public Task<List<Setting>> GetSettingByOrderId(int orderId)

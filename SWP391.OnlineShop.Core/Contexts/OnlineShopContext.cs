@@ -37,6 +37,7 @@ public class OnlineShopContext : IdentityDbContext<User, Role, int>
     public DbSet<Slider> Slider { get; set; }
 
 
+
     protected override void OnModelCreating(ModelBuilder builder)
     {
         base.OnModelCreating(builder);

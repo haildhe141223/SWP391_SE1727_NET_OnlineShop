@@ -11,6 +11,7 @@ namespace SWP391.OnlineShop.ServiceModel.ServiceModels
 {
     public class SettingModels
     {
+
         [Route("/Setting/GetAllSetting", "GET")]
         public class GetAllSetting : IReturn<List<SettingViewModel>>
         {

@@ -16,6 +16,7 @@ namespace SWP391.OnlineShop.Core.Models.Entities
         public decimal Value { get; set; }
         public int? OrderId { get; set; }
         public Status SettingStatus { get; set; }
-        public Order Order { get; set; }
+        public Voucher Voucher { get; set; }
+        
     }
 }

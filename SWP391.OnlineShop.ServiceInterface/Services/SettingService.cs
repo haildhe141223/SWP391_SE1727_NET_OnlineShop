@@ -17,6 +17,7 @@ namespace SWP391.OnlineShop.ServiceInterface.Services
 {
     public class SettingService : BaseService, ISettingService
     {
+
         private readonly IMapper _mapper;
         private readonly IUnitOfWork _unitOfWork;
         private readonly ILoggerService _logger;

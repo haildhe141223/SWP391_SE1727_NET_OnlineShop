@@ -16,5 +16,6 @@ namespace SWP391.OnlineShop.Core.Models.Entities
         public string Image { get; set; }
         public string BlackLink { get; set; }
         public Status SliderStatus { get; set; }
+
     }
 }

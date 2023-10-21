@@ -14,7 +14,6 @@ namespace SWP391.OnlineShop.Core.Cores.IRepositories
         Task<List<Slider>> GetSliderByBlackLink(string blackLink);
 
 
-
         Task<List<Slider>> GetSliderByTitle(string title);
 
 

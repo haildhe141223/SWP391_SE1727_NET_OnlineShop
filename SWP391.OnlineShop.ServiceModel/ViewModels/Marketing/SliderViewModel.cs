@@ -9,6 +9,7 @@ namespace SWP391.OnlineShop.ServiceModel.ViewModels.Marketing
 {
     public class SliderViewModel
     {
+
         public string? Title { get; set; }
         public string? Image { get; set; }
         public string? BlackLink { get; set; }

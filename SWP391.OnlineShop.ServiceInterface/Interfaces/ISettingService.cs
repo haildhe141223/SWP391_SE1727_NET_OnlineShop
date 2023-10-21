@@ -11,6 +11,7 @@ namespace SWP391.OnlineShop.ServiceInterface.Interfaces
 {
     public interface ISettingService
     {
+
         /// <summary>
         /// Post Detail Standard & Criteria of Appendices
         /// </summary>

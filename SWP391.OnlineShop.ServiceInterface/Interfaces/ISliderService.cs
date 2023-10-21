@@ -12,6 +12,7 @@ namespace SWP391.OnlineShop.ServiceInterface.Interfaces
 {
     public interface ISliderService
     {
+
         /// <summary>
         /// Post Detail Standard & Criteria of Appendices
         /// </summary>

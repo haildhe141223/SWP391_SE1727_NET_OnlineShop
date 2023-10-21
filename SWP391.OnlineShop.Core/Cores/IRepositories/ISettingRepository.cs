@@ -14,7 +14,6 @@ namespace SWP391.OnlineShop.Core.Cores.IRepositories
         Task<List<Setting>> GetSettingByOrderId(int orderId);
 
 
-
         Task<List<Setting>> GetSettingByType(string type);
 
 

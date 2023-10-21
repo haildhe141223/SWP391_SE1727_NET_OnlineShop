@@ -17,6 +17,7 @@ namespace SWP391.OnlineShop.ServiceInterface.Services
 {
     public class SliderService : BaseService, ISliderService
     {
+
         private readonly IMapper _mapper;
         private readonly IUnitOfWork _unitOfWork;
         private readonly ILoggerService _logger;

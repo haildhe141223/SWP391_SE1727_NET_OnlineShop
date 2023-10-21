@@ -31,7 +31,6 @@ public class UnitOfWork : IUnitOfWork
     public IPostRepository Posts { get; }
     public ITagRepository Tags { get; }
     public IVoucherRepository Vouchers { get; }
-
     public ISettingRepository Settings { get; }
     public ISliderRepository Sliders { get; }
 
