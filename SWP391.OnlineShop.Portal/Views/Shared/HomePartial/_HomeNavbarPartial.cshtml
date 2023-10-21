@@ -1,4 +1,10 @@
-﻿<!-- Start Header Area -->
+@using System.Security.Claims
+@using SWP391.OnlineShop.Common.Constraints
+@{
+    var role = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Role)?.Value;
+}
+
+<!-- Start Header Area -->
 <header class="header_area sticky-header">
     <div class="main_menu">
         <nav class="navbar navbar-expand-lg navbar-light main_box">
@@ -25,7 +31,6 @@
                                 <li class="nav-item"><a asp-action="Index" asp-controller="Cart" class="nav-link">Shopping Cart</a></li>
                                 <li class="nav-item"><a asp-action="Confirmation" asp-controller="Cart" class="nav-link">Confirmation</a></li>
                                 <li class="nav-item"><a asp-action="Index" asp-controller="Dashboard" asp-area="Managements" class="nav-link">Managements</a></li>
-                                <li class="nav-item"><a asp-action="Index" asp-controller="User" asp-area="Managements" class="nav-link">Users</a></li>
                                 <li class="nav-item"><a asp-action="MyOrders" asp-controller="Cart" class="nav-link">My Orders</a></li>
                             </ul>
                         </li>
@@ -39,13 +44,30 @@
                         </li>
                         <li class="nav-item submenu dropdown">
                             <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
-                               aria-expanded="false">Pages</a>
+                               aria-expanded="false">Users</a>
                             <ul class="dropdown-menu">
-                                <li class="nav-item"><a asp-action="Login" asp-controller="Account" class="nav-link">Login</a></li>
-                                <li class="nav-item"><a asp-action="Tracking" asp-controller="Product" class="nav-link">Tracking</a></li>
-                                <li class="nav-item"><a asp-action="Index" asp-controller="Element" class="nav-link">Elements</a></li>
+                                @if (User.Identity is { IsAuthenticated: true })
+                                {
+                                    <li class="nav-item"><a class="nav-link">User Profile</a></li>
+                                    <li class="nav-item"><a asp-action="Logout" asp-controller="Account" class="nav-link">Logout</a></li>
+                                    <li class="nav-item"><a asp-action="Tracking" asp-controller="Product" class="nav-link">Tracking</a></li>
+
+                                    @if (role == RoleConstraints.Admin)
+                                    {
+                                        <li class="nav-item"><a asp-action="Index" asp-controller="Element" class="nav-link">Elements</a></li>
+                                    }
+                                }
+                                else
+                                {
+                                    <li class="nav-item"><a asp-action="Login" asp-controller="Account" class="nav-link">Login</a></li>
+                                    <li class="nav-item"><a asp-action="Register" asp-controller="Account" class="nav-link">Register</a></li>
+                                }
                             </ul>
                         </li>
+                        @if (role == RoleConstraints.Admin)
+                        {
+                            <li class="nav-item"><a asp-action="Index" asp-controller="Dashboard" asp-area="Managements" class="nav-link">Managements</a></li>
+                        }
                         <li class="nav-item"><a asp-action="Contact" asp-controller="Product" class="nav-link">Contact</a></li>
                     </ul>
                     <ul class="nav navbar-nav navbar-right">
