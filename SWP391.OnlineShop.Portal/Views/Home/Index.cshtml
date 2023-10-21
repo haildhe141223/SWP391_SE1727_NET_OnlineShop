@@ -1,52 +1,34 @@
-﻿@model List<SWP391.OnlineShop.ServiceModel.ViewModels.Products.ProductViewModel>
+﻿@model SWP391.OnlineShop.ServiceModel.ViewModels.Products.HomeViewModel
 <!-- start banner Area -->
 <section class="banner-area">
     <div class="container">
         <div class="row fullscreen align-items-center justify-content-start">
             <div class="col-lg-12">
                 <div class="active-banner-slider owl-carousel">
-                    <!-- single-slide -->
-                    <div class="row single-slide align-items-center d-flex">
-                        <div class="col-lg-5 col-md-6">
-                            <div class="banner-content">
-                                <h1>Nike New <br>Collection!</h1>
-                                <p>
-                                    Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et
-                                    dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation.
-                                </p>
-                                <div class="add-bag d-flex align-items-center">
-                                    <a class="add-btn" href=""><span class="lnr lnr-cross"></span></a>
-                                    <span class="add-text text-uppercase">Add to Bag</span>
+                    @foreach (var item in Model.LatestProducts.Take(3))
+                    {
+                        <!-- single-slide -->
+                        <div class="row single-slide align-items-center d-flex">
+                            <div class="col-lg-5 col-md-6">
+                                <div class="banner-content">
+                                    <h1>New <br>Collection!</h1>
+                                    <p>
+                                        @item.Description
+                                    </p>
+                                    <div class="add-bag d-flex align-items-center">
+                                        <a class="add-btn" href=""><span class="lnr lnr-cross"></span></a>
+                                        <span class="add-text text-uppercase">Add to Bag</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-7">
+                                <div class="banner-img">
+                                    <img class="img-fluid" src="@item.Thumbnail" alt="">
                                 </div>
                             </div>
                         </div>
-                        <div class="col-lg-7">
-                            <div class="banner-img">
-                                <img class="img-fluid" src="~/template/img/banner/banner-img.png" alt="">
-                            </div>
-                        </div>
-                    </div>
-                    <!-- single-slide -->
-                    <div class="row single-slide">
-                        <div class="col-lg-5">
-                            <div class="banner-content">
-                                <h1>Nike New <br>Collection!</h1>
-                                <p>
-                                    Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et
-                                    dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation.
-                                </p>
-                                <div class="add-bag d-flex align-items-center">
-                                    <a class="add-btn" href=""><span class="lnr lnr-cross"></span></a>
-                                    <span class="add-text text-uppercase">Add to Bag</span>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-lg-7">
-                            <div class="banner-img">
-                                <img class="img-fluid" src="~/template/img/banner/banner-img.png" alt="">
-                            </div>
-                        </div>
-                    </div>
+                    }
+
                 </div>
             </div>
         </div>
@@ -107,59 +89,79 @@
         <div class="row justify-content-center">
             <div class="col-lg-8 col-md-12">
                 <div class="row">
-                    <div class="col-lg-8 col-md-8">
-                        <div class="single-deal">
-                            <div class="overlay"></div>
-                            <img class="img-fluid w-100" src="~/template/img/category/c1.jpg" alt="">
-                            <a href="~/template/img/category/c1.jpg" class="img-pop-up" target="_blank">
-                                <div class="deal-details">
-                                    <h6 class="deal-title">Sneaker for Sports</h6>
+                    @foreach (var item in Model.Categories)
+                    {
+                        if(Model.Categories.IndexOf(item) != -1)
+                        {
+                            if (Model.Categories.IndexOf(item) == 0)
+                            {
+                                <div class="col-lg-8 col-md-8">
+                                    <div class="single-deal text-center">
+                                        <div class="overlay"></div>
+                                        <img class="" src="@item.Thumbnail" alt="" style="width:300px !important; height:180px !important">
+                                        <a href="~/template/img/category/c1.jpg" class="img-pop-up" target="_blank">
+                                            <div class="deal-details">
+                                                <h6 class="deal-title">@item.CategoryName</h6>
+                                            </div>
+                                        </a>
+                                    </div>
                                 </div>
-                            </a>
-                        </div>
-                    </div>
-                    <div class="col-lg-4 col-md-4">
-                        <div class="single-deal">
-                            <div class="overlay"></div>
-                            <img class="img-fluid w-100" src="~/template/img/category/c2.jpg" alt="">
-                            <a href="~/template/img/category/c2.jpg" class="img-pop-up" target="_blank">
-                                <div class="deal-details">
-                                    <h6 class="deal-title">Sneaker for Sports</h6>
+                            }
+                            if (Model.Categories.IndexOf(item) == 1)
+                            {
+                                <div class="col-lg-4 col-md-4">
+                                    <div class="single-deal">
+                                        <div class="overlay"></div>
+                                        <img class="img-fluid w-100" src="@item.Thumbnail" alt="" style="width:300px !important; height:180px !important">
+                                        <a href="~/template/img/category/c1.jpg" class="img-pop-up" target="_blank">
+                                            <div class="deal-details">
+                                                <h6 class="deal-title">@item.CategoryName</h6>
+                                            </div>
+                                        </a>
+                                    </div>
                                 </div>
-                            </a>
-                        </div>
-                    </div>
-                    <div class="col-lg-4 col-md-4">
-                        <div class="single-deal">
-                            <div class="overlay"></div>
-                            <img class="img-fluid w-100" src="~/template/img/category/c3.jpg" alt="">
-                            <a href="~/template/img/category/c3.jpg" class="img-pop-up" target="_blank">
-                                <div class="deal-details">
-                                    <h6 class="deal-title">Product for Couple</h6>
+                            }
+                            if (Model.Categories.IndexOf(item) == 2)
+                            {
+                                <div class="col-lg-4 col-md-4">
+                                    <div class="single-deal">
+                                        <div class="overlay"></div>
+                                        <img class="img-fluid w-100" src="@item.Thumbnail" alt="" style="width:4300px !important; height:180px !important">
+                                        <a href="~/template/img/category/c1.jpg" class="img-pop-up" target="_blank">
+                                            <div class="deal-details">
+                                                <h6 class="deal-title">@item.CategoryName</h6>
+                                            </div>
+                                        </a>
+                                    </div>
                                 </div>
-                            </a>
-                        </div>
-                    </div>
-                    <div class="col-lg-8 col-md-8">
-                        <div class="single-deal">
-                            <div class="overlay"></div>
-                            <img class="img-fluid w-100" src="~/template/img/category/c4.jpg" alt="">
-                            <a href="~/template/img/category/c4.jpg" class="img-pop-up" target="_blank">
-                                <div class="deal-details">
-                                    <h6 class="deal-title">Sneaker for Sports</h6>
+                            }
+                            if (Model.Categories.IndexOf(item) == 3)
+                            {
+                                <div class="col-lg-8 col-md-8">
+                                    <div class="single-deal text-center">
+                                        <div class="overlay"></div>
+                                        <img class="" src="@item.Thumbnail" alt="" style="width:300px !important; height:180px !important">
+                                        <a href="~/template/img/category/c1.jpg" class="img-pop-up" target="_blank">
+                                            <div class="deal-details">
+                                                <h6 class="deal-title">@item.CategoryName</h6>
+                                            </div>
+                                        </a>
+                                    </div>
                                 </div>
-                            </a>
-                        </div>
-                    </div>
+                            }
+                        }
+                        
+                    }
+                    
                 </div>
             </div>
             <div class="col-lg-4 col-md-6">
                 <div class="single-deal">
                     <div class="overlay"></div>
-                    <img class="img-fluid w-100" src="~/template/img/category/c5.jpg" alt="">
+                    <img class="img-fluid w-100" src="@Model.Categories.LastOrDefault()?.Thumbnail" alt="">
                     <a href="~/template/img/category/c5.jpg" class="img-pop-up" target="_blank">
                         <div class="deal-details">
-                            <h6 class="deal-title">Sneaker for Sports</h6>
+                            <h6 class="deal-title">@Model.Categories.LastOrDefault()?.CategoryName</h6>
                         </div>
                     </a>
                 </div>
@@ -187,251 +189,46 @@
             </div>
             <div class="row">
                 <!-- single product -->
-                @foreach (var product in Model)
+                @if (Model.LatestProducts != null)
                 {
-                    <div class="col-lg-3 col-md-6">
-                        <div class="single-product">
-                            <img class="img-fluid" src="@product.Thumbnail" alt="">
-                            <div class="product-details">
-                                <h6>
-                                    @product.ProductName
-                                </h6>
-                                <div class="price">
-                                    <h6>@product.SalePrice</h6>
-                                    <h6 class="l-through">@product.Price</h6>
-                                </div>
-                                <div class="prd-bottom">
+                    @foreach (var product in Model.LatestProducts)
+                    {
+                        <div class="col-lg-3 col-md-6">
+                            <div class="single-product">
+                                <img class="img-fluid" src="@product.Thumbnail" alt="">
+                                <div class="product-details">
+                                    <h6>
+                                        @product.ProductName
+                                    </h6>
+                                    <div class="price">
+                                        <h6>@product.SalePrice</h6>
+                                        <h6 class="l-through">@product.Price</h6>
+                                    </div>
+                                    <div class="prd-bottom">
 
-                                    <a href="" class="social-info">
-                                        <span class="ti-bag"></span>
-                                        <p class="hover-text">add to bag</p>
-                                    </a>
-                                    <a href="" class="social-info">
-                                        <span class="lnr lnr-heart"></span>
-                                        <p class="hover-text">Wishlist</p>
-                                    </a>
-                                    <a href="" class="social-info">
-                                        <span class="lnr lnr-sync"></span>
-                                        <p class="hover-text">compare</p>
-                                    </a>
-                                    <a href="" class="social-info">
-                                        <span class="lnr lnr-move"></span>
-                                        <p class="hover-text">view more</p>
-                                    </a>
+                                        <a href="" class="social-info">
+                                            <span class="ti-bag"></span>
+                                            <p class="hover-text">add to bag</p>
+                                        </a>
+                                        <a href="" class="social-info">
+                                            <span class="lnr lnr-heart"></span>
+                                            <p class="hover-text">Wishlist</p>
+                                        </a>
+                                        <a href="" class="social-info">
+                                            <span class="lnr lnr-sync"></span>
+                                            <p class="hover-text">compare</p>
+                                        </a>
+                                        <a asp-action="Details" asp-controller="Product" asp-route-id="@product.Id" class="social-info">
+                                            <span class="lnr lnr-move"></span>
+                                            <p class="hover-text">view more</p>
+                                        </a>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
+                    }
                 }
-                <!-- single product -->
-                <div class="col-lg-3 col-md-6">
-                    <div class="single-product">
-                        <img class="img-fluid" src="~/template/img/product/p2.jpg" alt="">
-                        <div class="product-details">
-                            <h6>
-                                addidas New Hammer sole
-                                for Sports person
-                            </h6>
-                            <div class="price">
-                                <h6>$150.00</h6>
-                                <h6 class="l-through">$210.00</h6>
-                            </div>
-                            <div class="prd-bottom">
 
-                                <a href="" class="social-info">
-                                    <span class="ti-bag"></span>
-                                    <p class="hover-text">add to bag</p>
-                                </a>
-                                <a href="" class="social-info">
-                                    <span class="lnr lnr-heart"></span>
-                                    <p class="hover-text">Wishlist</p>
-                                </a>
-                                <a href="" class="social-info">
-                                    <span class="lnr lnr-sync"></span>
-                                    <p class="hover-text">compare</p>
-                                </a>
-                                <a href="" class="social-info">
-                                    <span class="lnr lnr-move"></span>
-                                    <p class="hover-text">view more</p>
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <!-- single product -->
-                <div class="col-lg-3 col-md-6">
-                    <div class="single-product">
-                        <img class="img-fluid" src="~/template/img/product/p3.jpg" alt="">
-                        <div class="product-details">
-                            <h6>
-                                addidas New Hammer sole
-                                for Sports person
-                            </h6>
-                            <div class="price">
-                                <h6>$150.00</h6>
-                                <h6 class="l-through">$210.00</h6>
-                            </div>
-                            <div class="prd-bottom">
-                                <a href="" class="social-info">
-                                    <span class="ti-bag"></span>
-                                    <p class="hover-text">add to bag</p>
-                                </a>
-                                <a href="" class="social-info">
-                                    <span class="lnr lnr-heart"></span>
-                                    <p class="hover-text">Wishlist</p>
-                                </a>
-                                <a href="" class="social-info">
-                                    <span class="lnr lnr-sync"></span>
-                                    <p class="hover-text">compare</p>
-                                </a>
-                                <a href="" class="social-info">
-                                    <span class="lnr lnr-move"></span>
-                                    <p class="hover-text">view more</p>
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <!-- single product -->
-                <div class="col-lg-3 col-md-6">
-                    <div class="single-product">
-                        <img class="img-fluid" src="~/template/img/product/p4.jpg" alt="">
-                        <div class="product-details">
-                            <h6>
-                                addidas New Hammer sole
-                                for Sports person
-                            </h6>
-                            <div class="price">
-                                <h6>$150.00</h6>
-                                <h6 class="l-through">$210.00</h6>
-                            </div>
-                            <div class="prd-bottom">
-
-                                <a href="" class="social-info">
-                                    <span class="ti-bag"></span>
-                                    <p class="hover-text">add to bag</p>
-                                </a>
-                                <a href="" class="social-info">
-                                    <span class="lnr lnr-heart"></span>
-                                    <p class="hover-text">Wishlist</p>
-                                </a>
-                                <a href="" class="social-info">
-                                    <span class="lnr lnr-sync"></span>
-                                    <p class="hover-text">compare</p>
-                                </a>
-                                <a href="" class="social-info">
-                                    <span class="lnr lnr-move"></span>
-                                    <p class="hover-text">view more</p>
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <!-- single product -->
-                <div class="col-lg-3 col-md-6">
-                    <div class="single-product">
-                        <img class="img-fluid" src="~/template/img/product/p5.jpg" alt="">
-                        <div class="product-details">
-                            <h6>
-                                addidas New Hammer sole
-                                for Sports person
-                            </h6>
-                            <div class="price">
-                                <h6>$150.00</h6>
-                                <h6 class="l-through">$210.00</h6>
-                            </div>
-                            <div class="prd-bottom">
-
-                                <a href="" class="social-info">
-                                    <span class="ti-bag"></span>
-                                    <p class="hover-text">add to bag</p>
-                                </a>
-                                <a href="" class="social-info">
-                                    <span class="lnr lnr-heart"></span>
-                                    <p class="hover-text">Wishlist</p>
-                                </a>
-                                <a href="" class="social-info">
-                                    <span class="lnr lnr-sync"></span>
-                                    <p class="hover-text">compare</p>
-                                </a>
-                                <a href="" class="social-info">
-                                    <span class="lnr lnr-move"></span>
-                                    <p class="hover-text">view more</p>
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <!-- single product -->
-                <div class="col-lg-3 col-md-6">
-                    <div class="single-product">
-                        <img class="img-fluid" src="~/template/img/product/p6.jpg" alt="">
-                        <div class="product-details">
-                            <h6>
-                                addidas New Hammer sole
-                                for Sports person
-                            </h6>
-                            <div class="price">
-                                <h6>$150.00</h6>
-                                <h6 class="l-through">$210.00</h6>
-                            </div>
-                            <div class="prd-bottom">
-
-                                <a href="" class="social-info">
-                                    <span class="ti-bag"></span>
-                                    <p class="hover-text">add to bag</p>
-                                </a>
-                                <a href="" class="social-info">
-                                    <span class="lnr lnr-heart"></span>
-                                    <p class="hover-text">Wishlist</p>
-                                </a>
-                                <a href="" class="social-info">
-                                    <span class="lnr lnr-sync"></span>
-                                    <p class="hover-text">compare</p>
-                                </a>
-                                <a href="" class="social-info">
-                                    <span class="lnr lnr-move"></span>
-                                    <p class="hover-text">view more</p>
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <!-- single product -->
-                <div class="col-lg-3 col-md-6">
-                    <div class="single-product">
-                        <img class="img-fluid" src="~/template/img/product/p7.jpg" alt="">
-                        <div class="product-details">
-                            <h6>
-                                addidas New Hammer sole
-                                for Sports person
-                            </h6>
-                            <div class="price">
-                                <h6>$150.00</h6>
-                                <h6 class="l-through">$210.00</h6>
-                            </div>
-                            <div class="prd-bottom">
-
-                                <a href="" class="social-info">
-                                    <span class="ti-bag"></span>
-                                    <p class="hover-text">add to bag</p>
-                                </a>
-                                <a href="" class="social-info">
-                                    <span class="lnr lnr-heart"></span>
-                                    <p class="hover-text">Wishlist</p>
-                                </a>
-                                <a href="" class="social-info">
-                                    <span class="lnr lnr-sync"></span>
-                                    <p class="hover-text">compare</p>
-                                </a>
-                                <a href="" class="social-info">
-                                    <span class="lnr lnr-move"></span>
-                                    <p class="hover-text">view more</p>
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
                 <!-- single product -->
                 <div class="col-lg-3 col-md-6">
                     <div class="single-product">
@@ -808,15 +605,14 @@
                 <div class="active-exclusive-product-slider">
                     <!-- single exclusive carousel -->
                     <div class="single-exclusive-slider">
-                        <img class="img-fluid" src="~/template/img/product/e-p1.png" alt="">
+                        <img class="img-fluid" src="@Model.LatestProducts?[0].Thumbnail" alt="">
                         <div class="product-details">
                             <div class="price">
-                                <h6>$150.00</h6>
-                                <h6 class="l-through">$210.00</h6>
+                                <h6>$@Model.LatestProducts?[0].SalePrice</h6>
+                                <h6 class="l-through">$@Model.LatestProducts?[0].Price</h6>
                             </div>
                             <h4>
-                                addidas New Hammer sole
-                                for Sports person
+                                @Model.LatestProducts?[0].Description
                             </h4>
                             <div class="add-bag d-flex align-items-center justify-content-center">
                                 <a class="add-btn" href=""><span class="ti-bag"></span></a>
@@ -826,15 +622,31 @@
                     </div>
                     <!-- single exclusive carousel -->
                     <div class="single-exclusive-slider">
-                        <img class="img-fluid" src="~/template/img/product/e-p1.png" alt="">
+                        <img class="img-fluid" src="@Model.LatestProducts?[1].Thumbnail" alt="">
                         <div class="product-details">
                             <div class="price">
-                                <h6>$150.00</h6>
-                                <h6 class="l-through">$210.00</h6>
+                                <h6>$@Model.LatestProducts?[1].SalePrice</h6>
+                                <h6 class="l-through">$@Model.LatestProducts?[1].Price</h6>
                             </div>
                             <h4>
-                                addidas New Hammer sole
-                                for Sports person
+                                @Model.LatestProducts?[1].Description
+                            </h4>
+                            <div class="add-bag d-flex align-items-center justify-content-center">
+                                <a class="add-btn" href=""><span class="ti-bag"></span></a>
+                                <span class="add-text text-uppercase">Add to Bag</span>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- single exclusive carousel -->
+                    <div class="single-exclusive-slider">
+                        <img class="img-fluid" src="@Model.LatestProducts?[2].Thumbnail" alt="">
+                        <div class="product-details">
+                            <div class="price">
+                                <h6>$@Model.LatestProducts?[2].SalePrice</h6>
+                                <h6 class="l-through">$@Model.LatestProducts?[2].Price</h6>
+                            </div>
+                            <h4>
+                                @Model.LatestProducts?[2].Description
                             </h4>
                             <div class="add-bag d-flex align-items-center justify-content-center">
                                 <a class="add-btn" href=""><span class="ti-bag"></span></a>
@@ -888,18 +700,25 @@
         <div class="row">
             <div class="col-lg-9">
                 <div class="row">
-                    <div class="col-lg-4 col-md-4 col-sm-6 mb-20">
-                        <div class="single-related-product d-flex">
-                            <a href="#"><img src="~/template/img/r1.jpg" alt=""></a>
-                            <div class="desc">
-                                <a href="#" class="title">Black lace Heels</a>
-                                <div class="price">
-                                    <h6>$189.00</h6>
-                                    <h6 class="l-through">$210.00</h6>
+                    @if (Model.ProductsOfWeek != null)
+                    {
+                        @foreach (var productOfWeek in Model.ProductsOfWeek)
+                        {
+                            <div class="col-lg-4 col-md-4 col-sm-6 mb-20">
+                                <div class="single-related-product d-flex">
+                                    <a href="#"><img src="@productOfWeek.Thumbnail" alt=""></a>
+                                    <div class="desc">
+                                        <a href="#" class="title">@productOfWeek.ProductName</a>
+                                        <div class="price">
+                                            <h6>@productOfWeek.SalePrice</h6>
+                                            <h6 class="l-through">@productOfWeek.SalePrice</h6>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                    </div>
+                        }
+                    }
+
                     <div class="col-lg-4 col-md-4 col-sm-6 mb-20">
                         <div class="single-related-product d-flex">
                             <a href="#"><img src="~/template/img/r2.jpg" alt=""></a>

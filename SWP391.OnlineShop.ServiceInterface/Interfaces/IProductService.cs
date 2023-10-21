@@ -1,49 +1,79 @@
-﻿using SWP391.OnlineShop.ServiceModel.ViewModels.Products;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using static SWP391.OnlineShop.ServiceModel.ServiceModels.ProductModels;
+﻿using SWP391.OnlineShop.ServiceModel.ServiceModels;
+using SWP391.OnlineShop.ServiceModel.ViewModels.Products;
 
 namespace SWP391.OnlineShop.ServiceInterface.Interfaces
 {
-    public interface IProductService
-    {
-        /// <summary>
-        /// Post Detail Standard & Criteria of Appendices
-        /// </summary>
-        /// <param name="request"></param>
-        /// <returns>Post Detail Standard & Criteria of Appendices</returns>
-        List<ProductViewModel> Get(GetAllProduct request);
+	public interface IProductService
+	{
+		/// <summary>
+		/// Post Detail Standard & Criteria of Appendices
+		/// </summary>
+		/// <param name="request"></param>
+		/// <returns>Post Detail Standard & Criteria of Appendices</returns>
+		List<ProductViewModel> Get(GetAllProduct request);
 
-        /// <summary>
-        /// Post Appendix By Id
-        /// </summary>
-        /// <param name="request"></param>
-        /// <returns>appendix of selected id</returns>
-        ProductViewModel Get(GetProductById request);
+		/// <summary>
+		/// Post Detail Standard & Criteria of Appendices
+		/// </summary>
+		/// <param name="request"></param>
+		/// <returns>Post Detail Standard & Criteria of Appendices</returns>
+		List<ProductViewModel> Get(GetProductByCategoryId request);
 
-        /// <summary>
-        /// Add new Appendix
-        /// </summary>
-        /// <param name="request"></param>
-        /// <returns>appendix of selected id</returns>
-        Task<ProductViewModel> Post(PostAddProduct request);
+		/// <summary>
+		/// Post Detail Standard & Criteria of Appendices
+		/// </summary>
+		/// <param name="request"></param>
+		/// <returns>Post Detail Standard & Criteria of Appendices</returns>
+		List<ProductViewModel> Get(GetHotDealProduct request);
 
-        /// <summary>
-        /// Add new Appendix
-        /// </summary>
-        /// <param name="request"></param>
-        /// <returns>appendix of selected id</returns>
-        Task<ProductViewModel> Delete(DeleteProduct request);
+		/// <summary>
+		/// Post Detail Standard & Criteria of Appendices
+		/// </summary>
+		/// <param name="request"></param>
+		/// <returns>Post Detail Standard & Criteria of Appendices</returns>
+		List<ProductViewModel> Get(GetDealProductOfWeek request);
 
-        /// <summary>
-        /// Add new Appendix
-        /// </summary>
-        /// <param name="request"></param>
-        /// <returns>appendix of selected id</returns>
-        Task<ProductViewModel> Put(PutUpdateProduct request);
-    }
+		/// <summary>
+		/// Post Appendix By Id
+		/// </summary>
+		/// <param name="request"></param>
+		/// <returns>appendix of selected id</returns>
+		ProductViewModel Get(GetProductById request);
+
+		/// <summary>
+		/// Post Appendix By Id
+		/// </summary>
+		/// <param name="request"></param>
+		/// <returns>appendix of selected id</returns>
+		ProductViewModel Get(GetProductFeedbackById request);
+
+		/// <summary>
+		/// Add new Appendix
+		/// </summary>
+		/// <param name="request"></param>
+		/// <returns>appendix of selected id</returns>
+		Task<ProductViewModel> Post(PostAddProduct request);
+
+		/// <summary>
+		/// Add new Appendix
+		/// </summary>
+		/// <param name="request"></param>
+		/// <returns>appendix of selected id</returns>
+		Task<ProductViewModel> Delete(DeleteProduct request);
+
+		/// <summary>
+		/// Add new Appendix
+		/// </summary>
+		/// <param name="request"></param>
+		/// <returns>appendix of selected id</returns>
+		Task<ProductViewModel> Put(PutUpdateProduct request);
+
+		/// <summary>
+		/// Add new Comment
+		/// </summary>
+		/// <param name="request"></param>
+		/// <returns>appendix of selected id</returns>
+		void Post(Comment request);
+	}
 }
 
