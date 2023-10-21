@@ -13,5 +13,9 @@ public class VoucherConfigs : IEntityTypeConfiguration<Voucher>
             .WithMany(u => u.Vouchers)
             .HasForeignKey(v => v.CreatedBy)
             .OnDelete(DeleteBehavior.Cascade);
+        builder.HasMany<Setting>(v => v.Settings)
+            .WithOne(s => s.Voucher)
+            .HasForeignKey(v => v.Voucher)
+            .OnDelete(DeleteBehavior.Cascade);  
     }
 }
