@@ -37,7 +37,7 @@ namespace SWP391.OnlineShop.Portal.Controllers
 			//Get all categories
 			var categories = await _client.GetAsync(new GetAllCategory());
 
-			var products = new HomeViewModel
+			var products = new HomeViewModels
 			{
 				LatestProducts = latestProducts,
 				HotDealProduct = hotDealProduct,

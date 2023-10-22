@@ -12,13 +12,13 @@ public class FeedBackRepository : GenericRepository<FeedBack, int>, IFeedBackRep
     {
     }
 
-    public async Task<string> GetFeedbackById(int Id)
+    public async Task<string> GetFeedbackById(int id)
     {
         var result = string.Empty;
         if (Context.FeedBacks != null)
         {
             result = await Context.FeedBacks
-                 .Where(p => p.Id == Id)
+                 .Where(p => p.Id == id)
                  .Select(p => p.Comment)
                  .FirstOrDefaultAsync();
         }
@@ -31,10 +31,10 @@ public class FeedBackRepository : GenericRepository<FeedBack, int>, IFeedBackRep
         var result = new List<FeedBack>();
         if (Context.FeedBacks == null) return Task.FromResult(result);
 
-        var feedbacks = Context.FeedBacks.Where(x => x.Comment.ToLower().Contains(name.ToLower()))
+        var feedback = Context.FeedBacks.Where(x => x.Comment.ToLower().Contains(name.ToLower()))
             .ToList();
 
-        result = feedbacks.ToList();
+        result = feedback.ToList();
 
         return Task.FromResult(result);
     }
@@ -57,10 +57,10 @@ public class FeedBackRepository : GenericRepository<FeedBack, int>, IFeedBackRep
         var result = new List<FeedBack>();
         if (Context.FeedBacks == null) return Task.FromResult(result);
 
-        var feedbacks = Context.FeedBacks.Where(x => x.Status.ToString() == status)
+        var feedback = Context.FeedBacks.Where(x => x.Status.ToString() == status)
             .ToList();
 
-        result = feedbacks.ToList();
+        result = feedback.ToList();
 
         return Task.FromResult(result);
     }
@@ -75,6 +75,6 @@ public class FeedBackRepository : GenericRepository<FeedBack, int>, IFeedBackRep
 
         result = feedBacks.ToList();
 
-        return Task.FromResult(result); throw new NotImplementedException();
+        return Task.FromResult(result);
     }
 }

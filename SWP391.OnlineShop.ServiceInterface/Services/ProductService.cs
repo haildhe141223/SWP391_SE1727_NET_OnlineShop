@@ -11,6 +11,7 @@ using SWP391.OnlineShop.ServiceModel.ViewModels.Products;
 
 namespace SWP391.OnlineShop.ServiceInterface.Services
 {
+    //TODO: PhuongNL logger should have key to double check in log. Check AccountService for example
     public class ProductService : BaseService, IProductService
     {
         private readonly IMapper _mapper;
@@ -40,11 +41,8 @@ namespace SWP391.OnlineShop.ServiceInterface.Services
                 {
                     var product = await _unitOfWork.Products.GetByIdAsync(request.ProductId);
                     result = _mapper.Map<ProductViewModel>(product);
-                    //result.StatusCode = StatusCode.Success;
                     return result;
                 }
-                //result.StatusCode = StatusCode.InternalServerError;
-
             }
             catch (Exception ex)
             {
@@ -60,10 +58,7 @@ namespace SWP391.OnlineShop.ServiceInterface.Services
             {
                 var product = _unitOfWork.Products.GetAll().OrderByDescending(x => x.CreatedDateTime).ToList();
                 result = _mapper.Map<List<ProductViewModel>>(product);
-                //result.StatusCode = StatusCode.Success;
                 return result;
-                //result.StatusCode = StatusCode.InternalServerError;
-
             }
             catch (Exception ex)
             {
@@ -79,10 +74,7 @@ namespace SWP391.OnlineShop.ServiceInterface.Services
             {
                 var products = _unitOfWork.Products.GetHotDealProduct();
                 result = _mapper.Map<List<ProductViewModel>>(products);
-                //result.StatusCode = StatusCode.Success;
                 return result;
-                //result.StatusCode = StatusCode.InternalServerError;
-
             }
             catch (Exception ex)
             {
@@ -90,24 +82,21 @@ namespace SWP391.OnlineShop.ServiceInterface.Services
             }
             return result;
         }
-        
+
         public List<ProductViewModel> Get(GetProductByCategoryId request)
         {
-          var result = new List<ProductViewModel>();
-          try
-          {
-            var product = _unitOfWork.Products.GetProductByCategoryId(Convert.ToInt32(request.CategoryId));
-            result = _mapper.Map<List<ProductViewModel>>(product);
-            //result.StatusCode = StatusCode.Success;
+            var result = new List<ProductViewModel>();
+            try
+            {
+                var product = _unitOfWork.Products.GetProductByCategoryId(Convert.ToInt32(request.CategoryId));
+                result = _mapper.Map<List<ProductViewModel>>(product);
+                return result;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message);
+            }
             return result;
-            //result.StatusCode = StatusCode.InternalServerError;
-
-          }
-          catch (Exception ex)
-          {
-            _logger.LogError(ex.Message);
-          }
-          return result;
         }
 
         public List<ProductViewModel> Get(GetDealProductOfWeek request)
@@ -117,10 +106,7 @@ namespace SWP391.OnlineShop.ServiceInterface.Services
             {
                 var product = _unitOfWork.Products.GetDealProductOfWeek();
                 result = _mapper.Map<List<ProductViewModel>>(product);
-                //result.StatusCode = StatusCode.Success;
                 return result;
-                //result.StatusCode = StatusCode.InternalServerError;
-
             }
             catch (Exception ex)
             {
@@ -138,7 +124,6 @@ namespace SWP391.OnlineShop.ServiceInterface.Services
                 if (appendix != null)
                 {
                     result = _mapper.Map<ProductViewModel>(appendix);
-                    //result.StatusCode = StatusCode.Success;
                 }
             }
             catch (Exception ex)
@@ -157,7 +142,6 @@ namespace SWP391.OnlineShop.ServiceInterface.Services
                 if (product != null)
                 {
                     result = _mapper.Map<ProductViewModel>(product);
-                    //result.StatusCode = StatusCode.Success;
                 }
             }
             catch (Exception ex)
@@ -193,19 +177,19 @@ namespace SWP391.OnlineShop.ServiceInterface.Services
             }
             return result;
         }
-        
+
         public void Post(Comment request)
         {
-          FeedBack feedBack = new FeedBack
-          {
-            ProductId = request.ProductID,
-            CreatedDateTime = DateTime.Now,
-            Comment = request.Message,
-            UserId = _userManager.FindByEmailAsync(request.Email).Result.Id,
-            Status = Core.Models.Enums.Status.Active
-          };
-          _unitOfWork.FeedBacks.Add(feedBack);
-          _unitOfWork.Complete();
+            var feedBack = new FeedBack
+            {
+                ProductId = request.ProductID,
+                CreatedDateTime = DateTime.Now,
+                Comment = request.Message,
+                UserId = _userManager.FindByEmailAsync(request.Email).Result.Id,
+                Status = Core.Models.Enums.Status.Active
+            };
+            _unitOfWork.FeedBacks.Add(feedBack);
+            _unitOfWork.Complete();
         }
 
         public async Task<ProductViewModel> Put(PutUpdateProduct request)
@@ -217,13 +201,34 @@ namespace SWP391.OnlineShop.ServiceInterface.Services
 
                 if (product != null)
                 {
-                    product.ProductName = request.ProductName;
-                    product.Thumbnail = request.Thumbnail;
-                    product.Amount = request.Amount;
-                    product.Price = request.Price;
-                    product.SalePrice = request.SalePrice;
-                    product.CategoryId = request.CategoryId;
-                    product.Description = request.Description;
+                    if (!string.IsNullOrEmpty(request.ProductName))
+                    {
+                        product.ProductName = request.ProductName;
+                    }
+                    if (!string.IsNullOrEmpty(request.Thumbnail))
+                    {
+                        product.Thumbnail = request.Thumbnail;
+                    }
+                    if (request.Amount > 0)
+                    {
+                        product.Amount = request.Amount;
+                    }
+                    if (request.Price > 0)
+                    {
+                        product.Price = request.Price;
+                    }
+                    if (request.SalePrice > 0)
+                    {
+                        product.SalePrice = request.SalePrice;
+                    }
+                    if (request.CategoryId > 0)
+                    {
+                        product.CategoryId = request.CategoryId;
+                    }
+                    if (!string.IsNullOrEmpty(request.Description))
+                    {
+                        product.Description = request.Description;
+                    }
                     product.Status = request.Status;
 
                     _unitOfWork.Products.Update(product);

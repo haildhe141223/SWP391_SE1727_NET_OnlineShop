@@ -101,7 +101,7 @@ namespace SWP391.OnlineShop.Portal.Controllers
 
         public async Task<IActionResult> DeleteProduct(int id)
         {
-            var product = await _client.DeleteAsync(new DeleteProduct
+            await _client.DeleteAsync(new DeleteProduct
             {
                 ProductId = id
             });
@@ -189,7 +189,7 @@ namespace SWP391.OnlineShop.Portal.Controllers
 
         public async Task<IActionResult> DeletePost(int id)
         {
-            var product = await _client.DeleteAsync(new DeletePost
+            await _client.DeleteAsync(new DeletePost
             {
                 PostId = id
             });

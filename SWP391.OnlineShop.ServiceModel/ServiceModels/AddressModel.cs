@@ -1,6 +1,6 @@
 ﻿using ServiceStack;
 using SWP391.OnlineShop.ServiceModel.Results;
-using SWP391.OnlineShop.ServiceModel.ViewModels.Address;
+using SWP391.OnlineShop.ServiceModel.ViewModels.Addresses;
 
 namespace SWP391.OnlineShop.ServiceModel.ServiceModels
 {

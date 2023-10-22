@@ -1,4 +1,4 @@
-﻿using SWP391.OnlineShop.ServiceModel.ViewModels.Category;
+﻿using SWP391.OnlineShop.ServiceModel.ViewModels.Categories;
 
 namespace SWP391.OnlineShop.ServiceModel.ViewModels.Products
 {

@@ -1,4 +1,4 @@
-﻿@model SWP391.OnlineShop.ServiceModel.ViewModels.Cart.OrderViewModel
+﻿@model SWP391.OnlineShop.ServiceModel.ViewModels.Carts.OrderViewModels
 @{
     var sliders = Model.Sliders.ToList();
     var address = Model.CustomerAddress.Split(',');
@@ -172,10 +172,10 @@
                                    <a asp-action="Details" asp-controller="Product" asp-route-id="@item.Product.Id"> <p>@item.Product.ProductName</p></a>
                                 </td>
                                 <td>
-                                    <h5>x @item.Product.Amount</h5>
+                                    <h5>x @item.Quantity</h5>
                                 </td>
                                 <td>
-                                    <p>$ @(item.Product.Amount * item.Product.Price)</p>
+                                    <p>$ @(item.Quantity * item.Product.Price)</p>
                                 </td>
                             </tr>
                         }

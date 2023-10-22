@@ -15,12 +15,16 @@ public class VoucherRepository : GenericRepository<Voucher, int>, IVoucherReposi
     public IEnumerable<Voucher> GetAvailableVouchersOfUser(int userId)
     {
         var result = new List<Voucher>();
-        var userVoucher = Context.UserVouchers.Where(uv => uv.UserId == userId).Include(uv =>uv.Voucher).ToList();
-        if(userVoucher != null && userVoucher.Count > 0)
+        var userVoucher = Context.UserVouchers
+            .Where(uv => uv.UserId == userId)
+            .Include(uv => uv.Voucher)
+            .ToList();
+
+        if (userVoucher.Count > 0)
         {
-            foreach(var voucher in userVoucher)
+            foreach (var voucher in userVoucher)
             {
-                if(voucher.Voucher.CreatedDateTime <= DateTime.Now && voucher.Voucher.EndDateTime >= DateTime.Today)
+                if (voucher.Voucher.CreatedDateTime <= DateTime.Now && voucher.Voucher.EndDateTime >= DateTime.Today)
                 {
                     result.Add(voucher.Voucher);
                 }
