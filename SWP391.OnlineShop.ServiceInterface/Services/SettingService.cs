@@ -5,13 +5,7 @@ using SWP391.OnlineShop.ServiceInterface.BaseServices;
 using SWP391.OnlineShop.ServiceInterface.Interfaces;
 using SWP391.OnlineShop.ServiceInterface.Loggers;
 using SWP391.OnlineShop.ServiceModel.ServiceModels;
-using SWP391.OnlineShop.ServiceModel.ViewModels.Customer;
-using SWP391.OnlineShop.ServiceModel.ViewModels.Products;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using SWP391.OnlineShop.ServiceModel.ViewModels.Settings;
 
 namespace SWP391.OnlineShop.ServiceInterface.Services
 {
@@ -40,14 +34,12 @@ namespace SWP391.OnlineShop.ServiceInterface.Services
                 {
                     var setting = await _unitOfWork.Settings.GetByIdAsync(request.SettingId);
                     result = _mapper.Map<SettingViewModel>(setting);
-                    //result.StatusCode = StatusCode.Success;
                     return result;
                 }
-                //result.StatusCode = StatusCode.InternalServerError;
-
             }
             catch (Exception ex)
             {
+                //TODO: SangDN logger should have key to double check in log. Check AccountService for example
                 _logger.LogError(ex.Message);
             }
             return result;
@@ -60,13 +52,11 @@ namespace SWP391.OnlineShop.ServiceInterface.Services
             {
                 var setting = _unitOfWork.Settings.GetAll().ToList();
                 result = _mapper.Map<List<SettingViewModel>>(setting);
-                //result.StatusCode = StatusCode.Success;
                 return result;
-                //result.StatusCode = StatusCode.InternalServerError;
-
             }
             catch (Exception ex)
             {
+                //TODO: SangDN logger should have key to double check in log. Check AccountService for example
                 _logger.LogError(ex.Message);
             }
             return result;
@@ -81,11 +71,11 @@ namespace SWP391.OnlineShop.ServiceInterface.Services
                 if (appendix != null)
                 {
                     result = _mapper.Map<SettingViewModel>(appendix);
-                    //result.StatusCode = StatusCode.Success;
                 }
             }
             catch (Exception ex)
             {
+                //TODO: SangDN logger should have key to double check in log. Check AccountService for example
                 _logger.LogError(ex.Message);
             }
             return result;
@@ -96,11 +86,10 @@ namespace SWP391.OnlineShop.ServiceInterface.Services
             var result = new SettingViewModel();
             try
             {
-                var setting = new Setting()
+                var setting = new Setting
                 {
                     Type = request.Type,
                     Value = result.Value,
-                    OrderId = request.OrderId,
                     SettingStatus = Core.Models.Enums.Status.Active
                 };
                 await _unitOfWork.Settings.AddAsync(setting);
@@ -108,6 +97,7 @@ namespace SWP391.OnlineShop.ServiceInterface.Services
             }
             catch (Exception ex)
             {
+                //TODO: SangDN logger should have key to double check in log. Check AccountService for example
                 _logger.LogError(ex.Message);
             }
             return result;
@@ -118,20 +108,19 @@ namespace SWP391.OnlineShop.ServiceInterface.Services
             var result = new SettingViewModel();
             try
             {
-                var setting = _unitOfWork.Settings.GetById(request.Id);
-                if (setting == null)
-                {
-                    //result.StatusCode = StatusCode.InternalServerError;
-                    //return result;
-                }
-                setting.Type = request.Type;
+                var setting = await _unitOfWork.Settings.GetByIdAsync(request.Id);
 
-                _unitOfWork.Settings.Update(setting);
-                var rows = await _unitOfWork.CompleteAsync();
-                //result.StatusCode = rows > 0 ? StatusCode.Success : StatusCode.InternalServerError;
+                if (setting != null)
+                {
+                    setting.Type = request.Type;
+
+                    _unitOfWork.Settings.Update(setting);
+                    await _unitOfWork.CompleteAsync();
+                }
             }
             catch (Exception ex)
             {
+                //TODO: SangDN logger should have key to double check in log. Check AccountService for example
                 _logger.LogError(ex.Message);
             }
             return result;

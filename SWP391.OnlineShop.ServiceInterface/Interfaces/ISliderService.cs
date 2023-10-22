@@ -1,11 +1,4 @@
-﻿using SWP391.OnlineShop.ServiceModel.ViewModels.Customer;
-using SWP391.OnlineShop.ServiceModel.ViewModels.Marketing;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using static SWP391.OnlineShop.ServiceModel.ServiceModels.SettingModels;
+﻿using SWP391.OnlineShop.ServiceModel.ViewModels.Settings;
 using static SWP391.OnlineShop.ServiceModel.ServiceModels.SliderModel;
 
 namespace SWP391.OnlineShop.ServiceInterface.Interfaces

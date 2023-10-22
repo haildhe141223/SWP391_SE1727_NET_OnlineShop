@@ -3,7 +3,7 @@ using SWP391.OnlineShop.Core.Models.Identities;
 
 namespace SWP391.OnlineShop.ServiceModel.ViewModels.Feedback
 {
-    public class FeedbackViewModel
+    public class FeedbackViewModels
     {
         public int Id { get; set; }
         public Status Status { get; set; }

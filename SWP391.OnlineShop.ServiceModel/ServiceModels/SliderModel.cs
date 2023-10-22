@@ -1,12 +1,6 @@
 ﻿using ServiceStack;
 using SWP391.OnlineShop.Core.Models.Enums;
-using SWP391.OnlineShop.ServiceModel.ViewModels.Customer;
-using SWP391.OnlineShop.ServiceModel.ViewModels.Marketing;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using SWP391.OnlineShop.ServiceModel.ViewModels.Settings;
 
 namespace SWP391.OnlineShop.ServiceModel.ServiceModels
 {
@@ -26,9 +20,9 @@ namespace SWP391.OnlineShop.ServiceModel.ServiceModels
         [Route("/Slider/PostAddSlider", "POST")]
         public class PostAddSlider : IReturn<SliderViewModel>
         {
-            public string? Title { get; set; }
-            public string? Image { get; set; }
-            public string? BlackLink { get; set; }
+            public string Title { get; set; }
+            public string Image { get; set; }
+            public string BlackLink { get; set; }
             public Status SliderStatus { get; set; }
         }
 
@@ -36,9 +30,9 @@ namespace SWP391.OnlineShop.ServiceModel.ServiceModels
         public class PutUpdateSlider : IReturn<SliderViewModel>
         {
             public int Id { get; set; }
-            public string? Title { get; set; }
-            public string? Image { get; set; }
-            public string? BlackLink { get; set; }
+            public string Title { get; set; }
+            public string Image { get; set; }
+            public string BlackLink { get; set; }
             public Status SliderStatus { get; set; }
         }
 
