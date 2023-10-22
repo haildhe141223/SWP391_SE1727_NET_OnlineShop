@@ -1,11 +1,11 @@
 ﻿using SWP391.OnlineShop.Core.Models.Enums;
 using SWP391.OnlineShop.ServiceModel.Results;
-using SWP391.OnlineShop.ServiceModel.ViewModels.Address;
+using SWP391.OnlineShop.ServiceModel.ViewModels.Addresses;
 using SWP391.OnlineShop.ServiceModel.ViewModels.Products;
 
-namespace SWP391.OnlineShop.ServiceModel.ViewModels.Cart
+namespace SWP391.OnlineShop.ServiceModel.ViewModels.Carts
 {
-    public class OrderViewModel : BaseResultModel
+    public class OrderViewModels : BaseResultModel
     {
         public int Id { get; set; }
         public int AddressId { get; set; }
@@ -19,7 +19,7 @@ namespace SWP391.OnlineShop.ServiceModel.ViewModels.Cart
         public Status Status { get; set; }
         public DateTime ModifiedDateTime { get; set; }
 
-        public ICollection<OrderDetailViewModel> OrderDetails { get; set; }
+        public ICollection<OrderDetailViewModels> OrderDetails { get; set; }
         public ICollection<ProvinceViewModel> Provinces { get; set; }
         public ICollection<ProductViewModel> Sliders { get; set; }
     }
