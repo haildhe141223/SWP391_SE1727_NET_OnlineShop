@@ -1,4 +1,5 @@
 ﻿using ServiceStack;
+using SWP391.OnlineShop.Core.Models.Enums;
 using SWP391.OnlineShop.ServiceModel.Results;
 using SWP391.OnlineShop.ServiceModel.ViewModels.Products;
 
@@ -75,6 +76,7 @@ namespace SWP391.OnlineShop.ServiceModel.ServiceModels
         public string Author { get; set; }
         public int? CategoryId { get; set; }
         public int Id { get; set; }
+        public Status Status { get; set; }
     }
 
     [Route("/Post/DeletePost", "DELETE")]

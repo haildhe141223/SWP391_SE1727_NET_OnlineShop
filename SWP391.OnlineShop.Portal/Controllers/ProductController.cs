@@ -15,24 +15,25 @@ namespace SWP391.OnlineShop.Portal.Controllers
             _client = client;
         }
 
-        public async Task<IActionResult> Index(int categoryId, int page)
-        {
-            List<ProductViewModel> latestProducts;
+		public async Task<IActionResult> Index(int categoryId, int page)
+		{
+			var latestProducts = new List<ProductViewModel>();
+			if (categoryId == 0)
+			{
+				//Get all products
+				latestProducts = await _client.GetAsync(new GetAllProduct());
+			}
+			else
+			{
+				//Get all products
+				latestProducts = await _client.GetAsync(new GetProductByCategoryId
+				{
+					CategoryId = categoryId
+				});
+			}
+
+            ViewBag.Pages = latestProducts.Count / 9 + 1;
             ViewBag.CurrentPage = page;
-            if (categoryId == 0)
-            {
-                //Get all products
-                latestProducts = await _client.GetAsync(new GetAllProduct());
-                ViewBag.Pages = latestProducts.Count / 9 + 1;
-            }
-            else
-            {
-                //Get all products
-                latestProducts = await _client.GetAsync(new GetProductByCategoryId
-                {
-                    CategoryId = categoryId
-                });
-            }
 
             //Get all categories
             var categories = await _client.GetAsync(new GetAllCategory());
