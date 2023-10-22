@@ -33,10 +33,14 @@ public class OnlineShopContext : IdentityDbContext<User, Role, int>
     public DbSet<ProductTag> ProductTags { get; set; }
     public DbSet<ProductVoucher> ProductVouchers { get; set; }
     public DbSet<UserVoucher> UserVouchers { get; set; }
+
+    public DbSet<Setting> Setting { get; set; }
+    public DbSet<Slider> Slider { get; set; }
     public DbSet<Address> Addresses { get; set; }
     public DbSet<District> Districts { get; set; }
     public DbSet<Province> Provinces { get; set; }
     public DbSet<Ward> Wards { get; set; }
+
 
 
     protected override void OnModelCreating(ModelBuilder builder)
