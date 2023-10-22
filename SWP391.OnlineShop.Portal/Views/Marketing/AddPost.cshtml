@@ -47,10 +47,10 @@
                 <input asp-for="Author" type="text" class="form-control" />
                 <span asp-validation-for="Author" class="r-error d-block text-danger"></span>
             </div>
-            @* <div class="mb-3">
-            <label asp-for="CategoryId" class="form-label">Category</label>
+            <div class="mb-3">
+            <label asp-for="CategoryId" class="form-label">Category</label><br />
             <select asp-for="CategoryId" class="form-control" asp-items="@genreList"></select>
-            </div> *@
+            </div><br />
             <a type="button" class="btn btn-secondary" asp-action="">Back</a>
             <button type="reset" class="btn btn-info">Reset</button>
             <button type="submit" class="btn btn-primary">Submit</button>

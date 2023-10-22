@@ -26,40 +26,40 @@
         <h6 class="m-0 font-weight-bold text-primary">View Detail Post</h6>
     </div>
     <div class="card-body">
-            <div class="mb-3">
-                <label asp-for="Title" class="form-label">Post Title</label>
-                <input disabled type="text" class="form-control" asp-for="Title" id="name" onchange="changeUrl('name', 'url')">
-                <span asp-validation-for="Title" class="r-error d-block text-danger"></span>
-            </div>
-            <div class="mb-3">
-                <label asp-for="Thumbnail" class="form-label">Thumbnail</label>
-                <input disabled asp-for="Thumbnail" type="text" class="form-control">
-                <span asp-validation-for="Thumbnail" class="r-error d-block text-danger"></span>
-            </div>
-            <div class="mb-3">
-                <label asp-for="Description" class="form-label"></label>
-                <textarea disabled asp-for="Description" type="text" class="form-control"></textarea>
-                <span asp-validation-for="Description" class="r-error d-block text-danger"></span>
-            </div>
-            <div class="mb-3">
-                <label asp-for="Brief" class="form-label"></label>
-                <input disabled asp-for="Brief" type="text" class="form-control" />
-                <span asp-validation-for="Brief" class="r-error d-block text-danger"></span>
-            </div>
-            <div class="mb-3">
-                <label asp-for="Featured" class="form-label"></label>
-                <input disabled asp-for="Featured" type="text" class="form-control" />
-                <span asp-validation-for="Featured" class="r-error d-block text-danger"></span>
-            </div>
-            <div class="mb-3">
-                <label asp-for="Author" class="form-label"></label>
-                <input disabled asp-for="Author" type="text" class="form-control" />
-                <span asp-validation-for="Author" class="r-error d-block text-danger"></span>
-            </div>
-            @* <div class="mb-3">
-            <label asp-for="CategoryId" class="form-label">Category</label>
+        <div class="mb-3">
+            <label asp-for="Title" class="form-label">Post Title</label>
+            <input disabled type="text" class="form-control" asp-for="Title" id="name" onchange="changeUrl('name', 'url')">
+            <span asp-validation-for="Title" class="r-error d-block text-danger"></span>
+        </div>
+        <div class="mb-3">
+            <label asp-for="Thumbnail" class="form-label">Thumbnail</label>
+            <input disabled asp-for="Thumbnail" type="text" class="form-control">
+            <span asp-validation-for="Thumbnail" class="r-error d-block text-danger"></span>
+        </div>
+        <div class="mb-3">
+            <label asp-for="Description" class="form-label"></label>
+            <textarea disabled asp-for="Description" type="text" class="form-control"></textarea>
+            <span asp-validation-for="Description" class="r-error d-block text-danger"></span>
+        </div>
+        <div class="mb-3">
+            <label asp-for="Brief" class="form-label"></label>
+            <input disabled asp-for="Brief" type="text" class="form-control" />
+            <span asp-validation-for="Brief" class="r-error d-block text-danger"></span>
+        </div>
+        <div class="mb-3">
+            <label asp-for="Featured" class="form-label"></label>
+            <input disabled asp-for="Featured" type="text" class="form-control" />
+            <span asp-validation-for="Featured" class="r-error d-block text-danger"></span>
+        </div>
+        <div class="mb-3">
+            <label asp-for="Author" class="form-label"></label>
+            <input disabled asp-for="Author" type="text" class="form-control" />
+            <span asp-validation-for="Author" class="r-error d-block text-danger"></span>
+        </div>
+        <div class="mb-3">
+            <label asp-for="CategoryId" class="form-label">Category</label><br />
             <select asp-for="CategoryId" class="form-control" asp-items="@genreList"></select>
-            </div> *@
-            <a type="button" class="btn btn-secondary" asp-action="">Back</a>
+        </div><br /><br />
+        <a type="button" class="btn btn-secondary" asp-action="">Back</a>
     </div>
 </div>

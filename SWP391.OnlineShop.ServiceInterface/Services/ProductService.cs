@@ -180,7 +180,8 @@ namespace SWP391.OnlineShop.ServiceInterface.Services
                     Price = request.Price,
                     SalePrice = request.SalePrice,
                     CategoryId = request.CategoryId,
-                    Status = Core.Models.Enums.Status.Active
+                    Status = Core.Models.Enums.Status.Active,
+                    CreatedDateTime = DateTime.Now
                 };
                 await _unitOfWork.Products.AddAsync(product);
                 await _unitOfWork.CompleteAsync();
