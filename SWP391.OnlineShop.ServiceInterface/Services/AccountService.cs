@@ -1,5 +1,4 @@
-﻿using AutoMapper;
-using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using SWP391.OnlineShop.Common.Enums;
 using SWP391.OnlineShop.Core.Cores.UnitOfWork;
@@ -15,23 +14,17 @@ namespace SWP391.OnlineShop.ServiceInterface.Services;
 public class AccountService : BaseService, IAccountService
 {
     private readonly ILoggerService _logger;
-    private readonly IMapper _mapper;
     private readonly UserManager<User> _userManager;
-    private readonly RoleManager<Role> _roleManager;
     private readonly SignInManager<User> _signInManager;
     private readonly IUnitOfWork _unitOfWork;
     public AccountService(
         ILoggerService logger,
-        IMapper mapper,
         UserManager<User> userManager,
-        RoleManager<Role> roleManager,
         SignInManager<User> signInManager,
         IUnitOfWork unitOfWork)
     {
         _logger = logger;
-        _mapper = mapper;
         _userManager = userManager;
-        _roleManager = roleManager;
         _signInManager = signInManager;
         _unitOfWork = unitOfWork;
     }
@@ -50,7 +43,7 @@ public class AccountService : BaseService, IAccountService
         }
         catch (Exception e)
         {
-            _logger.LogError($"LoginAsync: {e}");
+            _logger.LogError($"Error in GetLogin request: {e}");
             return new BaseResultModel
             {
                 StatusCode = StatusCode.InternalServerError
@@ -94,7 +87,7 @@ public class AccountService : BaseService, IAccountService
         }
         catch (Exception e)
         {
-            _logger.LogError($"ExternalLoginAsync: {e}");
+            _logger.LogError($"Error in GetExternalLogin request: {e}");
             return new BaseResultModel
             {
                 StatusCode = StatusCode.InternalServerError,

@@ -1,6 +1,6 @@
 ﻿using SWP391.OnlineShop.Core.Models.Enums;
 
-namespace SWP391.OnlineShop.ServiceModel.ViewModels.Category
+namespace SWP391.OnlineShop.ServiceModel.ViewModels.Categories
 {
     public class CategoryViewModel
     {
@@ -8,7 +8,6 @@ namespace SWP391.OnlineShop.ServiceModel.ViewModels.Category
         public Status Status { get; set; }
         public string CategoryName { get; set; }
         public CategoryType CategoryType { get; set; }
-        //public ICollection<Post>? Posts { get; set; }
         public int TotalProduct { get; set; }
         public string Thumbnail { get; set; }
     }

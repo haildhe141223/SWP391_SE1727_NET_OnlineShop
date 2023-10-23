@@ -1,32 +1,28 @@
 ﻿using AutoMapper;
-using Microsoft.AspNetCore.Identity;
 using SWP391.OnlineShop.Core.Cores.UnitOfWork;
-using SWP391.OnlineShop.Core.Models.Identities;
 using SWP391.OnlineShop.ServiceInterface.BaseServices;
 using SWP391.OnlineShop.ServiceInterface.Interfaces;
 using SWP391.OnlineShop.ServiceInterface.Loggers;
 using SWP391.OnlineShop.ServiceModel.ServiceModels;
-using SWP391.OnlineShop.ServiceModel.ViewModels.Category;
+using SWP391.OnlineShop.ServiceModel.ViewModels.Categories;
 
 namespace SWP391.OnlineShop.ServiceInterface.Services
 {
+    //TODO: PhuongNL logger should have key to double check in log. Check AccountService for example
     public class CategoryService : BaseService, ICategoryService
     {
         private readonly IMapper _mapper;
         private readonly IUnitOfWork _unitOfWork;
         private readonly ILoggerService _logger;
-        private readonly UserManager<User> _userManager;
 
         public CategoryService(
             IMapper mapper,
             IUnitOfWork unitOfWork,
-            ILoggerService logger,
-            UserManager<User> userManager)
+            ILoggerService logger)
         {
             _mapper = mapper;
             _unitOfWork = unitOfWork;
             _logger = logger;
-            _userManager = userManager;
         }
         public List<CategoryViewModel> Get(GetAllCategory request)
         {
@@ -41,10 +37,7 @@ namespace SWP391.OnlineShop.ServiceInterface.Services
                     categoryVm.Thumbnail = item.Products.FirstOrDefault()?.Thumbnail;
                     result.Add(categoryVm);
                 }
-                //result.StatusCode = StatusCode.Success;
                 return result;
-                //result.StatusCode = StatusCode.InternalServerError;
-
             }
             catch (Exception ex)
             {

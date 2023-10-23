@@ -2,6 +2,7 @@
 @{
     Layout = "_Layout";
     var genreList = ViewData["GenreList"] as SelectList;
+    var statusList = ViewData["StatusList"] as SelectList;
 }
 
 <div class="m-headers" style="margin-top: 10% !important;">
@@ -47,10 +48,14 @@
                 <input asp-for="Author" type="text" class="form-control" />
                 <span asp-validation-for="Author" class="r-error d-block text-danger"></span>
             </div>
-            @* <div class="mb-3">
-            <label asp-for="CategoryId" class="form-label">Category</label>
-            <select asp-for="CategoryId" class="form-control" asp-items="@genreList"></select>
-            </div> *@
+            <div class="mb-3">
+                <label asp-for="CategoryId" class="form-label">Category</label><br />
+                <select asp-for="CategoryId" class="form-control" asp-items="@genreList"></select>
+            </div><br /><br />
+            <div class="mb-3">
+                <label asp-for="Status" class="form-label">Status</label><br />
+                <select asp-for="Status" class="form-control" asp-items="@statusList"></select>
+            </div><br />
             <a type="button" class="btn btn-secondary" asp-action="">Back</a>
             <button type="reset" class="btn btn-info">Reset</button>
             <button type="submit" class="btn btn-primary">Submit</button>

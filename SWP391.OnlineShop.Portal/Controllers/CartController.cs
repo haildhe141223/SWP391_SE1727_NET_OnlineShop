@@ -1,18 +1,16 @@
 ﻿using BraintreeHttp;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.CodeAnalysis;
 using Newtonsoft.Json;
 using PayPal.Core;
 using PayPal.v1.Payments;
 using ServiceStack;
 using SWP391.OnlineShop.Common.Constraints;
-using SWP391.OnlineShop.Core.Models.Entities;
 using SWP391.OnlineShop.Core.Models.Identities;
 using SWP391.OnlineShop.ServiceInterface.Loggers;
 using SWP391.OnlineShop.ServiceModel.ServiceModels;
-using SWP391.OnlineShop.ServiceModel.ViewModels.Cart;
-using static ServiceStack.Svg;
+using SWP391.OnlineShop.ServiceModel.ViewModels.Carts;
+using System.Globalization;
 using static SWP391.OnlineShop.ServiceModel.ServiceModels.AddressModel;
 using static SWP391.OnlineShop.ServiceModel.ServiceModels.EmailModel;
 using static SWP391.OnlineShop.ServiceModel.ServiceModels.OrderModels;
@@ -21,44 +19,38 @@ namespace SWP391.OnlineShop.Portal.Controllers
 {
     public class CartController : Controller
     {
-        private readonly SignInManager<User> _signInManager;
         private readonly IJsonServiceClient _client;
         private readonly ILoggerService _logger;
-        private readonly IConfiguration _config;
         private readonly UserManager<User> _userManager;
-        private static Dictionary<string,int> paypalData = new Dictionary<string, int>();
+        private static readonly Dictionary<string, int> PaypalData = new Dictionary<string, int>();
 
         public CartController(
-           SignInManager<User> signInManager,
            IJsonServiceClient client,
            ILoggerService logger,
-           IConfiguration config,
            UserManager<User> userManager)
         {
-            _signInManager = signInManager;
             _client = client;
             _logger = logger;
             _userManager = userManager;
-            _config = config;
         }
 
         public async Task<IActionResult> MyOrders()
         {
-			var email = "admin@gmail.com";/* User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Email)?.Value;
+            var email = "admin@gmail.com";/* User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Email)?.Value;
             if(string.IsNullOrEmpty(email))
             {
                 return RedirectToAction("Login", "Account");
             }*/
-			var user = await _userManager.FindByEmailAsync(email);
-			if (user == null)
-			{
-				return RedirectToAction("Login", "Account");
-			}
+            var user = await _userManager.FindByEmailAsync(email);
+            if (user == null)
+            {
+                return RedirectToAction("Login", "Account");
+            }
             var orders = await _client.GetAsync(new GetAllOrderByUser()
             {
                 Email = email
             });
-			return View(orders);
+            return View(orders);
         }
         public async Task<IActionResult> Index()
         {
@@ -77,8 +69,8 @@ namespace SWP391.OnlineShop.Portal.Controllers
             {
                 Email = email
             });
-			cartDetailOrders.Sliders = productSlider.Take(8).ToList();
-			var cartContactOrders = await _client.GetAsync(new GetCartContactByUser
+            cartDetailOrders.Sliders = productSlider.Take(8).ToList();
+            var cartContactOrders = await _client.GetAsync(new GetCartContactByUser
             {
                 Email = email
             });
@@ -97,15 +89,15 @@ namespace SWP391.OnlineShop.Portal.Controllers
                 {
                     if ((cartContactOrders.OrderDetails == null || cartContactOrders.OrderDetails?.Count <= 0))
                     {
-                        if (cartCompleteOrders.OrderDetails != null && cartCompleteOrders.OrderDetails.Count >= 0)
+                        if (cartCompleteOrders.OrderDetails is { Count: >= 0 })
                         {
-							return RedirectToAction("Checkout", "Cart");
+                            return RedirectToAction("Checkout", "Cart");
                         }
                         else
                         {
                             return View(cartDetailOrders);
                         }
-					}
+                    }
                     // get address by userEmail
                     var userAddress = await _client.GetAsync(new GetAddressByUser()
                     {
@@ -117,7 +109,7 @@ namespace SWP391.OnlineShop.Portal.Controllers
                     var province = await _client.GetAsync(new GetAllProvince());
                     cartContactOrders.Provinces = province;
                     cartContactOrders.Sliders = productSlider.Take(8).ToList();
-					return View(cartContactOrders);
+                    return View(cartContactOrders);
                 }
                 return View(cartDetailOrders);
 
@@ -137,12 +129,12 @@ namespace SWP391.OnlineShop.Portal.Controllers
             {
                 Email = email
             });
-            if(cartCompleteOrders == null || cartCompleteOrders.OrderDetails == null || cartCompleteOrders.OrderDetails.Count <=0)
+            if (cartCompleteOrders?.OrderDetails == null || cartCompleteOrders.OrderDetails.Count <= 0)
             {
                 return RedirectToAction("Index", "Cart");
             }
-			var productSlider = await _client.GetAsync(new GetAllProduct());
-			var userAddress = await _client.GetAsync(new GetAddressByUser()
+            var productSlider = await _client.GetAsync(new GetAllProduct());
+            var userAddress = await _client.GetAsync(new GetAddressByUser()
             {
                 Email = email
             });
@@ -162,9 +154,9 @@ namespace SWP391.OnlineShop.Portal.Controllers
 
 		public async Task<IActionResult> Confirmation([FromQuery(Name = "token")] string token)
         {
-            if(paypalData.Keys.Contains(token))
+            if (PaypalData.Keys.Contains(token))
             {
-                var orderId = paypalData[token];
+                var orderId = PaypalData[token];
                 var order = await _client.GetAsync(new GetCartInfo()
                 {
                     Id = orderId
@@ -176,7 +168,7 @@ namespace SWP391.OnlineShop.Portal.Controllers
                         ProductId = item.Product.Id
                     });
                     var quantity = product.Amount - item.Quantity;
-                    var updateAmount = await _client.PutAsync(new PutUpdateProduct()
+                    await _client.PutAsync(new PutUpdateProduct()
                     {
                         Amount = quantity,
                         Id = product.Id
@@ -188,21 +180,22 @@ namespace SWP391.OnlineShop.Portal.Controllers
                     OrderStatus = Core.Models.Enums.OrderStatus.PaidOrderWaitingConfirm,
                 });
                 var emailBody = "Your Order has been paid successfully and waiting for delivery";
-				var email = "admin@gmail.com";
-				/*var email = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Email)?.Value;*/
-				var user = await _userManager.FindByEmailAsync(email);
-				if (user == null)
-				{
-					return RedirectToAction("Login", "Account");
-				}
-				var apiEmail = await _client.PostAsync(new PostAddEmail()
-				{
-					Body = emailBody,
-					Category = "Notification",
-					Subject = "Order Paid Successfully",
-					To = email,
-					Title = "Order Paid Successfully"
-				});
+                var email = "admin@gmail.com";
+                /*var email = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Email)?.Value;*/
+                var user = await _userManager.FindByEmailAsync(email);
+                if (user == null)
+                {
+                    return RedirectToAction("Login", "Account");
+                }
+
+                await _client.PostAsync(new PostAddEmail()
+                {
+                    Body = emailBody,
+                    Category = "Notification",
+                    Subject = "Order Paid Successfully",
+                    To = email,
+                    Title = "Order Paid Successfully"
+                });
                 var productSlider = await _client.GetAsync(new GetAllProduct());
                 order.Sliders = productSlider.Take(8).ToList();
                 if (api.StatusCode == Common.Enums.StatusCode.Success)
@@ -251,11 +244,11 @@ namespace SWP391.OnlineShop.Portal.Controllers
 
             foreach (var item in order.OrderDetails)
             {
-                if(item.Status == Core.Models.Enums.Status.Active)
+                if (item.Status == Core.Models.Enums.Status.Active)
                 {
-					total += item.Quantity * item.UnitPrice;
-				}
-			}
+                    total += item.Quantity * item.UnitPrice;
+                }
+            }
 
             var api = await _client.PutAsync(new PutUpdateCartToContact()
             {
@@ -305,46 +298,46 @@ namespace SWP391.OnlineShop.Portal.Controllers
             return RedirectToAction("Error", "Home");
         }
 
-		[HttpPost]
-		public async Task<IActionResult> FinishCart(int orderId, decimal total, string note)
-		{
-			var api = await _client.PutAsync(new PutUpdateCartToContact()
-			{
-				Id = orderId,
-				OrderStatus = Core.Models.Enums.OrderStatus.WaitingConfirmBySalerUnPaid,
-				TotalCost = total,
+        [HttpPost]
+        public async Task<IActionResult> FinishCart(int orderId, decimal total, string note)
+        {
+            var api = await _client.PutAsync(new PutUpdateCartToContact()
+            {
+                Id = orderId,
+                OrderStatus = Core.Models.Enums.OrderStatus.WaitingConfirmBySalerUnPaid,
+                TotalCost = total,
                 OrderNotes = note
-			});
-			if (api.StatusCode == Common.Enums.StatusCode.Success)
-			{
-				return Ok(api);
-			}
-			return RedirectToAction("Error", "Home");
-		}
+            });
+            if (api.StatusCode == Common.Enums.StatusCode.Success)
+            {
+                return Ok(api);
+            }
+            return RedirectToAction("Error", "Home");
+        }
 
         [HttpPost]
         public async Task<IActionResult> AddToCard(int productId, decimal price, int quantity)
         {
-			var email = "admin@gmail.com";
-			/*var email = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Email)?.Value;*/
-			var user = await _userManager.FindByEmailAsync(email);
-			if (user == null)
-			{
-				return RedirectToAction("Login", "Account");
-			}
-			var userAddress = await _client.GetAsync(new GetAddressByUser()
-			{
-				Email = email
-			});
-			var product = await _client.GetAsync(new GetProductById()
+            var email = "admin@gmail.com";
+            /*var email = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Email)?.Value;*/
+            var user = await _userManager.FindByEmailAsync(email);
+            if (user == null)
+            {
+                return RedirectToAction("Login", "Account");
+            }
+            var userAddress = await _client.GetAsync(new GetAddressByUser()
+            {
+                Email = email
+            });
+            var product = await _client.GetAsync(new GetProductById()
             {
                 ProductId = productId
             });
-           if(product.Amount < quantity)
+            if (product.Amount < quantity)
             {
                 return StatusCode(500, $"There's not enough product in store. Current in store {product.Amount}");
             }
-            var addToCart = await _client.PostAsync(new PostAddToCart()
+            await _client.PostAsync(new PostAddToCart
             {
                 CustomerEmail = email,
                 CustomerAddress = userAddress.FullAddress,
@@ -352,34 +345,35 @@ namespace SWP391.OnlineShop.Portal.Controllers
                 OrderStatus = Core.Models.Enums.OrderStatus.InCartDetail,
                 Quantity = quantity,
                 Price = price,
-                ProductId = productId,
+                ProductId = productId
             });
             return Ok();
         }
 
-		#region Paypal Payment
-		[HttpPost]
+        #region Paypal Payment
+        [HttpPost]
         public async Task<IActionResult> MakePaypalPayment(string data, string notes)
         {
-			if (string.IsNullOrEmpty(data))
-			{
-				return StatusCode(500, "Empty Data");
-			}
-			var model = JsonConvert.DeserializeObject<OrderViewModel>(data);
-			if (model is null)
-			{
-				return StatusCode(500, "Empty Data");
-			}
-			/*var user = await _userManager.GetUserAsync(User);*/
-			var email = "admin@gmail.com";
+            if (string.IsNullOrEmpty(data))
+            {
+                return StatusCode(500, "Empty Data");
+            }
+            var model = JsonConvert.DeserializeObject<OrderViewModels>(data);
+            if (model is null)
+            {
+                return StatusCode(500, "Empty Data");
+            }
+            /*var user = await _userManager.GetUserAsync(User);*/
+            var email = "admin@gmail.com";
             /*var email = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Email)?.Value;*/
             var user = await _userManager.FindByEmailAsync(email);
             if (user == null)
             {
-                return RedirectToAction("Error", "Account");
+                return RedirectToAction("ErrorForbidden", "Account");
             }
-            var environment = new SandboxEnvironment(PaypalHelper.clientId, PaypalHelper.secretId);
+            var environment = new SandboxEnvironment(PaypalHelper.ClientId, PaypalHelper.SecretId);
             var client = new PayPalHttpClient(environment);
+
             #region Create Paypal Order
 
             var itemList = new ItemList()
@@ -393,7 +387,7 @@ namespace SWP391.OnlineShop.Portal.Controllers
                 {
                     Currency = "USD",
                     Name = order.Product.ProductName,
-                    Price = order.UnitPrice.ToString(),
+                    Price = order.UnitPrice.ToString(CultureInfo.InvariantCulture),
                     Quantity = order.Quantity.ToString(),
                     Sku = "sku",
                     Tax = "0"
@@ -411,13 +405,13 @@ namespace SWP391.OnlineShop.Portal.Controllers
                     {
                         Amount = new Amount()
                         {
-                            Total = model.TotalCost.ToString(),
+                            Total = model.TotalCost.ToString(CultureInfo.InvariantCulture),
                             Currency = "USD",
                             Details = new AmountDetails
                             {
                                 Tax = "0",
                                 Shipping = "0",
-                                Subtotal = model.TotalCost.ToString()
+                                Subtotal = model.TotalCost.ToString(CultureInfo.InvariantCulture)
                             }
                         },
                         ItemList = itemList,
@@ -440,38 +434,38 @@ namespace SWP391.OnlineShop.Portal.Controllers
             var paypalDirectUrl = await GetPaypalDirectUrl(client, request);
             if (!string.IsNullOrEmpty(notes))
             {
-				var updateNotes = await _client.PutAsync(new PutUpdateOrderNotes()
-				{
-					Id = model.Id,
-					OrderNotes = notes
+                await _client.PutAsync(new PutUpdateOrderNotes()
+                {
+                    Id = model.Id,
+                    OrderNotes = notes
+                });
+            }
 
-				});
-			}
-          
-			#endregion
-			paypalData.Add( paypalDirectUrl.Split("&token=")[1], model.Id);
-			return Ok(paypalDirectUrl);
+            #endregion
+
+            PaypalData.Add(paypalDirectUrl.Split("&token=")[1], model.Id);
+            return Ok(paypalDirectUrl);
         }
 
         public async Task<IActionResult> PaymentFailed()
         {
-			var emailBody = "Your Order has been paid failed! Please try again or choose another payment method";
-			var email = "admin@gmail.com";
-			/*var email = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Email)?.Value;*/
-			var user = await _userManager.FindByEmailAsync(email);
-			if (user == null)
-			{
-				return RedirectToAction("Login", "Account");
-			}
-			var apiEmail = await _client.PostAsync(new PostAddEmail()
-			{
-				Body = emailBody,
-				Category = "Notification",
-				Subject = "Order Paid Failed",
-				To = email,
-				Title = "Order Paid Failed"
-			});
-			return View();
+            var emailBody = "Your Order has been paid failed! Please try again or choose another payment method";
+            var email = "admin@gmail.com";
+            /*var email = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Email)?.Value;*/
+            var user = await _userManager.FindByEmailAsync(email);
+            if (user == null)
+            {
+                return RedirectToAction("Login", "Account");
+            }
+            await _client.PostAsync(new PostAddEmail()
+            {
+                Body = emailBody,
+                Category = "Notification",
+                Subject = "Order Paid Failed",
+                To = email,
+                Title = "Order Paid Failed"
+            });
+            return View();
         }
 
         public async Task<string> GetPaypalDirectUrl(PayPalHttpClient client, PaymentCreateRequest request)
@@ -534,7 +528,7 @@ namespace SWP391.OnlineShop.Portal.Controllers
         [HttpPost]
         public async Task<IActionResult> UpdateAddress(int id, string fullAddress)
         {
-            var api = await _client.PutAsync(new PutUpdateAddress()
+            await _client.PutAsync(new PutUpdateAddress
             {
                 Id = id,
                 FullAddress = fullAddress

@@ -18,6 +18,8 @@ public class UnitOfWork : IUnitOfWork
         Posts = new PostRepository(Context);
         Tags = new TagRepository(Context);
         Vouchers = new VoucherRepository(Context);
+        Settings = new SettingRepository(Context);
+        Sliders = new SliderRepository(Context);
     }
 
     public OnlineShopContext Context { get; }
@@ -29,6 +31,8 @@ public class UnitOfWork : IUnitOfWork
     public IPostRepository Posts { get; }
     public ITagRepository Tags { get; }
     public IVoucherRepository Vouchers { get; }
+    public ISettingRepository Settings { get; }
+    public ISliderRepository Sliders { get; }
 
     public void Dispose()
     {

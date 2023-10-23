@@ -21,4 +21,5 @@ public class Voucher : BaseEntity<int>
 
     public ICollection<ProductVoucher> ProductVouchers { get; set; }
     public ICollection<UserVoucher> UserVouchers { get; set; }
+
 }

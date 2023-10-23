@@ -1,5 +1,5 @@
 using SWP391.OnlineShop.Core.Models.Enums;
-using SWP391.OnlineShop.ServiceModel.ViewModels.Category;
+using SWP391.OnlineShop.ServiceModel.ViewModels.Categories;
 using SWP391.OnlineShop.ServiceModel.ViewModels.Feedback;
 
 namespace SWP391.OnlineShop.ServiceModel.ViewModels.Products
@@ -16,6 +16,6 @@ namespace SWP391.OnlineShop.ServiceModel.ViewModels.Products
         public decimal Price { get; set; }
         public decimal SalePrice { get; set; }
         public CategoryViewModel Category { get; set; }
-        public List<FeedbackViewModel> FeedBacks { get; set; }
+        public List<FeedbackViewModels> FeedBacks { get; set; }
     }
 }

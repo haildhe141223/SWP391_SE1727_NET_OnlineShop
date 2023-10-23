@@ -2,9 +2,9 @@
 using SWP391.OnlineShop.ServiceModel.Results;
 using SWP391.OnlineShop.ServiceModel.ViewModels.Products;
 
-namespace SWP391.OnlineShop.ServiceModel.ViewModels.Cart
+namespace SWP391.OnlineShop.ServiceModel.ViewModels.Carts
 {
-    public class OrderDetailViewModel : BaseResultModel
+    public class OrderDetailViewModels : BaseResultModel
     {
         public int Id { get; set; }
         public int Quantity { get; set; }
