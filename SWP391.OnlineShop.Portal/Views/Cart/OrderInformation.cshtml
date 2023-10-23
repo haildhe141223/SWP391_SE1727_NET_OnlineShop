@@ -1,4 +1,130 @@
-﻿<section class="checkout_area section_gap">
+﻿@model SWP391.OnlineShop.ServiceModel.ViewModels.Carts.OrderViewModels
+@{
+	var sliders = Model.Sliders.ToList();
+}
+<!-- Start Banner Area -->
+<section class="banner-area organic-breadcrumb">
+	<div class="container">
+		<div class="breadcrumb-banner d-flex flex-wrap align-items-center justify-content-end">
+			<div class="col-first">
+				<h1>Checkout</h1>
+				<nav class="d-flex align-items-center">
+					<a asp-action="Index" asp-controller="Home">Home<span class="lnr lnr-arrow-right"></span></a>
+					<a href="single-product.html">Checkout</a>
+				</nav>
+			</div>
+		</div>
+	</div>
+</section>
+<!-- End Banner Area -->
+<section class="owl-carousel active-product-area section_gap">
+	<!-- single product slide -->
+	<div class="single-product-slider">
+		<div class="container">
+			<div class="row justify-content-center">
+				<div class="col-lg-6 text-center">
+					<div class="section-title">
+						<h1>Latest Products</h1>
+						<p>
+							Lastest Products Of All Category
+						</p>
+					</div>
+				</div>
+			</div>
+			<div class="row">
+				@for (int i = 0; i < sliders.Count() / 2; i++)
+				{
+					<!-- single product -->
+					<div class="col-lg-3 col-md-6">
+						<div class="single-product">
+							<a asp-action="Details" asp-controller="Product" asp-route-id="@sliders[i].Id"><img class="img-fluid" src="@sliders[i].Thumbnail" alt="@sliders[i].ProductName"></a>
+							<div class="product-details">
+								<h6>
+									<a asp-action="Details" asp-controller="Product" asp-route-id="@sliders[i].Id">@sliders[i].ProductName</a>
+								</h6>
+								<div class="price">
+									<h6>$ @sliders[i].Price</h6>
+									@if (sliders[i].SalePrice > 0)
+									{
+										<h6 class="l-through">$ @sliders[i].SalePrice</h6>
+									}
+								</div>
+								<div class="prd-bottom">
+									<a href="" class="social-info">
+										<span class="lnr lnr-heart"></span>
+										<p class="hover-text">Wishlist</p>
+									</a>
+									<a href="" class="social-info">
+										<span class="lnr lnr-sync"></span>
+										<p class="hover-text">compare</p>
+									</a>
+									<a href="" class="social-info">
+										<span class="lnr lnr-move"></span>
+										<p class="hover-text">view more</p>
+									</a>
+								</div>
+							</div>
+						</div>
+					</div>
+				}
+			</div>
+		</div>
+	</div>
+	<!-- single product slide -->
+	<div class="single-product-slider">
+		<div class="container">
+			<div class="row justify-content-center">
+				<div class="col-lg-6 text-center">
+					<div class="section-title">
+						<h1>Lastest Products</h1>
+						<p>
+							Lastest Products Of All Category
+						</p>
+					</div>
+				</div>
+			</div>
+			<div class="row">
+				<!-- single product -->
+				@for (int i = sliders.Count() / 2; i < sliders.Count(); i++)
+				{
+					<!-- single product -->
+					<div class="col-lg-3 col-md-6">
+						<div class="single-product">
+							<a asp-action="Details" asp-controller="Product" asp-route-id="@sliders[i].Id"><img class="img-fluid" src="@sliders[i].Thumbnail" alt="@sliders[i].ProductName"></a>
+							<div class="product-details">
+								<h6>
+									<a asp-action="Details" asp-controller="Product" asp-route-id="@sliders[i].Id">@sliders[i].ProductName</a>
+								</h6>
+								<div class="price">
+									<h6>$ @sliders[i].Price</h6>
+									@if (sliders[i].SalePrice > 0)
+									{
+										<h6 class="l-through">$ @sliders[i].SalePrice</h6>
+									}
+								</div>
+								<div class="prd-bottom">
+									<a href="" class="social-info">
+										<span class="lnr lnr-heart"></span>
+										<p class="hover-text">Wishlist</p>
+									</a>
+									<a href="" class="social-info">
+										<span class="lnr lnr-sync"></span>
+										<p class="hover-text">compare</p>
+									</a>
+									<a href="" class="social-info">
+										<span class="lnr lnr-move"></span>
+										<p class="hover-text">view more</p>
+									</a>
+								</div>
+							</div>
+						</div>
+					</div>
+				}
+			</div>
+		</div>
+	</div>
+</section>
+<section class="checkout_area section_gap">
 	<div class="container">
 		<div class="row">
 			<div class="col-lg-8">
@@ -14,35 +140,44 @@
 											<th scope="col">Quantity</th>
 											<th scope="col">Category</th>
 											<th scope="col">Total</th>
-											<th scope="col">Status</th>
 										</tr>
 									</thead>
 									<tbody>
 										<tr>
+											@if(Model.OrderDetails != null){
+												@foreach(var order in Model.OrderDetails){
 											<td>
 												<div class="media">
 													<div class="d-flex">
-														<img src="img/cart.jpg" alt="">
+														<img src="@order.Product.Thumbnail" alt="@order.Product.ProductName">
 													</div>
 													<div class="media-body">
-														<p>Minimalistic shop for multipurpose use</p>
+																<p>@order.Product.ProductName</p>
 													</div>
 												</div>
 											</td>
 											<td>
-												<h5>$360.00</h5>
+												<h5>$ @order.UnitPrice</h5>
 											</td>
 											<td>
 												<div class="product_count">
-													<input type="text" name="qty" id="sst" maxlength="12" value="1" title="Quantity:" disabled
+													<input type="text" name="qty" id="sst" maxlength="12" value="@order.Quantity" title="Quantity:" disabled
 														   class="input-text qty">
 												</div>
 											</td>
-											<td>Category</td>
+											<td><p>@order.Product.Category.CategoryName</p></td>
 											<td>
-												<h5>$720.00</h5>
+														@if (order.Product?.SalePrice > 0)
+														{
+															<h5 class="total">$ @(order.Product.SalePrice * order.Quantity)</h5>
+														}
+														else
+														{
+															<h5 class="total">$ @(order.Product?.Price * order.Quantity)</h5>
+														}
 											</td>
-											<td>Status</td>
+												}
+											}
 										</tr>
 									</tbody>
 								</table>
@@ -53,24 +188,16 @@
 			</div>
 			<div class="col-lg-4">
 				<div class="order_box" style="padding-top: 100px;padding-bottom: 100px;">
-					<h2>Your Order</h2>
+					<h2>Receiver Information</h2>
 					<ul class="list">
-						<li><a href="#">Product <span>Total</span></a></li>
-						<li><a href="#">Fresh Blackberry <span class="middle">x 02</span> <span class="last">$720.00</span></a></li>
-						<li><a href="#">Fresh Tomatoes <span class="middle">x 02</span> <span class="last">$720.00</span></a></li>
-						<li><a href="#">Fresh Brocoli <span class="middle">x 02</span> <span class="last">$720.00</span></a></li>
+						<li><a href="#">Name <span>@Model.CustomerName</span></a></li>
+						<li><a href="#">Email <span>@Model.CustomerEmail</span></a></li>
+						<li><a href="#">Phone Number <span>@Model.CustomerPhoneNumber</span></a></li>
 					</ul>
 					<ul class="list list_2">
-						<li><a href="#">Subtotal <span>$2160.00</span></a></li>
-						<li><a href="#">Shipping <span>Flat rate: $50.00</span></a></li>
-						<li><a href="#">Total <span>$2210.00</span></a></li>
+						<li><a href="#">Order Total <span>$ @Model.TotalCost</span></a></li>
+						<li><a href="#">Order Status <span>@Model.OrderStatus</span></a></li>
 					</ul>
-					<div class="payment_item">
-					
-					</div>
-					<div class="payment_item active">
-						
-					</div>
 				</div>
 			</div>
 		</div>
