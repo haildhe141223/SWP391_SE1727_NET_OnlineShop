@@ -112,7 +112,7 @@ public class OrderRepository : GenericRepository<Order, int>, IOrderRepository
     {
         var result = Context.Orders
             .Include(o => o.OrderDetails.Where(od => od.Status == Status.Active))
-            .ThenInclude(o => o.Product).FirstOrDefault(o => o.Id == id && o.Status == Status.Active);
+            .ThenInclude(o => o.Product).ThenInclude(p => p.Category).FirstOrDefault(o => o.Id == id && o.Status == Status.Active);
         return result;
     }
 

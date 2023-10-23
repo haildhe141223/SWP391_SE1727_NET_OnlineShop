@@ -38,7 +38,7 @@
 							<!-- text -->
 							<div class="border-bottom mb-3 pb-3 d-lg-flex align-items-center justify-content-between ">
 								<div class="d-flex align-items-center justify-content-between">
-									<h5 class="mb-0">Order #@order.Id</h5>
+									<a asp-action="OrderInformation" asp-controller="Cart" asp-route-id="@order.Id"><h5 class="mb-0">Order #@order.Id</h5></a>
 									<span class="ms-2">Order on @order.ModifiedDateTime.ToString("dd/MM/yyyy")</span>
 								</div>
 							</div>
