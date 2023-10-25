@@ -19,8 +19,8 @@ using static SWP391.OnlineShop.ServiceModel.ServiceModels.OrderModels;
 
 namespace SWP391.OnlineShop.Portal.Controllers
 {
-	public class CartController : Controller
-	{
+    public class CartController : BaseController
+
 		private readonly IJsonServiceClient _client;
 		private readonly ILoggerService _logger;
 		private readonly UserManager<User> _userManager;

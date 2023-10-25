@@ -16,5 +16,7 @@ public class RegisterViewModel
     public string Password { get; set; }
 
     [Required(ErrorMessage = "Re-password cannot be empty")]
+    [StringLength(50, ErrorMessage = "Must be between 8 and 50 characters", MinimumLength = 8)]
+    [Compare(nameof(Password))]
     public string RePassword { get; set; }
 }

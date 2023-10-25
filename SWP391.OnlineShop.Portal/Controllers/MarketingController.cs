@@ -8,7 +8,7 @@ using SWP391.OnlineShop.ServiceModel.ViewModels.Products;
 
 namespace SWP391.OnlineShop.Portal.Controllers
 {
-    public class MarketingController : Controller
+    public class MarketingController : BaseController
     {
         private readonly IJsonServiceClient _client;
         private readonly ILoggerService _logger;
@@ -49,7 +49,6 @@ namespace SWP391.OnlineShop.Portal.Controllers
                 SalePrice = request.SalePrice,
                 Thumbnail = request.Thumbnail,
                 CategoryId = request.CategoryId
-                
             });
             return RedirectToAction("Index");
         }

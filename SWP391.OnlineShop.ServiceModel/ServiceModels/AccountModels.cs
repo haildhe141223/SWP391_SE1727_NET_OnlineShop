@@ -1,10 +1,19 @@
 ﻿using ServiceStack;
 using SWP391.OnlineShop.ServiceModel.Results;
+using SWP391.OnlineShop.ServiceModel.ViewModels.Accounts;
+using SWP391.OnlineShop.ServiceModel.ViewModels.Users;
 
 namespace SWP391.OnlineShop.ServiceModel.ServiceModels;
 
 public class AccountModels
 {
+    [Route("/Account/GetUsers", "GET")]
+    public class GetUsers : IReturn<List<UserViewModel>>
+    {
+        public bool IsDesc { get; set; }
+        public int Size { get; set; }
+    }
+
     [Route("/Account/GetUser", "GET")]
     public class GetUser : IReturn<BaseResultModel>
     {
@@ -26,5 +35,11 @@ public class AccountModels
         public string ProviderDisplayName { get; set; }
         public string LoginProvider { get; set; }
         public string ProviderKey { get; set; }
+    }
+
+    [Route("/Account/RegisterAccount", "POST")]
+    public class PostRegisterAccount : IReturn<BaseResultModel>
+    {
+        public RegisterViewModel RegisterViewModel { get; set; }
     }
 }

@@ -2,14 +2,9 @@
 
 namespace SWP391.OnlineShop.Portal.Controllers
 {
-    public class PostController : BaseController
+    public class ProfileController : BaseController
     {
         public IActionResult Index()
-        {
-            return View();
-        }
-
-        public IActionResult Details()
         {
             return View();
         }

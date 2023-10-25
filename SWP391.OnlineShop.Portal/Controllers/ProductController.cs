@@ -5,7 +5,7 @@ using SWP391.OnlineShop.ServiceModel.ViewModels.Products;
 
 namespace SWP391.OnlineShop.Portal.Controllers
 {
-    public class ProductController : Controller
+    public class ProductController : BaseController
     {
         private readonly IJsonServiceClient _client;
 

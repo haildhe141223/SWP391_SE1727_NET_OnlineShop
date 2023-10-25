@@ -61,10 +61,15 @@ services.Configure<RouteOptions>(options =>
     options.LowercaseUrls = true;
 });
 
+// Add time expired for session
 services.AddSession(options =>
 {
     options.IdleTimeout = TimeSpan.FromDays(1);
 });
+
+// Add time expired for identity token
+services.Configure<DataProtectionTokenProviderOptions>(options =>
+    options.TokenLifespan = TimeSpan.FromMinutes(5));
 
 // Add identity configs
 services.AddIdentity<User, Role>(options =>
@@ -85,7 +90,6 @@ services.AddIdentity<User, Role>(options =>
     .AddEntityFrameworkStores<OnlineShopContext>()
     .AddDefaultTokenProviders();
 
-
 // Add defaultCookie services
 services.ConfigureApplicationCookie(options =>
 {
@@ -94,10 +98,6 @@ services.ConfigureApplicationCookie(options =>
     options.Cookie.Name = "OnlineShopUser";
     options.ExpireTimeSpan = TimeSpan.FromDays(3);
 });
-
-// Add time expired for identity token
-services.Configure<DataProtectionTokenProviderOptions>(options =>
-    options.TokenLifespan = TimeSpan.FromMinutes(30));
 
 // Add ServiceStack services
 services.AddScoped<IJsonServiceClient>(_ => new JsonServiceClient(config["ServiceApi"]));
