@@ -6,4 +6,5 @@ public class BaseResultModel
 {
     public StatusCode StatusCode { get; set; }
     public string ErrorMessage { get; set; }
+    public string SuccessMessage { get; set; }
 }

@@ -1,6 +1,9 @@
-﻿@{
-    //TODO: update Avatar Claim here.
+﻿@using System.Security.Claims
+@using SWP391.OnlineShop.Common.Constraints
+@{
+    //TODO: HaiLD update Avatar Claim here.
     var userImage = User.Claims.FirstOrDefault(u => u.Type == "Avatar")?.Value;
+    var userRole = User.Claims.FirstOrDefault(u => u.Type == ClaimTypes.Role)?.Value;
 }
 
 <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
@@ -67,20 +70,23 @@
             @*Dropdown - User Information*@
             <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
                  aria-labelledby="userDropdown">
-                <a asp-area="" class="dropdown-item">
+                <a class="dropdown-item" asp-controller="Home" asp-action="Index" asp-area="">
                     <i class="fas fa-home fa-sm fa-fw mr-2 text-gray-400"></i>
                     Home
                 </a>
-                <a asp-area="" class="dropdown-item">
+                <a class="dropdown-item" asp-controller="Profile" asp-action="Index" asp-area="">
                     <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
                     Profile
                 </a>
-                <a asp-area="" class="dropdown-item">
-                    <i class="fas fa-cogs fa-sm fa-fw mr-2 text-gray-400"></i>
-                    Settings
-                </a>
+                @if (!string.IsNullOrEmpty(userRole) && userRole.Contains(RoleConstraints.Admin))
+                {
+                    <a class="dropdown-item" asp-controller="Dashboard" asp-action="Index" asp-area="Managements">
+                        <i class="fas fa-cogs fa-sm fa-fw mr-2 text-gray-400"></i>
+                        Management
+                    </a>
+                }
                 <div class="dropdown-divider"></div>
-                <a class="dropdown-item"
+                <a class="dropdown-item" asp-controller="Account" asp-action="Logout" asp-area=""
                    data-bs-toggle="modal" data-bs-target="#logoutModal">
                     <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
                     Logout

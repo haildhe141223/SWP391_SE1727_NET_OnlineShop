@@ -8,8 +8,8 @@
 
   <ItemGroup>
     <Folder Include="Logs\" />
-    <Folder Include="Uploads\" />
     <Folder Include="wwwroot\css\orderHistory\" />
+    <Folder Include="wwwroot\img\" />
     <Folder Include="wwwroot\template\js\" />
   </ItemGroup>
 
@@ -19,6 +19,10 @@
     <PackageReference Include="MailKit" Version="4.2.0" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.Facebook" Version="6.0.22" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.Google" Version="6.0.22" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="6.0.22">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
     <PackageReference Include="Microsoft.Extensions.Identity.Core" Version="6.0.22" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="6.0.16" />
     <PackageReference Include="NLog" Version="5.2.4" />
@@ -39,6 +43,7 @@
     <_ContentIncludedByDefault Remove="Areas\Files\Views\FileManager\Index.cshtml" />
     <_ContentIncludedByDefault Remove="Areas\Managements\Views\Shared\AdminPartial\_AdminFooterPartial.cshtml" />
     <_ContentIncludedByDefault Remove="Areas\Managements\Views\Shared\_AdminLayout.cshtml" />
+    <_ContentIncludedByDefault Remove="Views\Account\ConfirmResetPassword.cshtml" />
     <_ContentIncludedByDefault Remove="Views\Account\Register.cshtml" />
   </ItemGroup>
 
@@ -52,6 +57,10 @@
 
   <ItemGroup>
     <UpToDateCheckInput Remove="Views\Account\Register.cshtml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <UpToDateCheckInput Remove="Views\Account\ConfirmResetPassword.cshtml" />
   </ItemGroup>
 
 </Project>

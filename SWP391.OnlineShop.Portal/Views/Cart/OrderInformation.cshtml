@@ -1,0 +1,287 @@
+﻿@model SWP391.OnlineShop.ServiceModel.ViewModels.Carts.OrderViewModels
+@{
+	var sliders = Model.Sliders.ToList();
+}
+<!-- Start Banner Area -->
+<section class="banner-area organic-breadcrumb">
+	<div class="container">
+		<div class="breadcrumb-banner d-flex flex-wrap align-items-center justify-content-end">
+			<div class="col-first">
+				<h1>Checkout</h1>
+				<nav class="d-flex align-items-center">
+					<a asp-action="Index" asp-controller="Home">Home<span class="lnr lnr-arrow-right"></span></a>
+					<a href="single-product.html">Checkout</a>
+				</nav>
+			</div>
+		</div>
+	</div>
+</section>
+<!-- End Banner Area -->
+<section class="owl-carousel active-product-area section_gap">
+	<!-- single product slide -->
+	<div class="single-product-slider">
+		<div class="container">
+			<div class="row justify-content-center">
+				<div class="col-lg-6 text-center">
+					<div class="section-title">
+						<h1>Latest Products</h1>
+						<p>
+							Lastest Products Of All Category
+						</p>
+					</div>
+				</div>
+			</div>
+			<div class="row">
+				@for (int i = 0; i < sliders.Count() / 2; i++)
+				{
+					<!-- single product -->
+					<div class="col-lg-3 col-md-6">
+						<div class="single-product">
+							<a asp-action="Details" asp-controller="Product" asp-route-id="@sliders[i].Id"><img class="img-fluid" src="@sliders[i].Thumbnail" alt="@sliders[i].ProductName"></a>
+							<div class="product-details">
+								<h6>
+									<a asp-action="Details" asp-controller="Product" asp-route-id="@sliders[i].Id">@sliders[i].ProductName</a>
+								</h6>
+								<div class="price">
+									<h6>$ @sliders[i].Price</h6>
+									@if (sliders[i].SalePrice > 0)
+									{
+										<h6 class="l-through">$ @sliders[i].SalePrice</h6>
+									}
+								</div>
+								<div class="prd-bottom">
+									<a href="" class="social-info">
+										<span class="lnr lnr-heart"></span>
+										<p class="hover-text">Wishlist</p>
+									</a>
+									<a href="" class="social-info">
+										<span class="lnr lnr-sync"></span>
+										<p class="hover-text">compare</p>
+									</a>
+									<a href="" class="social-info">
+										<span class="lnr lnr-move"></span>
+										<p class="hover-text">view more</p>
+									</a>
+								</div>
+							</div>
+						</div>
+					</div>
+				}
+			</div>
+		</div>
+	</div>
+	<!-- single product slide -->
+	<div class="single-product-slider">
+		<div class="container">
+			<div class="row justify-content-center">
+				<div class="col-lg-6 text-center">
+					<div class="section-title">
+						<h1>Lastest Products</h1>
+						<p>
+							Lastest Products Of All Category
+						</p>
+					</div>
+				</div>
+			</div>
+			<div class="row">
+				<!-- single product -->
+				@for (int i = sliders.Count() / 2; i < sliders.Count(); i++)
+				{
+					<!-- single product -->
+					<div class="col-lg-3 col-md-6">
+						<div class="single-product">
+							<a asp-action="Details" asp-controller="Product" asp-route-id="@sliders[i].Id"><img class="img-fluid" src="@sliders[i].Thumbnail" alt="@sliders[i].ProductName"></a>
+							<div class="product-details">
+								<h6>
+									<a asp-action="Details" asp-controller="Product" asp-route-id="@sliders[i].Id">@sliders[i].ProductName</a>
+								</h6>
+								<div class="price">
+									<h6>$ @sliders[i].Price</h6>
+									@if (sliders[i].SalePrice > 0)
+									{
+										<h6 class="l-through">$ @sliders[i].SalePrice</h6>
+									}
+								</div>
+								<div class="prd-bottom">
+									<a href="" class="social-info">
+										<span class="lnr lnr-heart"></span>
+										<p class="hover-text">Wishlist</p>
+									</a>
+									<a href="" class="social-info">
+										<span class="lnr lnr-sync"></span>
+										<p class="hover-text">compare</p>
+									</a>
+									<a href="" class="social-info">
+										<span class="lnr lnr-move"></span>
+										<p class="hover-text">view more</p>
+									</a>
+								</div>
+							</div>
+						</div>
+					</div>
+				}
+			</div>
+		</div>
+	</div>
+</section>
+<section class="checkout_area section_gap">
+	<div class="container">
+		<div class="row">
+			<div class="col-lg-9">
+				<section class="cart_area">
+					<div class="container">
+						<div class="cart_inner">
+							<div class="table-responsive">
+								<table class="table">
+									<thead>
+										<tr>
+											<th scope="col">Product</th>
+											<th scope="col">Price</th>
+											<th scope="col">Quantity</th>
+											<th scope="col">Category</th>
+											<th scope="col">Total</th>
+											<th scope="col">Action</th>
+										</tr>
+									</thead>
+									<tbody>
+										@if (Model.OrderDetails != null)
+										{
+											@foreach (var order in Model.OrderDetails)
+											{
+												<tr>
+
+													<td>
+														<div class="media">
+															<div class="d-flex">
+																<img src="@order.Product?.Thumbnail" alt="@order.Product?.ProductName" style="max-height: 101.6px;max-width:151.6px">
+															</div>
+															<div class="media-body">
+																<a asp-action="Details" asp-controller="Product" asp-route-id="@order.Product?.Id"><p>@order.Product?.ProductName</p></a>
+															</div>
+														</div>
+													</td>
+													<td>
+														<h5>$ @order.UnitPrice</h5>
+													</td>
+													<td>
+														<div class="product_count">
+															<input type="text" name="qty" id="sst" maxlength="12" value="@order.Quantity" title="Quantity:" disabled
+																   class="input-text qty">
+														</div>
+													</td>
+													<td><p>@order.Product?.Category.CategoryName</p></td>
+													<td>
+														@if (order.Product?.SalePrice > 0)
+														{
+															<h5 class="total">$ @(order.Product.SalePrice * order.Quantity)</h5>
+														}
+														else
+														{
+															<h5 class="total">$ @(order.Product?.Price * order.Quantity)</h5>
+														}
+													</td>
+													<td>
+														<a class="btn primary-btn" asp-action="Details" asp-controller="Product" asp-route-id="@order.Product?.Id">
+															Feed back
+														</a>
+													</td>
+												</tr>
+											}
+										}
+										<tr class="bottom_button">
+											<td>
+											</td>
+											<td>
+											</td>
+											<td>
+											</td>
+											<td>
+												<div class="cupon_text d-flex align-items-center">
+													<a class="btn primary-btn" id="update-cart-info">Update Cart</a>
+													<a class="btn gray_btn" id="cancel-cart">Cancel Cart</a>
+												</div>
+											</td>
+										</tr>
+									</tbody>
+								</table>
+							</div>
+						</div>
+					</div>
+				</section>
+			</div>
+			<div class="col-lg-3">
+				<div class="order_box" style="padding-top: 100px;padding-bottom: 100px;">
+					<h2>Receiver Information</h2>
+					<ul class="list">
+						<li><a href="#">Name <span>@Model.CustomerName</span></a></li>
+						<li><a href="#">Email <span>@Model.CustomerEmail</span></a></li>
+						<li><a href="#">Phone Number <span>@Model.CustomerPhoneNumber</span></a></li>
+					</ul>
+					<ul class="list list_2">
+						<li><a href="#">Order Total <span>$ @Model.TotalCost</span></a></li>
+						<li><a href="#">Order Status <span>@Model.OrderStatus</span></a></li>
+					</ul>
+				</div>
+			</div>
+		</div>
+	</div>
+</section>
+
+<script type="text/javascript">
+
+	$('#update-cart-info').click(function (e) {
+		if (!e.detail || e.detail == 1) {
+			const data = {
+				orderId: @Model.Id,
+			};
+			$.ajax({
+				url: '@Url.Action("UpdateCart","Cart")',
+				type: 'POST',
+				data: data,
+				success: function (response) {
+					window.location.href="@Url.Action("Index","Cart")";
+					//$.toaster({ priority: 'success', title: 'Created', message: "Back To Cart Detail Succesfully" });
+					setTimeout(function () {
+						window.location.reload();
+					}, 1000);
+				},
+				failure: function (failed) {
+					alert(failed.responseText)
+					//$.toaster({ priority: 'warning', title: 'Warning', message: failed.responseText });
+				},
+				error: function (error) {
+					alert(error.responseText)
+					//$.toaster({ priority: 'danger', title: 'Error', message: error.responseText });
+				}
+			});
+		}
+	});
+
+	$('#cancel-cart').click(function (e) {
+		if (!e.detail || e.detail == 1) {
+			const data = {
+				orderId: @Model.Id,
+			};
+			$.ajax({
+				url: '@Url.Action("CancelCart","Cart")',
+				type: 'POST',
+				data: data,
+				success: function (response) {
+					window.location.href = "@Url.Action("Index","Home")";
+					//$.toaster({ priority: 'success', title: 'Created', message: "Back To Cart Detail Succesfully" });
+					setTimeout(function () {
+						window.location.reload();
+					}, 1000);
+				},
+				failure: function (failed) {
+					alert(failed.responseText)
+					//$.toaster({ priority: 'warning', title: 'Warning', message: failed.responseText });
+				},
+				error: function (error) {
+					alert(error.responseText)
+					//$.toaster({ priority: 'danger', title: 'Error', message: error.responseText });
+				}
+			});
+		}
+	});
+</script>
