@@ -16,9 +16,7 @@
   <ItemGroup>
     <Folder Include="Configs\HangFire\" />
     <Folder Include="Jobs\BaseJobs\" />
-    <Folder Include="Jobs\Implements\" />
     <Folder Include="Logs\" />
-    <Folder Include="Controllers\" />
     <Folder Include="Models\" />
   </ItemGroup>
 
