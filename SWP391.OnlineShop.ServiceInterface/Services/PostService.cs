@@ -54,7 +54,7 @@ namespace SWP391.OnlineShop.ServiceInterface.Services
             var result = new List<PostViewModel>();
             try
             {
-                var post = _unitOfWork.Posts.GetAll().ToList();
+                var post = _unitOfWork.Posts.GetAll().OrderByDescending(x => x.CreatedDateTime).ToList();
                 result = _mapper.Map<List<PostViewModel>>(post);
                 return result;
             }
@@ -192,7 +192,8 @@ namespace SWP391.OnlineShop.ServiceInterface.Services
                     Description = request.Description,
                     Featured = request.Featured,
                     CategoryId = request.CategoryId,
-                    Status = Core.Models.Enums.Status.Active
+                    Status = Core.Models.Enums.Status.Active,
+                    CreatedDateTime = DateTime.Now
                 };
                 await _unitOfWork.Posts.AddAsync(post);
                 await _unitOfWork.CompleteAsync();
@@ -219,6 +220,7 @@ namespace SWP391.OnlineShop.ServiceInterface.Services
                     post.Description = request.Description;
                     post.Featured = request.Featured;
                     post.CategoryId = request.CategoryId;
+                    post.Status = request.Status;
 
                     _unitOfWork.Posts.Update(post);
                     _unitOfWork.Complete();

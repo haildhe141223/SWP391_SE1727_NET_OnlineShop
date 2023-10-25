@@ -30,7 +30,7 @@
 						@foreach (var category in Model.Categories)
 						{
 							<li class="main-nav-list">
-								<a asp-controller="Product" asp-action="Index" asp-route-categoryId="@category.Id">
+								<a asp-controller="Product" asp-action="Index" asp-route-categoryId="@category.Id" asp-route-page="1">
 									<span class="lnr lnr-arrow-right"></span>@category.CategoryName<span class="number">(@category.TotalProduct)</span>
 								</a>
 							</li>

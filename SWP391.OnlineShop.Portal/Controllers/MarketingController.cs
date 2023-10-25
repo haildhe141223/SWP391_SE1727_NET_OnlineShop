@@ -49,7 +49,6 @@ namespace SWP391.OnlineShop.Portal.Controllers
                 SalePrice = request.SalePrice,
                 Thumbnail = request.Thumbnail,
                 CategoryId = request.CategoryId
-
             });
             return RedirectToAction("Index");
         }
@@ -180,7 +179,9 @@ namespace SWP391.OnlineShop.Portal.Controllers
                 Brief = request.Brief,
                 Description = request.Description,
                 Thumbnail = request.Thumbnail,
-                Author = request.Author
+                Author = request.Author,
+                Status = request.Status
+                
             });
             return RedirectToAction("ManagePost");
         }

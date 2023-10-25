@@ -180,7 +180,7 @@
 							{
 								if (item.Status == SWP391.OnlineShop.Core.Models.Enums.Status.Active)
 								{
-									<tr>
+									<tr class="cart-item">
 										<td>
 											<div class="media">
 												<div class="d-flex">
@@ -388,7 +388,7 @@ else
 	});
 
 	if ('@Model.OrderStatus' != 'InCartDetail') {
-		$('#cart').find('*').prop('disabled', true)
+		$(".cart-item").find("input, button, a").prop("disabled", true);
 	}
 
 	$('#update-details-btn').click(function () {
