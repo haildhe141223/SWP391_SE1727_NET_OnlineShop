@@ -1,0 +1,55 @@
+@import url('https://fonts.googleapis.com/css2?family=Manrope:wght@200;300;400;500;600;700&display=swap');
+
+html > body.document-editor {
+    padding: 1cm !important;
+}
+
+body.document-editor {
+  width: 90%;
+  min-height: 150vh;
+  padding: 1cm !important;
+  margin: 0.5cm auto;
+  /*border: 1px #D3D3D3 solid;*/
+  background: white;
+  /*box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);*/
+  margin-top: 50px;
+  margin-bottom: 50px;
+  font-size: 16px;
+  line-height: 24px;
+  font-family: 'Manrope', sans-serif;
+}
+
+  body.document-editor td, body.document-editor th {
+    font-size: 0.9em;
+  }
+
+  body.document-editor h1 {
+    margin-bottom: 1cm;
+  }
+
+  body.document-editor table {
+    margin-top: 0.5cm;
+    margin-bottom: 0.5cm;
+  }
+
+    body.document-editor table td {
+      border-right: 1px solid #d0d0d0;
+      border-bottom: 1px solid #d0d0d0;
+    }
+
+      body.document-editor table td:first-of-type {
+        border-left: 1px solid #d0d0d0;
+      }
+
+    body.document-editor table tr:first-of-type td {
+      border-top: 1px solid #d0d0d0;
+    }
+
+    body.document-editor table thead th {
+      border-top: 1px solid #d0d0d0;
+      border-right: 1px solid #d0d0d0;
+    }
+
+      body.document-editor table thead th:first-of-type {
+        border-left: 1px solid #d0d0d0;
+      }
