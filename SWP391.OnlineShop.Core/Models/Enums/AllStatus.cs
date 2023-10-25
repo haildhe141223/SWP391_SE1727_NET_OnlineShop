@@ -40,4 +40,5 @@ public enum OrderStatus
     Delivered = 6,
     Received = 7,
     PaidOrderWaitingConfirm = 8,
+    Canceled = 9
 }

@@ -312,6 +312,22 @@ namespace SWP391.OnlineShop.Portal.Controllers
 		}
 
 		[HttpPost]
+		public async Task<IActionResult> CancelCart(int orderId, decimal total)
+		{
+			var api = await _client.PutAsync(new PutUpdateCartToContact()
+			{
+				Id = orderId,
+				OrderStatus = Core.Models.Enums.OrderStatus.Canceled,
+				TotalCost = total
+			});
+			if (api.StatusCode == Common.Enums.StatusCode.Success)
+			{
+				return Ok(api);
+			}
+			return RedirectToAction("Error", "Home");
+		}
+
+		[HttpPost]
 		public async Task<IActionResult> UpdateCartToComplete(int orderId, decimal total, string address)
 		{
 			var api = await _client.PutAsync(new PutUpdateCartToContact()
