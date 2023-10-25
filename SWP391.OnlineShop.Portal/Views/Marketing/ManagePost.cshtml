@@ -1,4 +1,5 @@
-﻿@model List<SWP391.OnlineShop.ServiceModel.ViewModels.Products.PostViewModel>
+﻿@using SWP391.OnlineShop.Core.Models.Enums;
+@model List<SWP391.OnlineShop.ServiceModel.ViewModels.Products.PostViewModel>
 @{
     Layout = "_Layout";
 }
@@ -51,6 +52,7 @@
                         <th scope="col">Thumbnail</th>
                         <th scope="col">Description</th>
                         <th scope="col">Author</th>
+                        <th scope="col">Status</th>
                         <th scope="col">Action</th>
                     </tr>
                 </thead>
@@ -67,14 +69,14 @@
                             <td>@postViewModel.Thumbnail</td>
                             <td>@postViewModel.Description</td>
                             <td>@postViewModel.Author</td>
-                            @* @if (productViewModel.Status == Status.Active)
-                        {
-                        <td class="text-success">Active</td>
-                        }
-                        else
-                        {
-                        <td class="text-danger">InActive</td>
-                        } *@
+                            @if (postViewModel.Status == Status.Active)
+                            {
+                                <td class="text-success">Active</td>
+                            }
+                            else
+                            {
+                                <td class="text-danger">InActive</td>
+                            }
                             <td>
                                 <div class="table-action">
                                     @*Prevent modify admin account*@

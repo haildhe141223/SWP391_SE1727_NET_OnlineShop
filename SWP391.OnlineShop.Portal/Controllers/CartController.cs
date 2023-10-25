@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using PayPal.Core;
+using PayPal.v1.Identity;
 using PayPal.v1.Payments;
 using ServiceStack;
 using SWP391.OnlineShop.Common.Constraints;
@@ -19,7 +20,7 @@ using static SWP391.OnlineShop.ServiceModel.ServiceModels.OrderModels;
 namespace SWP391.OnlineShop.Portal.Controllers
 {
     public class CartController : BaseController
-    {
+
 		private readonly IJsonServiceClient _client;
 		private readonly ILoggerService _logger;
 		private readonly UserManager<User> _userManager;
