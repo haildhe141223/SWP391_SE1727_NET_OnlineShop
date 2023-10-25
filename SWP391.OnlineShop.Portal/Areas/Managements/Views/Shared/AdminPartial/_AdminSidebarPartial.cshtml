@@ -1,4 +1,12 @@
-﻿<ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
+﻿@using System.Security.Claims
+@using Microsoft.AspNetCore.Mvc.TagHelpers
+@using SWP391.OnlineShop.Common.Constraints
+@{
+    //TODO: HaiLD update Avatar Claim here.
+    var userImage = User.Claims.FirstOrDefault(u => u.Type == "Avatar")?.Value;
+    var userRole = User.Claims.FirstOrDefault(u => u.Type == ClaimTypes.Role)?.Value;
+}
+<ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
     <!-- Sidebar - Brand -->
     <a class="sidebar-brand d-flex align-items-center justify-content-center">
         <div class="sidebar-brand-icon rotate-n-15">
@@ -11,11 +19,30 @@
     <!-- Divider -->
     <hr class="sidebar-divider my-0">
 
+    <li class="nav-item active">
+        <a class="nav-link" asp-action="Index" asp-controller="Home" asp-area="">
+            <i class="fa-solid fa-store"></i>
+            <span>Back to Shop</span>
+        </a>
+    </li>
+
+    <hr class="sidebar-divider my-0">
+
     <!-- Nav Item - Dashboard -->
     <li class="nav-item active">
-        <a class="nav-link">
+        <a class="nav-link" asp-action="Index" asp-controller="Dashboard" asp-area="Managements">
             <i class="fas fa-fw fa-tachometer-alt"></i>
             <span>Dashboard</span>
+        </a>
+    </li>
+
+    <hr class="sidebar-divider my-0">
+
+    <!-- Nav Item - Dashboard -->
+    <li class="nav-item active">
+        <a class="nav-link" asp-action="JobSchedule" asp-controller="Dashboard" asp-area="Managements">
+            <i class="fa-solid fa-screwdriver-wrench"></i>
+            <span>Job Schedule</span>
         </a>
     </li>
 
@@ -38,7 +65,14 @@
             <div class="bg-white py-2 collapse-inner rounded">
                 <h6 class="collapse-header">Custom Accounts:</h6>
                 <a class="collapse-item">Profile</a>
-                <a class="collapse-item">Users</a>
+
+                @if (!string.IsNullOrEmpty(userRole) &&
+                (userRole.Contains(RoleConstraints.Admin) ||
+                userRole.Contains(RoleConstraints.Marketing) ||
+                userRole.Contains(RoleConstraints.Sale)))
+                {
+                    <a class="collapse-item" asp-area="Managements" asp-action="Index" asp-controller="User">Users</a>
+                }
             </div>
         </div>
     </li>
@@ -47,21 +81,33 @@
     <li class="nav-item">
         <a class="nav-link collapsed" href="#collapseComponents" data-bs-toggle="collapse" data-target="#collapseComponents"
            aria-expanded="true" aria-controls="collapseComponents">
-            <i class="fas fa-fw fa-cog"></i>
-            <span>Component</span>
+            <i class="fa-solid fa-sliders"></i>
+            <span>Components</span>
         </a>
         <div id="collapseComponents" class="collapse" aria-labelledby="headingTwo" data-parent="#collapseComponents">
             <div class="bg-white py-2 collapse-inner rounded">
                 <h6 class="collapse-header">Custom Components:</h6>
-                <a class="collapse-item">Orders</a>
-                <a class="collapse-item">Products</a>
-                <a class="collapse-item">Categories</a>
-                <a class="collapse-item">Posts</a>
-                <a class="collapse-item">Tags</a>
-                <a class="collapse-item">Vouchers</a>
-                <a class="collapse-item">Comments</a>
-                <a class="collapse-item">Contacts</a>
-                <a class="collapse-item" href="#">Other</a>
+
+                @if (!string.IsNullOrEmpty(userRole) && (userRole.Contains(RoleConstraints.Admin) || userRole.Contains(RoleConstraints.Sale)))
+                {
+                    <a class="collapse-item">Products</a>
+                    <a class="collapse-item">Orders</a>
+                    <a class="collapse-item">Vouchers</a>
+                }
+
+                @if (!string.IsNullOrEmpty(userRole) && (userRole.Contains(RoleConstraints.Admin) || userRole.Contains(RoleConstraints.Marketing)))
+                {
+                    <a class="collapse-item">Posts</a>
+                }
+
+                @if (!string.IsNullOrEmpty(userRole) && userRole.Contains(RoleConstraints.Admin))
+                {
+                    <a class="collapse-item">Tags</a>
+                    <a class="collapse-item">Categories</a>
+                    <a class="collapse-item">Comments</a>
+                    <a class="collapse-item">Contacts</a>
+                    <a class="collapse-item" href="#">Other</a>
+                }
             </div>
         </div>
     </li>
@@ -70,13 +116,17 @@
     <li class="nav-item">
         <a class="nav-link collapsed" href="#collapseConfig" data-bs-toggle="collapse" data-target="#collapseConfig"
            aria-expanded="true" aria-controls="collapseConfig">
-            <i class="fa-solid fa-sliders"></i>
-            <span>Draft</span>
+            <i class="fas fa-fw fa-cog"></i>
+            <span>Settings</span>
         </a>
         <div id="collapseConfig" class="collapse" aria-labelledby="headingTwo" data-parent="#collapseConfig">
             <div class="bg-white py-2 collapse-inner rounded">
                 <h6 class="collapse-header">Custom Configurations:</h6>
-                <a class="collapse-item">Sliders</a>
+
+                @if (!string.IsNullOrEmpty(userRole) && (userRole.Contains(RoleConstraints.Admin) || userRole.Contains(RoleConstraints.Marketing)))
+                {
+                    <a class="collapse-item">Sliders</a>
+                }
             </div>
         </div>
     </li>

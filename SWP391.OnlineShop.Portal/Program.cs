@@ -1,6 +1,5 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.FileProviders;
 using NLog;
 using ServiceStack;
 using SWP391.OnlineShop.Common.Constraints;
@@ -8,6 +7,7 @@ using SWP391.OnlineShop.Core.Contexts;
 using SWP391.OnlineShop.Core.Cores.UnitOfWork;
 using SWP391.OnlineShop.Core.Models.Identities;
 using SWP391.OnlineShop.Core.Models.Settings;
+using SWP391.OnlineShop.ServiceInterface.Emails;
 using SWP391.OnlineShop.ServiceInterface.Loggers;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -61,10 +61,15 @@ services.Configure<RouteOptions>(options =>
     options.LowercaseUrls = true;
 });
 
+// Add time expired for session
 services.AddSession(options =>
 {
     options.IdleTimeout = TimeSpan.FromDays(1);
 });
+
+// Add time expired for identity token
+services.Configure<DataProtectionTokenProviderOptions>(options =>
+    options.TokenLifespan = TimeSpan.FromMinutes(5));
 
 // Add identity configs
 services.AddIdentity<User, Role>(options =>
@@ -81,10 +86,10 @@ services.AddIdentity<User, Role>(options =>
         options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromDays(1);
         options.User.RequireUniqueEmail = true;
         options.SignIn.RequireConfirmedEmail = true;
+        options.Lockout.AllowedForNewUsers = false;
     })
     .AddEntityFrameworkStores<OnlineShopContext>()
     .AddDefaultTokenProviders();
-
 
 // Add defaultCookie services
 services.ConfigureApplicationCookie(options =>
@@ -95,15 +100,12 @@ services.ConfigureApplicationCookie(options =>
     options.ExpireTimeSpan = TimeSpan.FromDays(3);
 });
 
-// Add time expired for identity token
-services.Configure<DataProtectionTokenProviderOptions>(options =>
-    options.TokenLifespan = TimeSpan.FromMinutes(30));
-
 // Add ServiceStack services
 services.AddScoped<IJsonServiceClient>(_ => new JsonServiceClient(config["ServiceApi"]));
 
 // Add NLog services
 services.AddScoped<ILoggerService, LoggerService>();
+services.AddScoped<IMailService, MailService>();
 services.AddScoped<IUnitOfWork, UnitOfWork>();
 
 // Configs Smtp
@@ -128,12 +130,6 @@ if (!app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();
-
-app.UseStaticFiles(new StaticFileOptions
-{
-    FileProvider = new PhysicalFileProvider(Path.Combine(Directory.GetCurrentDirectory(), "Uploads")),
-    RequestPath = "/uploads"
-});
 
 app.UseSession();
 app.UseRouting();

@@ -40,4 +40,11 @@ public enum OrderStatus
     Delivered = 6,
     Received = 7,
     PaidOrderWaitingConfirm = 8,
+    Canceled = 9
+}
+
+public enum VoucherType
+{
+    Percent = 0,
+    Money = 1
 }

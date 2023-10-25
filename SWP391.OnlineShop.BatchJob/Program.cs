@@ -7,8 +7,11 @@ using SWP391.OnlineShop.BatchJob.Jobs.Implements;
 using SWP391.OnlineShop.BatchJob.Jobs.Interfaces;
 using SWP391.OnlineShop.Common.Constraints;
 using SWP391.OnlineShop.Core.Contexts;
+using SWP391.OnlineShop.Core.Cores.UnitOfWork;
+using SWP391.OnlineShop.Core.Customs.Environments;
 using SWP391.OnlineShop.Core.Models.Identities;
 using SWP391.OnlineShop.Core.Models.Settings;
+using SWP391.OnlineShop.ServiceInterface.Emails;
 using SWP391.OnlineShop.ServiceInterface.Loggers;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -75,14 +78,21 @@ services.AddHangfireServer();
 
 // Add others service
 // Logging services
+services.AddScoped<IUnitOfWork, UnitOfWork>();
 services.AddScoped<ILoggerService, LoggerService>();
+services.AddScoped<IMailService, MailService>();
 
 // Job services
 services.AddScoped<IJobRegistration, RecurringRegistrationJob>();
 services.AddScoped<IJobRegistration, RecurringRegistrationWindowServiceJob>();
 
+services.AddScoped<IJobWebService, SendMailJob>();
+
 // Configs Smtp
 services.Configure<Smtp>(config.GetSection("Smtp"));
+
+// Configs Environment
+services.Configure<DeveloperEnvironment>(config.GetSection("DeveloperEnvironment"));
 
 // AutoMapper service
 services.AddAutoMapper(typeof(Program));
@@ -121,7 +131,7 @@ if (isDeveloperEnvironment != null && Convert.ToBoolean(isDeveloperEnvironment))
 {
     options = new DashboardOptions
     {
-        IsReadOnlyFunc = context => !authorize.IsReadOnlyHangFireDashboard(context),
+        //IsReadOnlyFunc = context => !authorize.IsReadOnlyHangFireDashboard(context),
     };
 }
 

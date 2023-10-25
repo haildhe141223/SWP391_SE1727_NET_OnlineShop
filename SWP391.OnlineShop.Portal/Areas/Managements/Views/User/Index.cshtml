@@ -1,4 +1,7 @@
-﻿@{
+﻿@using SWP391.OnlineShop.ServiceModel.ViewModels.Users
+@model List<UserViewModel>
+
+@{
     var successMess = TempData["SuccessMess"] as string;
     var errorMess = TempData["ErrorMess"] as string;
 }
@@ -20,6 +23,9 @@
             @successMess
         </div>
     }
+    <div>
+        <a class="btn btn-outline-primary my-3" asp-action="Add">Add New User</a>
+    </div>
 
     <!-- DataTales Example -->
     <div class="card shadow mb-4">
@@ -35,7 +41,7 @@
                             <th>UserName</th>
                             <th>Email</th>
                             <th>PhoneNumber</th>
-                            <th>Role</th>
+                            <th>Roles</th>
                             <th>Action</th>
                         </tr>
                     </thead>
@@ -45,23 +51,36 @@
                             <th>UserName</th>
                             <th>Email</th>
                             <th>PhoneNumber</th>
-                            <th>Role</th>
+                            <th>Roles</th>
                             <th>Action</th>
                         </tr>
                     </tfoot>
-                    <tbody>
-                        <tr>
-                            <td>
-                                <img src="~/template/img/cart.jpg" alt="" width="50" />
-                            </td>
-                            <td>hello</td>
-                            <td>hello@gmail.com</td>
-                            <td>0911000426</td>
-                            <td>Admin</td>
-                            <td>
-
-                            </td>
-                        </tr>
+                    <tbody>                    
+                        @foreach (var user in Model)
+                        {
+                            <tr>
+                                <td>
+                                    @if (string.IsNullOrEmpty(user.Avatar))
+                                    {
+                                        <img src="~/template/img/settings/admins/anonymous_user.jpg" alt="" width="50" />
+                                    }
+                                    else
+                                    {
+                                        <img src="@user.Avatar" alt="" width="50" />
+                                    }
+                                </td>
+                                <td>@user.UserName</td>
+                                <td>@user.Email</td>
+                                <td>@user.PhoneNumber</td>
+                                <td>@string.Join(", ", user.Role)</td>
+                                <td>
+                                    <a class="mx-1 btn btn-outline-info" asp-route-id="@user.Id"
+                                       asp-action="Details">View</a>
+                                    <a class="mx-1 btn btn-outline-danger btn-delete" asp-route-id="@user.Id"
+                                       asp-action="Delete">Delete</a>
+                                </td>
+                            </tr>
+                        }
                     </tbody>
                 </table>
             </div>
