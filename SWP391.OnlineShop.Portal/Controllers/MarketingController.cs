@@ -8,7 +8,7 @@ using SWP391.OnlineShop.ServiceModel.ViewModels.Products;
 
 namespace SWP391.OnlineShop.Portal.Controllers
 {
-    public class MarketingController : Controller
+    public class MarketingController : BaseController
     {
         private readonly IJsonServiceClient _client;
         private readonly ILoggerService _logger;
@@ -48,14 +48,15 @@ namespace SWP391.OnlineShop.Portal.Controllers
                 Price = request.Price,
                 SalePrice = request.SalePrice,
                 Thumbnail = request.Thumbnail,
-                CategoryId = request.CategoryId,
+                CategoryId = request.CategoryId
+
             });
             return RedirectToAction("Index");
         }
 
         public async Task<IActionResult> ViewProduct(int id)
         {
-
+            ViewData["GenreList"] = new SelectList(await _client.GetAsync(new GetAllCategory()), "Id", "CategoryName");
             var product = await _client.GetAsync(new GetProductById
             {
                 ProductId = id
@@ -118,8 +119,9 @@ namespace SWP391.OnlineShop.Portal.Controllers
             return View(latestPosts);
         }
 
-        public IActionResult AddPost()
+        public async Task<ActionResult> AddPost()
         {
+            ViewData["GenreList"] = new SelectList(await _client.GetAsync(new GetAllCategory()), "Id", "CategoryName");
             return View();
         }
 
@@ -133,14 +135,15 @@ namespace SWP391.OnlineShop.Portal.Controllers
                 Brief = request.Brief,
                 Description = request.Description,
                 Thumbnail = request.Thumbnail,
-                Author = request.Author
+                Author = request.Author,
+                CategoryId = request.CategoryId,
             });
             return RedirectToAction("ManagePost");
         }
 
         public async Task<IActionResult> ViewPost(int id)
         {
-
+            ViewData["GenreList"] = new SelectList(await _client.GetAsync(new GetAllCategory()), "Id", "CategoryName");
             var product = await _client.GetAsync(new GetPostById
             {
                 PostId = id
@@ -150,12 +153,20 @@ namespace SWP391.OnlineShop.Portal.Controllers
 
         public async Task<IActionResult> EditPost(int id)
         {
+            var listStatus = new List<Status>
+            {
+                Status.Active,
+                Status.Inactive
+            };
 
-            var product = await _client.GetAsync(new GetPostById
+            ViewData["GenreList"] = new SelectList(await _client.GetAsync(new GetAllCategory()), "Id", "CategoryName");
+            ViewData["StatusList"] = new SelectList(listStatus);
+
+            var post = await _client.GetAsync(new GetPostById
             {
                 PostId = id
             });
-            return View(product);
+            return View(post);
         }
 
         [HttpPost]
@@ -163,6 +174,7 @@ namespace SWP391.OnlineShop.Portal.Controllers
         {
             await _client.PutAsync(new PutUpdatePost
             {
+                Id = request.Id,
                 Title = request.Title,
                 Featured = request.Featured,
                 Brief = request.Brief,

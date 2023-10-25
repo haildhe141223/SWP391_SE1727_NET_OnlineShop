@@ -2,7 +2,7 @@
 
 namespace SWP391.OnlineShop.Portal.Controllers
 {
-    public class ElementController : Controller
+    public class ElementController : BaseController
     {
         public IActionResult Index()
         {

@@ -82,5 +82,31 @@ namespace SWP391.OnlineShop.Core.Cores.Repositories
                 await Context.Settings.AddAsync(entity);
             }
         }
+
+        #region User Settings
+        public List<string> GetRolesByUserId(int userId)
+        {
+            var roles = new List<string>();
+
+            var user = Context.Users.FirstOrDefault(u => u.Id == userId);
+            if (user != null)
+            {
+                var userRoles = Context.UserRoles
+                    .Where(ur => ur.UserId == user.Id)
+                    .Distinct()
+                    .ToList();
+                for (var i = 0; i < userRoles.Count(); i++)
+                {
+                    var data = userRoles[i];
+                    var role = Context.Roles.FirstOrDefault(r => r.Id == data.RoleId);
+                    if(role != null)
+                        roles.Add(role.Name);
+                }
+            }
+
+            return roles;
+        }
+
+        #endregion
     }
 }

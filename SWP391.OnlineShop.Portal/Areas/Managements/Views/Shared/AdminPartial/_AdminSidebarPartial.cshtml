@@ -11,9 +11,18 @@
     <!-- Divider -->
     <hr class="sidebar-divider my-0">
 
+    <li class="nav-item active">
+        <a class="nav-link" asp-action="Index" asp-controller="Home" asp-area="">
+            <i class="fa-solid fa-store"></i>
+            <span>Back to Shop</span>
+        </a>
+    </li>
+
+    <hr class="sidebar-divider my-0">
+
     <!-- Nav Item - Dashboard -->
     <li class="nav-item active">
-        <a class="nav-link">
+        <a class="nav-link" asp-action="Index" asp-controller="Dashboard" asp-area="Managements">
             <i class="fas fa-fw fa-tachometer-alt"></i>
             <span>Dashboard</span>
         </a>
@@ -47,8 +56,8 @@
     <li class="nav-item">
         <a class="nav-link collapsed" href="#collapseComponents" data-bs-toggle="collapse" data-target="#collapseComponents"
            aria-expanded="true" aria-controls="collapseComponents">
-            <i class="fas fa-fw fa-cog"></i>
-            <span>Component</span>
+            <i class="fa-solid fa-sliders"></i>
+            <span>Components</span>
         </a>
         <div id="collapseComponents" class="collapse" aria-labelledby="headingTwo" data-parent="#collapseComponents">
             <div class="bg-white py-2 collapse-inner rounded">
@@ -70,8 +79,8 @@
     <li class="nav-item">
         <a class="nav-link collapsed" href="#collapseConfig" data-bs-toggle="collapse" data-target="#collapseConfig"
            aria-expanded="true" aria-controls="collapseConfig">
-            <i class="fa-solid fa-sliders"></i>
-            <span>Draft</span>
+            <i class="fas fa-fw fa-cog"></i>
+            <span>Settings</span>
         </a>
         <div id="collapseConfig" class="collapse" aria-labelledby="headingTwo" data-parent="#collapseConfig">
             <div class="bg-white py-2 collapse-inner rounded">

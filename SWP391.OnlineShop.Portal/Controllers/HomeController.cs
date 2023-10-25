@@ -8,8 +8,8 @@ using System.Diagnostics;
 
 namespace SWP391.OnlineShop.Portal.Controllers
 {
-	public class HomeController : Controller
-	{
+	public class HomeController : BaseController
+    {
 		private readonly IJsonServiceClient _client;
 		private readonly ILoggerService _logger;
 

@@ -16,7 +16,7 @@
                 <h1 class="h4 text-gray-900 mb-4">Create an Account !</h1>
             </div>
 
-            <form method="post" class="user">
+            <form method="post" class="user" id="register">
                 <div class="r-error my-4 text-danger text-center" asp-validation-summary="All">
                 </div>
                 @if (!string.IsNullOrWhiteSpace(successMess))
@@ -28,26 +28,25 @@
                 @*Username*@
                 <div class="form-group" id="register">
                     <input asp-for="Username" type="text" class="form-control form-control-user" id="r-username"
-                           placeholder="Username" title="Username cannot change so please choose careful">
+                            placeholder="Username" title="Username cannot change so please choose careful">
                     <span asp-validation-for="Username" class="r-error d-block text-danger"></span>
                 </div>
                 @*Email*@
                 <div class="form-group">
                     <input asp-for="Email" type="email" class="form-control form-control-user" id="r-email"
-                           placeholder="Email Address">
+                            placeholder="Email Address">
                     <span asp-validation-for="Email" class="r-error d-block text-danger"></span>
                 </div>
                 @*Passwords*@
                 <div class="form-group row">
                     <div class="col-sm-6 mb-3 mb-sm-0">
-                        <input asp-for="Password" type="password" class="form-control form-control-user"
-                               id="r-password" placeholder="Password"
-                               title="Password must required length > 8, uppercase, lowercase, digit and special characters">
+                        <input asp-for="Password" type="password" class="form-control form-control-user" id="r-password" 
+                            placeholder="Password" title="Password must required length > 8, uppercase, lowercase, digit and special characters">
                         <span asp-validation-for="Password" class="r-error d-block text-danger"></span>
                     </div>
                     <div class="col-sm-6">
-                        <input asp-for="RePassword" type="password" class="form-control form-control-user"
-                               id="r-repass" placeholder="Repeat Password">
+                        <input asp-for="RePassword" type="password" class="form-control form-control-user" id="r-repass" 
+                            placeholder="Repeat Password">
                         <span asp-validation-for="RePassword" class="r-error d-block text-danger"></span>
                     </div>
                 </div>
@@ -87,3 +86,43 @@
         </div>
     </div>
 </div>
+
+
+                                
+<script type="text/javascript">
+    $(document).ready(function(){
+        
+        //// Register
+        $("#register").submit(function(e){
+            e.preventDefault();
+
+            const username = $("#r-username").val();
+            const email = $("#r-email").val();
+            const password = $("#r-password").val();
+            const rePassword = $("#r-repass").val();
+            
+            const data = {
+                Username: username,
+                Email: email,
+                Password: password,
+                RePassword: rePassword
+            };
+
+            $.ajax({
+                type: "POST",
+                url: "@Url.Action("Register", "Account")",
+                data: data,
+                success: function (res) {
+                    console.log(res)
+                    $.toaster({ priority: 'success', title: 'Success', message: res.responseText });
+                },
+                failure: function (failed) {
+                    $.toaster({ priority: 'warning', title: 'Warning', message: failed.responseText });
+                },
+                error: function (error) {
+                    $.toaster({ priority: 'danger', title: 'Error', message: error.responseText });
+                }
+            });
+        });
+    })
+</script>     
