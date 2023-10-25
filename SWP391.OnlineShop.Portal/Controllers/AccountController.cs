@@ -7,10 +7,11 @@ using SWP391.OnlineShop.ServiceInterface.Loggers;
 using SWP391.OnlineShop.ServiceModel.ServiceModels;
 using SWP391.OnlineShop.ServiceModel.ViewModels.Accounts;
 using System.Security.Claims;
+using static SWP391.OnlineShop.ServiceModel.ServiceModels.AccountModels;
 
 namespace SWP391.OnlineShop.Portal.Controllers
 {
-    public class AccountController : Controller
+    public class AccountController : BaseController
     {
         private readonly UserManager<User> _userManager;
         private readonly SignInManager<User> _signInManager;
@@ -222,6 +223,53 @@ namespace SWP391.OnlineShop.Portal.Controllers
             return View();
         }
 
+        [HttpPost]
+        public async Task<IActionResult> Register(RegisterViewModel request)
+        {
+            if (!ModelState.IsValid)
+            {
+                //TODO: HaiLD should update it into list objects.
+                return StatusCode(500, "Invalid data. Please input data while register an account.");
+            }
+
+            var userExist = await _userManager.FindByEmailAsync(request.Email);
+            if (userExist != null)
+            {
+                return StatusCode(500, $"User with email [{request.Email}] already exist. " +
+                    "Please use other email.");
+            }
+
+            var registerResult = await _client.PostAsync(new PostRegisterAccount
+            {
+                RegisterViewModel = request,
+            });
+
+            if (registerResult.StatusCode == Common.Enums.StatusCode.InternalServerError)
+            {
+                return StatusCode(500, registerResult.ErrorMessage);
+            }
+
+            var user = await _userManager.FindByEmailAsync(request.Email);
+            if (user == null)
+            {
+                return StatusCode(500, $"Success register account. Fail to find user with email [{request.Email}]. " +
+                    "Please contact admin or support team.");
+            }
+
+            var emailConfirmToken = await _userManager.GenerateEmailConfirmationTokenAsync(user);
+            var linkConfirmEmail = Url.Action(
+                protocol: HttpContext.Request.Scheme,
+                host: HttpContext.Request.Host.Value,
+                controller: "Account",
+                action: "ConfirmEmailRegister",
+                values: new { userId = user.Id, emailToken = emailConfirmToken }
+            );
+
+            //TODO: HaiLD update send mail here
+
+            return Ok("Register success. Please check your email address to confirm your email.");
+        }
+
         #endregion
 
         #region Passwords
@@ -235,7 +283,18 @@ namespace SWP391.OnlineShop.Portal.Controllers
         {
             return View();
         }
+        public IActionResult ConfirmResetPassword()
+        {
+            return View();
+        }
 
+        #endregion
+
+        #region Email
+        public IActionResult ConfirmEmailRegister(string userId, string emailToken)
+        {
+            return View();
+        }
         #endregion
 
         #region Logout

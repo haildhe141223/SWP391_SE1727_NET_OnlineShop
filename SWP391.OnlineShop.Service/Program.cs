@@ -1,3 +1,4 @@
+using AutoMapper;
 using Hangfire;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -9,6 +10,7 @@ using SWP391.OnlineShop.Core.Cores.UnitOfWork;
 using SWP391.OnlineShop.Core.Models.Identities;
 using SWP391.OnlineShop.Core.Models.Settings;
 using SWP391.OnlineShop.Service;
+using SWP391.OnlineShop.Service.Configs.AutoMapper;
 using SWP391.OnlineShop.ServiceInterface.Loggers;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -82,11 +84,14 @@ services.AddScoped<ILoggerService, LoggerService>();
 // Configs dependence inject
 services.AddScoped<IUnitOfWork, UnitOfWork>();
 
-//
 services.Configure<Smtp>(config.GetSection("Smtp"));
 
 // AutoMapper service
-services.AddAutoMapper(typeof(Program));
+//services.AddAutoMapper(typeof(Program));
+services.AddScoped(provider => new MapperConfiguration(cfg =>
+{
+    cfg.AddProfile(new AutoMapperConfigs(provider.GetService<IUnitOfWork>()));
+}).CreateMapper());
 
 var app = builder.Build();
 

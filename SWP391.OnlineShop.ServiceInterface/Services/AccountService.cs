@@ -1,5 +1,8 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using ServiceStack;
+using SWP391.OnlineShop.Common.Constraints;
 using SWP391.OnlineShop.Common.Enums;
 using SWP391.OnlineShop.Core.Cores.UnitOfWork;
 using SWP391.OnlineShop.Core.Models.Identities;
@@ -7,6 +10,7 @@ using SWP391.OnlineShop.ServiceInterface.BaseServices;
 using SWP391.OnlineShop.ServiceInterface.Interfaces;
 using SWP391.OnlineShop.ServiceInterface.Loggers;
 using SWP391.OnlineShop.ServiceModel.Results;
+using SWP391.OnlineShop.ServiceModel.ViewModels.Users;
 using static SWP391.OnlineShop.ServiceModel.ServiceModels.AccountModels;
 
 namespace SWP391.OnlineShop.ServiceInterface.Services;
@@ -17,16 +21,78 @@ public class AccountService : BaseService, IAccountService
     private readonly UserManager<User> _userManager;
     private readonly SignInManager<User> _signInManager;
     private readonly IUnitOfWork _unitOfWork;
+    private readonly IMapper _mapper;
+
     public AccountService(
         ILoggerService logger,
         UserManager<User> userManager,
         SignInManager<User> signInManager,
-        IUnitOfWork unitOfWork)
+        IUnitOfWork unitOfWork,
+        IMapper mapper)
     {
         _logger = logger;
         _userManager = userManager;
         _signInManager = signInManager;
         _unitOfWork = unitOfWork;
+        _mapper = mapper;
+    }
+
+    public async Task<List<UserViewModel>> Get(GetUsers request)
+    {
+        // Descending
+        if (request.IsDesc)
+        {
+            var users = await _userManager.Users.OrderByDescending(x => x.Id).Take(request.Size).ToListAsync();
+            return _mapper.Map<List<UserViewModel>>(users);
+        }
+        // Ascending
+        else
+        {
+            var users = await _userManager.Users.Take(request.Size).ToListAsync();
+            return _mapper.Map<List<UserViewModel>>(users);
+        }
+    }
+
+    public async Task<BaseResultModel> Get(GetUser request)
+    {
+        try
+        {
+            var user = await _userManager.FindByEmailAsync(request.Email);
+
+            if (user == null)
+            {
+                throw new Exception($"User with email [{request.Email}] does not exist.");
+            }
+
+            var externalLoginInfo = await _unitOfWork.Context.UserLogins.FirstOrDefaultAsync(x =>
+                x.ProviderKey == request.ProviderKey && x.UserId == user.Id);
+
+            if (externalLoginInfo == null)
+            {
+                var token = await _userManager.GenerateEmailConfirmationTokenAsync(user);
+                var isConfirmEmail = await _userManager.ConfirmEmailAsync(user, token);
+                if (isConfirmEmail.Succeeded)
+                {
+                    return new BaseResultModel
+                    {
+                        StatusCode = StatusCode.Success
+                    };
+                }
+
+                throw new Exception($"User external confirm email with email [{request.Email}] fail.");
+            }
+
+            throw new Exception($"User external info with email [{request.Email}] is exist.");
+        }
+        catch (Exception e)
+        {
+            _logger.LogError($"Error in GetUser request - {e}");
+            return new BaseResultModel
+            {
+                ErrorMessage = e.Message,
+                StatusCode = StatusCode.InternalServerError
+            };
+        }
     }
 
     public async Task<BaseResultModel> Get(GetLogin request)
@@ -97,43 +163,48 @@ public class AccountService : BaseService, IAccountService
         }
     }
 
-    public async Task<BaseResultModel> Get(GetUser request)
+    public async Task<BaseResultModel> Post(PostRegisterAccount request)
     {
         try
         {
-            var user = await _userManager.FindByEmailAsync(request.Email);
-
-            if (user == null)
+            var user = new User
             {
-                throw new Exception($"User with email [{request.Email}] does not exist.");
-            }
+                Email = request.RegisterViewModel.Email,
+                UserName = request.RegisterViewModel.Username.ToTitleCase(),
+            };
 
-            var externalLoginInfo = await _unitOfWork.Context.UserLogins.FirstOrDefaultAsync(x =>
-                x.ProviderKey == request.ProviderKey && x.UserId == user.Id);
+            var isCreatedUser = await _userManager.CreateAsync(user, request.RegisterViewModel.Password);
 
-            if (externalLoginInfo == null)
+            if (isCreatedUser.Succeeded)
             {
-                var token = await _userManager.GenerateEmailConfirmationTokenAsync(user);
-                var isConfirmEmail = await _userManager.ConfirmEmailAsync(user, token);
-                if (isConfirmEmail.Succeeded)
+                var userExist = await _userManager.FindByEmailAsync(request.RegisterViewModel.Email);
+                if (userExist != null)
                 {
+                    await _userManager.AddToRoleAsync(userExist, RoleConstraints.Customer);
+
                     return new BaseResultModel
                     {
-                        StatusCode = StatusCode.Success
+                        StatusCode = StatusCode.Success,
+                        SuccessMessage = "Created user success. Please double-check again."
                     };
                 }
-
-                throw new Exception($"User external confirm email with email [{request.Email}] fail.");
+                else
+                {
+                    throw new Exception($"Create user fail. Cannot find user with email [{request.RegisterViewModel.Email}]");
+                }
             }
-
-            throw new Exception($"User external info with email [{request.Email}] is exist.");
+            else
+            {
+                throw new Exception($"Create user fail. {string.Join(", ", isCreatedUser.Errors.ToList())}");
+            }
         }
-        catch (Exception e)
+        catch (Exception ex)
         {
-            _logger.LogError($"Error in GetUser request - {e}");
+            _logger.LogError($"Error in PostRegisterAccount request - error: {ex}");
+
             return new BaseResultModel
             {
-                ErrorMessage = e.Message,
+                ErrorMessage = ex.Message,
                 StatusCode = StatusCode.InternalServerError
             };
         }
