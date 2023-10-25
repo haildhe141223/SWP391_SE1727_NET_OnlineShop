@@ -3,11 +3,11 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using PayPal.Core;
-using PayPal.v1.Identity;
 using PayPal.v1.Payments;
 using ServiceStack;
 using SWP391.OnlineShop.Common.Constraints;
 using SWP391.OnlineShop.Core.Models.Identities;
+using SWP391.OnlineShop.Portal.Areas.Managements.Controllers;
 using SWP391.OnlineShop.ServiceInterface.Loggers;
 using SWP391.OnlineShop.ServiceModel.ServiceModels;
 using SWP391.OnlineShop.ServiceModel.ViewModels.Carts;
@@ -19,7 +19,7 @@ using static SWP391.OnlineShop.ServiceModel.ServiceModels.OrderModels;
 
 namespace SWP391.OnlineShop.Portal.Controllers
 {
-	public class CartController : Controller
+	public class CartController : BaseController
 	{
 		private readonly IJsonServiceClient _client;
 		private readonly ILoggerService _logger;
@@ -57,10 +57,10 @@ namespace SWP391.OnlineShop.Portal.Controllers
 		public async Task<IActionResult> Index()
 		{
 			var email = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Email)?.Value;
-            if(string.IsNullOrEmpty(email))
-            {
-                return RedirectToAction("Login", "Account");
-            }
+			if (string.IsNullOrEmpty(email))
+			{
+				return RedirectToAction("Login", "Account");
+			}
 			var user = await _userManager.FindByEmailAsync(email);
 			if (user == null)
 			{
@@ -165,17 +165,18 @@ namespace SWP391.OnlineShop.Portal.Controllers
 				return RedirectToAction("Login", "Account");
 			}
 			order.CustomerPhoneNumber = user.PhoneNumber;
-			
-			if (string.IsNullOrEmpty(order.CustomerAddress)){
+
+			if (string.IsNullOrEmpty(order.CustomerAddress))
+			{
 				var userAddress = await _client.GetAsync(new GetAddressByUser()
 				{
 					Email = email
 				});
-				order.CustomerAddress =  userAddress.FullAddress;
+				order.CustomerAddress = userAddress.FullAddress;
 			}
 			if (string.IsNullOrEmpty(order.CustomerEmail))
 			{
-				
+
 				order.CustomerAddress = email;
 			}
 			order.Sliders = productSlider.Take(8).ToList();
