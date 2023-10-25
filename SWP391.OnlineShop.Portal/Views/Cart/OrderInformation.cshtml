@@ -127,7 +127,7 @@
 <section class="checkout_area section_gap">
 	<div class="container">
 		<div class="row">
-			<div class="col-lg-8">
+			<div class="col-lg-9">
 				<section class="cart_area">
 					<div class="container">
 						<div class="cart_inner">
@@ -140,33 +140,37 @@
 											<th scope="col">Quantity</th>
 											<th scope="col">Category</th>
 											<th scope="col">Total</th>
+											<th scope="col">Action</th>
 										</tr>
 									</thead>
 									<tbody>
-										<tr>
-											@if(Model.OrderDetails != null){
-												@foreach(var order in Model.OrderDetails){
-											<td>
-												<div class="media">
-													<div class="d-flex">
-														<img src="@order.Product.Thumbnail" alt="@order.Product.ProductName">
-													</div>
-													<div class="media-body">
-																<p>@order.Product.ProductName</p>
-													</div>
-												</div>
-											</td>
-											<td>
-												<h5>$ @order.UnitPrice</h5>
-											</td>
-											<td>
-												<div class="product_count">
-													<input type="text" name="qty" id="sst" maxlength="12" value="@order.Quantity" title="Quantity:" disabled
-														   class="input-text qty">
-												</div>
-											</td>
-											<td><p>@order.Product.Category.CategoryName</p></td>
-											<td>
+										@if (Model.OrderDetails != null)
+										{
+											@foreach (var order in Model.OrderDetails)
+											{
+												<tr>
+
+													<td>
+														<div class="media">
+															<div class="d-flex">
+																<img src="@order.Product?.Thumbnail" alt="@order.Product?.ProductName" style="max-height: 101.6px;max-width:151.6px">
+															</div>
+															<div class="media-body">
+																<a asp-action="Details" asp-controller="Product" asp-route-id="@order.Product?.Id"><p>@order.Product?.ProductName</p></a>
+															</div>
+														</div>
+													</td>
+													<td>
+														<h5>$ @order.UnitPrice</h5>
+													</td>
+													<td>
+														<div class="product_count">
+															<input type="text" name="qty" id="sst" maxlength="12" value="@order.Quantity" title="Quantity:" disabled
+																   class="input-text qty">
+														</div>
+													</td>
+													<td><p>@order.Product?.Category.CategoryName</p></td>
+													<td>
 														@if (order.Product?.SalePrice > 0)
 														{
 															<h5 class="total">$ @(order.Product.SalePrice * order.Quantity)</h5>
@@ -175,9 +179,28 @@
 														{
 															<h5 class="total">$ @(order.Product?.Price * order.Quantity)</h5>
 														}
-											</td>
-												}
+													</td>
+													<td>
+														<a class="btn primary-btn" asp-action="Details" asp-controller="Product" asp-route-id="@order.Product?.Id">
+															Feed back
+														</a>
+													</td>
+												</tr>
 											}
+										}
+										<tr class="bottom_button">
+											<td>
+											</td>
+											<td>
+											</td>
+											<td>
+											</td>
+											<td>
+												<div class="cupon_text d-flex align-items-center">
+													<a class="btn primary-btn" id="update-cart-info">Update Cart</a>
+													<a class="btn gray_btn" id="cancel-cart">Cancel Cart</a>
+												</div>
+											</td>
 										</tr>
 									</tbody>
 								</table>
@@ -186,7 +209,7 @@
 					</div>
 				</section>
 			</div>
-			<div class="col-lg-4">
+			<div class="col-lg-3">
 				<div class="order_box" style="padding-top: 100px;padding-bottom: 100px;">
 					<h2>Receiver Information</h2>
 					<ul class="list">
@@ -203,3 +226,62 @@
 		</div>
 	</div>
 </section>
+
+<script type="text/javascript">
+
+	$('#update-cart-info').click(function (e) {
+		if (!e.detail || e.detail == 1) {
+			const data = {
+				orderId: @Model.Id,
+			};
+			$.ajax({
+				url: '@Url.Action("UpdateCart","Cart")',
+				type: 'POST',
+				data: data,
+				success: function (response) {
+					window.location.href="@Url.Action("Index","Cart")";
+					//$.toaster({ priority: 'success', title: 'Created', message: "Back To Cart Detail Succesfully" });
+					setTimeout(function () {
+						window.location.reload();
+					}, 1000);
+				},
+				failure: function (failed) {
+					alert(failed.responseText)
+					//$.toaster({ priority: 'warning', title: 'Warning', message: failed.responseText });
+				},
+				error: function (error) {
+					alert(error.responseText)
+					//$.toaster({ priority: 'danger', title: 'Error', message: error.responseText });
+				}
+			});
+		}
+	});
+
+	$('#cancel-cart').click(function (e) {
+		if (!e.detail || e.detail == 1) {
+			const data = {
+				orderId: @Model.Id,
+			};
+			$.ajax({
+				url: '@Url.Action("CancelCart","Cart")',
+				type: 'POST',
+				data: data,
+				success: function (response) {
+					window.location.href = "@Url.Action("Index","Home")";
+					//$.toaster({ priority: 'success', title: 'Created', message: "Back To Cart Detail Succesfully" });
+					setTimeout(function () {
+						window.location.reload();
+					}, 1000);
+				},
+				failure: function (failed) {
+					alert(failed.responseText)
+					//$.toaster({ priority: 'warning', title: 'Warning', message: failed.responseText });
+				},
+				error: function (error) {
+					alert(error.responseText)
+					//$.toaster({ priority: 'danger', title: 'Error', message: error.responseText });
+				}
+			});
+		}
+	});
+</script>
