@@ -7,10 +7,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Remove="Uploads\Sliders\01.png" />
-  </ItemGroup>
-
-  <ItemGroup>
     <Folder Include="Logs\" />
     <Folder Include="wwwroot\css\orderHistory\" />
     <Folder Include="wwwroot\img\" />
@@ -47,6 +43,7 @@
     <_ContentIncludedByDefault Remove="Areas\Files\Views\FileManager\Index.cshtml" />
     <_ContentIncludedByDefault Remove="Areas\Managements\Views\Shared\AdminPartial\_AdminFooterPartial.cshtml" />
     <_ContentIncludedByDefault Remove="Areas\Managements\Views\Shared\_AdminLayout.cshtml" />
+    <_ContentIncludedByDefault Remove="Views\Account\ConfirmResetPassword.cshtml" />
     <_ContentIncludedByDefault Remove="Views\Account\Register.cshtml" />
   </ItemGroup>
 
@@ -63,10 +60,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Content Include="Uploads\Sliders\01.png">
-      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
-      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
-    </Content>
+    <UpToDateCheckInput Remove="Views\Account\ConfirmResetPassword.cshtml" />
   </ItemGroup>
 
 </Project>

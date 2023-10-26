@@ -1,4 +1,4 @@
-﻿namespace SWP391.OnlineShop.Common.Constraints
+﻿namespace SWP391.OnlineShop.Common.Helpers
 {
     //TODO: HaiLD - you should fuck this file
     public class PaypalHelper

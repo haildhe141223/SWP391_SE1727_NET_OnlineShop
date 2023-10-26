@@ -1,6 +1,5 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.FileProviders;
 using NLog;
 using ServiceStack;
 using SWP391.OnlineShop.Common.Constraints;
@@ -8,6 +7,7 @@ using SWP391.OnlineShop.Core.Contexts;
 using SWP391.OnlineShop.Core.Cores.UnitOfWork;
 using SWP391.OnlineShop.Core.Models.Identities;
 using SWP391.OnlineShop.Core.Models.Settings;
+using SWP391.OnlineShop.ServiceInterface.Emails;
 using SWP391.OnlineShop.ServiceInterface.Loggers;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -86,6 +86,7 @@ services.AddIdentity<User, Role>(options =>
         options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromDays(1);
         options.User.RequireUniqueEmail = true;
         options.SignIn.RequireConfirmedEmail = true;
+        options.Lockout.AllowedForNewUsers = false;
     })
     .AddEntityFrameworkStores<OnlineShopContext>()
     .AddDefaultTokenProviders();
@@ -104,6 +105,7 @@ services.AddScoped<IJsonServiceClient>(_ => new JsonServiceClient(config["Servic
 
 // Add NLog services
 services.AddScoped<ILoggerService, LoggerService>();
+services.AddScoped<IMailService, MailService>();
 services.AddScoped<IUnitOfWork, UnitOfWork>();
 
 // Configs Smtp
@@ -128,12 +130,6 @@ if (!app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();
-
-app.UseStaticFiles(new StaticFileOptions
-{
-    FileProvider = new PhysicalFileProvider(Path.Combine(Directory.GetCurrentDirectory(), "Uploads")),
-    RequestPath = "/uploads"
-});
 
 app.UseSession();
 app.UseRouting();
