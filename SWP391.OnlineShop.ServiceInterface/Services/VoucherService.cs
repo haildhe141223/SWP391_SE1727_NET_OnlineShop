@@ -65,12 +65,25 @@ namespace SWP391.OnlineShop.ServiceInterface.Services
 			return result;
 		}
 
-		public List<VoucherViewModels> Get(GetAllVoucherByUser request)
+		public async Task<List<VoucherViewModels>> Get(GetAllVoucherByUser request)
 		{
 			var result = new List<VoucherViewModels>();
 			try
 			{
-
+				var user = await _userManager.FindByEmailAsync(request.Email);
+				if(user == null)
+				{
+					throw new Exception("User Not Found");
+				}
+				var vouchers = _unitOfWork.Vouchers.GetVouchersCreatedUser(user.Id);
+				foreach (var voucher in vouchers)
+				{
+					if(voucher != null)
+					{
+						var voucherVM = _mapper.Map<VoucherViewModels>(voucher);
+						result.Add(voucherVM);
+					}
+				}
 			}
 			catch (Exception ex)
 			{
@@ -79,12 +92,12 @@ namespace SWP391.OnlineShop.ServiceInterface.Services
 			return result;
 		}
 
-		public VoucherViewModels Get(GetAllVoucherById request)
+		public VoucherViewModels Get(GetVoucherById request)
 		{
 			var result = new VoucherViewModels();
 			try
 			{
-				var voucher = _unitOfWork.Vouchers.GetById(request.Id);
+				var voucher = _unitOfWork.Vouchers.GetVoucherInfo(request.Id);
 				if (voucher == null)
 				{
 					result.StatusCode = Common.Enums.StatusCode.NotFound;
@@ -95,7 +108,7 @@ namespace SWP391.OnlineShop.ServiceInterface.Services
 			}
 			catch (Exception ex)
 			{
-				_logger.LogError($"GetAllVoucherById error: {ex}");
+				_logger.LogError($"GetVoucherById error: {ex}");
 			}
 			return result;
 		}
@@ -128,7 +141,14 @@ namespace SWP391.OnlineShop.ServiceInterface.Services
 				int rows = await _unitOfWork.CompleteAsync();
 				if (rows > 0)
 				{
-					result.StatusCode = Common.Enums.StatusCode.Success;
+					var productVoucher = new ProductVoucher()
+					{
+						ProductId = request.ProductId,
+						VoucherId = voucher.Id
+					};
+					_unitOfWork.Context.ProductVouchers.Add(productVoucher);
+                    await _unitOfWork.CompleteAsync();
+                    result.StatusCode = Common.Enums.StatusCode.Success;
 					return result;
 				}
 				result.StatusCode = Common.Enums.StatusCode.InternalServerError;

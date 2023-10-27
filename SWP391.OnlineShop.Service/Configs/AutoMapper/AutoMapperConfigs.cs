@@ -35,6 +35,7 @@ public class AutoMapperConfigs : Profile
 
 		//// Voucher
 		CreateMap<Voucher, VoucherViewModels>().ReverseMap();
+		CreateMap<ProductVoucherViewModel, ProductVoucher>().ReverseMap();
 
 		if (unitOfWork != null)
         {
