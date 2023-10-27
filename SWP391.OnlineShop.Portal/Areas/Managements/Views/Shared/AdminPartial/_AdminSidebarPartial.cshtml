@@ -92,7 +92,7 @@
                 {
                     <a class="collapse-item">Products</a>
                     <a class="collapse-item">Orders</a>
-                    <a class="collapse-item">Vouchers</a>
+                    <a class="collapse-item" asp-area="Managements" asp-action="Index" asp-controller="Voucher">Vouchers</a>
                 }
 
                 @if (!string.IsNullOrEmpty(userRole) && (userRole.Contains(RoleConstraints.Admin) || userRole.Contains(RoleConstraints.Marketing)))

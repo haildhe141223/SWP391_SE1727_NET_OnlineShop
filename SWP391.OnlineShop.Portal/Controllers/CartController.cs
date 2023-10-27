@@ -183,9 +183,12 @@ namespace SWP391.OnlineShop.Portal.Controllers
 			return View(order);
 		}
 
-
 		public async Task<IActionResult> Confirmation([FromQuery(Name = "token")] string token)
 		{
+			if (string.IsNullOrEmpty(token))
+			{
+				return RedirectToAction("Index", "Home");
+			}
 			if (PaypalData.Keys.Contains(token))
 			{
 				var orderId = PaypalData[token];
