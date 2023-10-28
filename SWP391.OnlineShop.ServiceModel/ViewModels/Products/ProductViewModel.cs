@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Http;
 using SWP391.OnlineShop.Core.Models.Enums;
 using SWP391.OnlineShop.ServiceModel.ViewModels.Categories;
 using SWP391.OnlineShop.ServiceModel.ViewModels.Feedback;
@@ -10,6 +11,7 @@ namespace SWP391.OnlineShop.ServiceModel.ViewModels.Products
         public Status Status { get; set; }
         public int? CategoryId { get; set; }
         public string ProductName { get; set; }
+        public IFormFile ThumbnailFile { get; set; }
         public string Thumbnail { get; set; }
         public string Description { get; set; }
         public int Amount { get; set; }

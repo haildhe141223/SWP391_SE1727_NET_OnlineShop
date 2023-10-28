@@ -187,6 +187,7 @@ namespace SWP391.OnlineShop.ServiceInterface.Services
                 var post = new Post()
                 {
                     Title = request.Title,
+                    Thumbnail = request.Thumbnail,
                     Author = request.Author,
                     Brief = request.Brief,
                     Description = request.Description,
@@ -215,6 +216,7 @@ namespace SWP391.OnlineShop.ServiceInterface.Services
                 if (post != null)
                 {
                     post.Title = request.Title;
+                    post.Thumbnail = request.Thumbnail;
                     post.Author = request.Author;
                     post.Brief = request.Brief;
                     post.Description = request.Description;
