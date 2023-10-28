@@ -56,13 +56,13 @@
                         switch (provider.Name)
                         {
                             case LoginKeyConstraints.GoogleLogin:
-                                <a asp-controller="Account" asp-action="LoginExternally" asp-route-value="@provider.Name"
+                                <a asp-controller="Account" asp-action="LoginExternally" asp-route-request="@provider.Name"
                                    class="btn btn-google btn-user btn-block">
                                     <i class="fab fa-google fa-fw"></i> Login with @provider.DisplayName
                                 </a>
                                 break;
                             case LoginKeyConstraints.FacebookLogin:
-                                <a asp-controller="Account" asp-action="LoginExternally" asp-route-value="@provider.Name"
+                                <a asp-controller="Account" asp-action="LoginExternally" asp-route-request="@provider.Name"
                                    class="btn btn-facebook btn-user btn-block">
                                     <i class="fab fa-facebook-f fa-fw"></i> Login with @provider.DisplayName
                                 </a>

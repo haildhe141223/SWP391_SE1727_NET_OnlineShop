@@ -4,9 +4,12 @@ using Microsoft.EntityFrameworkCore;
 using ServiceStack;
 using SWP391.OnlineShop.Common.Constraints;
 using SWP391.OnlineShop.Common.Enums;
+using SWP391.OnlineShop.Common.Templates;
 using SWP391.OnlineShop.Core.Cores.UnitOfWork;
+using SWP391.OnlineShop.Core.Models.Entities;
 using SWP391.OnlineShop.Core.Models.Identities;
 using SWP391.OnlineShop.ServiceInterface.BaseServices;
+using SWP391.OnlineShop.ServiceInterface.Emails;
 using SWP391.OnlineShop.ServiceInterface.Interfaces;
 using SWP391.OnlineShop.ServiceInterface.Loggers;
 using SWP391.OnlineShop.ServiceModel.Results;
@@ -22,19 +25,22 @@ public class AccountService : BaseService, IAccountService
     private readonly SignInManager<User> _signInManager;
     private readonly IUnitOfWork _unitOfWork;
     private readonly IMapper _mapper;
+    private readonly IMailService _mailService;
 
     public AccountService(
         ILoggerService logger,
         UserManager<User> userManager,
         SignInManager<User> signInManager,
         IUnitOfWork unitOfWork,
-        IMapper mapper)
+        IMapper mapper,
+        IMailService mailService)
     {
         _logger = logger;
         _userManager = userManager;
         _signInManager = signInManager;
         _unitOfWork = unitOfWork;
         _mapper = mapper;
+        _mailService = mailService;
     }
 
     public async Task<List<UserViewModel>> Get(GetUsers request)
@@ -69,17 +75,10 @@ public class AccountService : BaseService, IAccountService
 
             if (externalLoginInfo == null)
             {
-                var token = await _userManager.GenerateEmailConfirmationTokenAsync(user);
-                var isConfirmEmail = await _userManager.ConfirmEmailAsync(user, token);
-                if (isConfirmEmail.Succeeded)
+                return new BaseResultModel
                 {
-                    return new BaseResultModel
-                    {
-                        StatusCode = StatusCode.Success
-                    };
-                }
-
-                throw new Exception($"User external confirm email with email [{request.Email}] fail.");
+                    StatusCode = StatusCode.Success
+                };
             }
 
             throw new Exception($"User external info with email [{request.Email}] is exist.");
@@ -171,6 +170,7 @@ public class AccountService : BaseService, IAccountService
             {
                 Email = request.RegisterViewModel.Email,
                 UserName = request.RegisterViewModel.Username.ToTitleCase(),
+                Image = "https://i.ibb.co/NK98Q7p/Image.png"
             };
 
             var isCreatedUser = await _userManager.CreateAsync(user, request.RegisterViewModel.Password);
@@ -206,6 +206,98 @@ public class AccountService : BaseService, IAccountService
             {
                 ErrorMessage = ex.Message,
                 StatusCode = StatusCode.InternalServerError
+            };
+        }
+    }
+
+    public async Task<BaseResultModel> Post(PostConfirmRegisterEmail request)
+    {
+        try
+        {
+            var userEmail = request.To;
+            var userName = request.To.Split('@')[0];
+
+            var confirmEmailSubject = EmailTemplates.RegisterEmailConfirmSubject;
+            var confirmEmailBody = EmailTemplates.RegisterEmailConfirmTemplate;
+
+            if (!string.IsNullOrEmpty(confirmEmailBody))
+            {
+                confirmEmailBody = confirmEmailBody
+                    .Replace("{{Username}}", userName)
+                    .Replace("{{UserEmail}}", userEmail)
+                    .Replace("{{ConfirmRegisterLink}}", request.LinkConfirmPassword);
+            }
+
+            var email = new Email
+            {
+                Subject = confirmEmailSubject,
+                Body = confirmEmailBody,
+                To = userEmail,
+                Category = request.Category,
+                Title = confirmEmailSubject
+            };
+
+            var mailId = await _mailService.SendAsync(email);
+
+            return new BaseResultModel
+            {
+                StatusCode = StatusCode.Success,
+                SuccessMessage = $"Send mail success with id [{mailId}]"
+            };
+        }
+        catch (Exception e)
+        {
+            _logger.LogError($"Error in PostResetPassword request - {e}");
+            return new BaseResultModel
+            {
+                StatusCode = StatusCode.InternalServerError,
+                ErrorMessage = e.Message
+            };
+        }
+    }
+
+    public async Task<BaseResultModel> Post(PostConfirmChangePasswordEmail request)
+    {
+        try
+        {
+            var userEmail = request.To;
+            var userName = request.To.Split('@')[0];
+
+            var confirmEmailSubject = EmailTemplates.ForgotPasswordSubject;
+            var confirmEmailBody = EmailTemplates.ForgotPasswordTemplate;
+
+            if (!string.IsNullOrEmpty(confirmEmailBody))
+            {
+                confirmEmailBody = confirmEmailBody
+                    .Replace("{{Username}}", userName)
+                    .Replace("{{UserEmail}}", userEmail)
+                    .Replace("{{ResetPassLink}}", request.LinkResetPassword);
+            }
+
+            var email = new Email
+            {
+                Subject = confirmEmailSubject,
+                Body = confirmEmailBody,
+                To = userEmail,
+                Category = request.Category,
+                Title = confirmEmailSubject
+            };
+
+            var mailId = await _mailService.SendAsync(email);
+
+            return new BaseResultModel
+            {
+                StatusCode = StatusCode.Created,
+                SuccessMessage = $"Send mail success with id [{mailId}]"
+            };
+        }
+        catch (Exception e)
+        {
+            _logger.LogError($"Error in PostResetPassword request - {e}");
+            return new BaseResultModel
+            {
+                StatusCode = StatusCode.InternalServerError,
+                ErrorMessage = e.Message
             };
         }
     }
