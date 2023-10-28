@@ -1,4 +1,5 @@
-﻿using SWP391.OnlineShop.Core.Models.Enums;
+﻿using Microsoft.AspNetCore.Http;
+using SWP391.OnlineShop.Core.Models.Enums;
 
 namespace SWP391.OnlineShop.ServiceModel.ViewModels.Products
 {
@@ -9,6 +10,7 @@ namespace SWP391.OnlineShop.ServiceModel.ViewModels.Products
         public string Featured { get; set; }
         public string Brief { get; set; }
         public string Description { get; set; }
+        public IFormFile ThumbnailFile { get; set; }
         public string Thumbnail { get; set; }
         public string Author { get; set; }
         public int? CategoryId { get; set; }
