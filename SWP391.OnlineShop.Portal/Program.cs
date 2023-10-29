@@ -69,7 +69,7 @@ services.AddSession(options =>
 
 // Add time expired for identity token
 services.Configure<DataProtectionTokenProviderOptions>(options =>
-    options.TokenLifespan = TimeSpan.FromMinutes(5));
+    options.TokenLifespan = TimeSpan.FromMinutes(30));
 
 // Add identity configs
 services.AddIdentity<User, Role>(options =>

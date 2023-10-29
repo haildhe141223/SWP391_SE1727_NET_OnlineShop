@@ -1,0 +1,84 @@
+﻿@using SWP391.OnlineShop.Core.Models.Enums;
+@model List<SWP391.OnlineShop.ServiceModel.ViewModels.Feedback.FeedbackViewModels>
+@{
+    Layout = "_Layout";
+}
+
+<div class="m-headers ml-3" style="margin-top: 10% !important;">
+    <h4 class="fw-bold">Feedbacks Management</h4>
+</div>
+@*<div class="m-searchs">
+    <div>
+        <form id="formSearchUser" asp-controller="Home" asp-action="ShowUsers">
+            <div class="mb-3">
+                <label for="search-user" class="form-label">Search</label>
+                <input type="text" placeholder="Enter username" class="form-control" id="search-user" title="Search User" name="SearchString" value="@ViewData["SearchValue"]">
+            </div>
+            <div class="mb-3 form-status">
+                <label for="search-status" class="form-label">Status</label>
+                <select class="form-select" id="search-status" name="status">
+                    <!option value="All" @(status == "All" ? "selected" : "")>All</!option>
+                    <!option value="Active" @(status == "Active" ? "selected" : "")>Active</!option>
+                    <!option value="Inactive" @(status == "Inactive" ? "selected" : "")>InActive</!option>
+                </select>
+            </div>
+            <div class="form-search-btn">
+                <button class="btn" type="submit" title="search-submit">
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                </button>
+            </div>
+        </form>
+    </div>
+</div>*@
+<div class="card shadow mb-4 mt-3">
+    <div class="card-header py-3">
+        <h6 class="m-0 font-weight-bold text-primary">Feedbacks</h6>
+    </div>
+    <div class="card-body container-fluid">
+        <div class="table-responsive">
+            <table class="table table-hover table-bordered" id="dataTable" width="100%" cellspacing="0">
+                <thead class="table-secondary">
+                    <tr>
+                        <th scope="col">User Name</th>
+                        <th scope="col">Product Name</th>
+                        <th scope="col">Comment</th>
+                        <th scope="col">Rate Star</th>
+                        <th scope="col">Feedback Time</th>
+                        <th scope="col">Status</th>
+                        <th scope="col">Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var feedbackViewModel in Model)
+                    {
+                        <tr>
+                            <td>@feedbackViewModel.UserName</td>
+                            <td>@feedbackViewModel.ProductName</td>
+                            <td>@feedbackViewModel.Comment</td>
+                            <td>@feedbackViewModel.RatedStar</td>
+                            <td>@feedbackViewModel.CreatedDateTime</td>
+                            @if (feedbackViewModel.Status == Status.Active)
+                            {
+                                <td class="text-success">Active</td>
+                            }
+                            else
+                            {
+                                <td class="text-danger">InActive</td>
+                            }
+                            <td>
+                                <div class="table-action">
+                                    <a asp-controller="Marketing" asp-action="FeedbackDetail" asp-route-id="@feedbackViewModel.Id">
+                                        <i class="fa-regular fa-eye"></i>
+                                    </a>
+                                    <a asp-controller="Marketing" asp-action="EditFeedback" asp-route-id="@feedbackViewModel.Id">
+                                        <i class="fa-regular fa-pen-to-square"></i>
+                                    </a>
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
