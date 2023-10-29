@@ -7,6 +7,7 @@ using SWP391.OnlineShop.ServiceModel.ViewModels.Categories;
 using SWP391.OnlineShop.ServiceModel.ViewModels.Emails;
 using SWP391.OnlineShop.ServiceModel.ViewModels.Feedback;
 using SWP391.OnlineShop.ServiceModel.ViewModels.Products;
+using SWP391.OnlineShop.ServiceModel.ViewModels.Tags;
 using SWP391.OnlineShop.ServiceModel.ViewModels.Users;
 using SWP391.OnlineShop.ServiceModel.ViewModels.Vouchers;
 
@@ -23,9 +24,10 @@ public class AutoMapperConfigs : Profile
         //// Product
         CreateMap<Product, ProductViewModel>().ReverseMap();
         CreateMap<Post, PostViewModel>().ReverseMap();
+		CreateMap<Tag, TagViewModel>().ReverseMap();
 
-        //// Category
-        CreateMap<Category, CategoryViewModel>().ReverseMap();
+		//// Category
+		CreateMap<Category, CategoryViewModel>().ReverseMap();
 
         //// Feedback
         CreateMap<FeedBack, FeedbackViewModels>().ReverseMap();
