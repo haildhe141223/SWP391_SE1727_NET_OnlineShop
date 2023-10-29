@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using SWP391.OnlineShop.Core.Models.Enums;
+using SWP391.OnlineShop.ServiceModel.ViewModels.Categories;
+using SWP391.OnlineShop.ServiceModel.ViewModels.Tags;
 using System.ComponentModel.DataAnnotations;
 
 namespace SWP391.OnlineShop.ServiceModel.ViewModels.Products
@@ -25,5 +27,9 @@ namespace SWP391.OnlineShop.ServiceModel.ViewModels.Products
         public string Author { get; set; }
         public int? CategoryId { get; set; }
         public Status Status { get; set; }
-    }
+		public CategoryViewModel Category { get; set; }
+		public List<TagViewModel> Tags { get; set; }
+		public DateTime CreatedDateTime { get; set; }
+		public DateTime ModifiedDateTime { get; set; }
+	}
 }
