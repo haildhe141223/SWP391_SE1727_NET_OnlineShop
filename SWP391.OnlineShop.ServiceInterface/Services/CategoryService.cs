@@ -29,7 +29,7 @@ namespace SWP391.OnlineShop.ServiceInterface.Services
             var result = new List<CategoryViewModel>();
             try
             {
-                var categories = _unitOfWork.Categories.GetAll();
+                var categories = _unitOfWork.Categories.GetAll().Where(x => x.CategoryType == request.CategoryType);
                 foreach (var item in categories)
                 {
                     var categoryVm = _mapper.Map<CategoryViewModel>(item);

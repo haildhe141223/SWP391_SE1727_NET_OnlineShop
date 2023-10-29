@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc;
 using ServiceStack;
 using SWP391.OnlineShop.ServiceModel.ServiceModels;
 using SWP391.OnlineShop.ServiceModel.ViewModels.Products;
@@ -32,23 +32,23 @@ namespace SWP391.OnlineShop.Portal.Controllers
 				});
 			}
 
-            ViewBag.Pages = latestProducts.Count / 9 + 1;
-            ViewBag.CurrentPage = page;
+			ViewBag.Pages = latestProducts.Count / 9 + 1;
+			ViewBag.CurrentPage = page;
 
-            //Get all categories
-            var categories = await _client.GetAsync(new GetAllCategory());
+      //Get all categories
+      var categories = await _client.GetAsync(new GetAllCategory());
 
-            //Get deal product of week
-            var dealProductOfWeeks = await _client.GetAsync(new GetDealProductOfWeek());
+      //Get deal product of week
+      var dealProductOfWeeks = await _client.GetAsync(new GetDealProductOfWeek());
 
-            var productCategories = new ProductCategoryViewModel
-            {
-                LatestProducts = latestProducts.Skip((page - 1) * 9).Take(9).ToList(),
-                Categories = categories,
-                ProductsOfWeek = dealProductOfWeeks
-            };
-            return View(productCategories);
-        }
+      var productCategories = new ProductCategoryViewModel
+      {
+          LatestProducts = latestProducts.Skip((page - 1) * 9).Take(9).ToList(),
+          Categories = categories,
+          ProductsOfWeek = dealProductOfWeeks
+       };
+       return View(productCategories);
+    }
 
         public async Task<IActionResult> Details(int id)
         {
