@@ -22,12 +22,11 @@ namespace SWP391.OnlineShop.Portal.Controllers
 		public async Task<IActionResult> Index(int categoryId, int page)
 		{
 			var latestProducts = new List<ProductViewModel>();
-			ViewBag.CurrentPage = page;
+			
 			if (categoryId == 0)
 			{
 				//Get all products
 				latestProducts = await _client.GetAsync(new GetAllProduct());
-				ViewBag.Pages = latestProducts.Count / 9 + 1;
 			}
 			else
 			{
@@ -37,6 +36,9 @@ namespace SWP391.OnlineShop.Portal.Controllers
 					CategoryId = categoryId
 				});
 			}
+
+			ViewBag.Pages = latestProducts.Count / 9 + 1;
+			ViewBag.CurrentPage = page;
 
 			//Get all categories
 			var categories = await _client.GetAsync(new GetAllCategory());
