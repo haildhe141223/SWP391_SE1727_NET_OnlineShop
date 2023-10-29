@@ -136,6 +136,12 @@ namespace SWP391.OnlineShop.Portal.Controllers
 
             var userExist = await _userManager.FindByEmailAsync(externalEmail.Value);
 
+            if(userExist == null)
+            {
+                return StatusCode(500, $"Your email {externalEmail.Value} does not exist " +
+                                       "Please contact admin for more information");
+            }
+
             if (userExist.LockoutEnabled)
             {
                 _logger.LogInfo($"Step 1.2 - Account with email [{userExist.Email}] already got lock.");

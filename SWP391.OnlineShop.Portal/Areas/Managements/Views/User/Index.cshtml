@@ -41,6 +41,8 @@
                             <th>UserName</th>
                             <th>Email</th>
                             <th>PhoneNumber</th>
+                            <th>Gender</th>
+                            <th>Default Address</th>
                             <th>Roles</th>
                             <th>Action</th>
                         </tr>
@@ -51,11 +53,13 @@
                             <th>UserName</th>
                             <th>Email</th>
                             <th>PhoneNumber</th>
+                            <th>Gender</th>
+                            <th>Default Address</th>
                             <th>Roles</th>
                             <th>Action</th>
                         </tr>
                     </tfoot>
-                    <tbody>                    
+                    <tbody>
                         @foreach (var user in Model)
                         {
                             <tr>
@@ -72,6 +76,17 @@
                                 <td>@user.UserName</td>
                                 <td>@user.Email</td>
                                 <td>@user.PhoneNumber</td>
+                                <td>
+                                    @if (user.Gender == 0)
+                                    {
+                                        <span>Female</span>
+                                    }
+                                    else
+                                    {
+                                        <span>Male</span>
+                                    }
+                                </td>
+                                <td>@user.Address</td>
                                 <td>@string.Join(", ", user.Role)</td>
                                 <td>
                                     <a class="mx-1 btn btn-outline-info" asp-route-id="@user.Id"
