@@ -4,7 +4,9 @@ using ServiceStack;
 using SWP391.OnlineShop.Core.Models.Enums;
 using SWP391.OnlineShop.ServiceInterface.Loggers;
 using SWP391.OnlineShop.ServiceModel.ServiceModels;
+using SWP391.OnlineShop.ServiceModel.ViewModels.Feedback;
 using SWP391.OnlineShop.ServiceModel.ViewModels.Products;
+using static SWP391.OnlineShop.ServiceModel.ServiceModels.FeedbackModels;
 
 namespace SWP391.OnlineShop.Portal.Controllers
 {
@@ -74,7 +76,14 @@ namespace SWP391.OnlineShop.Portal.Controllers
 
         public async Task<IActionResult> ViewProduct(int id)
         {
+            var listStatus = new List<Status>
+            {
+                Status.Active,
+                Status.Inactive
+            };
+
             ViewData["GenreList"] = new SelectList(await _client.GetAsync(new GetAllCategory { CategoryType = CategoryType.ProductCategory }), "Id", "CategoryName");
+            ViewData["StatusList"] = new SelectList(listStatus);
             var product = await _client.GetAsync(new GetProductById
             {
                 ProductId = id
@@ -198,12 +207,20 @@ namespace SWP391.OnlineShop.Portal.Controllers
 
         public async Task<IActionResult> ViewPost(int id)
         {
+            var listStatus = new List<Status>
+            {
+                Status.Active,
+                Status.Inactive
+            };
+
             ViewData["GenreList"] = new SelectList(await _client.GetAsync(new GetAllCategory { CategoryType = CategoryType.PostCategory }), "Id", "CategoryName");
-            var product = await _client.GetAsync(new GetPostById
+            ViewData["StatusList"] = new SelectList(listStatus);
+
+            var post = await _client.GetAsync(new GetPostById
             {
                 PostId = id
             });
-            return View(product);
+            return View(post);
         }
 
         public async Task<IActionResult> EditPost(int id)
@@ -269,6 +286,64 @@ namespace SWP391.OnlineShop.Portal.Controllers
                 PostId = id
             });
             return RedirectToAction("ManagePost");
+        }
+
+        public async Task<IActionResult> ManageFeedback()
+        {
+            //Get all feedbacks
+            var feedbacks = await _client.GetAsync(new GetAllFeedback());
+
+            return View(feedbacks);
+        }
+
+        public async Task<IActionResult> FeedbackDetail(int id)
+        {
+            var listStatus = new List<Status>
+            {
+                Status.Active,
+                Status.Inactive
+            };
+
+            ViewData["StatusList"] = new SelectList(listStatus);
+            //Get feedback
+            var feedback = await _client.GetAsync(new GetFeedbackById
+            {
+                FeedbackId = id
+            });
+
+            return View(feedback);
+        }
+
+        public async Task<IActionResult> EditFeedback(int id)
+        {
+
+            var listStatus = new List<Status>
+            {
+                Status.Active,
+                Status.Inactive
+            };
+
+            ViewData["StatusList"] = new SelectList(listStatus);
+            //Get feedback
+            var feedback = await _client.GetAsync(new GetFeedbackById
+            {
+                FeedbackId = id
+            });
+
+            return View(feedback);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> EditFeedback(FeedbackViewModels request)
+        {
+            //Edit feedback
+            await _client.PutAsync(new EditFeedback
+            {
+                FeedbackId = request.Id,
+                Status = request.Status
+            });
+
+            return RedirectToAction("ManageFeedback");
         }
 
     }
