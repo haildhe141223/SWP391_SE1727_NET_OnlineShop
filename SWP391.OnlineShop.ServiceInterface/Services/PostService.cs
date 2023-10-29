@@ -1,9 +1,7 @@
 ﻿using AutoMapper;
-using Microsoft.AspNetCore.Identity;
 using SWP391.OnlineShop.Common.Enums;
 using SWP391.OnlineShop.Core.Cores.UnitOfWork;
 using SWP391.OnlineShop.Core.Models.Entities;
-using SWP391.OnlineShop.Core.Models.Identities;
 using SWP391.OnlineShop.ServiceInterface.BaseServices;
 using SWP391.OnlineShop.ServiceInterface.Interfaces;
 using SWP391.OnlineShop.ServiceInterface.Loggers;
@@ -13,23 +11,21 @@ using SWP391.OnlineShop.ServiceModel.ViewModels.Products;
 
 namespace SWP391.OnlineShop.ServiceInterface.Services
 {
+    //TODO: PhuongNL logger should have key to double check in log. Check AccountService for example
     public class PostService : BaseService, IPostService
     {
         private readonly IMapper _mapper;
         private readonly IUnitOfWork _unitOfWork;
         private readonly ILoggerService _logger;
-        private readonly UserManager<User> _userManager;
 
         public PostService(
             IMapper mapper,
             IUnitOfWork unitOfWork,
-            ILoggerService logger,
-            UserManager<User> userManager)
+            ILoggerService logger)
         {
             _mapper = mapper;
             _unitOfWork = unitOfWork;
             _logger = logger;
-            _userManager = userManager;
         }
 
         public async Task<PostViewModel> Delete(DeletePost request)
@@ -43,11 +39,8 @@ namespace SWP391.OnlineShop.ServiceInterface.Services
                 {
                     var post = await _unitOfWork.Posts.GetByIdAsync(request.PostId);
                     result = _mapper.Map<PostViewModel>(post);
-                    //result.StatusCode = StatusCode.Success;
                     return result;
                 }
-                //result.StatusCode = StatusCode.InternalServerError;
-
             }
             catch (Exception ex)
             {
@@ -61,12 +54,9 @@ namespace SWP391.OnlineShop.ServiceInterface.Services
             var result = new List<PostViewModel>();
             try
             {
-                var post = _unitOfWork.Posts.GetAll().ToList();
+                var post = _unitOfWork.Posts.GetAll().OrderByDescending(x => x.CreatedDateTime).ToList();
                 result = _mapper.Map<List<PostViewModel>>(post);
-                //result.StatusCode = StatusCode.Success;
                 return result;
-                //result.StatusCode = StatusCode.InternalServerError;
-
             }
             catch (Exception ex)
             {
@@ -84,7 +74,6 @@ namespace SWP391.OnlineShop.ServiceInterface.Services
                 if (post != null)
                 {
                     result = _mapper.Map<PostViewModel>(post);
-                    //result.StatusCode = StatusCode.Success;
                 }
             }
             catch (Exception ex)
@@ -104,10 +93,7 @@ namespace SWP391.OnlineShop.ServiceInterface.Services
                             .Take(request.Take)
                             .ToList();
                 result = _mapper.Map<List<PostViewModel>>(post);
-                //result.StatusCode = StatusCode.Success;
                 return result;
-                //result.StatusCode = StatusCode.InternalServerError;
-
             }
             catch (Exception ex)
             {
@@ -126,7 +112,6 @@ namespace SWP391.OnlineShop.ServiceInterface.Services
                 if (post != null)
                 {
                     result = _mapper.Map<List<PostViewModel>>(post);
-                    //result.StatusCode = StatusCode.Success;
                 }
             }
             catch (Exception ex)
@@ -146,7 +131,6 @@ namespace SWP391.OnlineShop.ServiceInterface.Services
                 if (post != null)
                 {
                     result = _mapper.Map<List<PostViewModel>>(post);
-                    //result.StatusCode = StatusCode.Success;
                 }
             }
             catch (Exception ex)
@@ -186,7 +170,6 @@ namespace SWP391.OnlineShop.ServiceInterface.Services
                 if (post != null)
                 {
                     result = _mapper.Map<List<PostViewModel>>(post);
-                    //result.StatusCode = StatusCode.Success;
                 }
             }
             catch (Exception ex)
@@ -204,14 +187,17 @@ namespace SWP391.OnlineShop.ServiceInterface.Services
                 var post = new Post()
                 {
                     Title = request.Title,
+                    Thumbnail = request.Thumbnail,
                     Author = request.Author,
                     Brief = request.Brief,
                     Description = request.Description,
                     Featured = request.Featured,
                     CategoryId = request.CategoryId,
-                    Status = Core.Models.Enums.Status.Active
+                    Status = Core.Models.Enums.Status.Active,
+                    CreatedDateTime = DateTime.Now
                 };
                 await _unitOfWork.Posts.AddAsync(post);
+                await _unitOfWork.CompleteAsync();
 
             }
             catch (Exception ex)
@@ -223,7 +209,6 @@ namespace SWP391.OnlineShop.ServiceInterface.Services
 
         public BaseResultModel Put(PutUpdatePost request)
         {
-            var result = new PostViewModel();
             try
             {
                 var post = _unitOfWork.Posts.GetById(request.Id);
@@ -231,11 +216,13 @@ namespace SWP391.OnlineShop.ServiceInterface.Services
                 if (post != null)
                 {
                     post.Title = request.Title;
+                    post.Thumbnail = request.Thumbnail;
                     post.Author = request.Author;
                     post.Brief = request.Brief;
                     post.Description = request.Description;
                     post.Featured = request.Featured;
                     post.CategoryId = request.CategoryId;
+                    post.Status = request.Status;
 
                     _unitOfWork.Posts.Update(post);
                     _unitOfWork.Complete();

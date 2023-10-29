@@ -2,6 +2,7 @@
 @{
     Layout = "_Layout";
     var genreList = ViewData["GenreList"] as SelectList;
+    var statusList = ViewData["StatusList"] as SelectList;
 }
 
 <div class="m-headers" style="margin-top: 10% !important;">
@@ -23,13 +24,19 @@
                 <span asp-validation-for="Title" class="r-error d-block text-danger"></span>
             </div>
             <div class="mb-3">
-                <label asp-for="Thumbnail" class="form-label">Thumbnail</label>
-                <input asp-for="Thumbnail" type="text" class="form-control">
+                <label asp-for="ThumbnailFile" class="form-label">Thumbnail</label><br />
+                <img width="300" height="300" src="@Model.Thumbnail"><br /><br />
+                <input asp-for="ThumbnailFile" type="file" class="form-control">
+                <span asp-validation-for="ThumbnailFile" class="r-error d-block text-danger"></span>
+            </div>
+            <div hidden class="mb-3">
+                <label asp-for="Thumbnail" class="form-label"></label>
+                <textarea asp-for="Thumbnail" type="text" class="form-control"></textarea>
                 <span asp-validation-for="Thumbnail" class="r-error d-block text-danger"></span>
             </div>
             <div class="mb-3">
                 <label asp-for="Description" class="form-label"></label>
-                <textarea asp-for="Description" type="text" class="form-control"></textarea>
+                <textarea id="ck-editor" rows="10" cols="80" asp-for="Description" type="text" class="form-control"></textarea>
                 <span asp-validation-for="Description" class="r-error d-block text-danger"></span>
             </div>
             <div class="mb-3">
@@ -47,13 +54,25 @@
                 <input asp-for="Author" type="text" class="form-control" />
                 <span asp-validation-for="Author" class="r-error d-block text-danger"></span>
             </div>
-            @* <div class="mb-3">
-            <label asp-for="CategoryId" class="form-label">Category</label>
-            <select asp-for="CategoryId" class="form-control" asp-items="@genreList"></select>
-            </div> *@
+            <div class="mb-3">
+                <label asp-for="CategoryId" class="form-label">Category</label><br />
+                <select asp-for="CategoryId" class="form-control" asp-items="@genreList"></select>
+            </div><br /><br />
+            <div class="mb-3">
+                <label asp-for="Status" class="form-label">Status</label><br />
+                <select asp-for="Status" class="form-control" asp-items="@statusList"></select>
+            </div><br />
             <a type="button" class="btn btn-secondary" asp-action="">Back</a>
             <button type="reset" class="btn btn-info">Reset</button>
             <button type="submit" class="btn btn-primary">Submit</button>
         </form>
     </div>
 </div>
+
+@section scripts{
+    <script src="~/lib/ckeditor/ckeditor.js"></script>
+    <script src="~/lib/ckeditor/adapters/jquery.js"></script>
+    <script>
+        $("#ck-editor").ckeditor();
+    </script>
+}

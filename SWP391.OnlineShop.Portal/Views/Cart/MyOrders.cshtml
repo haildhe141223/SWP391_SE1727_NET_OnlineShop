@@ -1,0 +1,87 @@
+﻿@model List<SWP391.OnlineShop.ServiceModel.ViewModels.Carts.OrderViewModels>
+<head>
+	<link href="~/css/orderHistory/bootstrap-icons.css" rel="stylesheet" />
+	<link href="~/css/orderHistory/feather.css" rel="stylesheet" />
+	<link href="~/css/orderHistory/materialdesignicons.min.css" rel="stylesheet" />
+	<link href="~/css/orderHistory/simplebar.min.css" rel="stylesheet" />
+	<!-- Theme CSS -->
+	<link rel="stylesheet" href="~/css/orderHistory/theme.min.css" />
+</head>
+<section class="container-fluid p-4">
+	<section class="banner-area organic-breadcrumb">
+		<div class="container">
+			<div class="breadcrumb-banner d-flex flex-wrap align-items-center justify-content-end">
+				<div class="col-first">
+					<h1>Shopping Cart</h1>
+					<nav class="d-flex align-items-center">
+						<a asp-action="Index" asp-controller="Home">Home<span class="lnr lnr-arrow-right"></span></a>
+						<a href="category.html">Cart</a>
+					</nav>
+				</div>
+			</div>
+		</div>
+	</section>
+	<!-- row -->
+	<div class="row">
+		<div class="col-xxl-8 col-12">
+			<!-- card -->
+			<div class="card">
+				<!-- card body-->
+				<div class="card-body">
+					<div class="mb-6">
+						<h4 class="mb-0">Your Order</h4>
+						<p>Check the status of recent orders, manage returns, and discover similar products.</p>
+					</div>
+					@foreach (var order in Model)
+					{
+						<div class="mb-8">
+							<!-- text -->
+							<div class="border-bottom mb-3 pb-3 d-lg-flex align-items-center justify-content-between ">
+								<div class="d-flex align-items-center justify-content-between">
+									<a asp-action="OrderInformation" asp-controller="Cart" asp-route-id="@order.Id"><h5 class="mb-0">Order #@order.Id</h5></a>
+									<span class="ms-2">Order on @order.ModifiedDateTime.ToString("dd/MM/yyyy")</span>
+								</div>
+							</div>
+							<!-- row -->
+							@foreach (var detail in order.OrderDetails)
+							{
+								<div class="row justify-content-between align-items-center">
+									<!-- col -->
+
+									<div class="col-lg-8 col-12">
+										<div class="d-md-flex">
+											<div>
+												<!-- img -->
+												<img src="@detail.Product.Thumbnail" style="max-height: 101.6px;max-width:151.6px" alt="" class="img-4by3-xl rounded">
+											</div>
+											<div class="ms-md-4 mt-2 mt-lg-0">
+												<!-- heading -->
+												<h5 class="mb-1">
+													@detail.Product.ProductName
+												</h5>
+												<!-- text -->
+												<span>
+													 Quantity:<span class="text-dark"> @detail.Quantity</span>
+												</span>
+												<!-- text -->
+												<div class="mt-3">
+													<h4>$ @detail.UnitPrice</h4>
+												</div>
+											</div>
+										</div>
+									</div>
+									<!-- button -->
+									<div class="col-lg-3 col-12 d-grid">
+										<a class="btn btn-primary" style="background-color:#FFBA00" asp-action="Details" asp-controller="Product" asp-route-id="@detail.Product.Id">Buy again</a>
+									</div>
+								</div>
+							}
+							<hr class="my-3">
+							<!-- row -->
+						</div>
+					}
+				</div>
+			</div>
+		</div>
+	</div>
+</section>

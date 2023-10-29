@@ -23,9 +23,9 @@
                 <span asp-validation-for="ProductName" class="r-error d-block text-danger"></span>
             </div>
             <div class="mb-3">
-                <label asp-for="Thumbnail" class="form-label">Thumbnail</label>
-                <input asp-for="Thumbnail" type="text" class="form-control">
-                <span asp-validation-for="Thumbnail" class="r-error d-block text-danger"></span>
+                <label asp-for="ThumbnailFile" class="form-label">Thumbnail</label>
+                <input asp-for="ThumbnailFile" type="file" class="form-control">
+                <span asp-validation-for="ThumbnailFile" class="r-error d-block text-danger"></span>
             </div>
             <div class="mb-3">
                 <label asp-for="Description" class="form-label"></label>
@@ -47,10 +47,10 @@
                 <input asp-for="SalePrice" type="text" class="form-control" />
                 <span asp-validation-for="SalePrice" class="r-error d-block text-danger"></span>
             </div>
-            @* <div class="mb-3">
+            <div class="mb-3">
                 <label asp-for="CategoryId" class="form-label">Category</label><br />
                 <select asp-for="CategoryId" class="form-control" asp-items="@genreList"></select><br />
-            </div><br /> *@
+            </div><br />
             <div class="mb-3">
                 <a type="button" class="btn btn-secondary" asp-action="">Back</a>
                 <button type="reset" class="btn btn-info">Reset</button>

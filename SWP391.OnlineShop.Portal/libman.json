@@ -9,6 +9,18 @@
     {
       "library": "elfinder@2.1.62",
       "destination": "wwwroot/lib/download/elfinder"
+    },
+    {
+      "library": "bootstrap@5.3.2",
+      "destination": "wwwroot/lib/download/bootstrap"
+    },
+    {
+      "library": "jquery@3.7.1",
+      "destination": "wwwroot/lib/download/jquery"
+    },
+    {
+      "library": "font-awesome@6.4.0",
+      "destination": "wwwroot/lib/download/fontawesome"
     }
   ]
 }

@@ -2,6 +2,7 @@
 @{
     Layout = "_Layout";
     var genreList = ViewData["GenreList"] as SelectList;
+    var statusList = ViewData["StatusList"] as SelectList;
 }
 
 <div class="m-headers" style="margin-top: 10% !important;">
@@ -14,17 +15,27 @@
         <h6 class="m-0 font-weight-bold text-primary">Edit Product</h6>
     </div>
     <div class="card-body">
-        <form style="margin:auto !important; width:60% !important" asp-controller="Marketing" asp-action="AddProduct" method="post" enctype="multipart/form-data">
+        <form style="margin:auto !important; width:60% !important" asp-controller="Marketing" asp-action="EditProduct" method="post" enctype="multipart/form-data">
             <div class="r-error my-4 text-danger text-center" asp-validation-summary="All">
             </div>
             <div class="mb-3">
+                <label hidden asp-for="Id" class="form-label">Product ID</label>
+                <input hidden type="text" class="form-control" asp-for="Id" id="name">
+            </div>
+            <div class="mb-3">
                 <label asp-for="ProductName" class="form-label">Product Name</label>
-                <input type="text" class="form-control" asp-for="ProductName" id="name" onchange="changeUrl('name', 'url')">
+                <input type="text" class="form-control" asp-for="ProductName" id="name">
                 <span asp-validation-for="ProductName" class="r-error d-block text-danger"></span>
             </div>
             <div class="mb-3">
-                <label asp-for="Thumbnail" class="form-label">Thumbnail</label>
-                <input asp-for="Thumbnail" type="text" class="form-control">
+                <label asp-for="ThumbnailFile" class="form-label">Thumbnail</label><br/>
+                <img width="300" height="300" src="@Model.Thumbnail"><br /><br />
+                <input asp-for="ThumbnailFile" type="file" class="form-control">
+                <span asp-validation-for="ThumbnailFile" class="r-error d-block text-danger"></span>
+            </div>
+            <div hidden class="mb-3">
+                <label asp-for="Thumbnail" class="form-label"></label>
+                <input asp-for="Thumbnail" type="text" class="form-control" />
                 <span asp-validation-for="Thumbnail" class="r-error d-block text-danger"></span>
             </div>
             <div class="mb-3">
@@ -47,10 +58,14 @@
                 <input asp-for="SalePrice" type="text" class="form-control" />
                 <span asp-validation-for="SalePrice" class="r-error d-block text-danger"></span>
             </div>
-            @* <div class="mb-3">
-                <label asp-for="CategoryId" class="form-label">Category</label>
+            <div class="mb-3">
+                <label asp-for="CategoryId" class="form-label">Category</label><br />
                 <select asp-for="CategoryId" class="form-control" asp-items="@genreList"></select>
-            </div> *@
+            </div><br /><br />
+            <div class="mb-3">
+                <label asp-for="Status" class="form-label">Status</label><br />
+                <select asp-for="Status" class="form-control" asp-items="@statusList"></select>
+            </div><br />
             <a type="button" class="btn btn-secondary" asp-action="">Back</a>
             <button type="reset" class="btn btn-info">Reset</button>
             <button type="submit" class="btn btn-primary">Submit</button>

@@ -18,6 +18,10 @@
     <link href="~/template/admin/adminjs/admin-custom.css" rel="stylesheet">
     <link href="~/template/admin/datatables/dataTables.bootstrap4.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="icon" type="image/x-icon" sizes="16x16" href="~/img/logo/favicon.ico">
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/toaster/jquery.toaster.js"></script>
 </head>
 
 <body id="page-top">
@@ -50,7 +54,7 @@
 
     <partial name="_ValidationScriptsPartial" />
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/lib/download/bootstrap/js/bootstrap.bundle.min.js"></script>
     <script src="~/template/admin/urljs/url-helper.js"></script>
     <script src="https://kit.fontawesome.com/c41956cca0.js" crossorigin="anonymous"></script>
     <script src="~/template/admin/jquery-easing/jquery.easing.min.js"></script>
@@ -62,6 +66,14 @@
     <script src="~/template/admin/adminjs/charts/chart-bar-demo.js"></script>
     <script src="~/template/admin/adminjs/charts/chart-pie-demo.js"></script>
     <script src="~/template/admin/adminjs/charts/datatables-demo.js"></script>
+
+    <script>
+        $(".btn-delete").click(function () {
+            const isDelete = confirm("Do you really want to delete this record?. This is permanent delete.");
+            console.log(isDelete);
+            return isDelete;
+        });
+    </script>
 </body>
 
 </html>
