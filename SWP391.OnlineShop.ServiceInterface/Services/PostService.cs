@@ -8,6 +8,7 @@ using SWP391.OnlineShop.ServiceInterface.Loggers;
 using SWP391.OnlineShop.ServiceModel.Results;
 using SWP391.OnlineShop.ServiceModel.ServiceModels;
 using SWP391.OnlineShop.ServiceModel.ViewModels.Products;
+using SWP391.OnlineShop.ServiceModel.ViewModels.Tags;
 
 namespace SWP391.OnlineShop.ServiceInterface.Services
 {
@@ -54,7 +55,7 @@ namespace SWP391.OnlineShop.ServiceInterface.Services
             var result = new List<PostViewModel>();
             try
             {
-                var post = _unitOfWork.Posts.GetAll().OrderByDescending(x => x.CreatedDateTime).ToList();
+                var post = _unitOfWork.Posts.GetAllPost();
                 result = _mapper.Map<List<PostViewModel>>(post);
                 return result;
             }
@@ -243,5 +244,60 @@ namespace SWP391.OnlineShop.ServiceInterface.Services
                 };
             }
         }
-    }
+		public List<TagViewModel> Get(GetTagByPost request)
+		{
+			var result = new List<TagViewModel>();
+
+			try
+			{
+				var query = from t in _unitOfWork.Context.Tags
+							join pt in _unitOfWork.Context.PostTags
+							on t.Id equals pt.TagId
+							join p in _unitOfWork.Context.Posts
+							on pt.PostId equals p.Id
+							where p.Id == request.PostId
+							select t;
+				var listTag = query.ToList();
+				if (listTag.Any())
+				{
+					foreach (var tag in listTag)
+					{
+						var tagVm = _mapper.Map<TagViewModel>(tag);
+						result.Add(tagVm);
+					}
+				}
+
+			}
+			catch (Exception ex)
+			{
+				_logger.LogError("GetTagByPost error" + ex.Message);
+			}
+			return result;
+		}
+
+		public List<TagViewModel> Get(GetAllTag request)
+		{
+			var result = new List<TagViewModel>();
+
+			try
+			{
+				var query = _unitOfWork.Context.Tags;
+				var listTag = query.ToList();
+				if (listTag.Any())
+				{
+					foreach (var tag in listTag)
+					{
+						var tagVm = _mapper.Map<TagViewModel>(tag);
+						result.Add(tagVm);
+					}
+				}
+
+			}
+			catch (Exception ex)
+			{
+				_logger.LogError("GetTagByPost error" + ex.Message);
+			}
+			return result;
+		}
+	}
 }
