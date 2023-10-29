@@ -71,10 +71,10 @@
                     <input asp-for="Value" type="number" min="1" class="form-control" required>
                     <span asp-validation-for="Value" class="r-error d-block text-danger"></span>
                 </div>
-                <div class="mb-3">
+               @* <div class="mb-3">
                     <label asp-for="ProductId" class="form-label">Product</label>
                     <select asp-for="ProductId" class="form-control" asp-items="@productList" disabled></select>
-                </div>
+                </div>*@
 
                 <a type="button" class="btn btn-secondary" asp-action="">Back</a>
                 <button type="reset" class="btn btn-info">Reset</button>

@@ -57,8 +57,9 @@ namespace SWP391.OnlineShop.Portal.Areas.Managements.Controllers
 			return View(voucher);
 		}
 
-
-        public async Task<IActionResult> Update(VoucherViewModels request)
+		[HttpPost]
+		[ValidateAntiForgeryToken]
+		public async Task<IActionResult> Update(VoucherViewModels request)
         {
             var email = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Email)?.Value;
             if (string.IsNullOrEmpty(email))
@@ -71,7 +72,15 @@ namespace SWP391.OnlineShop.Portal.Areas.Managements.Controllers
             {
                 return View(request);
             }
-
+			if(request.StartDateTime < request.EndDateTime)
+			{
+				TempData["ErrorMess"] = "Start Time must happen before Expired Date";
+				return View(request);
+			}else if(DateTime.Now > request.EndDateTime)
+			{
+				TempData["ErrorMess"] = "End Time must be greater than today";
+				return View(request);
+			}
             var api = await _client.PostAsync(new PutUpdateVoucher()
             {
                 Amount = request.Amount,
@@ -85,7 +94,7 @@ namespace SWP391.OnlineShop.Portal.Areas.Managements.Controllers
             });
             if (api.StatusCode == Common.Enums.StatusCode.Success)
             {
-                TempData["SuccessMess"] = "Create successfully!";
+                TempData["SuccessMess"] = "Update successfully!";
                 return RedirectToAction("Index");
             }
             TempData["ErrorMess"] = $"Create fail! {api.ErrorMessage}";
@@ -128,7 +137,16 @@ namespace SWP391.OnlineShop.Portal.Areas.Managements.Controllers
 			{
 				return View(request);
 			}
-
+			if (request.StartDateTime < request.EndDateTime)
+			{
+				TempData["ErrorMess"] = "Start Time must happen before Expired Date";
+				return View(request);
+			}
+			else if (DateTime.Now > request.EndDateTime)
+			{
+				TempData["ErrorMess"] = "End Time must be greater than today";
+				return View(request);
+			}
 			var api = await _client.PostAsync(new PostAddVoucher()
 			{
 				Amount = request.Amount,

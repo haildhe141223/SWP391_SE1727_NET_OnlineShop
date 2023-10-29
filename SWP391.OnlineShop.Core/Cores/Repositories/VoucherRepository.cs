@@ -55,4 +55,5 @@ public class VoucherRepository : GenericRepository<Voucher, int>, IVoucherReposi
         }
         return vouchers;
     }
+
 }

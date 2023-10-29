@@ -1,6 +1,7 @@
 ﻿using SWP391.OnlineShop.Core.Models.Enums;
 using SWP391.OnlineShop.ServiceModel.Results;
 using SWP391.OnlineShop.ServiceModel.ViewModels.Accounts;
+using SWP391.OnlineShop.ServiceModel.ViewModels.Users;
 using System.ComponentModel.DataAnnotations;
 
 namespace SWP391.OnlineShop.ServiceModel.ViewModels.Vouchers
@@ -15,7 +16,7 @@ namespace SWP391.OnlineShop.ServiceModel.ViewModels.Vouchers
         [Required(ErrorMessage = "Amount is required")]
         public int Amount { get; set; }
 		public int CreatedBy { get; set; }
-		public AccountViewModel User { get; set; }
+		public UserViewModel User { get; set; }
         [Required(ErrorMessage = "Voucher Start Valid Date is required")]
         public DateTime StartDateTime { get; set; }
         [Required(ErrorMessage = "Voucher Expired Date is required")]
