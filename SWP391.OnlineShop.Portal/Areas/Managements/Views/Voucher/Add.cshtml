@@ -1,0 +1,85 @@
+﻿@using SWP391.OnlineShop.ServiceModel.ViewModels.Vouchers;
+@using SWP391.OnlineShop.Core.Models.Enums;
+@model VoucherViewModels
+@{
+    var errorMess = TempData["ErrorMess"] as string;
+    var successMess = TempData["SuccessMess"] as string;
+    var productList = ViewData["ProductList"] as SelectList;
+}
+
+<div class="container-fluid">
+ <!-- Page Heading -->
+    <h1 class="h3 mb-2 text-gray-800">Voucher Containers</h1>
+    <p class="mb-4 d-none">
+        DataTables is a third party plugin that is used to generate the demo table below.
+        For more information about DataTables, please visit the 
+       <a target="_blank" href="#">official DataTables documentation</a>.
+    </p>
+
+    @if (!string.IsNullOrWhiteSpace(errorMess))
+    {
+            <div class="alert alert-danger my-2 text-center">
+            @errorMess 
+            </div>	
+    }
+    @if (!string.IsNullOrWhiteSpace(successMess))
+    {
+        <div class="alert alert-success my-2 text-center">
+            @successMess
+        </div>
+    }
+    <!-- DataTales Example -->
+    <div class="card shadow mb-4">
+        <div class="card-header py-3">
+            <h6 class="m-0 font-weight-bold text-primary">Create New Voucher</h6>
+        </div>
+        <div class="card-body">
+            <form method="post" enctype="multipart/form-data">
+                <div class="r-error my-4 text-danger text-center" asp-validation-summary="All">
+                </div>
+                <div class="mb-3">
+                    <label asp-for="VoucherCode" class="form-label">Voucher Code</label>
+                    <input type="text" class="form-control" asp-for="VoucherCode" id="name" required>
+                    <span asp-validation-for="VoucherCode" class="r-error d-block text-danger"></span>
+                </div>
+                <div class="mb-3">
+                    <label asp-for="VoucherName" class="form-label" >Voucher Name</label>
+                    <input asp-for="VoucherName" type="text" class="form-control" id="url" required>
+                    <span asp-validation-for="VoucherName" class="r-error d-block text-danger"></span>
+                </div>
+                <div class="mb-3">
+                    <label asp-for="Amount" class="form-label" >Amount</label>
+                    <input asp-for="Amount" type="number" min="1" class="form-control" required>
+                    <span asp-validation-for="Amount" class="r-error d-block text-danger"></span>
+                </div>
+                <div class="mb-3">
+                    <label asp-for="StartDateTime" class="form-label">Start Date Time</label>
+                    <input asp-for="StartDateTime" type="datetime" class="form-control" required/>
+                    <span asp-validation-for="StartDateTime" class="r-error d-block text-danger"></span>
+                </div>
+                <div class="mb-3">
+                    <label asp-for="EndDateTime" class="form-label">Expired Date</label>
+                    <input asp-for="EndDateTime" type="datetime" class="form-control" required/>
+                    <span asp-validation-for="EndDateTime" class="r-error d-block text-danger"></span>
+                </div>
+                <div class="mb-3">
+                    <label asp-for="Type" class="form-label" >Type</label>
+                    <select asp-for="Type" class="form-control" asp-items="@Html.GetEnumSelectList<VoucherType>()"></select>
+                </div>
+                <div class="mb-3">
+                    <label asp-for="Value" class="form-label">Voucher Value</label>
+                    <input asp-for="Value" type="number" min="1" class="form-control" required>
+                    <span asp-validation-for="Value" class="r-error d-block text-danger"></span>
+                </div>
+                <div class="mb-3">
+                    <label asp-for="ProductId" class="form-label">Product</label>
+                    <select asp-for="ProductId" class="form-control" asp-items="@productList"></select>
+                </div>
+               
+                <a type="button" class="btn btn-secondary" asp-action="">Back</a>
+                <button type="reset" class="btn btn-info">Reset</button>
+                <button type="submit" class="btn btn-primary">Submit</button>
+            </form>
+        </div>
+    </div>
+</div>

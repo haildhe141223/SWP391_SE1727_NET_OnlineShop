@@ -42,4 +42,20 @@ public class AccountModels
     {
         public RegisterViewModel RegisterViewModel { get; set; }
     }
+
+    [Route("/Account/SendConfirmRegisterEmail", "POST")]
+    public class PostConfirmRegisterEmail : IReturn<BaseResultModel>
+    {
+        public string To { get; set; }
+        public string Category { get; set; }
+        public string LinkConfirmPassword { get; set; }
+    }
+
+    [Route("/Account/SendConfirmChangePasswordEmail", "POST")]
+    public class PostConfirmChangePasswordEmail : IReturn<BaseResultModel>
+    {
+        public string To { get; set; }
+        public string Category { get; set; }
+        public string LinkResetPassword { get; set; }
+    }
 }

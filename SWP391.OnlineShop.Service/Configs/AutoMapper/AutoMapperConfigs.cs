@@ -8,6 +8,7 @@ using SWP391.OnlineShop.ServiceModel.ViewModels.Emails;
 using SWP391.OnlineShop.ServiceModel.ViewModels.Feedback;
 using SWP391.OnlineShop.ServiceModel.ViewModels.Products;
 using SWP391.OnlineShop.ServiceModel.ViewModels.Users;
+using SWP391.OnlineShop.ServiceModel.ViewModels.Vouchers;
 
 namespace SWP391.OnlineShop.Service.Configs.AutoMapper;
 
@@ -32,7 +33,11 @@ public class AutoMapperConfigs : Profile
         //// Email
         CreateMap<Email, EmailViewModel>().ReverseMap();
 
-        if (unitOfWork != null)
+		//// Voucher
+		CreateMap<Voucher, VoucherViewModels>().ReverseMap();
+		CreateMap<ProductVoucherViewModel, ProductVoucher>().ReverseMap();
+
+		if (unitOfWork != null)
         {
             //// User
             CreateMap<User, UserViewModel>()
