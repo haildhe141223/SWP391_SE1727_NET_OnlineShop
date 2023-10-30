@@ -15,40 +15,40 @@ namespace SWP391.OnlineShop.Portal.Controllers
             _client = client;
         }
 
-		public async Task<IActionResult> Index(int categoryId, int page)
-		{
-			var latestProducts = new List<ProductViewModel>();
-			if (categoryId == 0)
-			{
-				//Get all products
-				latestProducts = await _client.GetAsync(new GetAllProduct());
-			}
-			else
-			{
-				//Get all products
-				latestProducts = await _client.GetAsync(new GetProductByCategoryId
-				{
-					CategoryId = categoryId
-				});
-			}
+        public async Task<IActionResult> Index(int categoryId, int page)
+        {
+            List<ProductViewModel> latestProducts;
+            if (categoryId == 0)
+            {
+                //Get all products
+                latestProducts = await _client.GetAsync(new GetAllProduct());
+            }
+            else
+            {
+                //Get all products
+                latestProducts = await _client.GetAsync(new GetProductByCategoryId
+                {
+                    CategoryId = categoryId
+                });
+            }
 
-			ViewBag.Pages = latestProducts.Count / 9 + 1;
-			ViewBag.CurrentPage = page;
+            ViewBag.Pages = latestProducts.Count / 9 + 1;
+            ViewBag.CurrentPage = page;
 
-      //Get all categories
-      var categories = await _client.GetAsync(new GetAllCategory());
+            //Get all categories
+            var categories = await _client.GetAsync(new GetAllCategory());
 
-      //Get deal product of week
-      var dealProductOfWeeks = await _client.GetAsync(new GetDealProductOfWeek());
+            //Get deal product of week
+            var dealProductOfWeeks = await _client.GetAsync(new GetDealProductOfWeek());
 
-      var productCategories = new ProductCategoryViewModel
-      {
-          LatestProducts = latestProducts.Skip((page - 1) * 9).Take(9).ToList(),
-          Categories = categories,
-          ProductsOfWeek = dealProductOfWeeks
-       };
-       return View(productCategories);
-    }
+            var productCategories = new ProductCategoryViewModel
+            {
+                LatestProducts = latestProducts.Skip((page - 1) * 9).Take(9).ToList(),
+                Categories = categories,
+                ProductsOfWeek = dealProductOfWeeks
+            };
+            return View(productCategories);
+        }
 
         public async Task<IActionResult> Details(int id)
         {
