@@ -151,6 +151,30 @@ namespace SWP391.OnlineShop.ServiceInterface.Services
             return result;
         }
 
+        public List<ProductViewModel> Get(GetProductOfVoucher request)
+        {
+            try
+            {
+                var query = from p in _unitOfWork.Context.Products
+                            join pv in _unitOfWork.Context.ProductVouchers
+                            on p.Id equals pv.ProductId
+                            join v in _unitOfWork.Context.Vouchers
+                            on pv.VoucherId equals v.Id
+                            where v.Id == request.VoucherId
+                            select p;
+                var result = query.ToList();
+                if (result.Any())
+                {
+                    return _mapper.Map<List<ProductViewModel>>(result);
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"GetProductOfVoucher error {ex.Message}");
+            }
+            return new List<ProductViewModel>();
+        }
+
         public async Task<ProductViewModel> Post(PostAddProduct request)
         {
             var result = new ProductViewModel();

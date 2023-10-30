@@ -74,6 +74,13 @@ namespace SWP391.OnlineShop.ServiceInterface.Interfaces
 		/// <param name="request"></param>
 		/// <returns></returns>
 		void Post(Comment request);
-	}
+
+        /// <summary>
+        /// Get product of voucher
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns>product of voucher</returns>
+        List<ProductViewModel> Get(GetProductOfVoucher request);
+    }
 }
 
