@@ -45,19 +45,19 @@ namespace SWP391.OnlineShop.Portal.Areas.Managements.Controllers
             return View(vouchers);
         }
 
-		public async Task<IActionResult> Update(int id)
-		{
-			var voucher = await _client.GetAsync(new GetVoucherById()
-			{
-				Id = id
-			});
-			var products = await _client.GetAsync(new GetProductOfVoucher
-			{
-				VoucherId = voucher.Id
-			});
+        public async Task<IActionResult> Update(int id)
+        {
+            var voucher = await _client.GetAsync(new GetVoucherById()
+            {
+                Id = id
+            });
+            var products = await _client.GetAsync(new GetProductOfVoucher
+            {
+                VoucherId = voucher.Id
+            });
             ViewData["ProductList"] = new SelectList(products.OrderBy(p => p.Id), "Id", "ProductName");
             return View(voucher);
-		}
+        }
 
 
         [HttpPost]
@@ -127,51 +127,51 @@ namespace SWP391.OnlineShop.Portal.Areas.Managements.Controllers
             return View();
         }
 
-		[HttpPost]
-		[ValidateAntiForgeryToken]
-		public async Task<IActionResult> Add(VoucherViewModels request)
-		{
-			var email = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Email)?.Value;
-			if (string.IsNullOrEmpty(email))
-			{
-				return RedirectToAction("Login", "Account");
-			}
-			var product = await _client.GetAsync(new GetAllProduct());
-			ViewData["ProductList"] = new SelectList(product.OrderBy(p => p.Id), "Id", "ProductName");
-			if (!ModelState.IsValid)
-			{
-				return View(request);
-			}
-			if (request.StartDateTime > request.EndDateTime)
-			{
-				TempData["ErrorMess"] = "Start Time must happen before Expired Date";
-				return View(request);
-			}
-			else if (DateTime.Now > request.EndDateTime)
-			{
-				TempData["ErrorMess"] = "End Time must be greater than today";
-				return View(request);
-			}
-			var api = await _client.PostAsync(new PostAddVoucher()
-			{
-				Amount = request.Amount,
-				Email = email,
-				EndDateTime = request.EndDateTime,
-				ProductId = request.ProductIds,
-				StartDateTime = request.StartDateTime,
-				Type = request.Type,
-				Value = request.Value,
-				VoucherCode = request.VoucherCode,
-				VoucherName = request.VoucherName
-			});
-			if (api.StatusCode == Common.Enums.StatusCode.Success)
-			{
-				TempData["SuccessMess"] = "Create successfully!";
-				return RedirectToAction("Index");
-			}
-			TempData["ErrorMess"] = $"Create fail! {api.ErrorMessage}";
-			return View(request);
-		}
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Add(VoucherViewModels request)
+        {
+            var email = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Email)?.Value;
+            if (string.IsNullOrEmpty(email))
+            {
+                return RedirectToAction("Login", "Account");
+            }
+            var product = await _client.GetAsync(new GetAllProduct());
+            ViewData["ProductList"] = new SelectList(product.OrderBy(p => p.Id), "Id", "ProductName");
+            if (!ModelState.IsValid)
+            {
+                return View(request);
+            }
+            if (request.StartDateTime > request.EndDateTime)
+            {
+                TempData["ErrorMess"] = "Start Time must happen before Expired Date";
+                return View(request);
+            }
+            else if (DateTime.Now > request.EndDateTime)
+            {
+                TempData["ErrorMess"] = "End Time must be greater than today";
+                return View(request);
+            }
+            var api = await _client.PostAsync(new PostAddVoucher()
+            {
+                Amount = request.Amount,
+                Email = email,
+                EndDateTime = request.EndDateTime,
+                ProductId = request.ProductIds,
+                StartDateTime = request.StartDateTime,
+                Type = request.Type,
+                Value = request.Value,
+                VoucherCode = request.VoucherCode,
+                VoucherName = request.VoucherName
+            });
+            if (api.StatusCode == Common.Enums.StatusCode.Success)
+            {
+                TempData["SuccessMess"] = "Create successfully!";
+                return RedirectToAction("Index");
+            }
+            TempData["ErrorMess"] = $"Create fail! {api.ErrorMessage}";
+            return View(request);
+        }
 
         public IActionResult AddVoucherForUser(int id)
         {
