@@ -54,7 +54,12 @@ namespace SWP391.OnlineShop.Portal.Areas.Managements.Controllers
 			{
 				Id = id
 			});
-			return View(voucher);
+			var products = await _client.GetAsync(new GetProductOfVoucher
+			{
+				VoucherId = voucher.Id
+			});
+            ViewData["ProductList"] = new SelectList(products.OrderBy(p => p.Id), "Id", "ProductName");
+            return View(voucher);
 		}
 
 		[HttpPost]
@@ -137,7 +142,7 @@ namespace SWP391.OnlineShop.Portal.Areas.Managements.Controllers
 			{
 				return View(request);
 			}
-			if (request.StartDateTime < request.EndDateTime)
+			if (request.StartDateTime > request.EndDateTime)
 			{
 				TempData["ErrorMess"] = "Start Time must happen before Expired Date";
 				return View(request);
@@ -152,7 +157,7 @@ namespace SWP391.OnlineShop.Portal.Areas.Managements.Controllers
 				Amount = request.Amount,
 				Email = email,
 				EndDateTime = request.EndDateTime,
-				ProductId = request.ProductId,
+				ProductId = request.ProductIds,
 				StartDateTime = request.StartDateTime,
 				Type = request.Type,
 				Value = request.Value,
