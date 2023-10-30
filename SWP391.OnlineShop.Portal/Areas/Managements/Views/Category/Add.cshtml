@@ -1,0 +1,57 @@
+﻿@using SWP391.OnlineShop.ServiceModel.ViewModels.Categories
+@using SWP391.OnlineShop.Core.Models.Enums;
+@model CategoryViewModel
+
+@{
+    var errorMess = TempData["ErrorMess"] as string;
+    var successMess = TempData["SuccessMess"] as string;
+    var productList = ViewData["ProductList"] as SelectList;
+}
+
+<div class="container-fluid">
+    <!-- Page Heading -->
+    <h1 class="h3 mb-2 text-gray-800">Voucher Containers</h1>
+    <p class="mb-4 d-none">
+        DataTables is a third party plugin that is used to generate the demo table below.
+        For more information about DataTables, please visit the
+        <a target="_blank" href="#">official DataTables documentation</a>.
+    </p>
+
+    @if (!string.IsNullOrWhiteSpace(errorMess))
+    {
+        <div class="alert alert-danger my-2 text-center">
+            @errorMess
+        </div>
+    }
+    @if (!string.IsNullOrWhiteSpace(successMess))
+    {
+        <div class="alert alert-success my-2 text-center">
+            @successMess
+        </div>
+    }
+    <!-- DataTales Example -->
+    <div class="card shadow mb-4">
+        <div class="card-header py-3">
+            <h6 class="m-0 font-weight-bold text-primary">Create New Voucher</h6>
+        </div>
+        <div class="card-body">
+            <form method="post" enctype="multipart/form-data">
+                <div class="r-error my-4 text-danger text-center" asp-validation-summary="All">
+                </div>
+                <div class="mb-3">
+                    <label asp-for="CategoryName" class="form-label">Category Name</label>
+                    <input type="text" class="form-control" asp-for="CategoryName" id="code" required>
+                    <span asp-validation-for="CategoryName" class="r-error d-block text-danger"></span>
+                </div>
+                <div class="mb-3">
+                    <label asp-for="CategoryType" class="form-label">Type</label>
+                    <select asp-for="CategoryType" class="form-control" asp-items="@Html.GetEnumSelectList<CategoryType>()"></select>
+                </div>
+                <a type="button" class="btn btn-secondary" asp-action="">Back</a>
+                <button type="reset" class="btn btn-info">Reset</button>
+                <button type="submit" class="btn btn-primary">Submit</button>
+            </form>
+        </div>
+    </div>
+</div>
+
