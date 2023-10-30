@@ -68,6 +68,17 @@
     <script src="~/template/admin/adminjs/charts/datatables-demo.js"></script>
 
     <script>
+        $(document).ready(function(){
+            const createDtPickerProject = $("#startDate");
+            if (createDtPickerProject != undefined) {
+                createDtPickerProject.datepicker({
+                    changeYear: true
+                });
+            };
+            $('#endDate').datepicker({
+                changeYear: true
+            });
+        });
         $(".btn-delete").click(function () {
             const isDelete = confirm("Do you really want to delete this record?. This is permanent delete.");
             console.log(isDelete);

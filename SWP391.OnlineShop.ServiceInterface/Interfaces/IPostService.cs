@@ -1,6 +1,7 @@
 ﻿using SWP391.OnlineShop.ServiceModel.Results;
 using SWP391.OnlineShop.ServiceModel.ServiceModels;
 using SWP391.OnlineShop.ServiceModel.ViewModels.Products;
+using SWP391.OnlineShop.ServiceModel.ViewModels.Tags;
 
 namespace SWP391.OnlineShop.ServiceInterface.Interfaces
 {
@@ -75,5 +76,19 @@ namespace SWP391.OnlineShop.ServiceInterface.Interfaces
         /// <param name="request"></param>
         /// <returns>appendix of selected id</returns>
         BaseResultModel Put(PutUpdatePost request);
-    }
+
+        /// <summary>
+        /// Get Tag by Post
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns>List of tag</returns>
+		List<TagViewModel> Get(GetTagByPost request);
+
+        /// <summary>
+        /// Get All Tag
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns>List of tag</returns>
+		List<TagViewModel> Get(GetAllTag request);
+	}
 }

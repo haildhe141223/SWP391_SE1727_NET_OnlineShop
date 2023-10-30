@@ -1,4 +1,5 @@
-﻿using ServiceStack;
+﻿using Microsoft.AspNetCore.Http;
+using ServiceStack;
 using SWP391.OnlineShop.Core.Models.Enums;
 using SWP391.OnlineShop.ServiceModel.ViewModels.Products;
 
@@ -78,5 +79,12 @@ namespace SWP391.OnlineShop.ServiceModel.ServiceModels
         public string Phone { get; set; }
         public string Message { get; set; }
         public int ProductID { get; set; }
+    }
+
+	[Route("/Product/GetProductOfVoucher", "Get")]
+	public class GetProductOfVoucher : IReturn<ProductViewModel>
+	{
+		public int ProductId { get; set; }
+        public int VoucherId { get; set; }
     }
 }
