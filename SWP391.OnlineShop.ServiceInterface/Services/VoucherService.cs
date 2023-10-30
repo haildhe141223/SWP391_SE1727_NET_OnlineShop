@@ -141,12 +141,17 @@ namespace SWP391.OnlineShop.ServiceInterface.Services
 				int rows = await _unitOfWork.CompleteAsync();
 				if (rows > 0)
 				{
-					var productVoucher = new ProductVoucher()
+					var listProductVouchers = new List<ProductVoucher>();
+					foreach (var productId in request.ProductId)
 					{
-						ProductId = request.ProductId,
-						VoucherId = voucher.Id
-					};
-					_unitOfWork.Context.ProductVouchers.Add(productVoucher);
+                        var productVoucher = new ProductVoucher()
+                        {
+                            ProductId = productId,
+                            VoucherId = voucher.Id
+                        };
+						listProductVouchers.Add(productVoucher);
+                    }
+                    _unitOfWork.Context.ProductVouchers.AddRange(listProductVouchers);
                     await _unitOfWork.CompleteAsync();
                     result.StatusCode = Common.Enums.StatusCode.Success;
 					return result;

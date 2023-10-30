@@ -30,7 +30,7 @@ namespace SWP391.OnlineShop.ServiceModel.ServiceModels
 			public DateTime EndDateTime { get; set; }
 			public VoucherType Type { get; set; }
 			public decimal Value { get; set; }
-            public int ProductId { get; set; }
+            public List<int> ProductId { get; set; }
         }
 
 		[Route("/Voucher/PutUpdateVoucher", "PUT")]
