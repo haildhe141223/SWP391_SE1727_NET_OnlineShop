@@ -64,4 +64,15 @@
     <UpToDateCheckInput Remove="Views\Account\ConfirmResetPassword.cshtml" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Include="wwwroot\sources\badges\anistar.webp" />
+    <None Include="wwwroot\sources\badges\coumarine.webp" />
+    <None Include="wwwroot\sources\badges\cyllage.webp" />
+    <None Include="wwwroot\sources\badges\laverre.webp" />
+    <None Include="wwwroot\sources\badges\lumiose.webp" />
+    <None Include="wwwroot\sources\badges\santalune.webp" />
+    <None Include="wwwroot\sources\badges\shalour.webp" />
+    <None Include="wwwroot\sources\badges\snowbelle.webp" />
+  </ItemGroup>
+
 </Project>

@@ -25,10 +25,8 @@
                             <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
                                aria-expanded="false">Shop</a>
                             <ul class="dropdown-menu">
-                                <li class="nav-item"><a asp-action="Index" asp-controller="Product" class="nav-link">Shop Category</a></li>
-                                <li class="nav-item"><a asp-action="Checkout" asp-controller="Cart" class="nav-link">Product Checkout</a></li>
+                                <li class="nav-item"><a asp-action="Index" asp-controller="Product" class="nav-link">Shop</a></li>
                                 <li class="nav-item"><a asp-action="Index" asp-controller="Cart" class="nav-link">Shopping Cart</a></li>
-                                <li class="nav-item"><a asp-action="Confirmation" asp-controller="Cart" class="nav-link">Confirmation</a></li>
                                 <li class="nav-item"><a asp-action="MyOrders" asp-controller="Cart" class="nav-link">My Orders</a></li>
                             </ul>
                         </li>
@@ -37,7 +35,6 @@
                                aria-expanded="false">Blog</a>
                             <ul class="dropdown-menu">
                                 <li class="nav-item"><a asp-action="Index" asp-controller="Post" class="nav-link">Blog</a></li>
-                                <li class="nav-item"><a asp-action="Details" asp-controller="Post" class="nav-link">Blog Details</a></li>
                             </ul>
                         </li>
                         <li class="nav-item submenu dropdown">
@@ -46,7 +43,7 @@
                             <ul class="dropdown-menu">
                                 @if (User.Identity is { IsAuthenticated: true })
                                 {
-                                    <li class="nav-item"><a class="nav-link">User Profile</a></li>
+                                    <li class="nav-item"><a asp-action="Index" asp-controller="Profile" class="nav-link">User Profile</a></li>
                                     <li class="nav-item"><a asp-action="Logout" asp-controller="Account" class="nav-link">Logout</a></li>
                                     <li class="nav-item"><a asp-action="Tracking" asp-controller="Product" class="nav-link">Tracking</a></li>
 
