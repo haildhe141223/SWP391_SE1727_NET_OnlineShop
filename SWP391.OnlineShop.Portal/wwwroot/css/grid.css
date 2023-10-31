@@ -1,0 +1,175 @@
+.row-pricing {
+    display: flex;
+    flex-wrap: wrap;
+    margin: 0 -15px;
+}
+
+[class*="col-"] {
+    padding: 0 15px;
+}
+
+.col-card-0 {
+    width: 5%;
+}
+
+.col-card-1 {
+    width: 8.33%;
+}
+
+.col-card-1_5 {
+    width: 12%;
+}
+
+.col-card-2 {
+    width: 16.66%;
+}
+
+.col-card-3 {
+    width: 25%;
+}
+
+.col-card-4 {
+    width: 33.33%;
+}
+
+.col-card-5 {
+    width: 41.66%;
+}
+
+.col-card-6 {
+    width: 50%;
+}
+
+.col-card-7 {
+    width: 58.33%;
+}
+
+.col-card-8 {
+    width: 66.66%;
+}
+
+.col-card-9 {
+    width: 75%;
+}
+
+.col-card-10 {
+    width: 83.33%;
+}
+
+.col-card-11 {
+    width: 91.66%;
+}
+
+.col-card-12 {
+    width: 100%;
+}
+
+/* medium screen */
+@media only screen and (max-width: 1280px) {
+    .col-c-md-0 {
+        width: 5%;
+    }
+
+    .col-c-md-1 {
+        width: 8.33%;
+    }
+
+    .col-c-md-2 {
+        width: 16.66%;
+    }
+
+    .col-c-md-3 {
+        width: 25%;
+    }
+
+    .col-c-md-4 {
+        width: 33.33%;
+    }
+
+    .col-c-md-5 {
+        width: 41.66%;
+    }
+
+    .col-c-md-6 {
+        width: 50%;
+    }
+
+    .col-c-md-7 {
+        width: 58.33%;
+    }
+
+    .col-c-md-8 {
+        width: 66.66%;
+    }
+
+    .col-c-md-9 {
+        width: 75%;
+    }
+
+    .col-c-md-10 {
+        width: 83.33%;
+    }
+
+    .col-c-md-11 {
+        width: 91.66%;
+    }
+
+    .col-c-md-12 {
+        width: 100%;
+    }
+}
+
+/* small screen */
+@media only screen and (max-width: 850px) {
+    .col-c-sm-0 {
+        width: 5%;
+    }
+
+    .col-c-sm-1 {
+        width: 8.33%;
+    }
+
+    .col-c-sm-2 {
+        width: 16.66%;
+    }
+
+    .col-c-sm-3 {
+        width: 25%;
+    }
+
+    .col-c-sm-4 {
+        width: 33.33%;
+    }
+
+    .col-c-sm-5 {
+        width: 41.66%;
+    }
+
+    .col-c-sm-6 {
+        width: 50%;
+    }
+
+    .col-c-sm-7 {
+        width: 58.33%;
+    }
+
+    .col-c-sm-8 {
+        width: 66.66%;
+    }
+
+    .col-c-sm-9 {
+        width: 75%;
+    }
+
+    .col-c-sm-10 {
+        width: 83.33%;
+    }
+
+    .col-c-sm-11 {
+        width: 91.66%;
+    }
+
+    .col-c-sm-12 {
+        width: 100%;
+    }
+}

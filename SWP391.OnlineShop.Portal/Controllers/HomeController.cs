@@ -23,8 +23,6 @@ namespace SWP391.OnlineShop.Portal.Controllers
 
         public async Task<IActionResult> Index()
         {
-            _logger.LogInfo("1. Home Index - Start");
-
             //Get all products
             var latestProducts = await _client.GetAsync(new GetAllProduct());
 

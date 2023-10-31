@@ -1,5 +1,5 @@
-﻿@using SWP391.OnlineShop.ServiceModel.ViewModels.Vouchers
-@model List<VoucherViewModels>
+﻿@using SWP391.OnlineShop.ServiceModel.ViewModels.Categories
+@model List<CategoryViewModel>
 
 @{
 	var successMess = TempData["SuccessMess"] as string;
@@ -37,55 +37,32 @@
 				<table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
 					<thead>
 						<tr>
-							<th>VoucherCode</th>
-							<th>VoucherName</th>
-							<th>Amount</th>
-							<th>StartDateTime</th>
-							<th>EndDateTime</th>
+							<th>Category Name</th>
 							<th>Type</th>
-							<th>Value</th>
-							<th>Product</th>
 							<th>Action</th>
 						</tr>
 					</thead>
 					<tfoot>
 						<tr>
-							<th>VoucherCode</th>
-							<th>VoucherName</th>
-							<th>Amount</th>
-							<th>StartDateTime</th>
-							<th>EndDateTime</th>
+							<th>Category Name</th>
 							<th>Type</th>
-							<th>Value</th>
-							<th>Product</th>
 							<th>Action</th>
 						</tr>
 					</tfoot>
 					<tbody>
 						@if (Model != null && Model.Count > 0)
 						{
-							@foreach (var voucher in Model)
+							@foreach (var category in Model)
 							{
 								<tr>
 									<td>
-										@voucher.VoucherCode
+										@category.CategoryName
 									</td>
-									<td>@voucher.VoucherName</td>
-									<td>@voucher.Amount</td>
-									<td>@voucher.StartDateTime.ToString("dd/MMM/yyyy")</td>
-									<td>@voucher.EndDateTime.ToString("dd/MMM/yyyy")</td>
-									<td>@voucher.Type</td>
-									<td>@voucher.Value</td>
+									<td>@category.CategoryType</td>
 									<td>
-										@foreach (var item in voucher.ProductVouchers)
-										{
-											@(item.Product.ProductName + ";\n")
-										}
-									</td>
-									<td>
-										<a class="mx-1 btn btn-outline-info" asp-route-id="@voucher.Id"
+										<a class="mx-1 btn btn-outline-info" asp-route-id="@category.Id"
 								   asp-action="Update">Update</a>
-										<a class="mx-1 btn btn-outline-danger btn-delete" asp-route-id="@voucher.Id" onclick="confirmDelete()"
+										<a class="mx-1 btn btn-outline-danger btn-delete" asp-route-id="@category.Id" onclick="confirmDelete()"
 								   asp-action="Delete">Delete</a>
 									</td>
 								</tr>
@@ -107,7 +84,7 @@
 </div>
 
 <script type="text/javascript">
-	function confirmDelete(){
+	function confirmDelete() {
 		return confirm("Are you sure you want to delete this record?");
 	}
 </script>

@@ -39,12 +39,12 @@
                 </div>
                 <div class="mb-3">
                     <label asp-for="VoucherCode" class="form-label">Voucher Code</label>
-                    <input type="text" class="form-control" asp-for="VoucherCode" id="name" required>
+                    <input type="text" class="form-control" asp-for="VoucherCode" id="code" required>
                     <span asp-validation-for="VoucherCode" class="r-error d-block text-danger"></span>
                 </div>
                 <div class="mb-3">
                     <label asp-for="VoucherName" class="form-label" >Voucher Name</label>
-                    <input asp-for="VoucherName" type="text" class="form-control" id="url" required>
+                    <input asp-for="VoucherName" type="text" class="form-control" id="name" required>
                     <span asp-validation-for="VoucherName" class="r-error d-block text-danger"></span>
                 </div>
                 <div class="mb-3">
@@ -54,12 +54,12 @@
                 </div>
                 <div class="mb-3">
                     <label asp-for="StartDateTime" class="form-label">Start Date Time</label>
-                    <input asp-for="StartDateTime" type="datetime" class="form-control" required/>
+                    <input asp-for="StartDateTime" type="datetime" class="form-control" id="startDate" required/>
                     <span asp-validation-for="StartDateTime" class="r-error d-block text-danger"></span>
                 </div>
                 <div class="mb-3">
                     <label asp-for="EndDateTime" class="form-label">Expired Date</label>
-                    <input asp-for="EndDateTime" type="datetime" class="form-control" required/>
+                    <input asp-for="EndDateTime" type="datetime" class="form-control" id="endDate" required />
                     <span asp-validation-for="EndDateTime" class="r-error d-block text-danger"></span>
                 </div>
                 <div class="mb-3">
@@ -72,8 +72,8 @@
                     <span asp-validation-for="Value" class="r-error d-block text-danger"></span>
                 </div>
                 <div class="mb-3">
-                    <label asp-for="ProductId" class="form-label">Product</label>
-                    <select asp-for="ProductId" class="form-control" asp-items="@productList"></select>
+                    <label asp-for="ProductIds" class="form-label">Product</label>
+                    <select asp-for="ProductIds" class="form-control" asp-items="@productList"></select>
                 </div>
                
                 <a type="button" class="btn btn-secondary" asp-action="">Back</a>
@@ -83,3 +83,4 @@
         </div>
     </div>
 </div>
+
