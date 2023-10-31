@@ -18,8 +18,10 @@ namespace SWP391.OnlineShop.ServiceModel.ViewModels.Vouchers
 		public int CreatedBy { get; set; }
 		public UserViewModel User { get; set; }
         [Required(ErrorMessage = "Voucher Start Valid Date is required")]
+        [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:MM/dd/yyyy}")]
         public DateTime StartDateTime { get; set; }
         [Required(ErrorMessage = "Voucher Expired Date is required")]
+        [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:MM/dd/yyyy}")]
         public DateTime EndDateTime { get; set; }
         [Required(ErrorMessage = "Voucher Type is required")]
         public VoucherType Type { get; set; }
