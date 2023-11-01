@@ -172,7 +172,7 @@ public class ProductRepository : GenericRepository<Product, int>, IProductReposi
         if (Context.Products == null) return result;
 
         var products = Context.Products
-            .Where(x => x.Id == productId).Include(x => x.Category).Include(x => x.FeedBacks).FirstOrDefault();
+            .Where(x => x.Id == productId).Include(x => x.Category).Include(x => x.FeedBacks).ThenInclude(f => f.User).FirstOrDefault();
 
         result = products;
 

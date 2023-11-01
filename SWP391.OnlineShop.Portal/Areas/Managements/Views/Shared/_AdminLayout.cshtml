@@ -72,10 +72,20 @@
             const createDtPickerProject = $("#startDate");
             if (createDtPickerProject != undefined) {
                 createDtPickerProject.datepicker({
+                    format:"MM/dd/yyyy",
                     changeYear: true
                 });
             };
             $('#endDate').datepicker({
+                format: "MM/dd/yyyy",
+                changeYear: true
+            }); 
+            $('#updateStartDate').datepicker({
+                format: "MM/dd/yyyy",
+                changeYear: true
+            });
+            $('#updateEndDate').datepicker({
+                format: "MM/dd/yyyy",
                 changeYear: true
             });
         });
