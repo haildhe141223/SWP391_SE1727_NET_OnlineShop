@@ -7,6 +7,8 @@
     var existedCategoryRightSide = new List<int>();
     var allTags = ViewData["AllTags"] as List<TagViewModel>;
     var lastestPost = ViewData["LastesPost"] as List<PostViewModel>;
+    var pagesNumber = (int)ViewBag.Pages;
+    var currentNumber = (int)ViewBag.CurrentPage;
 }
 <!-- Start Banner Area -->
 <section class="banner-area organic-breadcrumb">
@@ -35,7 +37,6 @@
                     {
                         <div class="col-lg-4">
                             <div class="categories_post">
-                                <img src=@item.Category.Thumbnail alt="post">
                                 <div class="categories_details">
                                     <div class="categories_text">
                                         <a href="blog-details.html">
@@ -60,10 +61,10 @@
 <section class="blog_area">
     <div class="container">
         <div class="row">
-            @foreach (var post in Model)
-            {
-                <div class="col-lg-8">
-                    <div class="blog_left_sidebar">
+            <div class="col-lg-8">
+                <div class="blog_left_sidebar">
+                    @foreach (var post in Model)
+                    {
                         <article class="row blog_item">
                             <div class="col-md-3">
                                 <div class="blog_info text-right">
@@ -85,7 +86,7 @@
                             </div>
                             <div class="col-md-9">
                                 <div class="blog_post">
-                                    <img src="~/template/img/blog/main-blog/m-blog-1.jpg" alt="">
+                                    <img src="@post.Thumbnail" width="516" height="260" alt="">
                                     <div class="blog_details">
                                         <a asp-action="Details" asp-controller="Post" asp-route-id="@post.Id">
                                             <h2>@post.Title</h2>
@@ -98,42 +99,56 @@
                                 </div>
                             </div>
                         </article>
-                        <nav class="blog-pagination justify-content-center d-flex">
-                            <ul class="pagination">
+                    }
+                    <nav class="blog-pagination justify-content-center d-flex">
+                        <ul class="pagination">
+                            @if(currentNumber > 1)
+                            {
                                 <li class="page-item">
-                                    <a href="#" class="page-link" aria-label="Previous">
+                                    <a asp-controller="Post" asp-action="Index" asp-route-page="@(currentNumber-1)" class="page-link" aria-label="Previous">
                                         <span aria-hidden="true">
                                             <span class="lnr lnr-chevron-left"></span>
                                         </span>
                                     </a>
                                 </li>
-                                <li class="page-item"><a href="#" class="page-link">01</a></li>
-                                <li class="page-item active"><a href="#" class="page-link">02</a></li>
-                                <li class="page-item"><a href="#" class="page-link">03</a></li>
-                                <li class="page-item"><a href="#" class="page-link">04</a></li>
-                                <li class="page-item"><a href="#" class="page-link">09</a></li>
+                            }
+                            @for (int i = 1; i <= pagesNumber; i++)
+                            {
+                                if (i == currentNumber)
+                                {
+                                    <li class="page-item active"> <a asp-controller="Post" asp-action="Index" asp-route-page="@i" class="page-link">@i</a></li>
+                                }
+                                else
+                                {
+                                    <li class="page-item"> <a asp-controller="Post" asp-action="Index" asp-route-page="@i" class="page-link">@i</a></li>
+                                }
+                            }
+                            @if(currentNumber < pagesNumber)
+                            {
                                 <li class="page-item">
-                                    <a href="#" class="page-link" aria-label="Next">
+                                    <a asp-controller="Post" asp-action="Index" asp-route-page="@(currentNumber+1)" class="page-link" aria-label="Next">
                                         <span aria-hidden="true">
                                             <span class="lnr lnr-chevron-right"></span>
                                         </span>
                                     </a>
                                 </li>
-                            </ul>
-                        </nav>
-                    </div>
+                            }
+                        </ul>
+                    </nav>
                 </div>
-            }
+            </div>
             <div class="col-lg-4">
                 <div class="blog_right_sidebar">
                     <aside class="single_sidebar_widget search_widget">
-                        <div class="input-group">
-                            <input type="text" class="form-control" placeholder="Search Posts" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Search Posts'">
-                            <span class="input-group-btn">
-                                <button class="btn btn-default" type="button"><i class="lnr lnr-magnifier"></i></button>
-                            </span>
-                        </div><!-- /input-group -->
-                        <div class="br"></div>
+                        <form>
+                            <div class="input-group">
+                                <input type="text" name="search" class="form-control" placeholder="Search Posts" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Search Posts'">
+                                <span class="input-group-btn">
+                                    <button asp-controller="Post" asp-action="Index" class="btn btn-default" type="submit"><i class="lnr lnr-magnifier"></i></button>
+                                </span>
+                            </div><!-- /input-group -->
+                            <div class="br"></div>
+                        </form>
                     </aside>
                     <aside class="single_sidebar_widget author_widget">
                         <img class="author_img rounded-circle" src="~/template/img/blog/author.png" alt="">
@@ -157,7 +172,7 @@
                         @foreach (var post in Model.OrderByDescending(p => p.CreatedDateTime))
                         {
                             <div class="media post_item">
-                                <img src=@post.Thumbnail alt="post">
+                                <img src=@post.Thumbnail width="50" height="50" alt="post">
                                 <div class="media-body">
                                     <a asp-action="Details" asp-controller="Post" asp-route-id="@post.Id">
                                         <h3>@post.Title</h3>
@@ -169,7 +184,7 @@
                         <div class="br"></div>
                     </aside>
                     <aside class="single_sidebar_widget ads_widget">
-                        <a href="#"><img class="img-fluid" src="~/template/img/blog/add.jpg" alt=""></a>
+                        @* <a href="#"><img class="img-fluid" src="~/template/img/blog/add.jpg" alt=""></a> *@
                         <div class="br"></div>
                     </aside>
                     <aside class="single_sidebar_widget post_category_widget">
@@ -220,7 +235,7 @@
                             <ul class="list">
                                 @foreach (var tag in allTags)
                                 {
-                                <li><a href="#">@tag.TagName</a></li>
+                                    <li><a href="#">@tag.TagName</a></li>
                                 }
                             </ul>
                         }

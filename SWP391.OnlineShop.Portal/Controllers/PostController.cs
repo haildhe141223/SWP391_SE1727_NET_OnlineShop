@@ -4,6 +4,7 @@ using ServiceStack;
 using SWP391.OnlineShop.Core.Models.Identities;
 using SWP391.OnlineShop.ServiceInterface.Loggers;
 using SWP391.OnlineShop.ServiceModel.ServiceModels;
+using SWP391.OnlineShop.ServiceModel.ViewModels.Products;
 
 namespace SWP391.OnlineShop.Portal.Controllers
 {
@@ -20,10 +21,25 @@ namespace SWP391.OnlineShop.Portal.Controllers
             _logger = logger;
             _userManager = userManager;
         }
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string search, int page = 1)
         {
-            //get all post
-            var posts = await _client.GetAsync(new GetAllPost());
+            var posts = new List<PostViewModel>();
+            if (string.IsNullOrEmpty(search))
+            {
+                //get all post
+                posts = await _client.GetAsync(new GetAllPost());
+            } else
+            {
+                posts = await _client.GetAsync(new GetPostByTitle
+                {
+                    Title = search
+                });
+            }
+
+            ViewBag.Pages = posts.Count % 5 == 0 ? posts.Count / 5 : posts.Count / 5 + 1;
+            ViewBag.CurrentPage = page;
+
+            posts = posts.Skip((page - 1) * 5).Take(5).ToList();
             foreach (var post in posts)
             {
             //get tag by post
@@ -33,6 +49,7 @@ namespace SWP391.OnlineShop.Portal.Controllers
                 });
                 post.Tags = tags;
             }
+            
             //get all tag
             ViewData["AllTags"] = await _client.GetAsync(new GetAllTag());
             return View(posts);
