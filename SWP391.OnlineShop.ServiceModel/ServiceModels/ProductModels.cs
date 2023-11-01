@@ -77,6 +77,7 @@ namespace SWP391.OnlineShop.ServiceModel.ServiceModels
         public string Name { get; set; }
         public string Email { get; set; }
         public string Phone { get; set; }
+        public double Point { get; set; }
         public string Message { get; set; }
         public int ProductID { get; set; }
     }

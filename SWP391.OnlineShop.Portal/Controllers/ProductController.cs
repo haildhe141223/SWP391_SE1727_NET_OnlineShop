@@ -1,18 +1,26 @@
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using ServiceStack;
+using SWP391.OnlineShop.Core.Models.Identities;
+using SWP391.OnlineShop.ServiceInterface.Loggers;
 using SWP391.OnlineShop.ServiceModel.ServiceModels;
 using SWP391.OnlineShop.ServiceModel.ViewModels.Products;
+using System.Security.Claims;
 
 namespace SWP391.OnlineShop.Portal.Controllers
 {
     public class ProductController : BaseController
     {
         private readonly IJsonServiceClient _client;
-
-        public ProductController(
-            IJsonServiceClient client)
+        private readonly ILoggerService _logger;
+        private readonly UserManager<User> _userManager;
+        public ProductController(IJsonServiceClient client,
+           ILoggerService logger,
+           UserManager<User> userManager)
         {
             _client = client;
+            _logger = logger;
+            _userManager = userManager;
         }
 
         public async Task<IActionResult> Index(int categoryId, int page)
@@ -75,21 +83,22 @@ namespace SWP391.OnlineShop.Portal.Controllers
             string name,
             string email,
             string number,
+            double point,
             string message,
             int productId)
         {
+
             await _client.PostAsync(new Comment
             {
                 Email = email,
                 Message = message,
                 Name = name,
                 Phone = number,
+                Point = point,
                 ProductID = productId
             });
             return RedirectToAction("Details", new { id = productId });
         }
-
-
 
         public IActionResult Tracking()
         {

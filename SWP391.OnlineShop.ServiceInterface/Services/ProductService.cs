@@ -210,7 +210,8 @@ namespace SWP391.OnlineShop.ServiceInterface.Services
                 CreatedDateTime = DateTime.Now,
                 Comment = request.Message,
                 UserId = _userManager.FindByEmailAsync(request.Email).Result.Id,
-                Status = Core.Models.Enums.Status.Active
+                Status = Core.Models.Enums.Status.Active,
+                RatedStar = Convert.ToDecimal(request.Point)
             };
             _unitOfWork.FeedBacks.Add(feedBack);
             _unitOfWork.Complete();
