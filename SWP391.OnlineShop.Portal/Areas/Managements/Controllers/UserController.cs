@@ -6,6 +6,7 @@ using SWP391.OnlineShop.Common.Constraints;
 using SWP391.OnlineShop.Core.Models.Identities;
 using SWP391.OnlineShop.ServiceInterface.Loggers;
 using SWP391.OnlineShop.ServiceModel.ServiceModels;
+using SWP391.OnlineShop.ServiceModel.ViewModels.Users;
 
 namespace SWP391.OnlineShop.Portal.Areas.Managements.Controllers
 {
@@ -49,6 +50,12 @@ namespace SWP391.OnlineShop.Portal.Areas.Managements.Controllers
         }
 
         public IActionResult Add()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public IActionResult Add(AddUserViewModel request)
         {
             return View();
         }

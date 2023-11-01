@@ -3,18 +3,18 @@
 @import url('https://fonts.googleapis.com/css2?family=Open+Sans&display=swap');
 
 @font-face {
-    font-family: brutal;
-    src: url(../fonts/BrutalType.ttf);
+  font-family: brutal;
+  src: url(../fonts/BrutalType.ttf);
 }
 
 :root {
-    --font-brutal: brutal, sans-serif;
-    --font-cairo: 'Cairo', sans-serif;
-    --main-color: #C0392B;
-    --box-bg: #221F1F;
-    --font-open: 'Open Sans', sans-serif;
-    --border-bg: #474747;
-    --detail-bg: #1C1C1C;
+  --font-brutal: brutal, sans-serif;
+  --font-cairo: 'Cairo', sans-serif;
+  --main-color: #C0392B;
+  --box-bg: #221F1F;
+  --font-open: 'Open Sans', sans-serif;
+  --border-bg: #474747;
+  --detail-bg: #1C1C1C;
 }
 
 html {
@@ -210,7 +210,7 @@ body {
   }
 
 .profile-img {
-  margin: 20px auto;
+  margin: 50px auto;
   border: 1px solid;
   height: 150px;
   width: 150px;
@@ -505,17 +505,67 @@ body {
 }
 
 .wrong-login {
-    font-size: .85rem;
-    padding: 5px;
-    border-radius: 3px;
-    display: flex;
-    justify-content: center;
+  font-size: .85rem;
+  padding: 5px;
+  border-radius: 3px;
+  display: flex;
+  justify-content: center;
 }
 
-.wrong-login ul {
+  .wrong-login ul {
     margin: 0;
     padding: 0;
     list-style-type: none;
+  }
+
+.address-container {
+}
+
+.address-content {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border: 1px solid #9999B3;
+  padding: 20px;
+}
+
+.address-left {
+}
+
+.add-l-info .add-l-phone {
+  color: #9999B3;
+}
+
+.address-right {
+  padding-left: 20px;
+  border-left: 1px solid #9999B3;
+}
+
+  .address-right div {
+    margin: 5px;
+  }
+
+.add-l-name {
+}
+
+.add-l-address {
+  max-width: 450px;
+  color: #9999B3;
+}
+
+@media only screen and (max-width: 1400px) {
+  .address-content {
+    flex-direction: column;
+    align-items: start;
+  }
+
+  .address-right {
+    border-top: 1px solid #9999B3;
+    border-left: 0;
+    margin-top: 20px;
+    padding-top: 10px;
+    padding-left: 0;
+  }
 }
 
 @media only screen and (max-width: 1280px) {
@@ -566,9 +616,9 @@ body {
 }
 
 @media(max-width: 476px) {
-  .tab-content-item {
+  /*.tab-content-item {
     width: 72%;
-  }
+  }*/
 
   .tab-content-secu {
     width: 100%;
