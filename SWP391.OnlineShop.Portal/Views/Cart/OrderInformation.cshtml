@@ -197,7 +197,12 @@
 											</td>
 											<td>
 												<div class="cupon_text d-flex align-items-center">
-													<a class="btn primary-btn" id="update-cart-info">Update Cart</a>
+													@if (Model.OrderStatus == SWP391.OnlineShop.Core.Models.Enums.OrderStatus.InCartDetail
+															|| Model.OrderStatus == SWP391.OnlineShop.Core.Models.Enums.OrderStatus.InCartContact
+															|| Model.OrderStatus == SWP391.OnlineShop.Core.Models.Enums.OrderStatus.InCartCompletion)
+													{
+														<a class="btn primary-btn" id="update-cart-info">Update Cart</a>
+													}
 													<a class="btn gray_btn" id="cancel-cart">Cancel Cart</a>
 												</div>
 											</td>
@@ -239,7 +244,7 @@
 				type: 'POST',
 				data: data,
 				success: function (response) {
-					window.location.href="@Url.Action("Index","Cart")";
+					window.location.href = "@Url.Action("Index","Cart")";
 					//$.toaster({ priority: 'success', title: 'Created', message: "Back To Cart Detail Succesfully" });
 					setTimeout(function () {
 						window.location.reload();
