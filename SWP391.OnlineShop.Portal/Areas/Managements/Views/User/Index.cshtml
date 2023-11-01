@@ -65,8 +65,8 @@
                             <tr>
                                 <td>
                                     @{
-                                        var avatar = string.Empty;
-                                        if (!string.IsNullOrEmpty(user.Avatar))
+                                        var avatar = user.Avatar;
+                                        if (!string.IsNullOrEmpty(user.Avatar) && user.Avatar.Contains('~'))
                                         {
                                             avatar = user.Avatar[1..];
                                         }
