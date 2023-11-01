@@ -23,7 +23,7 @@ namespace SWP391.OnlineShop.Portal.Controllers
             _userManager = userManager;
         }
 
-        public async Task<IActionResult> Index(int categoryId, int page)
+        public async Task<IActionResult> Index(int categoryId, int page = 1)
         {
             List<ProductViewModel> latestProducts;
             if (categoryId == 0)
