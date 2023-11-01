@@ -2,6 +2,7 @@
 @using SWP391.OnlineShop.Common.Constraints
 @{
     var role = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Role)?.Value;
+    var id = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
 }
 
 <!-- Start Header Area -->
@@ -43,7 +44,7 @@
                             <ul class="dropdown-menu">
                                 @if (User.Identity is { IsAuthenticated: true })
                                 {
-                                    <li class="nav-item"><a asp-action="Index" asp-controller="Profile" class="nav-link">User Profile</a></li>
+                                    <li class="nav-item"><a asp-action="Index" asp-controller="Profile" asp-route-userId="@id" class="nav-link">User Profile</a></li>
                                     <li class="nav-item"><a asp-action="Logout" asp-controller="Account" class="nav-link">Logout</a></li>
                                     <li class="nav-item"><a asp-action="Tracking" asp-controller="Product" class="nav-link">Tracking</a></li>
 

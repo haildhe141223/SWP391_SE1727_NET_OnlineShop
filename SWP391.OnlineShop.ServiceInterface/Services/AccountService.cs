@@ -301,4 +301,29 @@ public class AccountService : BaseService, IAccountService
             };
         }
     }
+
+    public async Task<BaseResultModel> Delete(DeleteUser request)
+    {
+        try
+        {
+            var user = await _userManager.FindByIdAsync(request.UserId.ToString());
+            if (user != null)
+            {
+                await _userManager.SetLockoutEnabledAsync(user, true);
+            }
+
+            return new BaseResultModel
+            {
+                StatusCode = StatusCode.Success
+            };
+        }
+        catch (Exception ex)
+        {
+            return new BaseResultModel
+            {
+                ErrorMessage = $"DeleteUser request - {ex}",
+                StatusCode = StatusCode.InternalServerError
+            };
+        }
+    }
 }
