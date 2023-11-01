@@ -213,7 +213,7 @@ namespace SWP391.OnlineShop.Portal.Controllers
                 var api = await _client.PutAsync(new PutUpdateCartStatus()
                 {
                     Id = orderId,
-                    OrderStatus = Core.Models.Enums.OrderStatus.PaidOrderWaitingConfirm,
+                    OrderStatus = Core.Models.Enums.OrderStatus.WaitingShipperToDeliver,
                 });
                 var emailBody = "Your Order has been paid successfully and waiting for delivery";
                 var email = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Email)?.Value;
@@ -355,13 +355,30 @@ namespace SWP391.OnlineShop.Portal.Controllers
             var api = await _client.PutAsync(new PutUpdateCartToContact
             {
                 Id = orderId,
-                OrderStatus = Core.Models.Enums.OrderStatus.WaitingConfirmBySalerUnPaid,
+                OrderStatus = Core.Models.Enums.OrderStatus.WaitingShipperToDeliver,
                 TotalCost = total,
                 OrderNotes = note
             });
             if (api.StatusCode == Common.Enums.StatusCode.Success)
             {
-                return Ok(api);
+				var order = await _client.GetAsync(new GetCartInfo()
+				{
+					Id = orderId
+				});
+				foreach (var item in order.OrderDetails)
+				{
+					var product = await _client.GetAsync(new GetProductById()
+					{
+						ProductId = item.Product.Id
+					});
+					var quantity = product.Amount - item.Quantity;
+					await _client.PutAsync(new PutUpdateProduct()
+					{
+						Amount = quantity,
+						Id = product.Id
+					});
+				}
+				return Ok(api);
             }
             return RedirectToAction("Error", "Home");
         }
