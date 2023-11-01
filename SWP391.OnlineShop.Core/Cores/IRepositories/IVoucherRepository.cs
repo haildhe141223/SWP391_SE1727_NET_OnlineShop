@@ -10,4 +10,6 @@ public interface IVoucherRepository : IGenericRepository<Voucher, int>
     public IEnumerable<Voucher> GetVouchersCreatedUser(int userId);
 
     public Voucher GetVoucherInfo(int voucherId);
+
+	public IEnumerable<Voucher> GetAvailableVouchers();
 }

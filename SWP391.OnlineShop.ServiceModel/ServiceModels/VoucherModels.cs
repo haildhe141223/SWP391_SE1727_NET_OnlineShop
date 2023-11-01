@@ -52,5 +52,23 @@ namespace SWP391.OnlineShop.ServiceModel.ServiceModels
 		{
 			public int Id { get; set; }
 		}
+
+		[Route("/Voucher/GetAllAvailableVoucher", "GET")]
+		public class GetAllAvailableVoucher : IReturn<List<VoucherViewModels>>
+		{
+		}
+
+		[Route("/Voucher/PostAddVoucherToUser", "POST")]
+		public class PostAddVoucherToUser : IReturn<BaseResultModel>
+		{
+			public int VoucherId { get; set; }
+			public int UserId { get; set; }
+		}
+
+		[Route("/Voucher/PutUpdateVoucherAmount", "PUT")]
+		public class PutUpdateVoucherAmount : IReturn<BaseResultModel>
+		{
+			public int Id { get; set; }
+		}
 	}
 }

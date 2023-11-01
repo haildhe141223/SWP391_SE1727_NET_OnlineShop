@@ -75,7 +75,7 @@ namespace SWP391.OnlineShop.Portal.Areas.Managements.Controllers
             {
                 return View(request);
             }
-            if (request.StartDateTime < request.EndDateTime)
+            if (request.StartDateTime > request.EndDateTime)
             {
                 TempData["ErrorMess"] = "Start Time must happen before Expired Date";
                 return View(request);
@@ -85,8 +85,9 @@ namespace SWP391.OnlineShop.Portal.Areas.Managements.Controllers
                 TempData["ErrorMess"] = "End Time must be greater than today";
                 return View(request);
             }
-            var api = await _client.PostAsync(new PutUpdateVoucher()
+            var api = await _client.PutAsync(new PutUpdateVoucher()
             {
+                Id = request.Id,
                 Amount = request.Amount,
                 Email = email,
                 EndDateTime = request.EndDateTime,
@@ -101,7 +102,7 @@ namespace SWP391.OnlineShop.Portal.Areas.Managements.Controllers
                 TempData["SuccessMess"] = "Update successfully!";
                 return RedirectToAction("Index");
             }
-            TempData["ErrorMess"] = $"Create fail! {api.ErrorMessage}";
+            TempData["ErrorMess"] = $"Update fail! {api.ErrorMessage}";
             return View(request);
         }
 
@@ -113,10 +114,10 @@ namespace SWP391.OnlineShop.Portal.Areas.Managements.Controllers
             });
             if (api.StatusCode == Common.Enums.StatusCode.Success)
             {
-                TempData["SuccessMess"] = "Create successfully!";
+                TempData["SuccessMess"] = "Delete successfully!";
                 return RedirectToAction("Index");
             }
-            TempData["ErrorMess"] = $"Create fail! {api.ErrorMessage}";
+            TempData["ErrorMess"] = $"Delete fail! {api.ErrorMessage}";
             return RedirectToAction("Index");
         }
 
@@ -171,11 +172,6 @@ namespace SWP391.OnlineShop.Portal.Areas.Managements.Controllers
             }
             TempData["ErrorMess"] = $"Create fail! {api.ErrorMessage}";
             return View(request);
-        }
-
-        public IActionResult AddVoucherForUser(int id)
-        {
-            return View();
         }
 
     }
