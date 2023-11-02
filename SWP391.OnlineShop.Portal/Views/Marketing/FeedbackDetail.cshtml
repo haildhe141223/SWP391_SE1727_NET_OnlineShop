@@ -1,0 +1,61 @@
+﻿@model SWP391.OnlineShop.ServiceModel.ViewModels.Feedback.FeedbackViewModels
+@{
+    Layout = "_Layout";
+    var statusList = ViewData["StatusList"] as SelectList;
+}
+
+<div class="m-headers" style="margin-top: 10% !important;">
+    <h4 class="fw-bold ml-5">Manage Feedback</h4>
+</div>
+
+<div class="card shadow mb-4">
+    <div class="card-header py-3">
+        <h6 class="m-0 font-weight-bold text-primary">Feedback Detail</h6>
+    </div>
+    <div class="card-body">
+        <form style="margin:auto !important; width:60% !important">
+            <div class="r-error my-4 text-danger text-center" asp-validation-summary="All">
+            </div>
+            <div class="mb-3">
+                <label hidden asp-for="Id" class="form-label">Feedback ID</label>
+                <input disabled hidden type="text" class="form-control" asp-for="Id" id="name">
+            </div>
+            <div class="mb-3">
+                <label asp-for="UserName" class="form-label">User Name</label>
+                <input disabled type="text" class="form-control" asp-for="UserName" id="name">
+                <span asp-validation-for="UserName" class="r-error d-block text-danger"></span>
+            </div>
+            <div class="mb-3">
+                <label asp-for="Email" class="form-label">Email</label><br />
+                <input disabled type="text" class="form-control" asp-for="Email" id="name">
+                <span asp-validation-for="Email" class="r-error d-block text-danger"></span>
+            </div>
+            <div hidden class="mb-3">
+                <label asp-for="Mobile" class="form-label"></label>
+                <input disabled asp-for="Mobile" type="text" class="form-control" />
+                <span asp-validation-for="Mobile" class="r-error d-block text-danger"></span>
+            </div>
+            <div class="mb-3">
+                <label asp-for="ProductName" class="form-label"></label>
+                <input disabled asp-for="ProductName" type="text" class="form-control" />
+                <span asp-validation-for="ProductName" class="r-error d-block text-danger"></span>
+            </div>
+            <div class="mb-3">
+                <label asp-for="RatedStar" class="form-label"></label>
+                <input disabled asp-for="RatedStar" type="number" min="1" class="form-control" />
+                <span asp-validation-for="RatedStar" class="r-error d-block text-danger"></span>
+            </div>
+            <div class="mb-3">
+                <label asp-for="Comment" class="form-label"></label>
+                <textarea disabled asp-for="Comment" type="text" class="form-control"></textarea>
+                <span asp-validation-for="Comment" class="r-error d-block text-danger"></span>
+            </div>
+            <div class="mb-3">
+                <label asp-for="Status" class="form-label">Status</label><br />
+                <select disabled asp-for="Status" class="form-control" asp-items="@statusList"></select>
+            </div><br />
+            <a type="button" class="btn btn-secondary" asp-action="">Back</a>
+            <button asp-controller="Marketing" asp-action="EditFeedback" asp-route-id="@Model.Id" class="btn btn-primary">Edit Status</button>
+        </form>
+    </div>
+</div>

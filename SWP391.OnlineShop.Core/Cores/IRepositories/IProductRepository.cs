@@ -12,6 +12,6 @@ public interface IProductRepository : IGenericRepository<Product, int>
     Task<List<Product>> GetProductsByStatus(string status);
     Task<List<Product>> GetProductsWithPaging(int skip, int take);
     Task<List<Product>> GetHotDealProduct();
-    Task<List<Product>> GetDealProductOfWeek();
+    List<Product> GetDealProductOfWeek();
     Product GetProductFeedbackById(int productId);
 }

@@ -1,0 +1,67 @@
+﻿@model SWP391.OnlineShop.ServiceModel.ViewModels.Profiles.SecurityViewModel
+@{
+    var isError = false;
+    var errorMessage = TempData["ErrorPassMess"] as string;
+    var successMessage = TempData["SuccessPassMess"] as string;
+
+    if (TempData["IsPassError"] != null)
+    {
+        isError = bool.Parse(TempData["IsPassError"] as string ?? string.Empty);
+    }
+
+    var isSuccess = !string.IsNullOrEmpty(successMessage);
+}
+<div class="tab-pane fade tab-content-item tab-content-secu" id="v-pills-security">
+    <div class="secu-title">
+        <span>Change your password</span>
+        <p>
+            For your security, we highly recommend that you choose a unique password that you don't use for any other online account.
+            Please careful while manage your security page. Your information will be private by of
+            <a href="https://www.termsfeed.com/live/e3c51e1f-dd04-4568-ba9d-617bca9d4c5d" title="">Terms of Service</a>
+        </p>
+    </div>
+    @if (isSuccess)
+    {
+        <div class="alert-success" style="padding: 10px;margin: 15px;text-align: center;">@successMessage</div>
+    }
+    @if (isError)
+    {
+        <div class="wrong-login alert-danger" style="padding: 10px;margin: 15px;text-align: center;">@errorMessage</div>
+    }
+    <div class="row-pricing" style="margin: 0">
+        <div class="col-card-6 col-c-md-12 col-c-sm-12">
+            <form class="" method="post" enctype="multipart/form-data">
+                <div class="left-secu-title">
+                    <span class="secu-t1">Current Password</span>
+                    <span class="secu-t2">Required</span>
+                    <input type="password" asp-for="CurrentPassword" placeholder="CURRENT PASSWORD *" />
+                </div>
+                <div class="left-secu-title">
+                    <span class="secu-t1">New Password</span>
+                    <span class="secu-t2">Required</span>
+                    <input class="secu-in" type="password" asp-for="NewPassword" placeholder="NEW PASSWORD *" />
+                </div>
+                <div class="left-secu-title">
+                    <span class="secu-t1">Retype New Password</span>
+                    <span class="secu-t2">Required</span>
+                    <input class="secu-in" type="password" asp-for="RePassword" placeholder="RETYPE PASSWORD *" />
+                </div>
+                <div class="last-secu-btn">
+                    <div class="secu-discard">Discard Changes</div>
+                    <input class="secu-in" type="submit" value="Save changes" />
+                </div>
+            </form>
+        </div>
+        <div class="col-card-6 col-c-md-12 col-c-sm-12 right-secu" style="padding: 20px; ">
+            <div class="secu-right">
+                <div class="secu-right-title">
+                    <span class="secu-r-title">Your Passwords</span>
+                    <p>Your password must contain 1+ upper and lower characters</p>
+                    <p>Your password must contain 1+ digit number & non alphanumeric characters</p>
+                    <p>Your password must have at least 8+ characters</p>
+                    <p>Your password must contain no space(s)</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

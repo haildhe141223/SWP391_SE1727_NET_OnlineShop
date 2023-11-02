@@ -58,4 +58,10 @@ public class AccountModels
         public string Category { get; set; }
         public string LinkResetPassword { get; set; }
     }
+
+    [Route("/Account/DeleteUser", "DELETE")]
+    public class DeleteUser : IReturn<BaseResultModel>
+    {
+        public int UserId { get; set; }
+    }
 }

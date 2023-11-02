@@ -41,6 +41,8 @@
                             <th>UserName</th>
                             <th>Email</th>
                             <th>PhoneNumber</th>
+                            <th>Gender</th>
+                            <th>Default Address</th>
                             <th>Roles</th>
                             <th>Action</th>
                         </tr>
@@ -51,27 +53,47 @@
                             <th>UserName</th>
                             <th>Email</th>
                             <th>PhoneNumber</th>
+                            <th>Gender</th>
+                            <th>Default Address</th>
                             <th>Roles</th>
                             <th>Action</th>
                         </tr>
                     </tfoot>
-                    <tbody>                    
+                    <tbody>
                         @foreach (var user in Model)
                         {
                             <tr>
                                 <td>
+                                    @{
+                                        var avatar = user.Avatar;
+                                        if (!string.IsNullOrEmpty(user.Avatar) && user.Avatar.Contains('~'))
+                                        {
+                                            avatar = user.Avatar[1..];
+                                        }
+                                    }
                                     @if (string.IsNullOrEmpty(user.Avatar))
                                     {
-                                        <img src="~/template/img/settings/admins/anonymous_user.jpg" alt="" width="50" />
+                                        <img src="~/template/img/settings/admins/anonymous_user.jpg" alt="" width="50"/>
                                     }
                                     else
                                     {
-                                        <img src="@user.Avatar" alt="" width="50" />
+                                        <img src="@avatar" alt="" width="50" />
                                     }
                                 </td>
                                 <td>@user.UserName</td>
                                 <td>@user.Email</td>
                                 <td>@user.PhoneNumber</td>
+                                <td>
+                                    @if (user.Gender == 0)
+                                    {
+                                        <span>Female</span>
+                                    }
+                                    else
+                                    {
+                                        <span>Male</span>
+                                    }
+                                </td>
+                                <td>@user.Address</td>
                                 <td>@string.Join(", ", user.Role)</td>
                                 <td>
                                     <a class="mx-1 btn btn-outline-info" asp-route-id="@user.Id"

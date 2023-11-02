@@ -580,6 +580,8 @@ namespace SWP391.OnlineShop.Core.Migrations
 
                     b.HasIndex("ProductId");
 
+                    b.HasIndex("VoucherId");
+
                     b.ToTable("ProductVouchers");
                 });
 
@@ -738,8 +740,8 @@ namespace SWP391.OnlineShop.Core.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
-                    b.Property<string>("Amount")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int>("Amount")
+                        .HasColumnType("int");
 
                     b.Property<int>("CreatedBy")
                         .HasColumnType("int");
@@ -859,6 +861,9 @@ namespace SWP391.OnlineShop.Core.Migrations
 
                     b.Property<bool>("EmailConfirmed")
                         .HasColumnType("bit");
+
+                    b.Property<int>("Gender")
+                        .HasColumnType("int");
 
                     b.Property<string>("Image")
                         .HasColumnType("nvarchar(max)");
@@ -1099,7 +1104,7 @@ namespace SWP391.OnlineShop.Core.Migrations
 
                     b.HasOne("SWP391.OnlineShop.Core.Models.Entities.Voucher", "Voucher")
                         .WithMany("ProductVouchers")
-                        .HasForeignKey("ProductId")
+                        .HasForeignKey("VoucherId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
