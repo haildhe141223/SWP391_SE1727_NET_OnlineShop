@@ -66,8 +66,8 @@
                             <td>@postViewModel.Title</td>
                             <td>@postViewModel.Brief</td>
                             <td>@postViewModel.Featured</td>
-                            <td>@postViewModel.Thumbnail</td>
-                            <td>@postViewModel.Description</td>
+                            <td><img width="300" height="300" src="@postViewModel.Thumbnail"></td>
+                            <td>@Html.Raw(@postViewModel.Description)</td>
                             <td>@postViewModel.Author</td>
                             @if (postViewModel.Status == Status.Active)
                             {
@@ -89,8 +89,11 @@
                                 <i class="fa-regular fa-trash-can text-danger"></i>
                                 </a>
                                 } *@
+                                    <a asp-controller="Marketing" asp-action="ViewPost" asp-route-id="@postViewModel.Id">
+                                        <i class="fa-regular fa-eye"></i>
+                                    </a>
                                     <a asp-controller="Marketing" asp-action="EditPost" asp-route-id="@postViewModel.Id">
-                                        <i class="fa-regular fa-pen-to-square"></i>
+                                        <i class="fa-regular fa-pen-to-square text-primary"></i>
                                     </a>
                                     <a asp-controller="Marketing" asp-action="DeletePost" asp-route-id="@postViewModel.Id">
                                         <i class="fa-regular fa-trash-can text-danger"></i>

@@ -15,7 +15,7 @@ public class ProductVoucherConfigs : IEntityTypeConfiguration<ProductVoucher>
 
         builder.HasOne<Voucher>(pv => pv.Voucher)
             .WithMany(v => v.ProductVouchers)
-            .HasForeignKey(pv => pv.ProductId)
+            .HasForeignKey(pv => pv.VoucherId)
             .OnDelete(DeleteBehavior.Cascade);
     }
 }

@@ -1,3 +1,63 @@
-﻿@{
+﻿@model SWP391.OnlineShop.ServiceModel.ViewModels.Profiles.ProfileViewModels
+@{
     ViewBag.Title = "Profile";
+    var homeUrl = Url.Action("Index", "Home");
 }
+<div class="profile-container">
+    <div class="d-flex align-items-start">
+        <div class="nav flex-column nav-pills tab-header" id="v-pills-tab" role="tablist" aria-orientation="vertical">
+            <button class="tab-header-items" data-bs-toggle="pill" type="button" onclick="location.href = '@homeUrl'">
+                <div class="header-item-content">
+                    <i class="fa-solid fa-store"></i>
+                    <span>Back to Shop</span>
+                </div>
+            </button>
+            <button class="tab-header-items active" data-bs-toggle="pill" data-bs-target="#v-pills-profile" type="button">
+                <div class="header-item-content">
+                    <i class="fas fa-user-secret"></i>
+                    <span>General</span>
+                </div>
+            </button>
+            <button class="tab-header-items" data-bs-toggle="pill" data-bs-target="#v-pills-security" type="button">
+                <div class="header-item-content">
+                    <i class="fas fa-key"></i>
+                    <span>Security</span>
+                </div>
+            </button>
+            <button class="tab-header-items" data-bs-toggle="pill" data-bs-target="#v-pills-addr" type="button">
+                <div class="header-item-content">
+                    <i class="fa-solid fa-map-location-dot"></i>
+                    <span>Addresses</span>
+                </div>
+            </button>
+            <button class="tab-header-items" data-bs-toggle="pill" data-bs-target="#v-pills-badges" type="button">
+                <div class="header-item-content">
+                    <i class="fa-solid fa-gift"></i>
+                    <span>Vouchers</span>
+                </div>
+            </button>
+            <button class="tab-header-items" data-bs-toggle="pill" data-bs-target="#v-pills-favor" type="button" id="tab-order">
+                <div class="header-item-content">
+                    <i class="fa-solid fa-cart-arrow-down"></i>
+                    <span>Orders</span>
+                </div>
+            </button>
+        </div>
+        <div class="tab-content" id="v-pills-tabContent">
+            @*tab profile*@
+            <partial name="ProfilePartial/_GeneralPartial" for="GeneralViewModel"/>
+            @*tab security*@
+            <partial name="ProfilePartial/_SecurityPartial" for="SecurityViewModel"/>
+            @*tab addresses*@
+            <partial name="ProfilePartial/_AddressPartial" />
+            @*tab vouchers*@
+            <partial name="ProfilePartial/_VoucherPartial" />
+            @*tab orders*@
+            <partial name="ProfilePartial/_OrderPartial" />
+        </div>
+    </div>
+</div>
+
+
+
+

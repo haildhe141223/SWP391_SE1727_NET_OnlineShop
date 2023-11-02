@@ -23,13 +23,13 @@
                 <span asp-validation-for="Title" class="r-error d-block text-danger"></span>
             </div>
             <div class="mb-3">
-                <label asp-for="Thumbnail" class="form-label">Thumbnail</label>
-                <input asp-for="Thumbnail" type="text" class="form-control">
-                <span asp-validation-for="Thumbnail" class="r-error d-block text-danger"></span>
+                <label asp-for="ThumbnailFile" class="form-label">Thumbnail</label>
+                <input asp-for="ThumbnailFile" type="file" class="form-control">
+                <span asp-validation-for="ThumbnailFile" class="r-error d-block text-danger"></span>
             </div>
             <div class="mb-3">
                 <label asp-for="Description" class="form-label"></label>
-                <textarea asp-for ="Description" type="text" class="form-control"></textarea>
+                <textarea id="ck-editor" rows="10" cols="80" asp-for="Description" type="text" class="form-control"></textarea>
                 <span asp-validation-for="Description" class="r-error d-block text-danger"></span>
             </div>
             <div class="mb-3">
@@ -52,8 +52,15 @@
             <select asp-for="CategoryId" class="form-control" asp-items="@genreList"></select>
             </div><br />
             <a type="button" class="btn btn-secondary" asp-action="">Back</a>
-            <button type="reset" class="btn btn-info">Reset</button>
             <button type="submit" class="btn btn-primary">Submit</button>
         </form>
     </div>
 </div>
+
+@section scripts{
+    <script src="~/lib/ckeditor/ckeditor.js"></script>
+    <script src="~/lib/ckeditor/adapters/jquery.js"></script>
+    <script>
+        $("#ck-editor").ckeditor();
+    </script>
+}

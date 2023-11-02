@@ -104,8 +104,12 @@ namespace SWP391.OnlineShop.ServiceInterface.Services
             var result = new List<ProductViewModel>();
             try
             {
-                var product = _unitOfWork.Products.GetDealProductOfWeek();
-                result = _mapper.Map<List<ProductViewModel>>(product);
+                var products = _unitOfWork.Products.GetDealProductOfWeek();
+                foreach (var product in products)
+                {
+                    var procustVm = _mapper.Map<ProductViewModel>(product);
+                    result.Add(procustVm);
+                }
                 return result;
             }
             catch (Exception ex)
@@ -151,6 +155,30 @@ namespace SWP391.OnlineShop.ServiceInterface.Services
             return result;
         }
 
+        public List<ProductViewModel> Get(GetProductOfVoucher request)
+        {
+            try
+            {
+                var query = from p in _unitOfWork.Context.Products
+                            join pv in _unitOfWork.Context.ProductVouchers
+                            on p.Id equals pv.ProductId
+                            join v in _unitOfWork.Context.Vouchers
+                            on pv.VoucherId equals v.Id
+                            where v.Id == request.VoucherId
+                            select p;
+                var result = query.ToList();
+                if (result.Any())
+                {
+                    return _mapper.Map<List<ProductViewModel>>(result);
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"GetProductOfVoucher error {ex.Message}");
+            }
+            return new List<ProductViewModel>();
+        }
+
         public async Task<ProductViewModel> Post(PostAddProduct request)
         {
             var result = new ProductViewModel();
@@ -186,7 +214,8 @@ namespace SWP391.OnlineShop.ServiceInterface.Services
                 CreatedDateTime = DateTime.Now,
                 Comment = request.Message,
                 UserId = _userManager.FindByEmailAsync(request.Email).Result.Id,
-                Status = Core.Models.Enums.Status.Active
+                Status = Core.Models.Enums.Status.Active,
+                RatedStar = Convert.ToDecimal(request.Point)
             };
             _unitOfWork.FeedBacks.Add(feedBack);
             _unitOfWork.Complete();

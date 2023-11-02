@@ -2,6 +2,7 @@
 using SWP391.OnlineShop.Core.Models.Enums;
 using SWP391.OnlineShop.ServiceModel.Results;
 using SWP391.OnlineShop.ServiceModel.ViewModels.Products;
+using SWP391.OnlineShop.ServiceModel.ViewModels.Tags;
 
 namespace SWP391.OnlineShop.ServiceModel.ServiceModels
 {
@@ -85,4 +86,14 @@ namespace SWP391.OnlineShop.ServiceModel.ServiceModels
         public int PostId { get; set; }
     }
 
+	[Route("/Post/GetTagByPost", "GET")]
+	public class GetTagByPost : IReturn<List<TagViewModel>>
+	{
+		public int PostId { get; set; }
+	}
+
+	[Route("/Post/GetAllTag", "GET")]
+	public class GetAllTag : IReturn<List<TagViewModel>>
+	{
+	}
 }

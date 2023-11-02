@@ -144,26 +144,18 @@ public class ProductRepository : GenericRepository<Product, int>, IProductReposi
     }
 
 
-    public Task<List<Product>> GetDealProductOfWeek()
+    public List<Product> GetDealProductOfWeek()
     {
         var result = new List<Product>();
-        if (Context.OrderDetails == null) return Task.FromResult(result);
+        if (Context.Products == null) return result;
         var products = Context
                         .Products
-                        .Include(x => x.OrderDetails
-                        .GroupBy(od => od.ProductId)
-                        .Select(n => new
-                        {
-                            productId = n.Key,
-                            productCount = n.Count(),
-
-                        })
-                        .OrderByDescending(n => n.productCount)).Take(9)
+                        .OrderByDescending(x => x.OrderDetails.Count).Take(6)
                         .ToList();
 
         result = products;
 
-        return Task.FromResult(result);
+        return result;
     }
 
     public Product GetProductFeedbackById(int productId)
@@ -172,7 +164,7 @@ public class ProductRepository : GenericRepository<Product, int>, IProductReposi
         if (Context.Products == null) return result;
 
         var products = Context.Products
-            .Where(x => x.Id == productId).Include(x => x.Category).Include(x => x.FeedBacks).FirstOrDefault();
+            .Where(x => x.Id == productId).Include(x => x.Category).Include(x => x.FeedBacks).ThenInclude(f => f.User).FirstOrDefault();
 
         result = products;
 

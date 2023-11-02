@@ -4,7 +4,9 @@ using ServiceStack;
 using SWP391.OnlineShop.Core.Models.Enums;
 using SWP391.OnlineShop.ServiceInterface.Loggers;
 using SWP391.OnlineShop.ServiceModel.ServiceModels;
+using SWP391.OnlineShop.ServiceModel.ViewModels.Feedback;
 using SWP391.OnlineShop.ServiceModel.ViewModels.Products;
+using static SWP391.OnlineShop.ServiceModel.ServiceModels.FeedbackModels;
 
 namespace SWP391.OnlineShop.Portal.Controllers
 {
@@ -23,8 +25,6 @@ namespace SWP391.OnlineShop.Portal.Controllers
 
         public async Task<IActionResult> Index()
         {
-            _logger.LogInfo("1. Home Index - Start");
-
             //Get all products
             var latestProducts = await _client.GetAsync(new GetAllProduct());
 
@@ -33,13 +33,33 @@ namespace SWP391.OnlineShop.Portal.Controllers
 
         public async Task<IActionResult> AddProduct()
         {
-            ViewData["GenreList"] = new SelectList(await _client.GetAsync(new GetAllCategory()), "Id", "CategoryName");
+            ViewData["GenreList"] = new SelectList(await _client.GetAsync(new GetAllCategory
+            {
+                CategoryType = CategoryType.ProductCategory
+            }), "Id", "CategoryName");
             return View();
         }
 
         [HttpPost]
         public async Task<IActionResult> AddProduct(ProductViewModel request)
         {
+            var imageFolderLink = $"{Convert.ToString(Directory.GetCurrentDirectory())}\\wwwroot\\uploads\\{request.ProductName}";
+            var imageLink = string.Empty;
+            if (!Directory.Exists(imageFolderLink))
+            {
+                Directory.CreateDirectory(imageFolderLink);
+            }
+
+            var imageLocalLink = Path.Combine(imageFolderLink, request.ThumbnailFile.FileName);
+
+            if (request.ThumbnailFile != null)
+            {
+                await using Stream fileStream = new FileStream(imageLocalLink, FileMode.Create);
+                await request.ThumbnailFile.CopyToAsync(fileStream);
+
+                imageLink = $"/uploads/{request.ProductName}/{request.ThumbnailFile.FileName}";
+            }
+
             await _client.PostAsync(new PostAddProduct
             {
                 ProductName = request.ProductName,
@@ -47,7 +67,7 @@ namespace SWP391.OnlineShop.Portal.Controllers
                 Amount = request.Amount,
                 Price = request.Price,
                 SalePrice = request.SalePrice,
-                Thumbnail = request.Thumbnail,
+                Thumbnail = imageLink,
                 CategoryId = request.CategoryId
             });
             return RedirectToAction("Index");
@@ -55,7 +75,18 @@ namespace SWP391.OnlineShop.Portal.Controllers
 
         public async Task<IActionResult> ViewProduct(int id)
         {
-            ViewData["GenreList"] = new SelectList(await _client.GetAsync(new GetAllCategory()), "Id", "CategoryName");
+            var listStatus = new List<Status>
+            {
+                Status.Active,
+                Status.Inactive
+            };
+
+            ViewData["GenreList"] = new SelectList(await _client.GetAsync(new GetAllCategory
+            {
+                CategoryType = CategoryType.ProductCategory
+            }), "Id", "CategoryName");
+
+            ViewData["StatusList"] = new SelectList(listStatus);
             var product = await _client.GetAsync(new GetProductById
             {
                 ProductId = id
@@ -71,7 +102,8 @@ namespace SWP391.OnlineShop.Portal.Controllers
                 Status.Inactive
             };
 
-            ViewData["GenreList"] = new SelectList(await _client.GetAsync(new GetAllCategory()), "Id", "CategoryName");
+            ViewData["GenreList"] = new SelectList(await _client.GetAsync(
+                new GetAllCategory { CategoryType = CategoryType.ProductCategory }), "Id", "CategoryName");
             ViewData["StatusList"] = new SelectList(listStatus);
             var product = await _client.GetAsync(new GetProductById
             {
@@ -83,6 +115,23 @@ namespace SWP391.OnlineShop.Portal.Controllers
         [HttpPost]
         public async Task<IActionResult> EditProduct(ProductViewModel request)
         {
+            var imageFolderLink = $"{Convert.ToString(Directory.GetCurrentDirectory())}\\wwwroot\\uploads\\{request.ProductName}";
+            var imageLink = string.Empty;
+            if (!Directory.Exists(imageFolderLink))
+            {
+                Directory.CreateDirectory(imageFolderLink);
+            }
+
+            if (request.ThumbnailFile != null)
+            {
+                var imageLocalLink = Path.Combine(imageFolderLink, request.ThumbnailFile.FileName);
+
+                await using Stream fileStream = new FileStream(imageLocalLink, FileMode.Create);
+                await request.ThumbnailFile.CopyToAsync(fileStream);
+
+                imageLink = $"/uploads/{request.ProductName}/{request.ThumbnailFile.FileName}";
+            }
+
             await _client.PutAsync(new PutUpdateProduct
             {
                 ProductName = request.ProductName,
@@ -90,7 +139,7 @@ namespace SWP391.OnlineShop.Portal.Controllers
                 Amount = request.Amount,
                 Price = request.Price,
                 SalePrice = request.SalePrice,
-                Thumbnail = request.Thumbnail,
+                Thumbnail = string.IsNullOrEmpty(imageLink) ? request.Thumbnail : imageLink,
                 CategoryId = request.CategoryId,
                 Status = request.Status,
                 Id = request.Id
@@ -120,20 +169,39 @@ namespace SWP391.OnlineShop.Portal.Controllers
 
         public async Task<ActionResult> AddPost()
         {
-            ViewData["GenreList"] = new SelectList(await _client.GetAsync(new GetAllCategory()), "Id", "CategoryName");
+            ViewData["GenreList"] = new SelectList(await _client.GetAsync(new GetAllCategory
+            {
+                CategoryType = CategoryType.PostCategory
+            }), "Id", "CategoryName");
             return View();
         }
 
         [HttpPost]
         public async Task<IActionResult> AddPost(PostViewModel request)
         {
+            var imageFolderLink = $"{Convert.ToString(Directory.GetCurrentDirectory())}\\wwwroot\\uploads\\{request.Title}";
+            var imageLink = string.Empty;
+            if (!Directory.Exists(imageFolderLink))
+            {
+                Directory.CreateDirectory(imageFolderLink);
+            }
+
+            var imageLocalLink = Path.Combine(imageFolderLink, request.ThumbnailFile.FileName);
+
+            if (request.ThumbnailFile != null)
+            {
+                await using Stream fileStream = new FileStream(imageLocalLink, FileMode.Create);
+                await request.ThumbnailFile.CopyToAsync(fileStream);
+
+                imageLink = $"/uploads/{request.Title}/{request.ThumbnailFile.FileName}";
+            }
             await _client.PostAsync(new PostAddPost
             {
                 Title = request.Title,
                 Featured = request.Featured,
                 Brief = request.Brief,
                 Description = request.Description,
-                Thumbnail = request.Thumbnail,
+                Thumbnail = imageLink,
                 Author = request.Author,
                 CategoryId = request.CategoryId,
             });
@@ -142,12 +210,23 @@ namespace SWP391.OnlineShop.Portal.Controllers
 
         public async Task<IActionResult> ViewPost(int id)
         {
-            ViewData["GenreList"] = new SelectList(await _client.GetAsync(new GetAllCategory()), "Id", "CategoryName");
-            var product = await _client.GetAsync(new GetPostById
+            var listStatus = new List<Status>
+            {
+                Status.Active,
+                Status.Inactive
+            };
+
+            ViewData["GenreList"] = new SelectList(await _client.GetAsync(new GetAllCategory
+            {
+                CategoryType = CategoryType.PostCategory
+            }), "Id", "CategoryName");
+            ViewData["StatusList"] = new SelectList(listStatus);
+
+            var post = await _client.GetAsync(new GetPostById
             {
                 PostId = id
             });
-            return View(product);
+            return View(post);
         }
 
         public async Task<IActionResult> EditPost(int id)
@@ -158,7 +237,10 @@ namespace SWP391.OnlineShop.Portal.Controllers
                 Status.Inactive
             };
 
-            ViewData["GenreList"] = new SelectList(await _client.GetAsync(new GetAllCategory()), "Id", "CategoryName");
+            ViewData["GenreList"] = new SelectList(await _client.GetAsync(new GetAllCategory
+            {
+                CategoryType = CategoryType.PostCategory
+            }), "Id", "CategoryName");
             ViewData["StatusList"] = new SelectList(listStatus);
 
             var post = await _client.GetAsync(new GetPostById
@@ -171,6 +253,23 @@ namespace SWP391.OnlineShop.Portal.Controllers
         [HttpPost]
         public async Task<IActionResult> EditPost(PostViewModel request)
         {
+            var imageFolderLink = $"{Convert.ToString(Directory.GetCurrentDirectory())}\\wwwroot\\uploads\\{request.Title}";
+            var imageLink = string.Empty;
+            if (!Directory.Exists(imageFolderLink))
+            {
+                Directory.CreateDirectory(imageFolderLink);
+            }
+
+            if (request.ThumbnailFile != null)
+            {
+                var imageLocalLink = Path.Combine(imageFolderLink, request.ThumbnailFile.FileName);
+
+                await using Stream fileStream = new FileStream(imageLocalLink, FileMode.Create);
+                await request.ThumbnailFile.CopyToAsync(fileStream);
+
+                imageLink = $"/uploads/{request.Title}/{request.ThumbnailFile.FileName}";
+            }
+
             await _client.PutAsync(new PutUpdatePost
             {
                 Id = request.Id,
@@ -178,10 +277,11 @@ namespace SWP391.OnlineShop.Portal.Controllers
                 Featured = request.Featured,
                 Brief = request.Brief,
                 Description = request.Description,
-                Thumbnail = request.Thumbnail,
+                Thumbnail = string.IsNullOrEmpty(imageLink) ? request.Thumbnail : imageLink,
                 Author = request.Author,
+                CategoryId = request.CategoryId,
                 Status = request.Status
-                
+
             });
             return RedirectToAction("ManagePost");
         }
@@ -193,6 +293,64 @@ namespace SWP391.OnlineShop.Portal.Controllers
                 PostId = id
             });
             return RedirectToAction("ManagePost");
+        }
+
+        public async Task<IActionResult> ManageFeedback()
+        {
+            //Get all feedback
+            var feedback = await _client.GetAsync(new GetAllFeedback());
+
+            return View(feedback);
+        }
+
+        public async Task<IActionResult> FeedbackDetail(int id)
+        {
+            var listStatus = new List<Status>
+            {
+                Status.Active,
+                Status.Inactive
+            };
+
+            ViewData["StatusList"] = new SelectList(listStatus);
+            //Get feedback
+            var feedback = await _client.GetAsync(new GetFeedbackById
+            {
+                FeedbackId = id
+            });
+
+            return View(feedback);
+        }
+
+        public async Task<IActionResult> EditFeedback(int id)
+        {
+
+            var listStatus = new List<Status>
+            {
+                Status.Active,
+                Status.Inactive
+            };
+
+            ViewData["StatusList"] = new SelectList(listStatus);
+            //Get feedback
+            var feedback = await _client.GetAsync(new GetFeedbackById
+            {
+                FeedbackId = id
+            });
+
+            return View(feedback);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> EditFeedback(FeedbackViewModels request)
+        {
+            //Edit feedback
+            await _client.PutAsync(new EditFeedback
+            {
+                FeedbackId = request.Id,
+                Status = request.Status
+            });
+
+            return RedirectToAction("ManageFeedback");
         }
 
     }

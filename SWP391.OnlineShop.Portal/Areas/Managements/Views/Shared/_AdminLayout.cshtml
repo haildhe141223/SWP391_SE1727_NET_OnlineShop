@@ -68,6 +68,27 @@
     <script src="~/template/admin/adminjs/charts/datatables-demo.js"></script>
 
     <script>
+        $(document).ready(function(){
+            const createDtPickerProject = $("#startDate");
+            if (createDtPickerProject != undefined) {
+                createDtPickerProject.datepicker({
+                    format:"MM/dd/yyyy",
+                    changeYear: true
+                });
+            };
+            $('#endDate').datepicker({
+                format: "MM/dd/yyyy",
+                changeYear: true
+            }); 
+            $('#updateStartDate').datepicker({
+                format: "MM/dd/yyyy",
+                changeYear: true
+            });
+            $('#updateEndDate').datepicker({
+                format: "MM/dd/yyyy",
+                changeYear: true
+            });
+        });
         $(".btn-delete").click(function () {
             const isDelete = confirm("Do you really want to delete this record?. This is permanent delete.");
             console.log(isDelete);
