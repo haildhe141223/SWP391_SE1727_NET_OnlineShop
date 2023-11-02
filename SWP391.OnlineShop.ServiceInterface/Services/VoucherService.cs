@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Identity;
-using static SWP391.OnlineShop.ServiceModel.ServiceModels.VoucherModels;
 using SWP391.OnlineShop.Core.Cores.UnitOfWork;
 using SWP391.OnlineShop.Core.Models.Entities;
 using SWP391.OnlineShop.Core.Models.Identities;
@@ -9,8 +8,7 @@ using SWP391.OnlineShop.ServiceInterface.Interfaces;
 using SWP391.OnlineShop.ServiceInterface.Loggers;
 using SWP391.OnlineShop.ServiceModel.Results;
 using SWP391.OnlineShop.ServiceModel.ViewModels.Vouchers;
-using SWP391.OnlineShop.Core.Models.Enums;
-using SWP391.OnlineShop.ServiceModel.ViewModels.Carts;
+using static SWP391.OnlineShop.ServiceModel.ServiceModels.VoucherModels;
 
 namespace SWP391.OnlineShop.ServiceInterface.Services
 {
@@ -65,12 +63,25 @@ namespace SWP391.OnlineShop.ServiceInterface.Services
 			return result;
 		}
 
-		public List<VoucherViewModels> Get(GetAllVoucherByUser request)
+		public async Task<List<VoucherViewModels>> Get(GetAllVoucherByUser request)
 		{
 			var result = new List<VoucherViewModels>();
 			try
 			{
-
+				var user = await _userManager.FindByEmailAsync(request.Email);
+				if(user == null)
+				{
+					throw new Exception("User Not Found");
+				}
+				var vouchers = _unitOfWork.Vouchers.GetVouchersCreatedUser(user.Id);
+				foreach (var voucher in vouchers)
+				{
+					if(voucher != null)
+					{
+						var voucherVM = _mapper.Map<VoucherViewModels>(voucher);
+						result.Add(voucherVM);
+					}
+				}
 			}
 			catch (Exception ex)
 			{
@@ -79,12 +90,12 @@ namespace SWP391.OnlineShop.ServiceInterface.Services
 			return result;
 		}
 
-		public VoucherViewModels Get(GetAllVoucherById request)
+		public VoucherViewModels Get(GetVoucherById request)
 		{
 			var result = new VoucherViewModels();
 			try
 			{
-				var voucher = _unitOfWork.Vouchers.GetById(request.Id);
+				var voucher = _unitOfWork.Vouchers.GetVoucherInfo(request.Id);
 				if (voucher == null)
 				{
 					result.StatusCode = Common.Enums.StatusCode.NotFound;
@@ -95,7 +106,29 @@ namespace SWP391.OnlineShop.ServiceInterface.Services
 			}
 			catch (Exception ex)
 			{
-				_logger.LogError($"GetAllVoucherById error: {ex}");
+				_logger.LogError($"GetVoucherById error: {ex}");
+			}
+			return result;
+		}
+
+		public List<VoucherViewModels> Get(GetAllAvailableVoucher request)
+		{
+			var result = new List<VoucherViewModels>();
+			try
+			{
+				var vouchers = _unitOfWork.Vouchers.GetAvailableVouchers();
+				foreach (var voucher in vouchers)
+				{
+					if (voucher != null)
+					{
+						var voucherVM = _mapper.Map<VoucherViewModels>(voucher);
+						result.Add(voucherVM);
+					}
+				}
+			}
+			catch (Exception ex)
+			{
+				_logger.LogError($"GetAllAvailableVoucher error: {ex}");
 			}
 			return result;
 		}
@@ -128,7 +161,19 @@ namespace SWP391.OnlineShop.ServiceInterface.Services
 				int rows = await _unitOfWork.CompleteAsync();
 				if (rows > 0)
 				{
-					result.StatusCode = Common.Enums.StatusCode.Success;
+					var listProductVouchers = new List<ProductVoucher>();
+					foreach (var productId in request.ProductId)
+					{
+                        var productVoucher = new ProductVoucher()
+                        {
+                            ProductId = productId,
+                            VoucherId = voucher.Id
+                        };
+						listProductVouchers.Add(productVoucher);
+                    }
+                    _unitOfWork.Context.ProductVouchers.AddRange(listProductVouchers);
+                    await _unitOfWork.CompleteAsync();
+                    result.StatusCode = Common.Enums.StatusCode.Success;
 					return result;
 				}
 				result.StatusCode = Common.Enums.StatusCode.InternalServerError;
@@ -137,6 +182,33 @@ namespace SWP391.OnlineShop.ServiceInterface.Services
 			catch (Exception ex)
 			{
 				_logger.LogError($"PostAddVoucher error: {ex}");
+			}
+			return result;
+		}
+
+		public async Task<BaseResultModel> Post(PostAddVoucherToUser request)
+		{
+			var result = new BaseResultModel();
+			try
+			{
+				var userVoucher = new UserVoucher()
+				{
+					UserId = request.UserId,
+					VoucherId = request.VoucherId
+				};
+				_unitOfWork.Context.UserVouchers.Add(userVoucher);
+				int rows = await _unitOfWork.CompleteAsync();
+				if(rows > 0)
+				{
+					result.StatusCode = Common.Enums.StatusCode.Success;
+					return result;
+				}
+				result.StatusCode = Common.Enums.StatusCode.InternalServerError;
+				result.ErrorMessage = "Error";
+			}
+			catch (Exception ex)
+			{
+				_logger.LogError($"PostAddVoucherToUser error: {ex}");
 			}
 			return result;
 		}
@@ -173,6 +245,36 @@ namespace SWP391.OnlineShop.ServiceInterface.Services
 			catch (Exception ex)
 			{
 				_logger.LogError($"PutUpdateVoucher error: {ex}");
+			}
+			return result;
+		}
+
+		public async Task<BaseResultModel> Put(PutUpdateVoucherAmount request)
+		{
+			var result = new BaseResultModel();
+			try
+			{
+				var voucher = _unitOfWork.Vouchers.GetById(request.Id);
+				if (voucher == null)
+				{
+					result.StatusCode = Common.Enums.StatusCode.NotFound;
+					result.ErrorMessage = "Voucher doesn't exist";
+					return result;
+				}
+				voucher.Amount -= 1;
+				_unitOfWork.Vouchers.Update(voucher);
+				int rows = await _unitOfWork.CompleteAsync();
+				if (rows > 0)
+				{
+					result.StatusCode = Common.Enums.StatusCode.Success;
+					return result;
+				}
+				result.StatusCode = Common.Enums.StatusCode.InternalServerError;
+				result.ErrorMessage = "Error";
+			}
+			catch (Exception ex)
+			{
+				_logger.LogError($"PutUpdateVoucherAmount error: {ex}");
 			}
 			return result;
 		}

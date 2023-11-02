@@ -6,74 +6,81 @@ namespace SWP391.OnlineShop.ServiceInterface.Interfaces
 	public interface IProductService
 	{
 		/// <summary>
-		/// Post Detail Standard & Criteria of Appendices
+		/// Get all products
 		/// </summary>
 		/// <param name="request"></param>
-		/// <returns>Post Detail Standard & Criteria of Appendices</returns>
+		/// <returns>Products</returns>
 		List<ProductViewModel> Get(GetAllProduct request);
 
 		/// <summary>
-		/// Post Detail Standard & Criteria of Appendices
+		/// Get product by category id
 		/// </summary>
 		/// <param name="request"></param>
-		/// <returns>Post Detail Standard & Criteria of Appendices</returns>
+		/// <returns>Product</returns>
 		List<ProductViewModel> Get(GetProductByCategoryId request);
 
 		/// <summary>
-		/// Post Detail Standard & Criteria of Appendices
+		/// Get hot deals products
 		/// </summary>
 		/// <param name="request"></param>
-		/// <returns>Post Detail Standard & Criteria of Appendices</returns>
+		/// <returns>Products has biggest deal</returns>
 		List<ProductViewModel> Get(GetHotDealProduct request);
 
-		/// <summary>
-		/// Post Detail Standard & Criteria of Appendices
-		/// </summary>
-		/// <param name="request"></param>
-		/// <returns>Post Detail Standard & Criteria of Appendices</returns>
-		List<ProductViewModel> Get(GetDealProductOfWeek request);
+        /// <summary>
+        /// Get deal product of week
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns>Products has biggest deal in week</returns>
+        List<ProductViewModel> Get(GetDealProductOfWeek request);
 
 		/// <summary>
-		/// Post Appendix By Id
+		/// Get product By Id
 		/// </summary>
 		/// <param name="request"></param>
-		/// <returns>appendix of selected id</returns>
+		/// <returns>Product</returns>
 		ProductViewModel Get(GetProductById request);
 
 		/// <summary>
-		/// Post Appendix By Id
+		/// Get product's feedback by id
 		/// </summary>
 		/// <param name="request"></param>
-		/// <returns>appendix of selected id</returns>
+		/// <returns>product feedbacks</returns>
 		ProductViewModel Get(GetProductFeedbackById request);
 
 		/// <summary>
-		/// Add new Appendix
+		/// Post Add Product
 		/// </summary>
 		/// <param name="request"></param>
-		/// <returns>appendix of selected id</returns>
+		/// <returns>Product</returns>
 		Task<ProductViewModel> Post(PostAddProduct request);
 
 		/// <summary>
-		/// Add new Appendix
+		/// Delete Product
 		/// </summary>
 		/// <param name="request"></param>
-		/// <returns>appendix of selected id</returns>
+		/// <returns></returns>
 		Task<ProductViewModel> Delete(DeleteProduct request);
 
 		/// <summary>
-		/// Add new Appendix
+		/// Update Product
 		/// </summary>
 		/// <param name="request"></param>
-		/// <returns>appendix of selected id</returns>
+		/// <returns>Product</returns>
 		Task<ProductViewModel> Put(PutUpdateProduct request);
 
 		/// <summary>
 		/// Add new Comment
 		/// </summary>
 		/// <param name="request"></param>
-		/// <returns>appendix of selected id</returns>
+		/// <returns></returns>
 		void Post(Comment request);
-	}
+
+        /// <summary>
+        /// Get product of voucher
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns>product of voucher</returns>
+        List<ProductViewModel> Get(GetProductOfVoucher request);
+    }
 }
 

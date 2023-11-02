@@ -1,6 +1,5 @@
 ﻿namespace SWP391.OnlineShop.Common.Helpers
 {
-    //TODO: HaiLD - you should fuck this file
     public class PaypalHelper
     {
         public const string ClientId = "AXZCeMTHkHGnMI-YTo8RSP-ogXsX1qti68hcKHtkdXJ5EuvZJ22gfpoeOye2VMZQV0JtTtA0YOOxqBl0";

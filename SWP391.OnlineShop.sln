@@ -13,23 +13,23 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Database", "Database", "{3F
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Libraries", "Libraries", "{5377D38A-756C-4EAE-9C64-6E2FD0A3924F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SWP391.OnlineShop.Core", "SWP391.OnlineShop.Core\SWP391.OnlineShop.Core.csproj", "{42845D5E-0A29-4E2D-A3F8-AD938C307DEA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SWP391.OnlineShop.Core", "SWP391.OnlineShop.Core\SWP391.OnlineShop.Core.csproj", "{42845D5E-0A29-4E2D-A3F8-AD938C307DEA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SWP391.OnlineShop.Common", "SWP391.OnlineShop.Common\SWP391.OnlineShop.Common.csproj", "{40F4B2D2-2E6D-426F-8D5A-EC2021DA367B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SWP391.OnlineShop.Common", "SWP391.OnlineShop.Common\SWP391.OnlineShop.Common.csproj", "{40F4B2D2-2E6D-426F-8D5A-EC2021DA367B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SWP391.OnlineShop.ServiceModel", "SWP391.OnlineShop.ServiceModel\SWP391.OnlineShop.ServiceModel.csproj", "{D8704F81-5938-43BB-BBE9-BF7416645CAA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SWP391.OnlineShop.ServiceModel", "SWP391.OnlineShop.ServiceModel\SWP391.OnlineShop.ServiceModel.csproj", "{D8704F81-5938-43BB-BBE9-BF7416645CAA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SWP391.OnlineShop.ServiceInterface", "SWP391.OnlineShop.ServiceInterface\SWP391.OnlineShop.ServiceInterface.csproj", "{F0A80EC8-E2A2-4F95-BFB0-9D7866A49AED}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SWP391.OnlineShop.ServiceInterface", "SWP391.OnlineShop.ServiceInterface\SWP391.OnlineShop.ServiceInterface.csproj", "{F0A80EC8-E2A2-4F95-BFB0-9D7866A49AED}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{62FD46DE-E274-445E-ABF9-4087ABE37D14}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SWP391.OnlineShop.UnitTest", "SWP391.OnlineShop.UnitTest\SWP391.OnlineShop.UnitTest.csproj", "{0DE3165D-05B9-46E5-B851-577A1AD9FF21}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SWP391.OnlineShop.UnitTest", "SWP391.OnlineShop.UnitTest\SWP391.OnlineShop.UnitTest.csproj", "{0DE3165D-05B9-46E5-B851-577A1AD9FF21}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SWP391.OnlineShop.BatchJob", "SWP391.OnlineShop.BatchJob\SWP391.OnlineShop.BatchJob.csproj", "{16227AEA-A9C4-46D7-BFFE-83D0F9B5F06A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SWP391.OnlineShop.BatchJob", "SWP391.OnlineShop.BatchJob\SWP391.OnlineShop.BatchJob.csproj", "{16227AEA-A9C4-46D7-BFFE-83D0F9B5F06A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SWP391.OnlineShop.Service", "SWP391.OnlineShop.Service\SWP391.OnlineShop.Service.csproj", "{E3C14BD7-7C0D-48EB-9A27-C51D0F507F48}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SWP391.OnlineShop.Service", "SWP391.OnlineShop.Service\SWP391.OnlineShop.Service.csproj", "{E3C14BD7-7C0D-48EB-9A27-C51D0F507F48}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SWP391.OnlineShop.Portal", "SWP391.OnlineShop.Portal\SWP391.OnlineShop.Portal.csproj", "{F9FCFB30-657B-46D8-8061-36987A6FCF1E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SWP391.OnlineShop.Portal", "SWP391.OnlineShop.Portal\SWP391.OnlineShop.Portal.csproj", "{F9FCFB30-657B-46D8-8061-36987A6FCF1E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

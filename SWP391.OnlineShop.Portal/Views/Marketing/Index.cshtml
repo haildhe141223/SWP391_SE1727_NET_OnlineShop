@@ -89,8 +89,11 @@
                                 <i class="fa-regular fa-trash-can text-danger"></i>
                                 </a>
                                 } *@
+                                    <a asp-controller="Marketing" asp-action="ViewProduct" asp-route-id="@productViewModel.Id">
+                                        <i class="fa-regular fa-eye"></i>
+                                    </a>
                                     <a asp-controller="Marketing" asp-action="EditProduct" asp-route-id="@productViewModel.Id">
-                                        <i class="fa-regular fa-pen-to-square"></i>
+                                        <i class="fa-regular fa-pen-to-square text-primary"></i>
                                     </a>
                                     <a asp-controller="Marketing" asp-action="DeleteProduct" asp-route-id="@productViewModel.Id">
                                         <i class="fa-regular fa-trash-can text-danger"></i>

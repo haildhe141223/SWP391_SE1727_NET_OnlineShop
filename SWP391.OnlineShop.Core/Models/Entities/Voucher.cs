@@ -14,7 +14,7 @@ public class Voucher : BaseEntity<int>
 
     public string VoucherName { get; set; }
     public string VoucherCode { get; set; }
-    public string Amount { get; set; }
+    public int Amount { get; set; }
     public int CreatedBy { get; set; }
     public User User { get; set; }
     public DateTime StartDateTime { get; set; }

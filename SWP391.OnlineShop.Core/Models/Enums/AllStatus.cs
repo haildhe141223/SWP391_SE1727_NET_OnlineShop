@@ -34,12 +34,12 @@ public enum OrderStatus
     InCartDetail = 0,
     InCartContact = 1,
     InCartCompletion = 2,
-    WaitingConfirmBySalerUnPaid = 3,
+	WaitingShipperToDeliverUnPaid = 3,
     WaitingShipperToDeliver = 4,
     Delivering = 5,
     Delivered = 6,
     Received = 7,
-    PaidOrderWaitingConfirm = 8,
+	DeliveringUnPaid = 8,
     Canceled = 9
 }
 

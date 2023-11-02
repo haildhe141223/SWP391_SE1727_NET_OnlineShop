@@ -1,4 +1,6 @@
-﻿namespace SWP391.OnlineShop.ServiceModel.ViewModels.Users
+﻿using SWP391.OnlineShop.Core.Models.Enums;
+
+namespace SWP391.OnlineShop.ServiceModel.ViewModels.Users
 {
     public class UserViewModel
     {
@@ -12,6 +14,9 @@
         public bool TwoFactorEnabled { get; set; }
         public bool LockoutEnabled { get; set; }
         public string Avatar { get; set; }
+        public string Address { get; set; }
+        public Gender Gender { get; set; }
+        public List<string> Addresses { get; set; }
         public List<string> Role { get; set; }
     }
 }

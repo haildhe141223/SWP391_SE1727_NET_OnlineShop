@@ -13,8 +13,8 @@ namespace SWP391.OnlineShop.ServiceModel.ServiceModels
 			public string Email { get; set; }
 		}
 
-		[Route("/Voucher/GetAllVoucherById", "GET")]
-		public class GetAllVoucherById : IReturn<VoucherViewModels>
+		[Route("/Voucher/GetVoucherById", "GET")]
+		public class GetVoucherById : IReturn<VoucherViewModels>
 		{
 			public int Id { get; set; }
 		}
@@ -25,12 +25,13 @@ namespace SWP391.OnlineShop.ServiceModel.ServiceModels
 			public string Email { get; set; }
 			public string VoucherName { get; set; }
 			public string VoucherCode { get; set; }
-			public string Amount { get; set; }
+			public int Amount { get; set; }
 			public DateTime StartDateTime { get; set; }
 			public DateTime EndDateTime { get; set; }
 			public VoucherType Type { get; set; }
 			public decimal Value { get; set; }
-		}
+            public List<int> ProductId { get; set; }
+        }
 
 		[Route("/Voucher/PutUpdateVoucher", "PUT")]
 		public class PutUpdateVoucher : IReturn<BaseResultModel>
@@ -39,7 +40,7 @@ namespace SWP391.OnlineShop.ServiceModel.ServiceModels
 			public string Email { get; set; }
 			public string VoucherName { get; set; }
 			public string VoucherCode { get; set; }
-			public string Amount { get; set; }
+			public int Amount { get; set; }
 			public DateTime StartDateTime { get; set; }
 			public DateTime EndDateTime { get; set; }
             public VoucherType Type { get; set; }
@@ -48,6 +49,24 @@ namespace SWP391.OnlineShop.ServiceModel.ServiceModels
 
 		[Route("/Voucher/DeleteVoucher", "DELETE")]
 		public class DeleteVoucher : IReturn<BaseResultModel>
+		{
+			public int Id { get; set; }
+		}
+
+		[Route("/Voucher/GetAllAvailableVoucher", "GET")]
+		public class GetAllAvailableVoucher : IReturn<List<VoucherViewModels>>
+		{
+		}
+
+		[Route("/Voucher/PostAddVoucherToUser", "POST")]
+		public class PostAddVoucherToUser : IReturn<BaseResultModel>
+		{
+			public int VoucherId { get; set; }
+			public int UserId { get; set; }
+		}
+
+		[Route("/Voucher/PutUpdateVoucherAmount", "PUT")]
+		public class PutUpdateVoucherAmount : IReturn<BaseResultModel>
 		{
 			public int Id { get; set; }
 		}
