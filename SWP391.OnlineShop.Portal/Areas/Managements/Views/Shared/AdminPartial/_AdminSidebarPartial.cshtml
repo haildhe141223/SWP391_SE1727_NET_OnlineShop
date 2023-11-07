@@ -97,7 +97,8 @@
 
                 @if (!string.IsNullOrEmpty(userRole) && (userRole.Contains(RoleConstraints.Admin) || userRole.Contains(RoleConstraints.Marketing)))
                 {
-                    <a class="collapse-item">Posts</a>
+                    <a class="collapse-item" asp-area="Managements" asp-controller="Marketing" asp-action="Index">Manage Products</a>
+                    <a class="collapse-item" asp-area="Managements" asp-controller="Marketing" asp-action="ManagePost">Manage Posts</a>
                 }
 
                 @if (!string.IsNullOrEmpty(userRole) && userRole.Contains(RoleConstraints.Admin))

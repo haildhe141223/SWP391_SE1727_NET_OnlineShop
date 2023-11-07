@@ -11,6 +11,6 @@ public interface IPostRepository : IGenericRepository<Post, int>
     Task<List<Post>> GetPostByName(string postName);
     Task<List<Post>> GetPostByStatus(string status);
     Task<List<Post>> GetPostWithPaging(int skip, int take);
-	Task<List<Post>> GetAllPost();
+	List<Post> GetAllPost();
 	Task<Post> GetPostById(int id);
 }

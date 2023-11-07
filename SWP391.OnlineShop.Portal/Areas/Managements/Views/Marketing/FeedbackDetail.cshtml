@@ -1,6 +1,5 @@
 ﻿@model SWP391.OnlineShop.ServiceModel.ViewModels.Feedback.FeedbackViewModels
 @{
-    Layout = "_Layout";
     var statusList = ViewData["StatusList"] as SelectList;
 }
 
@@ -55,7 +54,7 @@
                 <select disabled asp-for="Status" class="form-control" asp-items="@statusList"></select>
             </div><br />
             <a type="button" class="btn btn-secondary" asp-action="">Back</a>
-            <button asp-controller="Marketing" asp-action="EditFeedback" asp-route-id="@Model.Id" class="btn btn-primary">Edit Status</button>
+            <button asp-area="Managements" asp-controller="Marketing" asp-action="EditFeedback" asp-route-id="@Model.Id" class="btn btn-primary">Edit Status</button>
         </form>
     </div>
 </div>

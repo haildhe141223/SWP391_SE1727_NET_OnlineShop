@@ -1,6 +1,5 @@
 ﻿@model SWP391.OnlineShop.ServiceModel.ViewModels.Feedback.FeedbackViewModels
 @{
-    Layout = "_Layout";
     var statusList = ViewData["StatusList"] as SelectList;
 }
 
@@ -13,7 +12,7 @@
         <h6 class="m-0 font-weight-bold text-primary">Edit Feedback</h6>
     </div>
     <div class="card-body">
-        <form style="margin:auto !important; width:60% !important" asp-controller="Marketing" asp-action="EditFeedback" method="post" enctype="multipart/form-data">
+        <form style="margin:auto !important; width:60% !important" asp-area="Managements" asp-controller="Marketing" asp-action="EditFeedback" method="post" enctype="multipart/form-data">
             <div class="r-error my-4 text-danger text-center" asp-validation-summary="All">
             </div>
             <div class="mb-3">
