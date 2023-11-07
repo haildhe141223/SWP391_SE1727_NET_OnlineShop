@@ -1,12 +1,9 @@
 ﻿@using SWP391.OnlineShop.Core.Models.Enums;
 @model List<SWP391.OnlineShop.ServiceModel.ViewModels.Products.PostViewModel>
-@{
-    Layout = "_Layout";
-}
 
 <div class="m-headers ml-3" style="margin-top: 10% !important;">
     <h4 class="fw-bold">Post Management</h4>
-    <a asp-controller="Marketing" asp-action="AddPost">
+    <a asp-area="Managements" asp-controller="Marketing" asp-action="AddPost">
         <button class="btn btn-primary">
             <span>Add</span>
             <i class="fa-regular fa-plus"></i>
@@ -14,29 +11,7 @@
     </a>
 
 </div>
-@*<div class="m-searchs">
-    <div>
-        <form id="formSearchUser" asp-controller="Home" asp-action="ShowUsers">
-            <div class="mb-3">
-                <label for="search-user" class="form-label">Search</label>
-                <input type="text" placeholder="Enter username" class="form-control" id="search-user" title="Search User" name="SearchString" value="@ViewData["SearchValue"]">
-            </div>
-            <div class="mb-3 form-status">
-                <label for="search-status" class="form-label">Status</label>
-                <select class="form-select" id="search-status" name="status">
-                    <!option value="All" @(status == "All" ? "selected" : "")>All</!option>
-                    <!option value="Active" @(status == "Active" ? "selected" : "")>Active</!option>
-                    <!option value="Inactive" @(status == "Inactive" ? "selected" : "")>InActive</!option>
-                </select>
-            </div>
-            <div class="form-search-btn">
-                <button class="btn" type="submit" title="search-submit">
-                    <i class="fa-solid fa-magnifying-glass"></i>
-                </button>
-            </div>
-        </form>
-    </div>
-</div>*@
+
 <div class="card shadow mb-4 mt-3">
     <div class="card-header py-3">
         <h6 class="m-0 font-weight-bold text-primary">Posts DataTables</h6>
@@ -60,9 +35,6 @@
                     @foreach (var postViewModel in Model)
                     {
                         <tr>
-                            @* <td>
-                        <a asp-action="UserRoleDetails" asp-controller="Admin" asp-route-email="@userViewModel.Email">@userViewModel.UserName</a>
-                        </td> *@
                             <td>@postViewModel.Title</td>
                             <td>@postViewModel.Brief</td>
                             <td>@postViewModel.Featured</td>
@@ -79,23 +51,13 @@
                             }
                             <td>
                                 <div class="table-action">
-                                    @*Prevent modify admin account*@
-                                    @* @if (userViewModel.Roles != null && !userViewModel.Roles.Contains(RoleConstraints.Admin))
-                                {
-                                <a href="#" data-bs-toggle="modal" data-bs-target="#formEditUserPopup" onclick="editUser('@userViewModel.UserName', '@userViewModel.Email', '@Enum.GetName(typeof(Status), userViewModel.Status)')">
-                                <i class="fa-regular fa-pen-to-square"></i>
-                                </a>
-                                <a href="#" data-bs-toggle="modal" data-bs-target="#formDeletePopup" onclick="deleteUser('@userViewModel.Email')">
-                                <i class="fa-regular fa-trash-can text-danger"></i>
-                                </a>
-                                } *@
-                                    <a asp-controller="Marketing" asp-action="ViewPost" asp-route-id="@postViewModel.Id">
+                                    <a asp-area="Managements" asp-controller="Marketing" asp-action="ViewPost" asp-route-id="@postViewModel.Id">
                                         <i class="fa-regular fa-eye"></i>
                                     </a>
-                                    <a asp-controller="Marketing" asp-action="EditPost" asp-route-id="@postViewModel.Id">
+                                    <a asp-area="Managements" asp-controller="Marketing" asp-action="EditPost" asp-route-id="@postViewModel.Id">
                                         <i class="fa-regular fa-pen-to-square text-primary"></i>
                                     </a>
-                                    <a asp-controller="Marketing" asp-action="DeletePost" asp-route-id="@postViewModel.Id">
+                                    <a asp-area="Managements" asp-controller="Marketing" asp-action="DeletePost" asp-route-id="@postViewModel.Id">
                                         <i class="fa-regular fa-trash-can text-danger"></i>
                                     </a>
                                 </div>

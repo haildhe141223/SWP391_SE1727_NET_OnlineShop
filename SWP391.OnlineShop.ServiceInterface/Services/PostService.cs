@@ -55,8 +55,13 @@ namespace SWP391.OnlineShop.ServiceInterface.Services
             var result = new List<PostViewModel>();
             try
             {
-                var post = _unitOfWork.Posts.GetAllPost();
-                result = _mapper.Map<List<PostViewModel>>(post);
+                var posts = _unitOfWork.Posts.GetAllPost();
+                foreach (var post in posts)
+                {
+                    var postVm = _mapper.Map<PostViewModel>(post);
+                    result.Add(postVm);
+                }
+                //result = _mapper.Map<List<PostViewModel>>(post);
                 return result;
             }
             catch (Exception ex)
