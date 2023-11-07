@@ -59,7 +59,13 @@ public class AccountService : BaseService, IAccountService
         }
     }
 
-    public async Task<BaseResultModel> Get(GetUser request)
+    public async Task<UserViewModel> Get(GetUser request)
+    {
+        var users = await _userManager.FindByIdAsync(request.Id);
+        return _mapper.Map<UserViewModel>(users);
+    }
+
+    public async Task<BaseResultModel> Get(GetExternalUser request)
     {
         try
         {

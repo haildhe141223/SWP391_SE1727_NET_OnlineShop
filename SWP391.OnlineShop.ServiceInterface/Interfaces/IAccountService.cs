@@ -7,8 +7,9 @@ namespace SWP391.OnlineShop.ServiceInterface.Interfaces;
 public interface IAccountService
 {
     Task<List<UserViewModel>> Get(GetUsers request);
+    Task<UserViewModel> Get(GetUser request);
 
-    Task<BaseResultModel> Get(GetUser request);
+    Task<BaseResultModel> Get(GetExternalUser request);
     Task<BaseResultModel> Get(GetLogin request);
     Task<BaseResultModel> Get(GetExternalLogin request);
 
