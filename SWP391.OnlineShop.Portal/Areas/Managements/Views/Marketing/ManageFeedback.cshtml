@@ -1,35 +1,9 @@
 ﻿@using SWP391.OnlineShop.Core.Models.Enums;
 @model List<SWP391.OnlineShop.ServiceModel.ViewModels.Feedback.FeedbackViewModels>
-@{
-    Layout = "_Layout";
-}
 
 <div class="m-headers ml-3" style="margin-top: 10% !important;">
     <h4 class="fw-bold">Feedbacks Management</h4>
 </div>
-@*<div class="m-searchs">
-    <div>
-        <form id="formSearchUser" asp-controller="Home" asp-action="ShowUsers">
-            <div class="mb-3">
-                <label for="search-user" class="form-label">Search</label>
-                <input type="text" placeholder="Enter username" class="form-control" id="search-user" title="Search User" name="SearchString" value="@ViewData["SearchValue"]">
-            </div>
-            <div class="mb-3 form-status">
-                <label for="search-status" class="form-label">Status</label>
-                <select class="form-select" id="search-status" name="status">
-                    <!option value="All" @(status == "All" ? "selected" : "")>All</!option>
-                    <!option value="Active" @(status == "Active" ? "selected" : "")>Active</!option>
-                    <!option value="Inactive" @(status == "Inactive" ? "selected" : "")>InActive</!option>
-                </select>
-            </div>
-            <div class="form-search-btn">
-                <button class="btn" type="submit" title="search-submit">
-                    <i class="fa-solid fa-magnifying-glass"></i>
-                </button>
-            </div>
-        </form>
-    </div>
-</div>*@
 <div class="card shadow mb-4 mt-3">
     <div class="card-header py-3">
         <h6 class="m-0 font-weight-bold text-primary">Feedbacks</h6>
@@ -67,10 +41,10 @@
                             }
                             <td>
                                 <div class="table-action">
-                                    <a asp-controller="Marketing" asp-action="FeedbackDetail" asp-route-id="@feedbackViewModel.Id">
+                                    <a asp-area="Managements" asp-controller="Marketing" asp-action="FeedbackDetail" asp-route-id="@feedbackViewModel.Id">
                                         <i class="fa-regular fa-eye"></i>
                                     </a>
-                                    <a asp-controller="Marketing" asp-action="EditFeedback" asp-route-id="@feedbackViewModel.Id">
+                                    <a asp-area="Managements" asp-controller="Marketing" asp-action="EditFeedback" asp-route-id="@feedbackViewModel.Id">
                                         <i class="fa-regular fa-pen-to-square"></i>
                                     </a>
                                 </div>

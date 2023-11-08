@@ -6,9 +6,11 @@ using SWP391.OnlineShop.ServiceInterface.Loggers;
 using SWP391.OnlineShop.ServiceModel.ServiceModels;
 using SWP391.OnlineShop.ServiceModel.ViewModels.Feedback;
 using SWP391.OnlineShop.ServiceModel.ViewModels.Products;
+using SWP391.OnlineShop.ServiceModel.ViewModels.Settings;
 using static SWP391.OnlineShop.ServiceModel.ServiceModels.FeedbackModels;
+using static SWP391.OnlineShop.ServiceModel.ServiceModels.SliderModel;
 
-namespace SWP391.OnlineShop.Portal.Controllers
+namespace SWP391.OnlineShop.Portal.Areas.Managements.Controllers
 {
     public class MarketingController : BaseController
     {
@@ -43,7 +45,7 @@ namespace SWP391.OnlineShop.Portal.Controllers
         [HttpPost]
         public async Task<IActionResult> AddProduct(ProductViewModel request)
         {
-            var imageFolderLink = $"{Convert.ToString(Directory.GetCurrentDirectory())}\\wwwroot\\uploads\\{request.ProductName}";
+            var imageFolderLink = $"{Convert.ToString(Directory.GetCurrentDirectory())}\\wwwroot\\uploads\\Products\\{request.ProductName}";
             var imageLink = string.Empty;
             if (!Directory.Exists(imageFolderLink))
             {
@@ -57,7 +59,7 @@ namespace SWP391.OnlineShop.Portal.Controllers
                 await using Stream fileStream = new FileStream(imageLocalLink, FileMode.Create);
                 await request.ThumbnailFile.CopyToAsync(fileStream);
 
-                imageLink = $"/uploads/{request.ProductName}/{request.ThumbnailFile.FileName}";
+                imageLink = $"/uploads/Products/{request.ProductName}/{request.ThumbnailFile.FileName}";
             }
 
             await _client.PostAsync(new PostAddProduct
@@ -115,7 +117,7 @@ namespace SWP391.OnlineShop.Portal.Controllers
         [HttpPost]
         public async Task<IActionResult> EditProduct(ProductViewModel request)
         {
-            var imageFolderLink = $"{Convert.ToString(Directory.GetCurrentDirectory())}\\wwwroot\\uploads\\{request.ProductName}";
+            var imageFolderLink = $"{Convert.ToString(Directory.GetCurrentDirectory())}\\wwwroot\\uploads\\Products\\{request.ProductName}";
             var imageLink = string.Empty;
             if (!Directory.Exists(imageFolderLink))
             {
@@ -129,7 +131,7 @@ namespace SWP391.OnlineShop.Portal.Controllers
                 await using Stream fileStream = new FileStream(imageLocalLink, FileMode.Create);
                 await request.ThumbnailFile.CopyToAsync(fileStream);
 
-                imageLink = $"/uploads/{request.ProductName}/{request.ThumbnailFile.FileName}";
+                imageLink = $"/uploads/Products/{request.ProductName}/{request.ThumbnailFile.FileName}";
             }
 
             await _client.PutAsync(new PutUpdateProduct
@@ -156,18 +158,17 @@ namespace SWP391.OnlineShop.Portal.Controllers
             return RedirectToAction("Index");
         }
 
-
         public async Task<IActionResult> ManagePost()
         {
             _logger.LogInfo("1. Post Index - Start");
 
-            //Get all products
+            //Get all posts
             var latestPosts = await _client.GetAsync(new GetAllPost());
 
             return View(latestPosts);
         }
 
-        public async Task<ActionResult> AddPost()
+        public async Task<IActionResult> AddPost()
         {
             ViewData["GenreList"] = new SelectList(await _client.GetAsync(new GetAllCategory
             {
@@ -179,7 +180,7 @@ namespace SWP391.OnlineShop.Portal.Controllers
         [HttpPost]
         public async Task<IActionResult> AddPost(PostViewModel request)
         {
-            var imageFolderLink = $"{Convert.ToString(Directory.GetCurrentDirectory())}\\wwwroot\\uploads\\{request.Title}";
+            var imageFolderLink = $"{Convert.ToString(Directory.GetCurrentDirectory())}\\wwwroot\\uploads\\Posts\\{request.Title}";
             var imageLink = string.Empty;
             if (!Directory.Exists(imageFolderLink))
             {
@@ -193,7 +194,7 @@ namespace SWP391.OnlineShop.Portal.Controllers
                 await using Stream fileStream = new FileStream(imageLocalLink, FileMode.Create);
                 await request.ThumbnailFile.CopyToAsync(fileStream);
 
-                imageLink = $"/uploads/{request.Title}/{request.ThumbnailFile.FileName}";
+                imageLink = $"/uploads/Posts/{request.Title}/{request.ThumbnailFile.FileName}";
             }
             await _client.PostAsync(new PostAddPost
             {
@@ -253,7 +254,7 @@ namespace SWP391.OnlineShop.Portal.Controllers
         [HttpPost]
         public async Task<IActionResult> EditPost(PostViewModel request)
         {
-            var imageFolderLink = $"{Convert.ToString(Directory.GetCurrentDirectory())}\\wwwroot\\uploads\\{request.Title}";
+            var imageFolderLink = $"{Convert.ToString(Directory.GetCurrentDirectory())}\\wwwroot\\uploads\\Posts\\{request.Title}";
             var imageLink = string.Empty;
             if (!Directory.Exists(imageFolderLink))
             {
@@ -267,7 +268,7 @@ namespace SWP391.OnlineShop.Portal.Controllers
                 await using Stream fileStream = new FileStream(imageLocalLink, FileMode.Create);
                 await request.ThumbnailFile.CopyToAsync(fileStream);
 
-                imageLink = $"/uploads/{request.Title}/{request.ThumbnailFile.FileName}";
+                imageLink = $"/uploads/Posts/{request.Title}/{request.ThumbnailFile.FileName}";
             }
 
             await _client.PutAsync(new PutUpdatePost
@@ -353,5 +354,121 @@ namespace SWP391.OnlineShop.Portal.Controllers
             return RedirectToAction("ManageFeedback");
         }
 
+        public async Task<IActionResult> ManageSlider()
+        {
+            //Get all sliders
+            var sliders = await _client.GetAsync(new GetAllSlider());
+
+            return View(sliders);
+        }
+
+        public IActionResult AddSlider()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> AddSlider(SliderViewModel request)
+        {
+            var imageFolderLink = $"{Convert.ToString(Directory.GetCurrentDirectory())}\\wwwroot\\uploads\\Sliders\\{request.Title}";
+            var imageLink = string.Empty;
+            if (!Directory.Exists(imageFolderLink))
+            {
+                Directory.CreateDirectory(imageFolderLink);
+            }
+
+            var imageLocalLink = Path.Combine(imageFolderLink, request.ThumbnailFile.FileName);
+
+            if (request.ThumbnailFile != null)
+            {
+                await using Stream fileStream = new FileStream(imageLocalLink, FileMode.Create);
+                await request.ThumbnailFile.CopyToAsync(fileStream);
+
+                imageLink = $"/uploads/Sliders/{request.Title}/{request.ThumbnailFile.FileName}";
+            }
+            await _client.PostAsync(new PostAddSlider
+            {
+                Title = request.Title,
+                Image = imageLink,
+                BlackLink = request.BlackLink,
+                Status = Status.Active
+            });
+            return RedirectToAction("ManageSlider");
+        }
+
+        public async Task<IActionResult> ViewSlider(int id)
+        {
+            var listStatus = new List<Status>
+            {
+                Status.Active,
+                Status.Inactive
+            };
+
+            ViewData["StatusList"] = new SelectList(listStatus);
+
+            var slider = await _client.GetAsync(new GetSliderById
+            {
+                SliderId = id
+            });
+            return View(slider);
+        }
+
+        public async Task<IActionResult> EditSlider(int id)
+        {
+            var listStatus = new List<Status>
+            {
+                Status.Active,
+                Status.Inactive
+            };
+
+            ViewData["StatusList"] = new SelectList(listStatus);
+
+            var slider = await _client.GetAsync(new GetSliderById
+            {
+                SliderId = id
+            });
+            return View(slider);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> EditSlider(SliderViewModel request)
+        {
+            var imageFolderLink = $"{Convert.ToString(Directory.GetCurrentDirectory())}\\wwwroot\\uploads\\Sliders\\{request.Title}";
+            var imageLink = string.Empty;
+            if (!Directory.Exists(imageFolderLink))
+            {
+                Directory.CreateDirectory(imageFolderLink);
+            }
+
+            if (request.ThumbnailFile != null)
+            {
+                var imageLocalLink = Path.Combine(imageFolderLink, request.ThumbnailFile.FileName);
+
+                await using Stream fileStream = new FileStream(imageLocalLink, FileMode.Create);
+                await request.ThumbnailFile.CopyToAsync(fileStream);
+
+                imageLink = $"/uploads/Sliders/{request.Title}/{request.ThumbnailFile.FileName}";
+            }
+
+            await _client.PutAsync(new PutUpdateSlider
+            {
+                Id = request.Id,
+                Title = request.Title,
+                Image = string.IsNullOrEmpty(imageLink) ? request.Image : imageLink,
+                BlackLink = request.BlackLink,
+                Status = request.Status
+
+            });
+            return RedirectToAction("ManageSlider");
+        }
+
+        public async Task<IActionResult> DeleteSlider(int id)
+        {
+            await _client.DeleteAsync(new DeleteSlider
+            {
+                SliderId = id
+            });
+            return RedirectToAction("ManageSlider");
+        }
     }
 }

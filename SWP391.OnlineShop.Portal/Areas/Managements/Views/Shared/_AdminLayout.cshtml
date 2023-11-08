@@ -22,6 +22,8 @@
     <link rel="icon" type="image/x-icon" sizes="16x16" href="~/img/logo/favicon.ico">
 
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/ckeditor/ckeditor.js"></script>
+    <script src="~/lib/ckeditor/adapters/jquery.js"></script>
     <script src="~/lib/toaster/jquery.toaster.js"></script>
 </head>
 
@@ -70,6 +72,8 @@
 
     <script>
         $(document).ready(function(){
+            $("#ck-editor").ckeditor();
+
             const createDtPickerProject = $("#startDate");
             if (createDtPickerProject != undefined) {
                 createDtPickerProject.datepicker({
