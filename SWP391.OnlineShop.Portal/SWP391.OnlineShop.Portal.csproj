@@ -8,10 +8,10 @@
 
   <ItemGroup>
     <Folder Include="Logs\" />
-    <Folder Include="wwwroot\css\orderHistory\" />
+    <Folder Include="wwwroot\css\order_history\" />
     <Folder Include="wwwroot\img\" />
-    <Folder Include="wwwroot\uploads\" />
     <Folder Include="wwwroot\template\js\" />
+    <Folder Include="wwwroot\uploads\users\" />
   </ItemGroup>
 
   <ItemGroup>
@@ -46,6 +46,8 @@
     <_ContentIncludedByDefault Remove="Areas\Managements\Views\Shared\_AdminLayout.cshtml" />
     <_ContentIncludedByDefault Remove="Views\Account\ConfirmResetPassword.cshtml" />
     <_ContentIncludedByDefault Remove="Views\Account\Register.cshtml" />
+    <_ContentIncludedByDefault Remove="Views\Profile\ProfilePartial\_AddressPartial.cshtml" />
+    <_ContentIncludedByDefault Remove="Views\Profile\ProfilePartial\_GeneralPartial.cshtml" />
   </ItemGroup>
 
   <ItemGroup>
@@ -73,6 +75,14 @@
     <None Include="wwwroot\sources\badges\santalune.webp" />
     <None Include="wwwroot\sources\badges\shalour.webp" />
     <None Include="wwwroot\sources\badges\snowbelle.webp" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <UpToDateCheckInput Remove="Views\Profile\ProfilePartial\_GeneralPartial.cshtml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <UpToDateCheckInput Remove="Views\Profile\ProfilePartial\_AddressPartial.cshtml" />
   </ItemGroup>
 
 </Project>

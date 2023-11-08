@@ -15,7 +15,13 @@ public class AccountModels
     }
 
     [Route("/Account/GetUser", "GET")]
-    public class GetUser : IReturn<BaseResultModel>
+    public class GetUser : IReturn<List<UserViewModel>>
+    {
+        public string Id { get; set; }
+    }
+
+    [Route("/Account/GetExternalUser", "GET")]
+    public class GetExternalUser : IReturn<BaseResultModel>
     {
         public string Email { get; set; }
         public string ProviderKey { get; set; }
@@ -57,5 +63,11 @@ public class AccountModels
         public string To { get; set; }
         public string Category { get; set; }
         public string LinkResetPassword { get; set; }
+    }
+
+    [Route("/Account/DeleteUser", "DELETE")]
+    public class DeleteUser : IReturn<BaseResultModel>
+    {
+        public int UserId { get; set; }
     }
 }

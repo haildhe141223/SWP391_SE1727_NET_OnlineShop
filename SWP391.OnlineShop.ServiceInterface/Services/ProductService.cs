@@ -104,8 +104,12 @@ namespace SWP391.OnlineShop.ServiceInterface.Services
             var result = new List<ProductViewModel>();
             try
             {
-                var product = _unitOfWork.Products.GetDealProductOfWeek();
-                result = _mapper.Map<List<ProductViewModel>>(product);
+                var products = _unitOfWork.Products.GetDealProductOfWeek();
+                foreach (var product in products)
+                {
+                    var procustVm = _mapper.Map<ProductViewModel>(product);
+                    result.Add(procustVm);
+                }
                 return result;
             }
             catch (Exception ex)
@@ -210,7 +214,8 @@ namespace SWP391.OnlineShop.ServiceInterface.Services
                 CreatedDateTime = DateTime.Now,
                 Comment = request.Message,
                 UserId = _userManager.FindByEmailAsync(request.Email).Result.Id,
-                Status = Core.Models.Enums.Status.Active
+                Status = Core.Models.Enums.Status.Active,
+                RatedStar = Convert.ToDecimal(request.Point)
             };
             _unitOfWork.FeedBacks.Add(feedBack);
             _unitOfWork.Complete();

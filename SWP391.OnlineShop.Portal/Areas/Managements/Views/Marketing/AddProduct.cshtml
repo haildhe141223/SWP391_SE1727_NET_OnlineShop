@@ -1,6 +1,5 @@
 ﻿@model SWP391.OnlineShop.ServiceModel.ViewModels.Products.ProductViewModel
 @{
-    Layout = "_Layout";
     var genreList = ViewData["GenreList"] as SelectList;
 }
 
@@ -14,12 +13,12 @@
         <h6 class="m-0 font-weight-bold text-primary">Create New Product</h6>
     </div>
     <div class="card-body">
-        <form style="margin:auto !important; width:60% !important" asp-controller="Marketing" asp-action="AddProduct" method="post" enctype="multipart/form-data">
+        <form style="margin:auto !important; width:60% !important" asp-area="Managements" asp-controller="Marketing" asp-action="AddProduct" method="post" enctype="multipart/form-data">
             <div class="r-error my-4 text-danger text-center" asp-validation-summary="All">
             </div>
             <div class="mb-3">
                 <label asp-for="ProductName" class="form-label">Product Name</label>
-                <input type="text" class="form-control" asp-for="ProductName" id="name" onchange="changeUrl('name', 'url')">
+                <input type="text" class="form-control" asp-for="ProductName" id="name">
                 <span asp-validation-for="ProductName" class="r-error d-block text-danger"></span>
             </div>
             <div class="mb-3">
@@ -53,7 +52,6 @@
             </div><br />
             <div class="mb-3">
                 <a type="button" class="btn btn-secondary" asp-action="">Back</a>
-                <button type="reset" class="btn btn-info">Reset</button>
                 <button type="submit" class="btn btn-primary">Submit</button>
             </div>
         </form>

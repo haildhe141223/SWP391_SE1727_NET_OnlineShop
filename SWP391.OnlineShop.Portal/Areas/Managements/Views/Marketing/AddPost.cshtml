@@ -1,6 +1,5 @@
 ﻿@model SWP391.OnlineShop.ServiceModel.ViewModels.Products.PostViewModel
 @{
-    Layout = "_Layout";
     var genreList = ViewData["GenreList"] as SelectList;
 }
 
@@ -14,12 +13,12 @@
         <h6 class="m-0 font-weight-bold text-primary">Create New Post</h6>
     </div>
     <div class="card-body">
-        <form style="margin:auto !important; width:60% !important" asp-controller="Marketing" asp-action="AddPost" method="post" enctype="multipart/form-data">
+        <form style="margin:auto !important; width:60% !important" asp-area="Managements" asp-controller="Marketing" asp-action="AddPost" method="post" enctype="multipart/form-data">
             <div class="r-error my-4 text-danger text-center" asp-validation-summary="All">
             </div>
             <div class="mb-3">
                 <label asp-for="Title" class="form-label">Post Title</label>
-                <input type="text" class="form-control" asp-for="Title" id="name" onchange="changeUrl('name', 'url')">
+                <input type="text" class="form-control" asp-for="Title" id="name">
                 <span asp-validation-for="Title" class="r-error d-block text-danger"></span>
             </div>
             <div class="mb-3">
@@ -48,20 +47,13 @@
                 <span asp-validation-for="Author" class="r-error d-block text-danger"></span>
             </div>
             <div class="mb-3">
-            <label asp-for="CategoryId" class="form-label">Category</label><br />
-            <select asp-for="CategoryId" class="form-control" asp-items="@genreList"></select>
+                <label asp-for="CategoryId" class="form-label">Category</label><br />
+                <select asp-for="CategoryId" class="form-control" asp-items="@genreList"></select><br />
             </div><br />
-            <a type="button" class="btn btn-secondary" asp-action="">Back</a>
-            <button type="reset" class="btn btn-info">Reset</button>
-            <button type="submit" class="btn btn-primary">Submit</button>
+            <div class="mb-3">
+                <a type="button" class="btn btn-secondary" asp-action="">Back</a>
+                <button type="submit" class="btn btn-primary">Submit</button>
+            </div>
         </form>
     </div>
 </div>
-
-@section scripts{
-    <script src="~/lib/ckeditor/ckeditor.js"></script>
-    <script src="~/lib/ckeditor/adapters/jquery.js"></script>
-    <script>
-        $("#ck-editor").ckeditor();
-    </script>
-}

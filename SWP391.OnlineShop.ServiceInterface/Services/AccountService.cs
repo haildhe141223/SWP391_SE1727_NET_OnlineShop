@@ -59,7 +59,13 @@ public class AccountService : BaseService, IAccountService
         }
     }
 
-    public async Task<BaseResultModel> Get(GetUser request)
+    public async Task<UserViewModel> Get(GetUser request)
+    {
+        var users = await _userManager.FindByIdAsync(request.Id);
+        return _mapper.Map<UserViewModel>(users);
+    }
+
+    public async Task<BaseResultModel> Get(GetExternalUser request)
     {
         try
         {
@@ -298,6 +304,31 @@ public class AccountService : BaseService, IAccountService
             {
                 StatusCode = StatusCode.InternalServerError,
                 ErrorMessage = e.Message
+            };
+        }
+    }
+
+    public async Task<BaseResultModel> Delete(DeleteUser request)
+    {
+        try
+        {
+            var user = await _userManager.FindByIdAsync(request.UserId.ToString());
+            if (user != null)
+            {
+                await _userManager.SetLockoutEnabledAsync(user, true);
+            }
+
+            return new BaseResultModel
+            {
+                StatusCode = StatusCode.Success
+            };
+        }
+        catch (Exception ex)
+        {
+            return new BaseResultModel
+            {
+                ErrorMessage = $"DeleteUser request - {ex}",
+                StatusCode = StatusCode.InternalServerError
             };
         }
     }

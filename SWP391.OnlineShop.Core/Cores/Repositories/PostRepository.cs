@@ -12,17 +12,17 @@ public class PostRepository : GenericRepository<Post, int>, IPostRepository
 	{
 	}
 
-	public Task<List<Post>> GetPostByName(string postName)
+	public List<Post> GetPostByName(string postName)
 	{
 		var result = new List<Post>();
-		if (Context.Posts == null) return Task.FromResult(result);
+		if (Context.Posts == null) return result;
 
 		var posts = Context.Posts.Where(x => x.Title.ToLower().Contains(postName.ToLower()))
 			.ToList();
 
 		result = posts.ToList();
 
-		return Task.FromResult(result);
+		return result;
 	}
 
 	public Task<List<Post>> GetPostByStatus(string status)
@@ -107,10 +107,10 @@ public class PostRepository : GenericRepository<Post, int>, IPostRepository
 		return Task.FromResult(result);
 	}
 
-	public Task<List<Post>> GetAllPost()
+	public List<Post> GetAllPost()
 	{
 		var result = new List<Post>();
-		if (Context.Posts == null) return Task.FromResult(result);
+		if (Context.Posts == null) return result;
 
 		var posts = Context.Posts.Include(p => p.PostTags).ThenInclude(p => p.Tag).Include(p => p.Category)
 			.OrderByDescending(p => p.CreatedDateTime)
@@ -118,7 +118,7 @@ public class PostRepository : GenericRepository<Post, int>, IPostRepository
 
 		result = posts.ToList();
 
-		return Task.FromResult(result);
+		return result;
 	}
 
 	public Task<Post> GetPostById(int id)

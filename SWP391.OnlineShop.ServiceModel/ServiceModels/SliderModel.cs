@@ -23,7 +23,7 @@ namespace SWP391.OnlineShop.ServiceModel.ServiceModels
             public string Title { get; set; }
             public string Image { get; set; }
             public string BlackLink { get; set; }
-            public Status SliderStatus { get; set; }
+            public Status Status { get; set; }
         }
 
         [Route("/Slider/PutUpdateSlider", "PUT")]
@@ -33,7 +33,7 @@ namespace SWP391.OnlineShop.ServiceModel.ServiceModels
             public string Title { get; set; }
             public string Image { get; set; }
             public string BlackLink { get; set; }
-            public Status SliderStatus { get; set; }
+            public Status Status { get; set; }
         }
 
         [Route("/Slider/DeleteSlider", "DELETE")]

@@ -1,0 +1,52 @@
+﻿@model SWP391.OnlineShop.ServiceModel.ViewModels.Settings.SliderViewModel
+@{
+    var statusList = ViewData["StatusList"] as SelectList;
+}
+
+<div class="m-headers" style="margin-top: 10% !important;">
+    <h4 class="fw-bold ml-5">Manage Slider</h4>
+</div>
+
+<!-- DataTales Example -->
+<div class="card shadow mb-4">
+    <div class="card-header py-3">
+        <h6 class="m-0 font-weight-bold text-primary">Edit Slider</h6>
+    </div>
+    <div class="card-body">
+        <form style="margin:auto !important; width:60% !important" asp-area="Managements" asp-controller="Marketing" asp-action="EditSlider" method="post" enctype="multipart/form-data">
+            <div class="r-error my-4 text-danger text-center" asp-validation-summary="All">
+            </div>
+            <div class="mb-3">
+                <label hidden asp-for="Id" class="form-label">Product ID</label>
+                <input hidden type="text" class="form-control" asp-for="Id" id="name">
+            </div>
+            <div class="mb-3">
+                <label asp-for="Title" class="form-label">Title</label>
+                <input type="text" class="form-control" asp-for="Title" id="name">
+                <span asp-validation-for="Title" class="r-error d-block text-danger"></span>
+            </div>
+            <div class="mb-3">
+                <label asp-for="ThumbnailFile" class="form-label">Image</label><br />
+                <img width="300" height="300" src="@Model.Image"><br /><br />
+                <input asp-for="ThumbnailFile" type="file" class="form-control">
+                <span asp-validation-for="ThumbnailFile" class="r-error d-block text-danger"></span>
+            </div>
+            <div hidden class="mb-3">
+                <label asp-for="Image" class="form-label"></label>
+                <input asp-for="Image" type="text" class="form-control" />
+                <span asp-validation-for="Image" class="r-error d-block text-danger"></span>
+            </div>
+            <div class="mb-3">
+                <label asp-for="BlackLink" class="form-label"></label>
+                <input asp-for="BlackLink" type="text" class="form-control" />
+                <span asp-validation-for="BlackLink" class="r-error d-block text-danger"></span>
+            </div>
+            <div class="mb-3">
+                <label asp-for="Status" class="form-label">Status</label><br />
+                <select asp-for="Status" class="form-control" asp-items="@statusList"></select>
+            </div><br />
+            <a type="button" class="btn btn-secondary" asp-action="">Back</a>
+            <button type="submit" class="btn btn-primary">Submit</button>
+        </form>
+    </div>
+</div>

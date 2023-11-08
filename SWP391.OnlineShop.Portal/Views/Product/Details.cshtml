@@ -35,7 +35,7 @@
             <div class="col-lg-5 offset-lg-1">
                 <div class="s_product_text">
                     <h3>@Model.ProductDetail?.ProductName</h3>
-                    <h2>@Model.ProductDetail?.Price</h2>
+                    <h2>@Model.ProductDetail?.SalePrice</h2>
                     <ul class="list">
                         <li><a class="active" href="#"><span>Category</span> : @Model.ProductDetail?.Category?.CategoryName</a></li>
                         @if (Model.ProductDetail?.Amount > 0)
@@ -85,13 +85,13 @@
                    aria-selected="false">Specification</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" id="contact-tab" data-toggle="tab" href="#contact" role="tab" aria-controls="contact"
+                <a class="nav-link active" id="contact-tab" data-toggle="tab" href="#contact" role="tab" aria-controls="contact"
                    aria-selected="false">Comments</a>
             </li>
-            <li class="nav-item">
+            @* <li class="nav-item">
                 <a class="nav-link active" id="review-tab" data-toggle="tab" href="#review" role="tab" aria-controls="review"
                    aria-selected="false">Reviews</a>
-            </li>
+            </li> *@
         </ul>
         <div class="tab-content" id="myTabContent">
             <div class="tab-pane fade" id="home" role="tabpanel" aria-labelledby="home-tab">
@@ -171,7 +171,7 @@
                     </table>
                 </div>
             </div>
-            <div class="tab-pane fade" id="contact" role="tabpanel" aria-labelledby="contact-tab">
+            <div class="tab-pane fade show active" id="contact" role="tabpanel" aria-labelledby="contact-tab">
                 <div class="row">
                     <div class="col-lg-6">
                         <div class="comment_list">
@@ -182,10 +182,14 @@
                                     <div class="review_item">
                                         <div class="media">
                                             <div class="d-flex">
-                                                <img src="~/template/img/product/review-1.png" alt="">
+                                                <img src="@feedback.User.Avatar" width="50" height="50" alt="">
                                             </div>
                                             <div class="media-body">
-                                                <h4>Blake Ruiz</h4>
+                                                <h4>@feedback.User.UserName</h4>
+                                                @for (int i = 0; i < Convert.ToInt32(feedback.RatedStar); i++)
+                                                {
+                                                    <i class="fa fa-star"></i>
+                                                }
                                                 <h5>@feedback.CreatedDateTime</h5>
                                                 <a class="reply_btn" href="#">Reply</a>
                                             </div>
@@ -220,6 +224,11 @@
                                 </div>
                                 <div class="col-md-12">
                                     <div class="form-group">
+                                        <input type="number" step="1" min="1" max="10" class="form-control" id="point" name="point" placeholder="Rate Point">
+                                    </div>
+                                </div>
+                                <div class="col-md-12">
+                                    <div class="form-group">
                                         <textarea class="form-control" name="message" id="message" rows="3" placeholder="Message"></textarea>
                                     </div>
                                 </div>
@@ -231,7 +240,7 @@
                     </div>
                 </div>
             </div>
-            <div class="tab-pane fade show active" id="review" role="tabpanel" aria-labelledby="review-tab">
+            @* <div class="tab-pane fade show active" id="review" role="tabpanel" aria-labelledby="review-tab">
                 <div class="row">
                     <div class="col-lg-6">
                         <div class="row total_rate">
@@ -283,10 +292,10 @@
                                     <div class="review_item">
                                         <div class="media">
                                             <div class="d-flex">
-                                                <img src="~/template/img/product/review-1.png" alt="">
+                                                <img src="@feedback.Image" alt="">
                                             </div>
                                             <div class="media-body">
-                                                <h4>Blake Ruiz</h4>
+                                                <h4>@feedback.UserName</h4> &nbsp;
                                                 @for (int i = 0; i < feedback.RatedStar; i++)
                                                 {
                                                     <i class="fa fa-star"></i>
@@ -299,30 +308,9 @@
                                     </div>
                                 }
                             }
-
-                            <div class="review_item">
-                                <div class="media">
-                                    <div class="d-flex">
-                                        <img src="~/template/img/product/review-3.png" alt="">
-                                    </div>
-                                    <div class="media-body">
-                                        <h4>Blake Ruiz</h4>
-                                        <i class="fa fa-star"></i>
-                                        <i class="fa fa-star"></i>
-                                        <i class="fa fa-star"></i>
-                                        <i class="fa fa-star"></i>
-                                        <i class="fa fa-star"></i>
-                                    </div>
-                                </div>
-                                <p>
-                                    Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et
-                                    dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea
-                                    commodo
-                                </p>
-                            </div>
                         </div>
                     </div>
-                    <div class="col-lg-6">
+                     <div class="col-lg-6">
                         <div class="review_box">
                             <h4>Add a Review</h4>
                             <p>Your Rating:</p>
@@ -352,6 +340,11 @@
                                 </div>
                                 <div class="col-md-12">
                                     <div class="form-group">
+                                        <input type="number" step="1" class="form-control" id="point" name="point" placeholder="Rate Point" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Rate Point'">
+                                    </div>
+                                </div>
+                                <div class="col-md-12">
+                                    <div class="form-group">
                                         <textarea class="form-control" name="message" id="message" rows="1" placeholder="Review" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Review'"></textarea>
                                     </div>
                                 </div>
@@ -362,7 +355,7 @@
                         </div>
                     </div>
                 </div>
-            </div>
+            </div> *@
         </div>
     </div>
 </section>
@@ -384,114 +377,24 @@
         <div class="row">
             <div class="col-lg-9">
                 <div class="row">
-                    <div class="col-lg-4 col-md-4 col-sm-6 mb-20">
-                        <div class="single-related-product d-flex">
-                            <a href="#"><img src="~/template/img/r1.jpg" alt=""></a>
-                            <div class="desc">
-                                <a href="#" class="title">Black lace Heels</a>
-                                <div class="price">
-                                    <h6>$189.00</h6>
-                                    <h6 class="l-through">$210.00</h6>
+                    @if (Model.ProductsOfWeek != null)
+                    {
+                        @foreach (var productOfWeek in Model.ProductsOfWeek)
+                        {
+                            <div class="col-lg-4 col-md-4 col-sm-6 mb-20">
+                                <div class="single-related-product d-flex">
+                                    <a href="#"><img src="@productOfWeek.Thumbnail" width="70" height="70" alt=""></a>
+                                    <div class="desc">
+                                        <a href="#" class="title">@productOfWeek.ProductName</a>
+                                        <div class="price">
+                                            <h6>@productOfWeek.SalePrice</h6>
+                                            <h6 class="l-through">@productOfWeek.SalePrice</h6>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                    </div>
-                    <div class="col-lg-4 col-md-4 col-sm-6 mb-20">
-                        <div class="single-related-product d-flex">
-                            <a href="#"><img src="~/template/img/r2.jpg" alt=""></a>
-                            <div class="desc">
-                                <a href="#" class="title">Black lace Heels</a>
-                                <div class="price">
-                                    <h6>$189.00</h6>
-                                    <h6 class="l-through">$210.00</h6>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-lg-4 col-md-4 col-sm-6 mb-20">
-                        <div class="single-related-product d-flex">
-                            <a href="#"><img src="~/template/img/r3.jpg" alt=""></a>
-                            <div class="desc">
-                                <a href="#" class="title">Black lace Heels</a>
-                                <div class="price">
-                                    <h6>$189.00</h6>
-                                    <h6 class="l-through">$210.00</h6>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-lg-4 col-md-4 col-sm-6 mb-20">
-                        <div class="single-related-product d-flex">
-                            <a href="#"><img src="~/template/img/r5.jpg" alt=""></a>
-                            <div class="desc">
-                                <a href="#" class="title">Black lace Heels</a>
-                                <div class="price">
-                                    <h6>$189.00</h6>
-                                    <h6 class="l-through">$210.00</h6>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-lg-4 col-md-4 col-sm-6 mb-20">
-                        <div class="single-related-product d-flex">
-                            <a href="#"><img src="~/template/img/r6.jpg" alt=""></a>
-                            <div class="desc">
-                                <a href="#" class="title">Black lace Heels</a>
-                                <div class="price">
-                                    <h6>$189.00</h6>
-                                    <h6 class="l-through">$210.00</h6>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-lg-4 col-md-4 col-sm-6 mb-20">
-                        <div class="single-related-product d-flex">
-                            <a href="#"><img src="~/template/img/r7.jpg" alt=""></a>
-                            <div class="desc">
-                                <a href="#" class="title">Black lace Heels</a>
-                                <div class="price">
-                                    <h6>$189.00</h6>
-                                    <h6 class="l-through">$210.00</h6>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-lg-4 col-md-4 col-sm-6">
-                        <div class="single-related-product d-flex">
-                            <a href="#"><img src="~/template/img/r9.jpg" alt=""></a>
-                            <div class="desc">
-                                <a href="#" class="title">Black lace Heels</a>
-                                <div class="price">
-                                    <h6>$189.00</h6>
-                                    <h6 class="l-through">$210.00</h6>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-lg-4 col-md-4 col-sm-6">
-                        <div class="single-related-product d-flex">
-                            <a href="#"><img src="~/template/img/r10.jpg" alt=""></a>
-                            <div class="desc">
-                                <a href="#" class="title">Black lace Heels</a>
-                                <div class="price">
-                                    <h6>$189.00</h6>
-                                    <h6 class="l-through">$210.00</h6>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-lg-4 col-md-4 col-sm-6">
-                        <div class="single-related-product d-flex">
-                            <a href="#"><img src="~/template/img/r11.jpg" alt=""></a>
-                            <div class="desc">
-                                <a href="#" class="title">Black lace Heels</a>
-                                <div class="price">
-                                    <h6>$189.00</h6>
-                                    <h6 class="l-through">$210.00</h6>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                        }
+                    }
                 </div>
             </div>
             <div class="col-lg-3">

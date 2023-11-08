@@ -154,7 +154,7 @@ namespace SWP391.OnlineShop.Portal.Controllers
             }
 
             // External login if account existed
-            var isExternalInfoExist = await _client.GetAsync(new GetUser
+            var isExternalInfoExist = await _client.GetAsync(new GetExternalUser
             {
                 Email = externalEmail.Value,
                 ProviderKey = loginInfo.ProviderKey
