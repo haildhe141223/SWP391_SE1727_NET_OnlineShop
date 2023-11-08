@@ -52,113 +52,6 @@
 	</div>
 </section>
 <!-- End Banner Area -->
-<section class="owl-carousel active-product-area section_gap">
-	<!-- single product slide -->
-	<div class="single-product-slider">
-		<div class="container">
-			<div class="row justify-content-center">
-				<div class="col-lg-6 text-center">
-					<div class="section-title">
-						<h1>Latest Products</h1>
-						<p>
-							Lastest Products Of All Category
-						</p>
-					</div>
-				</div>
-			</div>
-			<div class="row">
-				@for (int i = 0; i < sliders.Count() / 2; i++)
-				{
-					<!-- single product -->
-					<div class="col-lg-3 col-md-6">
-						<div class="single-product">
-							<a asp-action="Details" asp-controller="Product" asp-route-id="@sliders[i].Id"><img class="img-fluid" src="@sliders[i].Thumbnail" alt="@sliders[i].ProductName"></a>
-							<div class="product-details">
-								<h6>
-									<a asp-action="Details" asp-controller="Product" asp-route-id="@sliders[i].Id">@sliders[i].ProductName</a>
-								</h6>
-								<div class="price">
-									<h6>$ @sliders[i].Price</h6>
-									@if (sliders[i].SalePrice > 0)
-									{
-										<h6 class="l-through">$ @sliders[i].SalePrice</h6>
-									}
-								</div>
-								<div class="prd-bottom">
-									<a href="" class="social-info">
-										<span class="lnr lnr-heart"></span>
-										<p class="hover-text">Wishlist</p>
-									</a>
-									<a href="" class="social-info">
-										<span class="lnr lnr-sync"></span>
-										<p class="hover-text">compare</p>
-									</a>
-									<a href="" class="social-info">
-										<span class="lnr lnr-move"></span>
-										<p class="hover-text">view more</p>
-									</a>
-								</div>
-							</div>
-						</div>
-					</div>
-				}
-			</div>
-		</div>
-	</div>
-	<!-- single product slide -->
-	<div class="single-product-slider">
-		<div class="container">
-			<div class="row justify-content-center">
-				<div class="col-lg-6 text-center">
-					<div class="section-title">
-						<h1>Lastest Products</h1>
-						<p>
-							Lastest Products Of All Category
-						</p>
-					</div>
-				</div>
-			</div>
-			<div class="row">
-				<!-- single product -->
-				@for (int i = sliders.Count() / 2; i < sliders.Count(); i++)
-				{
-					<!-- single product -->
-					<div class="col-lg-3 col-md-6">
-						<div class="single-product">
-							<a asp-action="Details" asp-controller="Product" asp-route-id="@sliders[i].Id"><img class="img-fluid" src="@sliders[i].Thumbnail" alt="@sliders[i].ProductName"></a>
-							<div class="product-details">
-								<h6>
-									<a asp-action="Details" asp-controller="Product" asp-route-id="@sliders[i].Id">@sliders[i].ProductName</a>
-								</h6>
-								<div class="price">
-									<h6>$ @sliders[i].Price</h6>
-									@if (sliders[i].SalePrice > 0)
-									{
-										<h6 class="l-through">$ @sliders[i].SalePrice</h6>
-									}
-								</div>
-								<div class="prd-bottom">
-									<a href="" class="social-info">
-										<span class="lnr lnr-heart"></span>
-										<p class="hover-text">Wishlist</p>
-									</a>
-									<a href="" class="social-info">
-										<span class="lnr lnr-sync"></span>
-										<p class="hover-text">compare</p>
-									</a>
-									<a href="" class="social-info">
-										<span class="lnr lnr-move"></span>
-										<p class="hover-text">view more</p>
-									</a>
-								</div>
-							</div>
-						</div>
-					</div>
-				}
-			</div>
-		</div>
-	</div>
-</section>
 <!--================Cart Area =================-->
 @if (Model.OrderDetails != null && Model.OrderDetails.Count > 0)
 {
@@ -357,6 +250,113 @@ else
 		</div>
 	</div>
 }
+<section class="owl-carousel active-product-area section_gap">
+	<!-- single product slide -->
+	<div class="single-product-slider">
+		<div class="container">
+			<div class="row justify-content-center">
+				<div class="col-lg-6 text-center">
+					<div class="section-title">
+						<h1>Latest Products</h1>
+						<p>
+							Lastest Products Of All Category
+						</p>
+					</div>
+				</div>
+			</div>
+			<div class="row">
+				@for (int i = 0; i < sliders.Count() / 2; i++)
+				{
+					<!-- single product -->
+					<div class="col-lg-3 col-md-6">
+						<div class="single-product">
+							<a asp-action="Details" asp-controller="Product" asp-route-id="@sliders[i].Id"><img class="img-fluid" src="@sliders[i].Thumbnail" alt="@sliders[i].ProductName"></a>
+							<div class="product-details">
+								<h6>
+									<a asp-action="Details" asp-controller="Product" asp-route-id="@sliders[i].Id">@sliders[i].ProductName</a>
+								</h6>
+								<div class="price">
+									<h6>$ @sliders[i].Price</h6>
+									@if (sliders[i].SalePrice > 0)
+									{
+										<h6 class="l-through">$ @sliders[i].SalePrice</h6>
+									}
+								</div>
+								<div class="prd-bottom">
+									<a href="" class="social-info">
+										<span class="lnr lnr-heart"></span>
+										<p class="hover-text">Wishlist</p>
+									</a>
+									<a href="" class="social-info">
+										<span class="lnr lnr-sync"></span>
+										<p class="hover-text">compare</p>
+									</a>
+									<a href="" class="social-info">
+										<span class="lnr lnr-move"></span>
+										<p class="hover-text">view more</p>
+									</a>
+								</div>
+							</div>
+						</div>
+					</div>
+				}
+			</div>
+		</div>
+	</div>
+	<!-- single product slide -->
+	<div class="single-product-slider">
+		<div class="container">
+			<div class="row justify-content-center">
+				<div class="col-lg-6 text-center">
+					<div class="section-title">
+						<h1>Lastest Products</h1>
+						<p>
+							Lastest Products Of All Category
+						</p>
+					</div>
+				</div>
+			</div>
+			<div class="row">
+				<!-- single product -->
+				@for (int i = sliders.Count() / 2; i < sliders.Count(); i++)
+				{
+					<!-- single product -->
+					<div class="col-lg-3 col-md-6">
+						<div class="single-product">
+							<a asp-action="Details" asp-controller="Product" asp-route-id="@sliders[i].Id"><img class="img-fluid" src="@sliders[i].Thumbnail" alt="@sliders[i].ProductName"></a>
+							<div class="product-details">
+								<h6>
+									<a asp-action="Details" asp-controller="Product" asp-route-id="@sliders[i].Id">@sliders[i].ProductName</a>
+								</h6>
+								<div class="price">
+									<h6>$ @sliders[i].Price</h6>
+									@if (sliders[i].SalePrice > 0)
+									{
+										<h6 class="l-through">$ @sliders[i].SalePrice</h6>
+									}
+								</div>
+								<div class="prd-bottom">
+									<a href="" class="social-info">
+										<span class="lnr lnr-heart"></span>
+										<p class="hover-text">Wishlist</p>
+									</a>
+									<a href="" class="social-info">
+										<span class="lnr lnr-sync"></span>
+										<p class="hover-text">compare</p>
+									</a>
+									<a href="" class="social-info">
+										<span class="lnr lnr-move"></span>
+										<p class="hover-text">view more</p>
+									</a>
+								</div>
+							</div>
+						</div>
+					</div>
+				}
+			</div>
+		</div>
+	</div>
+</section>
 
 <!--================End Cart Area =================-->
 <script type="text/javascript">
@@ -486,12 +486,11 @@ else
 				}
 			},
 			failure: function (failed) {
-				alert(failed.responseText)
-				//$.toaster({ priority: 'warning', title: 'Warning', message: failed.responseText });
+				$.toaster({ priority: 'warning', title: 'Warning', message: failed.responseText });
 			},
 			error: function (error) {
 				alert(error.responseText)
-				//$.toaster({ priority: 'danger', title: 'Error', message: error.responseText });
+				$.toaster({ priority: 'danger', title: 'Error', message: error.responseText });
 			}
 		});
 	});
@@ -517,12 +516,10 @@ else
 				}
 			},
 			failure: function (failed) {
-				alert(failed.responseText)
-				//$.toaster({ priority: 'warning', title: 'Warning', message: failed.responseText });
+				$.toaster({ priority: 'warning', title: 'Warning', message: failed.responseText });
 			},
 			error: function (error) {
-				alert(error.responseText)
-				//$.toaster({ priority: 'danger', title: 'Error', message: error.responseText });
+				$.toaster({ priority: 'danger', title: 'Error', message: error.responseText });
 			}
 		});
 	});
@@ -538,19 +535,16 @@ else
 				type: 'POST',
 				data: data,
 				success: function (response) {
-					alert('Back To Cart Detail Succesfully');
-					//$.toaster({ priority: 'success', title: 'Created', message: "Back To Cart Detail Succesfully" });
+					$.toaster({ priority: 'success', title: 'Created', message: "Back To Cart Detail Succesfully" });
 					setTimeout(function () {
 						window.location.reload();
 					}, 1000);
 				},
 				failure: function (failed) {
-					alert(failed.responseText)
-					//$.toaster({ priority: 'warning', title: 'Warning', message: failed.responseText });
+					$.toaster({ priority: 'warning', title: 'Warning', message: failed.responseText });
 				},
 				error: function (error) {
-					alert(error.responseText)
-					//$.toaster({ priority: 'danger', title: 'Error', message: error.responseText });
+					$.toaster({ priority: 'danger', title: 'Error', message: error.responseText });
 				}
 			});
 		}
@@ -572,18 +566,15 @@ else
 								window.location.reload();
 							}, 1000);
 						} else {
-							alert("Delete Cart Item Succesfully");
-							//$.toaster({ priority: 'success', title: 'Success', message: "Delete Cart Item Succesfully" });
+							$.toaster({ priority: 'success', title: 'Success', message: "Delete Cart Item Succesfully" });
 							$(event).closest("tr").remove();
 						}
 					},
 					failure: function (failed) {
-						alert(failed.responseText)
-						//$.toaster({ priority: 'warning', title: 'Warning', message: failed.responseText });
+						$.toaster({ priority: 'warning', title: 'Warning', message: failed.responseText });
 					},
 					error: function (error) {
-						alert(error.responseText)
-						//$.toaster({ priority: 'danger', title: 'Error', message: error.responseText });
+						$.toaster({ priority: 'danger', title: 'Error', message: error.responseText });
 					}
 				});
 			}
@@ -599,12 +590,10 @@ else
 					$(event).closest("tr").find("h5.total").text("$ " + total);
 				},
 				failure: function (failed) {
-					alert(failed.responseText)
-					//$.toaster({ priority: 'warning', title: 'Warning', message: failed.responseText });
+					$.toaster({ priority: 'warning', title: 'Warning', message: failed.responseText });
 				},
 				error: function (error) {
-					alert(error.responseText)
-					//$.toaster({ priority: 'danger', title: 'Error', message: error.responseText });
+					$.toaster({ priority: 'danger', title: 'Error', message: error.responseText });
 				}
 			});
 		}
@@ -615,8 +604,7 @@ else
 		var quantity = Number(stringQ);
 		var newQuantity = quantity + 1;
 		if (newQuantity > max) {
-			alert("There not enough item in the store")
-			//$.toaster({ priority: 'warning', title: 'Warning', message: "There not enough item in the store" });
+			$.toaster({ priority: 'warning', title: 'Warning', message: "There not enough item in the store" });
 			return false;
 		}
 		$.ajax({
@@ -630,12 +618,10 @@ else
 				$(event).closest("tr").find("h5.total").text("$ " + total);
 			},
 			failure: function (failed) {
-				alert(failed.responseText)
-				//$.toaster({ priority: 'warning', title: 'Warning', message: failed.responseText });
+				$.toaster({ priority: 'warning', title: 'Warning', message: failed.responseText });
 			},
 			error: function (error) {
-				alert(error.responseText)
-				//$.toaster({ priority: 'danger', title: 'Error', message: error.responseText });
+				$.toaster({ priority: 'danger', title: 'Error', message: error.responseText });
 			}
 		});
 	}
@@ -643,12 +629,10 @@ else
 	function onQuantityChange(event, orderDetailId, max) {
 		var newQuantity = Number(event.value);
 		if (newQuantity > max) {
-			alert('There not enough item in the store')
-			//$.toaster({ priority: 'warning', title: 'Warning', message: "There not enough item in the store" });
+			$.toaster({ priority: 'warning', title: 'Warning', message: "There not enough item in the store" });
 			return false;
 		} else if (newQuantity < 0) {
-			alert("Please enter a positive number")
-			//$.toaster({ priority: 'warning', title: 'Warning', message: "Please enter a positive number" });
+			$.toaster({ priority: 'warning', title: 'Warning', message: "Please enter a positive number" });
 			return false;
 		} else if (newQuantity == 0) {
 			if (confirmDelete("Changing to '0' means you will remove this item from cart? Are you sure?")) {
@@ -662,18 +646,15 @@ else
 								window.location.reload();
 							}, 1000);
 						} else {
-							alert("Delete Cart Item Succesfully")
-							//$.toaster({ priority: 'success', title: 'Success', message: "Delete Cart Item Succesfully" });
+							$.toaster({ priority: 'success', title: 'Success', message: "Delete Cart Item Succesfully" });
 							$(event).closest("tr").remove();
 						}
 					},
 					failure: function (failed) {
-						alert(error.responseText)
-						//$.toaster({ priority: 'warning', title: 'Warning', message: failed.responseText });
+						$.toaster({ priority: 'warning', title: 'Warning', message: failed.responseText });
 					},
 					error: function (error) {
-						alert(error.responseText)
-						//$.toaster({ priority: 'danger', title: 'Error', message: error.responseText });
+						$.toaster({ priority: 'danger', title: 'Error', message: error.responseText });
 					}
 				});
 			}
@@ -689,12 +670,10 @@ else
 					$(event).closest("tr").find("h5.total").text("$ " + total);
 				},
 				failure: function (failed) {
-					alert(error.responseText)
-					//$.toaster({ priority: 'warning', title: 'Warning', message: failed.responseText });
+					$.toaster({ priority: 'warning', title: 'Warning', message: failed.responseText });
 				},
 				error: function (error) {
-					alert(error.responseText)
-					//$.toaster({ priority: 'danger', title: 'Error', message: error.responseText });
+					/$.toaster({ priority: 'danger', title: 'Error', message: error.responseText });
 				}
 			});
 		}
@@ -727,17 +706,16 @@ else
 					type: 'POST',
 					data: data,
 					success: function (response) {
-						alert("Add To Cart Contact Succesfully");
-						//$.toaster({ priority: 'success', title: 'Created', message: "Add To Cart Contact Succesfully" });
+						$.toaster({ priority: 'success', title: 'Created', message: "Add To Cart Contact Succesfully" });
 						setTimeout(function () {
 							window.location.reload();
 						}, 1000);
 					},
 					failure: function (failed) {
-						//$.toaster({ priority: 'warning', title: 'Warning', message: failed.responseText });
+						$.toaster({ priority: 'warning', title: 'Warning', message: failed.responseText });
 					},
 					error: function (error) {
-						//$.toaster({ priority: 'danger', title: 'Error', message: error.responseText });
+						$.toaster({ priority: 'danger', title: 'Error', message: error.responseText });
 					}
 				});
 			}
@@ -756,19 +734,16 @@ else
 				type: 'POST',
 				data: data,
 				success: function (response) {
-					alert('Back To Cart Complete Succesfully');
-					//$.toaster({ priority: 'success', title: 'Created', message: "Back To Cart Detail Succesfully" });
+					$.toaster({ priority: 'success', title: 'Created', message: "Back To Cart Detail Succesfully" });
 					setTimeout(function () {
 						window.location.reload();
 					}, 1000);
 				},
 				failure: function (failed) {
-					alert(failed.responseText)
-					//$.toaster({ priority: 'warning', title: 'Warning', message: failed.responseText });
+					$.toaster({ priority: 'warning', title: 'Warning', message: failed.responseText });
 				},
 				error: function (error) {
-					alert(error.responseText)
-					//$.toaster({ priority: 'danger', title: 'Error', message: error.responseText });
+					$.toaster({ priority: 'danger', title: 'Error', message: error.responseText });
 				}
 			});
 		}

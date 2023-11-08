@@ -236,17 +236,14 @@
 				type: 'POST',
 				data: { data: JSON.stringify(modelData), notes: notes },
 				success: function (response) {
-					alert('Processing to Paypal');
 					window.location.href = response;
 					//$.toaster({ priority: 'success', title: 'Created', message: "Back To Cart Detail Succesfully" });
 				},
 				failure: function (failed) {
-					alert(failed.responseText)
-					//$.toaster({ priority: 'warning', title: 'Warning', message: failed.responseText });
+					$.toaster({ priority: 'warning', title: 'Warning', message: failed.responseText });
 				},
 				error: function (error) {
-					alert(error.responseText)
-					//$.toaster({ priority: 'danger', title: 'Error', message: error.responseText });
+					$.toaster({ priority: 'danger', title: 'Error', message: error.responseText });
 				}
 			});
 		}
@@ -262,19 +259,16 @@
 				type: 'POST',
 				data: data,
 				success: function (response) {
-					alert('Back To Cart Detail Succesfully');
-					//$.toaster({ priority: 'success', title: 'Created', message: "Back To Cart Detail Succesfully" });
+					$.toaster({ priority: 'success', title: 'Created', message: "Back To Cart Detail Succesfully" });
 					setTimeout(function () {
 						window.location.reload();
 					}, 1000);
 				},
 				failure: function (failed) {
-					alert(failed.responseText)
-					//$.toaster({ priority: 'warning', title: 'Warning', message: failed.responseText });
+					$.toaster({ priority: 'warning', title: 'Warning', message: failed.responseText });
 				},
 				error: function (error) {
-					alert(error.responseText)
-					//$.toaster({ priority: 'danger', title: 'Error', message: error.responseText });
+					$.toaster({ priority: 'danger', title: 'Error', message: error.responseText });
 				}
 			});
 		}
@@ -291,20 +285,17 @@
 				type: 'POST',
 				data: data,
 				success: function (response) {
-					alert('Your Order has been confirmed');
 					window.location.href = "/home";
-					//$.toaster({ priority: 'success', title: 'Created', message: "Back To Cart Detail Succesfully" });
+					$.toaster({ priority: 'success', title: 'Created', message: "Back To Cart Detail Succesfully" });
 					setTimeout(function () {
 						window.location.reload();
 					}, 1000);
 				},
 				failure: function (failed) {
-					alert(failed.responseText)
-					//$.toaster({ priority: 'warning', title: 'Warning', message: failed.responseText });
+					$.toaster({ priority: 'warning', title: 'Warning', message: failed.responseText });
 				},
 				error: function (error) {
-					alert(error.responseText)
-					//$.toaster({ priority: 'danger', title: 'Error', message: error.responseText });
+					$.toaster({ priority: 'danger', title: 'Error', message: error.responseText });
 				}
 			});
 		}
