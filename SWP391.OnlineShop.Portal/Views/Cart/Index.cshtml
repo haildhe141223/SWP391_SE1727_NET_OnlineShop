@@ -151,7 +151,6 @@
 									<td>
 									</td>
 									<td>
-										<h5>Shipping</h5>
 									</td>
 									<td>
 										<div class="shipping_box">
@@ -673,7 +672,7 @@ else
 					$.toaster({ priority: 'warning', title: 'Warning', message: failed.responseText });
 				},
 				error: function (error) {
-					/$.toaster({ priority: 'danger', title: 'Error', message: error.responseText });
+					$.toaster({ priority: 'danger', title: 'Error', message: error.responseText });
 				}
 			});
 		}
