@@ -66,9 +66,7 @@
                 <a asp-action="Index" asp-controller="Profile" asp-area="" asp-route-userId="@id" class="collapse-item">Profile</a>
 
                 @if (!string.IsNullOrEmpty(userRole) &&
-                (userRole.Contains(RoleConstraints.Admin) ||
-                userRole.Contains(RoleConstraints.Marketing) ||
-                userRole.Contains(RoleConstraints.Sale)))
+                (userRole.Contains(RoleConstraints.Admin)))
                 {
                     <a class="collapse-item" asp-area="Managements" asp-action="Index" asp-controller="User">Users</a>
                 }
