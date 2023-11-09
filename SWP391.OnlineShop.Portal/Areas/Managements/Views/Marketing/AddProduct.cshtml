@@ -1,11 +1,26 @@
 ﻿@model SWP391.OnlineShop.ServiceModel.ViewModels.Products.ProductViewModel
 @{
     var genreList = ViewData["GenreList"] as SelectList;
+    var errorMess = TempData["ErrorMess"] as string;
+    var successMess = TempData["SuccessMess"] as string;
 }
 
 <div class="m-headers" style="margin-top: 10% !important;">
     <h4 class="fw-bold ml-5">Manage Product</h4>
 </div>
+
+@if (!string.IsNullOrWhiteSpace(errorMess))
+{
+    <div class="alert alert-danger my-2 text-center">
+        @errorMess
+    </div>
+}
+@if (!string.IsNullOrWhiteSpace(successMess))
+{
+    <div class="alert alert-success my-2 text-center">
+        @successMess
+    </div>
+}
 
 <!-- DataTales Example -->
 <div class="card shadow mb-4">
