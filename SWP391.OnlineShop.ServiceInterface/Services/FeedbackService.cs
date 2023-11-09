@@ -6,6 +6,7 @@ using SWP391.OnlineShop.Core.Models.Identities;
 using SWP391.OnlineShop.ServiceInterface.BaseServices;
 using SWP391.OnlineShop.ServiceInterface.Interfaces;
 using SWP391.OnlineShop.ServiceInterface.Loggers;
+using SWP391.OnlineShop.ServiceModel.Results;
 using SWP391.OnlineShop.ServiceModel.ServiceModels;
 using SWP391.OnlineShop.ServiceModel.ViewModels.Feedback;
 using SWP391.OnlineShop.ServiceModel.ViewModels.Products;
@@ -75,15 +76,25 @@ namespace SWP391.OnlineShop.ServiceInterface.Services
             return result;
         }
 
-        public void Put(FeedbackModels.EditFeedback request)
+        public async Task<BaseResultModel> Put(FeedbackModels.EditFeedback request)
         {
+            var result = new BaseResultModel();
+
             var feedback = _unitOfWork.FeedBacks.GetById(request.FeedbackId);
             if(feedback != null)
             {
                 feedback.Status = request.Status;
                 _unitOfWork.FeedBacks.Update(feedback);
-                _unitOfWork.Complete();
+                int rows = await _unitOfWork.CompleteAsync();
+                if (rows > 0)
+                {
+                    result.StatusCode = Common.Enums.StatusCode.Success;
+                    return result;
+                }
+                result.StatusCode = Common.Enums.StatusCode.InternalServerError;
+                result.ErrorMessage = "Error";
             }
+            return result;
         }
     }
 }

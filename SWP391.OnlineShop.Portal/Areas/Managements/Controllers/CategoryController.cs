@@ -64,10 +64,20 @@ namespace SWP391.OnlineShop.Portal.Areas.Managements.Controllers
             return View(request);
         }
 
-        public IActionResult Delete(int id)
+        public async Task<IActionResult> Delete(int id)
         {
-            return View();
-        }
+			var api = await _client.DeleteAsync(new DeleteCategory()
+			{
+				Id = id
+			});
+			if (api.StatusCode == Common.Enums.StatusCode.Success)
+			{
+				TempData["SuccessMess"] = "Delete successfully!";
+				return RedirectToAction("Index");
+			}
+			TempData["ErrorMess"] = $"Delete fail! {api.ErrorMessage}";
+			return RedirectToAction("Index");
+		}
 
         public IActionResult Add()
         {

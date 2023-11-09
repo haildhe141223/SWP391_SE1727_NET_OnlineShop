@@ -308,6 +308,52 @@ public class AccountService : BaseService, IAccountService
         }
     }
 
+
+    public List<UserViewModel> Get(GetCustomers request)
+    {
+        // Descending
+        if (request.IsDesc)
+        {
+            var customers = _userManager.GetUsersInRoleAsync(RoleConstraints.Customer).Result.OrderByDescending(x => x.Id).ToList();
+            return _mapper.Map<List<UserViewModel>>(customers);
+        }
+        // Ascending
+        else
+        {
+            var customers = _userManager.GetUsersInRoleAsync(RoleConstraints.Customer).Result.ToList();
+            return _mapper.Map<List<UserViewModel>>(customers);
+        }
+    }
+
+    public async Task<BaseResultModel> Put(UpdateCustomer request)
+    {
+        try
+        {
+            var customer = _userManager.FindByIdAsync(Convert.ToString(request.Id)).Result;
+            if (customer != null)
+            {
+                customer.LockoutEnabled = request.LockoutEnabled;
+                await _userManager.UpdateAsync(customer);
+                }
+
+            return new BaseResultModel
+            {
+                StatusCode = StatusCode.Success,
+                SuccessMessage = $"Update status success"
+            };
+        }
+        catch (Exception e)
+        {
+            _logger.LogError($"Error in UpdateCustomer request - {e}");
+            return new BaseResultModel
+            {
+                StatusCode = StatusCode.InternalServerError,
+                ErrorMessage = e.Message
+            };
+        }
+        
+    }
+
     public async Task<BaseResultModel> Delete(DeleteUser request)
     {
         try
@@ -316,10 +362,6 @@ public class AccountService : BaseService, IAccountService
             if (user != null)
             {
                 await _userManager.SetLockoutEnabledAsync(user, true);
-            }
-
-            return new BaseResultModel
-            {
                 StatusCode = StatusCode.Success
             };
         }

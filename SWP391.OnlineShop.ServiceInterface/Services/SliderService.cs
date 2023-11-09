@@ -4,6 +4,7 @@ using SWP391.OnlineShop.Core.Models.Entities;
 using SWP391.OnlineShop.ServiceInterface.BaseServices;
 using SWP391.OnlineShop.ServiceInterface.Interfaces;
 using SWP391.OnlineShop.ServiceInterface.Loggers;
+using SWP391.OnlineShop.ServiceModel.Results;
 using SWP391.OnlineShop.ServiceModel.ServiceModels;
 using SWP391.OnlineShop.ServiceModel.ViewModels.Settings;
 
@@ -23,19 +24,20 @@ namespace SWP391.OnlineShop.ServiceInterface.Services
             _logger = logger;
         }
 
-        public async Task<SliderViewModel> Delete(SliderModel.DeleteSlider request)
+        public async Task<BaseResultModel> Delete(SliderModel.DeleteSlider request)
         {
-            var result = new SliderViewModel();
+            var result = new BaseResultModel();
             try
             {
                 _unitOfWork.Sliders.Delete(request.SliderId);
                 var rows = await _unitOfWork.CompleteAsync();
                 if (rows > 0)
                 {
-                    var slider = await _unitOfWork.Sliders.GetByIdAsync(request.SliderId);
-                    result = _mapper.Map<SliderViewModel>(slider);
+                    result.StatusCode = Common.Enums.StatusCode.Success;
                     return result;
                 }
+                result.StatusCode = Common.Enums.StatusCode.InternalServerError;
+                result.ErrorMessage = "Error";
             }
             catch (Exception ex)
             {
@@ -83,9 +85,9 @@ namespace SWP391.OnlineShop.ServiceInterface.Services
             return result;
         }
 
-        public async Task<SliderViewModel> Post(SliderModel.PostAddSlider request)
+        public async Task<BaseResultModel> Post(SliderModel.PostAddSlider request)
         {
-            var result = new SliderViewModel();
+            var result = new BaseResultModel();
             try
             {
                 var slider = new Slider()
@@ -96,7 +98,14 @@ namespace SWP391.OnlineShop.ServiceInterface.Services
                     SliderStatus = Core.Models.Enums.Status.Active
                 };
                 await _unitOfWork.Sliders.AddAsync(slider);
-                await _unitOfWork.CompleteAsync();
+                int rows = await _unitOfWork.CompleteAsync();
+                if (rows > 0)
+                {
+                    result.StatusCode = Common.Enums.StatusCode.Success;
+                    return result;
+                }
+                result.StatusCode = Common.Enums.StatusCode.InternalServerError;
+                result.ErrorMessage = "Error";
 
             }
             catch (Exception ex)
@@ -107,9 +116,9 @@ namespace SWP391.OnlineShop.ServiceInterface.Services
             return result;
         }
 
-        public async Task<SliderViewModel> Put(SliderModel.PutUpdateSlider request)
+        public async Task<BaseResultModel> Put(SliderModel.PutUpdateSlider request)
         {
-            var result = new SliderViewModel();
+            var result = new BaseResultModel();
             try
             {
                 var slider = await _unitOfWork.Sliders.GetByIdAsync(request.Id);
@@ -122,7 +131,14 @@ namespace SWP391.OnlineShop.ServiceInterface.Services
                     slider.Status = request.Status;
 
                     _unitOfWork.Sliders.Update(slider);
-                    await _unitOfWork.CompleteAsync();
+                    int rows = await _unitOfWork.CompleteAsync();
+                    if (rows > 0)
+                    {
+                        result.StatusCode = Common.Enums.StatusCode.Success;
+                        return result;
+                    }
+                    result.StatusCode = Common.Enums.StatusCode.InternalServerError;
+                    result.ErrorMessage = "Error";
                 }
             }
             catch (Exception ex)

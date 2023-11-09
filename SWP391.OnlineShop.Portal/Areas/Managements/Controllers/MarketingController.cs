@@ -1,12 +1,17 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Org.BouncyCastle.Asn1.Ocsp;
 using ServiceStack;
+using ServiceStack.Web;
 using SWP391.OnlineShop.Core.Models.Enums;
+using SWP391.OnlineShop.Core.Models.Identities;
 using SWP391.OnlineShop.ServiceInterface.Loggers;
 using SWP391.OnlineShop.ServiceModel.ServiceModels;
 using SWP391.OnlineShop.ServiceModel.ViewModels.Feedback;
 using SWP391.OnlineShop.ServiceModel.ViewModels.Products;
 using SWP391.OnlineShop.ServiceModel.ViewModels.Settings;
+using System.Security.Claims;
 using static SWP391.OnlineShop.ServiceModel.ServiceModels.FeedbackModels;
 using static SWP391.OnlineShop.ServiceModel.ServiceModels.SliderModel;
 
@@ -16,17 +21,26 @@ namespace SWP391.OnlineShop.Portal.Areas.Managements.Controllers
     {
         private readonly IJsonServiceClient _client;
         private readonly ILoggerService _logger;
+        private readonly UserManager<User> _userManager;
 
         public MarketingController(
             IJsonServiceClient client,
+            UserManager<User> userManager
             ILoggerService logger)
         {
             _logger = logger;
             _client = client;
+            _userManager = userManager;
         }
 
         public async Task<IActionResult> Index()
         {
+            var email = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Email)?.Value;
+            if (string.IsNullOrEmpty(email))
+            {
+                return RedirectToAction("Login", "Account", new { area = "" });
+            }
+
             //Get all products
             var latestProducts = await _client.GetAsync(new GetAllProduct());
 
@@ -35,6 +49,12 @@ namespace SWP391.OnlineShop.Portal.Areas.Managements.Controllers
 
         public async Task<IActionResult> AddProduct()
         {
+            var email = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Email)?.Value;
+            if (string.IsNullOrEmpty(email))
+            {
+                return RedirectToAction("Login", "Account", new { area = "" });
+            }
+
             ViewData["GenreList"] = new SelectList(await _client.GetAsync(new GetAllCategory
             {
                 CategoryType = CategoryType.ProductCategory
@@ -43,9 +63,22 @@ namespace SWP391.OnlineShop.Portal.Areas.Managements.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> AddProduct(ProductViewModel request)
         {
+            if (!ModelState.IsValid)
+            {
+                return View(request);
+            }
+
+            if (request.SalePrice > request.Price)
+            {
+                TempData["ErrorMess"] = "Sale Price must smaller than Price";
+                return View(request);
+            }
+
             var imageFolderLink = $"{Convert.ToString(Directory.GetCurrentDirectory())}\\wwwroot\\uploads\\products\\{request.ProductName}";
+
             var imageLink = string.Empty;
             if (!Directory.Exists(imageFolderLink))
             {
@@ -62,7 +95,7 @@ namespace SWP391.OnlineShop.Portal.Areas.Managements.Controllers
                 imageLink = $"/uploads/products/{request.ProductName}/{request.ThumbnailFile.FileName}";
             }
 
-            await _client.PostAsync(new PostAddProduct
+            var result = await _client.PostAsync(new PostAddProduct
             {
                 ProductName = request.ProductName,
                 Description = request.Description,
@@ -72,7 +105,14 @@ namespace SWP391.OnlineShop.Portal.Areas.Managements.Controllers
                 Thumbnail = imageLink,
                 CategoryId = request.CategoryId
             });
-            return RedirectToAction("Index");
+
+            if (result.StatusCode == Common.Enums.StatusCode.Success)
+            {
+                TempData["SuccessMess"] = "Create successfully!";
+                return RedirectToAction("Index");
+            }
+            TempData["ErrorMess"] = $"Create fail! {result.ErrorMessage}";
+            return View(request);
         }
 
         public async Task<IActionResult> ViewProduct(int id)
@@ -98,6 +138,12 @@ namespace SWP391.OnlineShop.Portal.Areas.Managements.Controllers
 
         public async Task<IActionResult> EditProduct(int id)
         {
+            var email = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Email)?.Value;
+            if (string.IsNullOrEmpty(email))
+            {
+                return RedirectToAction("Login", "Account", new { area = "" });
+            }
+
             var listStatus = new List<Status>
             {
                 Status.Active,
@@ -117,7 +163,19 @@ namespace SWP391.OnlineShop.Portal.Areas.Managements.Controllers
         [HttpPost]
         public async Task<IActionResult> EditProduct(ProductViewModel request)
         {
+            if (!ModelState.IsValid)
+            {
+                return View(request);
+            }
+
+            if (request.SalePrice > request.Price)
+            {
+                TempData["ErrorMess"] = "Sale Price must smaller than Price";
+                return View(request);
+            }
+
             var imageFolderLink = $"{Convert.ToString(Directory.GetCurrentDirectory())}\\wwwroot\\uploads\\products\\{request.ProductName}";
+
             var imageLink = string.Empty;
             if (!Directory.Exists(imageFolderLink))
             {
@@ -134,7 +192,7 @@ namespace SWP391.OnlineShop.Portal.Areas.Managements.Controllers
                 imageLink = $"/uploads/products/{request.ProductName}/{request.ThumbnailFile.FileName}";
             }
 
-            await _client.PutAsync(new PutUpdateProduct
+            var result = await _client.PutAsync(new PutUpdateProduct
             {
                 ProductName = request.ProductName,
                 Description = request.Description,
@@ -146,26 +204,51 @@ namespace SWP391.OnlineShop.Portal.Areas.Managements.Controllers
                 Status = request.Status,
                 Id = request.Id
             });
-            return RedirectToAction("Index");
+
+            if (result.StatusCode == Common.Enums.StatusCode.Success)
+            {
+                TempData["SuccessMess"] = "Update successfully!";
+                return RedirectToAction("Index");
+            }
+            TempData["ErrorMess"] = $"Update fail! {result.ErrorMessage}";
+            return View(request);
         }
 
         public async Task<IActionResult> DeleteProduct(int id)
         {
-            await _client.DeleteAsync(new DeleteProduct
+            var result = await _client.DeleteAsync(new DeleteProduct
             {
                 ProductId = id
             });
+            if (result.StatusCode == Common.Enums.StatusCode.Success)
+            {
+                TempData["SuccessMess"] = "Delete successfully!";
+                return RedirectToAction("Index");
+            }
+            TempData["ErrorMess"] = $"Delete fail! {result.ErrorMessage}";
             return RedirectToAction("Index");
         }
 
         public async Task<IActionResult> ManagePost()
         {
+            var email = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Email)?.Value;
+            if (string.IsNullOrEmpty(email))
+            {
+                return RedirectToAction("Login", "Account", new { area = "" });
+            }
+
             var latestPosts = await _client.GetAsync(new GetAllPost());
             return View(latestPosts);
         }
 
         public async Task<IActionResult> AddPost()
         {
+            var email = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Email)?.Value;
+            if (string.IsNullOrEmpty(email))
+            {
+                return RedirectToAction("Login", "Account", new { area = "" });
+            }
+
             ViewData["GenreList"] = new SelectList(await _client.GetAsync(new GetAllCategory
             {
                 CategoryType = CategoryType.PostCategory
@@ -174,9 +257,16 @@ namespace SWP391.OnlineShop.Portal.Areas.Managements.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> AddPost(PostViewModel request)
         {
+            if (!ModelState.IsValid)
+            {
+                return View(request);
+            }
+
             var imageFolderLink = $"{Convert.ToString(Directory.GetCurrentDirectory())}\\wwwroot\\uploads\\posts\\{request.Title}";
+            
             var imageLink = string.Empty;
             if (!Directory.Exists(imageFolderLink))
             {
@@ -192,7 +282,7 @@ namespace SWP391.OnlineShop.Portal.Areas.Managements.Controllers
 
                 imageLink = $"/uploads/posts/{request.Title}/{request.ThumbnailFile.FileName}";
             }
-            await _client.PostAsync(new PostAddPost
+            var result = await _client.PostAsync(new PostAddPost
             {
                 Title = request.Title,
                 Featured = request.Featured,
@@ -202,7 +292,14 @@ namespace SWP391.OnlineShop.Portal.Areas.Managements.Controllers
                 Author = request.Author,
                 CategoryId = request.CategoryId,
             });
-            return RedirectToAction("ManagePost");
+
+            if (result.StatusCode == Common.Enums.StatusCode.Success)
+            {
+                TempData["SuccessMess"] = "Create successfully!";
+                return RedirectToAction("ManagePost");
+            }
+            TempData["ErrorMess"] = $"Create fail! {result.ErrorMessage}";
+            return View(request);
         }
 
         public async Task<IActionResult> ViewPost(int id)
@@ -228,6 +325,12 @@ namespace SWP391.OnlineShop.Portal.Areas.Managements.Controllers
 
         public async Task<IActionResult> EditPost(int id)
         {
+            var email = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Email)?.Value;
+            if (string.IsNullOrEmpty(email))
+            {
+                return RedirectToAction("Login", "Account", new { area = "" });
+            }
+
             var listStatus = new List<Status>
             {
                 Status.Active,
@@ -250,7 +353,13 @@ namespace SWP391.OnlineShop.Portal.Areas.Managements.Controllers
         [HttpPost]
         public async Task<IActionResult> EditPost(PostViewModel request)
         {
+            if (!ModelState.IsValid)
+            {
+                return View(request);
+            }
+
             var imageFolderLink = $"{Convert.ToString(Directory.GetCurrentDirectory())}\\wwwroot\\uploads\\posts\\{request.Title}";
+
             var imageLink = string.Empty;
             if (!Directory.Exists(imageFolderLink))
             {
@@ -267,7 +376,7 @@ namespace SWP391.OnlineShop.Portal.Areas.Managements.Controllers
                 imageLink = $"/uploads/posts/{request.Title}/{request.ThumbnailFile.FileName}";
             }
 
-            await _client.PutAsync(new PutUpdatePost
+            var result = await _client.PutAsync(new PutUpdatePost
             {
                 Id = request.Id,
                 Title = request.Title,
@@ -278,22 +387,39 @@ namespace SWP391.OnlineShop.Portal.Areas.Managements.Controllers
                 Author = request.Author,
                 CategoryId = request.CategoryId,
                 Status = request.Status
-
             });
-            return RedirectToAction("ManagePost");
+
+            if (result.StatusCode == Common.Enums.StatusCode.Success)
+            {
+                TempData["SuccessMess"] = "Update successfully!";
+                return RedirectToAction("ManagePost");
+            }
+            TempData["ErrorMess"] = $"Update fail! {result.ErrorMessage}";
+            return View(request);
         }
 
         public async Task<IActionResult> DeletePost(int id)
         {
-            await _client.DeleteAsync(new DeletePost
+            var result = await _client.DeleteAsync(new DeletePost
             {
                 PostId = id
             });
+            if (result.StatusCode == Common.Enums.StatusCode.Success)
+            {
+                TempData["SuccessMess"] = "Delete successfully!";
+                return RedirectToAction("ManagePost");
+            }
+            TempData["ErrorMess"] = $"Delete fail! {result.ErrorMessage}";
             return RedirectToAction("ManagePost");
         }
 
         public async Task<IActionResult> ManageFeedback()
         {
+            var email = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Email)?.Value;
+            if (string.IsNullOrEmpty(email))
+            {
+                return RedirectToAction("Login", "Account", new { area = "" });
+            }
             //Get all feedback
             var feedback = await _client.GetAsync(new GetAllFeedback());
 
@@ -341,17 +467,29 @@ namespace SWP391.OnlineShop.Portal.Areas.Managements.Controllers
         public async Task<IActionResult> EditFeedback(FeedbackViewModels request)
         {
             //Edit feedback
-            await _client.PutAsync(new EditFeedback
+            var result = await _client.PutAsync(new EditFeedback
             {
                 FeedbackId = request.Id,
                 Status = request.Status
             });
 
-            return RedirectToAction("ManageFeedback");
+            if (result.StatusCode == Common.Enums.StatusCode.Success)
+            {
+                TempData["SuccessMess"] = "Update successfully!";
+                return RedirectToAction("ManageFeedback");
+            }
+            TempData["ErrorMess"] = $"Update fail! {result.ErrorMessage}";
+            return View(request);
         }
 
         public async Task<IActionResult> ManageSlider()
         {
+            var email = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Email)?.Value;
+            if (string.IsNullOrEmpty(email))
+            {
+                return RedirectToAction("Login", "Account", new { area = "" });
+            }
+
             var sliders = await _client.GetAsync(new GetAllSlider());
             return View(sliders);
         }
@@ -362,9 +500,16 @@ namespace SWP391.OnlineShop.Portal.Areas.Managements.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> AddSlider(SliderViewModel request)
         {
+            if (!ModelState.IsValid)
+            {
+                return View(request);
+            }
+
             var imageFolderLink = $"{Convert.ToString(Directory.GetCurrentDirectory())}\\wwwroot\\uploads\\sliders\\{request.Title}";
+
             var imageLink = string.Empty;
             if (!Directory.Exists(imageFolderLink))
             {
@@ -380,14 +525,21 @@ namespace SWP391.OnlineShop.Portal.Areas.Managements.Controllers
 
                 imageLink = $"/uploads/sliders/{request.Title}/{request.ThumbnailFile.FileName}";
             }
-            await _client.PostAsync(new PostAddSlider
+            var result = await _client.PostAsync(new PostAddSlider
             {
                 Title = request.Title,
                 Image = imageLink,
                 BlackLink = request.BlackLink,
                 Status = Status.Active
             });
-            return RedirectToAction("ManageSlider");
+
+            if (result.StatusCode == Common.Enums.StatusCode.Success)
+            {
+                TempData["SuccessMess"] = "Create successfully!";
+                return RedirectToAction("ManageSlider");
+            }
+            TempData["ErrorMess"] = $"Create fail! {result.ErrorMessage}";
+            return View(request);
         }
 
         public async Task<IActionResult> ViewSlider(int id)
@@ -409,6 +561,12 @@ namespace SWP391.OnlineShop.Portal.Areas.Managements.Controllers
 
         public async Task<IActionResult> EditSlider(int id)
         {
+            var email = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Email)?.Value;
+            if (string.IsNullOrEmpty(email))
+            {
+                return RedirectToAction("Login", "Account", new { area = "" });
+            }
+
             var listStatus = new List<Status>
             {
                 Status.Active,
@@ -427,7 +585,12 @@ namespace SWP391.OnlineShop.Portal.Areas.Managements.Controllers
         [HttpPost]
         public async Task<IActionResult> EditSlider(SliderViewModel request)
         {
-            var imageFolderLink = $"{Convert.ToString(Directory.GetCurrentDirectory())}\\wwwroot\\uploads\\Sliders\\{request.Title}";
+            if (!ModelState.IsValid)
+            {
+                return View(request);
+            }
+
+            var imageFolderLink = $"{Convert.ToString(Directory.GetCurrentDirectory())}\\wwwroot\\uploads\\sliders\\{request.Title}";
             var imageLink = string.Empty;
             if (!Directory.Exists(imageFolderLink))
             {
@@ -444,7 +607,7 @@ namespace SWP391.OnlineShop.Portal.Areas.Managements.Controllers
                 imageLink = $"/uploads/Sliders/{request.Title}/{request.ThumbnailFile.FileName}";
             }
 
-            await _client.PutAsync(new PutUpdateSlider
+            var result = await _client.PutAsync(new PutUpdateSlider
             {
                 Id = request.Id,
                 Title = request.Title,
@@ -453,16 +616,59 @@ namespace SWP391.OnlineShop.Portal.Areas.Managements.Controllers
                 Status = request.Status
 
             });
-            return RedirectToAction("ManageSlider");
+
+            if (result.StatusCode == Common.Enums.StatusCode.Success)
+            {
+                TempData["SuccessMess"] = "Update successfully!";
+                return RedirectToAction("ManageSlider");
+            }
+            TempData["ErrorMess"] = $"Update fail! {result.ErrorMessage}";
+            return View(request);
         }
 
         public async Task<IActionResult> DeleteSlider(int id)
         {
-            await _client.DeleteAsync(new DeleteSlider
+            var result = await _client.DeleteAsync(new DeleteSlider
             {
                 SliderId = id
             });
+            if (result.StatusCode == Common.Enums.StatusCode.Success)
+            {
+                TempData["SuccessMess"] = "Delete successfully!";
+                return RedirectToAction("ManageSlider");
+            }
+            TempData["ErrorMess"] = $"Delete fail! {result.ErrorMessage}";
             return RedirectToAction("ManageSlider");
+        }
+
+        public async Task<IActionResult> ManageCustomer()
+        {
+            var email = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Email)?.Value;
+            if (string.IsNullOrEmpty(email))
+            {
+                return RedirectToAction("Login", "Account", new { area = "" });
+            }
+
+            //Get all customers
+            var customers = await _client.GetAsync(new AccountModels.GetCustomers());
+
+            return View(customers);
+        }
+
+        public async Task<IActionResult> EditCustomer(int id, bool lockoutEnable)
+        {
+            var result = await _client.PutAsync(new AccountModels.UpdateCustomer
+            {
+                Id = id,
+                LockoutEnabled = lockoutEnable
+            });
+            if (result.StatusCode == Common.Enums.StatusCode.Success)
+            {
+                TempData["SuccessMess"] = "Update successfully!";
+                return RedirectToAction("ManageCustomer");
+            }
+            TempData["ErrorMess"] = $"Update fail! {result.ErrorMessage}";
+            return RedirectToAction("ManageCustomer");
         }
     }
 }
