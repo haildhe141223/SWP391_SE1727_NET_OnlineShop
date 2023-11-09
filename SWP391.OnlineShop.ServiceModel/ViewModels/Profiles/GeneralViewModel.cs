@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using SWP391.OnlineShop.Core.Models.Enums;
+using System.ComponentModel.DataAnnotations;
 
 namespace SWP391.OnlineShop.ServiceModel.ViewModels.Profiles;
 
@@ -14,4 +15,10 @@ public class GeneralViewModel
 
     [Required(ErrorMessage = "Please input image. This field is required")]
     public string DisplayImage { get; set; }
+
+    [Required(ErrorMessage = "Please input gender. This field is required")]
+    public Gender DisplayGender { get; set; }
+
+    [Required(ErrorMessage = "Please input phone number. This field is required")]
+    public string DisplayPhoneNumber { get; set; }
 }

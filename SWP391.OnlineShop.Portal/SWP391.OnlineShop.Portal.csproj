@@ -8,9 +8,12 @@
 
   <ItemGroup>
     <Folder Include="Logs\" />
-    <Folder Include="wwwroot\css\orderHistory\" />
+    <Folder Include="wwwroot\css\order_history\" />
     <Folder Include="wwwroot\img\" />
     <Folder Include="wwwroot\template\js\" />
+    <Folder Include="wwwroot\uploads\posts\" />
+    <Folder Include="wwwroot\uploads\products\" />
+    <Folder Include="wwwroot\uploads\sliders\" />
     <Folder Include="wwwroot\uploads\users\" />
   </ItemGroup>
 

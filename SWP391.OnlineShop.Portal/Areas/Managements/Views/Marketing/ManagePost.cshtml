@@ -1,0 +1,103 @@
+﻿@using SWP391.OnlineShop.Core.Models.Enums;
+@model List<SWP391.OnlineShop.ServiceModel.ViewModels.Products.PostViewModel>
+
+@{
+    var successMess = TempData["SuccessMess"] as string;
+    var errorMess = TempData["ErrorMess"] as string;
+}
+
+<div class="container-fluid">
+    <!-- Page Heading -->
+    <h1 class="h3 mb-2 text-gray-800">Post Containers</h1>
+    @if (!string.IsNullOrWhiteSpace(errorMess))
+    {
+        <div class="alert alert-danger my-2 text-center">
+            @errorMess
+        </div>
+    }
+    @if (!string.IsNullOrWhiteSpace(successMess))
+    {
+        <div class="alert alert-success my-2 text-center">
+            @successMess
+        </div>
+    }
+    <div class="m-headers ml-3" style="margin-top: 10% !important;">
+        <h4 class="fw-bold">Post Management</h4>
+        <div>
+            <a class="btn btn-outline-primary my-3" asp-area="Managements" asp-controller="Marketing" asp-action="AddPost">Add New Post</a>
+        </div>
+    </div>
+
+    <div class="card shadow mb-4 mt-3">
+        <div class="card-header py-3">
+            <h6 class="m-0 font-weight-bold text-primary">Feedbacks</h6>
+        </div>
+        <!-- DataTales Example -->
+        <div class="card shadow mb-4">
+            <div class="card-header py-3">
+                <h6 class="m-0 font-weight-bold text-primary">Feedbacks DataTables</h6>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                        <thead>
+                            <tr>
+                                <th>Title</th>
+                                <th>Brief</th>
+                                <th>Featured</th>
+                                <th>Thumbnail</th>
+                                <th>Description</th>
+                                <th>Author</th>
+                                <th>Status</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tfoot>
+                            <tr>
+                                <th>Title</th>
+                                <th>Brief</th>
+                                <th>Featured</th>
+                                <th>Thumbnail</th>
+                                <th>Description</th>
+                                <th>Author</th>
+                                <th>Status</th>
+                                <th>Action</th>
+                            </tr>
+                        </tfoot>
+                        <tbody>
+                            @foreach (var postViewModel in Model)
+                            {
+                                <tr>
+                                    <td>@postViewModel.Title</td>
+                                    <td>@postViewModel.Brief</td>
+                                    <td>@postViewModel.Featured</td>
+                                    <td><img width="300" height="300" src="@postViewModel.Thumbnail"></td>
+                                    <td>@Html.Raw(@postViewModel.Description)</td>
+                                    <td>@postViewModel.Author</td>
+                                    @if (postViewModel.Status == Status.Active)
+                                    {
+                                        <td class="text-success">Active</td>
+                                    }
+                                    else
+                                    {
+                                        <td class="text-danger">InActive</td>
+                                    }
+                                    <td>
+                                        <div class="table-action">
+                                            <a class="m-1 btn btn-outline-info" asp-area="Managements" asp-controller="Marketing"
+                                               asp-action="ViewPost" asp-route-id="@postViewModel.Id">View</a>
+                                            <a class="m-1 btn btn-outline-success" asp-area="Managements" asp-controller="Marketing"
+                                               asp-action="EditPost" asp-route-id="@postViewModel.Id">Edit</a>
+                                            <a class="m-1 btn btn-outline-danger btn-delete" asp-area="Managements" asp-controller="Marketing"
+                                               asp-action="DeletePost" asp-route-id="@postViewModel.Id">Delete</a>
+                                        </div>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,7 +1,11 @@
-﻿@model SWP391.OnlineShop.ServiceModel.ViewModels.Profiles.ProfileViewModels
+﻿@using System.Security.Claims;
+@using SWP391.OnlineShop.Common.Constraints;
+@model SWP391.OnlineShop.ServiceModel.ViewModels.Profiles.ProfileViewModels
 @{
     ViewBag.Title = "Profile";
     var homeUrl = Url.Action("Index", "Home");
+    var managementUrl = Url.Action("Index", "Dashboard", new { area = "Managements" });
+    var userRoles = User.Claims.FirstOrDefault(u => u.Type == ClaimTypes.Role)?.Value;
 }
 <div class="profile-container">
     <div class="d-flex align-items-start">
@@ -42,6 +46,21 @@
                     <span>Orders</span>
                 </div>
             </button>
+            <button class="tab-header-items" data-bs-toggle="pill" data-bs-target="#v-pills-request" type="button" id="tab-request">
+                <div class="header-item-content">
+                    <i class="fa-regular fa-handshake"></i>
+                    <span>Collaboration</span>
+                </div>
+            </button>
+            @if (!string.IsNullOrEmpty(userRoles) && userRoles.Contains(RoleConstraints.Admin))
+            {
+                <button class="tab-header-items" data-bs-toggle="pill" type="button" onclick="location.href = '@managementUrl'">
+                    <div class="header-item-content">
+                        <i class="fa-solid fa-gear"></i>
+                        <span>Managements</span>
+                    </div>
+                </button>
+            }
         </div>
         <div class="tab-content" id="v-pills-tabContent">
             @*tab profile*@
@@ -54,6 +73,8 @@
             <partial name="ProfilePartial/_VoucherPartial" />
             @*tab orders*@
             <partial name="ProfilePartial/_OrderPartial" />
+            @*tab requests*@
+            <partial name="ProfilePartial/_RequestPartial" />
         </div>
     </div>
 </div>

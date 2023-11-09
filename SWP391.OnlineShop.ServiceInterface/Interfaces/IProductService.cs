@@ -1,4 +1,5 @@
-﻿using SWP391.OnlineShop.ServiceModel.ServiceModels;
+﻿using SWP391.OnlineShop.ServiceModel.Results;
+using SWP391.OnlineShop.ServiceModel.ServiceModels;
 using SWP391.OnlineShop.ServiceModel.ViewModels.Products;
 
 namespace SWP391.OnlineShop.ServiceInterface.Interfaces
@@ -52,21 +53,21 @@ namespace SWP391.OnlineShop.ServiceInterface.Interfaces
 		/// </summary>
 		/// <param name="request"></param>
 		/// <returns>Product</returns>
-		Task<ProductViewModel> Post(PostAddProduct request);
+		Task<BaseResultModel> Post(PostAddProduct request);
 
 		/// <summary>
 		/// Delete Product
 		/// </summary>
 		/// <param name="request"></param>
 		/// <returns></returns>
-		Task<ProductViewModel> Delete(DeleteProduct request);
+		Task<BaseResultModel> Delete(DeleteProduct request);
 
 		/// <summary>
 		/// Update Product
 		/// </summary>
 		/// <param name="request"></param>
 		/// <returns>Product</returns>
-		Task<ProductViewModel> Put(PutUpdateProduct request);
+		Task<BaseResultModel> Put(PutUpdateProduct request);
 
 		/// <summary>
 		/// Add new Comment

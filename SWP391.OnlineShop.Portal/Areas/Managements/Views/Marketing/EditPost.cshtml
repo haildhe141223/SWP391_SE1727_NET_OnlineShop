@@ -1,13 +1,27 @@
 ﻿@model SWP391.OnlineShop.ServiceModel.ViewModels.Products.PostViewModel
 @{
-    Layout = "_Layout";
     var genreList = ViewData["GenreList"] as SelectList;
     var statusList = ViewData["StatusList"] as SelectList;
+    var errorMess = TempData["ErrorMess"] as string;
+    var successMess = TempData["SuccessMess"] as string;
 }
 
 <div class="m-headers" style="margin-top: 10% !important;">
     <h4 class="fw-bold ml-5">Manage Post</h4>
 </div>
+
+@if (!string.IsNullOrWhiteSpace(errorMess))
+{
+    <div class="alert alert-danger my-2 text-center">
+        @errorMess
+    </div>
+}
+@if (!string.IsNullOrWhiteSpace(successMess))
+{
+    <div class="alert alert-success my-2 text-center">
+        @successMess
+    </div>
+}
 
 <!-- DataTales Example -->
 <div class="card shadow mb-4">
@@ -15,7 +29,7 @@
         <h6 class="m-0 font-weight-bold text-primary">Edit Post</h6>
     </div>
     <div class="card-body">
-        <form style="margin:auto !important; width:60% !important" asp-controller="Marketing" asp-action="EditPost" method="post" enctype="multipart/form-data">
+        <form style="margin:auto !important; width:60% !important" asp-area="Managements" asp-controller="Marketing" asp-action="EditPost" method="post" enctype="multipart/form-data">
             <div class="r-error my-4 text-danger text-center" asp-validation-summary="All">
             </div>
             <div class="mb-3">
@@ -57,7 +71,7 @@
             <div class="mb-3">
                 <label asp-for="CategoryId" class="form-label">Category</label><br />
                 <select asp-for="CategoryId" class="form-control" asp-items="@genreList"></select>
-            </div><br /><br />
+            </div><br />
             <div class="mb-3">
                 <label asp-for="Status" class="form-label">Status</label><br />
                 <select asp-for="Status" class="form-control" asp-items="@statusList"></select>
@@ -67,11 +81,3 @@
         </form>
     </div>
 </div>
-
-@section scripts{
-    <script src="~/lib/ckeditor/ckeditor.js"></script>
-    <script src="~/lib/ckeditor/adapters/jquery.js"></script>
-    <script>
-        $("#ck-editor").ckeditor();
-    </script>
-}
