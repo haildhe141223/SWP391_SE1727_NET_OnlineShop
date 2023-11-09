@@ -1,0 +1,87 @@
+﻿@using SWP391.OnlineShop.Core.Models.Enums;
+@model List<SWP391.OnlineShop.ServiceModel.ViewModels.Feedback.FeedbackViewModels>
+@{
+    var successMess = TempData["SuccessMess"] as string;
+    var errorMess = TempData["ErrorMess"] as string;
+}
+<div class="m-headers ml-3" style="margin-top: 10% !important;">
+    <h4 class="fw-bold">Feedbacks Management</h4>
+</div>
+
+@if (!string.IsNullOrWhiteSpace(errorMess))
+{
+    <div class="alert alert-danger my-2 text-center">
+        @errorMess
+    </div>
+}
+@if (!string.IsNullOrWhiteSpace(successMess))
+{
+    <div class="alert alert-success my-2 text-center">
+        @successMess
+    </div>
+}
+
+<div class="card shadow mb-4 mt-3">
+    <!-- DataTales Example -->
+    <div class="card shadow mb-4">
+        <div class="card-header py-3">
+            <h6 class="m-0 font-weight-bold text-primary">Feedbacks DataTables</h6>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                    <thead>
+                        <tr>
+                            <th>User Name</th>
+                            <th>Product Name</th>
+                            <th>Comment</th>
+                            <th>Rate Star</th>
+                            <th>Feedback Time</th>
+                            <th>Status</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tfoot>
+                        <tr>
+                            <th>User Name</th>
+                            <th>Product Name</th>
+                            <th>Comment</th>
+                            <th>Rate Star</th>
+                            <th>Feedback Time</th>
+                            <th>Status</th>
+                            <th>Action</th>
+                        </tr>
+                    </tfoot>
+                    <tbody>
+                        @foreach (var feedbackViewModel in Model)
+                        {
+                            <tr>
+                                <td>@feedbackViewModel.UserName</td>
+                                <td>@feedbackViewModel.ProductName</td>
+                                <td>@feedbackViewModel.Comment</td>
+                                <td>@feedbackViewModel.RatedStar</td>
+                                <td>@feedbackViewModel.CreatedDateTime</td>
+                                @if (feedbackViewModel.Status == Status.Active)
+                                {
+                                    <td class="text-success">Active</td>
+                                }
+                                else
+                                {
+                                    <td class="text-danger">InActive</td>
+                                }
+                                <td>
+                                    <div class="table-action">
+                                        <a class="mx-1 btn btn-outline-info" asp-area="Managements" asp-controller="Marketing"
+                                           asp-action="FeedbackDetail" asp-route-id="@feedbackViewModel.Id">View</a>
+                                        <a class="mx-1 btn btn-outline-success" asp-area="Managements" asp-controller="Marketing"
+                                           asp-action="EditFeedback" asp-route-id="@feedbackViewModel.Id">Edit</a>
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

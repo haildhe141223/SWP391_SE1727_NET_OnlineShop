@@ -66,11 +66,15 @@
                 <a asp-action="Index" asp-controller="Profile" asp-area="" asp-route-userId="@id" class="collapse-item">Profile</a>
 
                 @if (!string.IsNullOrEmpty(userRole) &&
-                (userRole.Contains(RoleConstraints.Admin) ||
-                userRole.Contains(RoleConstraints.Marketing) ||
-                userRole.Contains(RoleConstraints.Sale)))
+                userRole.Contains(RoleConstraints.Admin))
                 {
                     <a class="collapse-item" asp-area="Managements" asp-action="Index" asp-controller="User">Users</a>
+                }
+                
+                @if (!string.IsNullOrEmpty(userRole) &&
+                     userRole.Contains(RoleConstraints.Marketing))
+                {
+                    <a class="collapse-item" asp-area="Managements" asp-action="ManageCustomer" asp-controller="Marketing">Customers</a>
                 }
             </div>
         </div>
@@ -87,16 +91,26 @@
             <div class="bg-white py-2 collapse-inner rounded">
                 <h6 class="collapse-header">Custom Components:</h6>
 
-                @if (!string.IsNullOrEmpty(userRole) && (userRole.Contains(RoleConstraints.Admin) || userRole.Contains(RoleConstraints.Sale)))
+                @if (!string.IsNullOrEmpty(userRole) && (
+                    userRole.Contains(RoleConstraints.Admin) ||
+                    userRole.Contains(RoleConstraints.Sale) ||
+                    userRole.Contains(RoleConstraints.SaleManager)))
                 {
-                    <a class="collapse-item">Products</a>
                     <a class="collapse-item">Orders</a>
                     <a class="collapse-item" asp-area="Managements" asp-action="Index" asp-controller="Voucher">Vouchers</a>
+                    <a class="collapse-item" asp-area="Managements" asp-controller="Marketing" asp-action="Index">Products</a>
+
+                    if (userRole.Contains(RoleConstraints.Admin))
+                    {
+                        <a class="collapse-item" asp-area="Managements" asp-controller="Marketing" asp-action="ManagePost">Posts</a>
+                    }
                 }
 
-                @if (!string.IsNullOrEmpty(userRole) && (userRole.Contains(RoleConstraints.Admin) || userRole.Contains(RoleConstraints.Marketing)))
+                @if (!string.IsNullOrEmpty(userRole) && (
+                    userRole.Contains(RoleConstraints.Marketing)))
                 {
-                    <a class="collapse-item">Posts</a>
+                    <a class="collapse-item" asp-area="Managements" asp-controller="Marketing" asp-action="Index">Products</a>
+                    <a class="collapse-item" asp-area="Managements" asp-controller="Marketing" asp-action="ManagePost">Posts</a>
                 }
 
                 @if (!string.IsNullOrEmpty(userRole) && userRole.Contains(RoleConstraints.Admin))
@@ -105,7 +119,7 @@
                     <a class="collapse-item" asp-area="Managements" asp-action="Index" asp-controller="Category">Categories</a>
                     <a class="collapse-item">Comments</a>
                     <a class="collapse-item">Contacts</a>
-                    <a class="collapse-item" href="#">Other</a>
+                    <a class="collapse-item">Other</a>
                 }
             </div>
         </div>

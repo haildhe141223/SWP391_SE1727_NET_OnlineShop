@@ -1,4 +1,5 @@
-﻿using SWP391.OnlineShop.ServiceModel.ViewModels.Settings;
+﻿using SWP391.OnlineShop.ServiceModel.Results;
+using SWP391.OnlineShop.ServiceModel.ViewModels.Settings;
 using static SWP391.OnlineShop.ServiceModel.ServiceModels.SliderModel;
 
 namespace SWP391.OnlineShop.ServiceInterface.Interfaces
@@ -25,20 +26,20 @@ namespace SWP391.OnlineShop.ServiceInterface.Interfaces
         /// </summary>
         /// <param name="request"></param>
         /// <returns>appendix of selected id</returns>
-        Task<SliderViewModel> Post(PostAddSlider request);
+        Task<BaseResultModel> Post(PostAddSlider request);
 
         /// <summary>
         /// Add new Appendix
         /// </summary>
         /// <param name="request"></param>
         /// <returns>appendix of selected id</returns>
-        Task<SliderViewModel> Delete(DeleteSlider request);
+        Task<BaseResultModel> Delete(DeleteSlider request);
 
         /// <summary>
         /// Add new Appendix
         /// </summary>
         /// <param name="request"></param>
         /// <returns>appendix of selected id</returns>
-        Task<SliderViewModel> Put(PutUpdateSlider request);
+        Task<BaseResultModel> Put(PutUpdateSlider request);
     }
 }

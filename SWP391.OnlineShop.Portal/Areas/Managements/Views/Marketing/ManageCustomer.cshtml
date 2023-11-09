@@ -1,0 +1,122 @@
+﻿@using SWP391.OnlineShop.ServiceModel.ViewModels.Users
+@model List<UserViewModel>
+
+@{
+    var successMess = TempData["SuccessMess"] as string;
+    var errorMess = TempData["ErrorMess"] as string;
+}
+
+<div class="container-fluid">
+    <!-- Page Heading -->
+    <h1 class="h3 mb-2 text-gray-800">Manage Customers</h1>
+    <p class="mb-4">
+    </p>
+    @if (!string.IsNullOrWhiteSpace(errorMess))
+    {
+        <div class="alert alert-danger my-2 text-center">
+            @errorMess
+        </div>
+    }
+    @if (!string.IsNullOrWhiteSpace(successMess))
+    {
+        <div class="alert alert-success my-2 text-center">
+            @successMess
+        </div>
+    }
+
+    <!-- DataTales Example -->
+    <div class="card shadow mb-4">
+        <div class="card-header py-3">
+            <h6 class="m-0 font-weight-bold text-primary">User DataTables</h6>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                    <thead>
+                        <tr>
+                            <th>Avatar</th>
+                            <th>UserName</th>
+                            <th>Email</th>
+                            <th>PhoneNumber</th>
+                            <th>Gender</th>
+                            <th>Default Address</th>
+                            <th>Roles</th>
+                            <th>Lockout Enable</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tfoot>
+                        <tr>
+                            <th>Avatar</th>
+                            <th>UserName</th>
+                            <th>Email</th>
+                            <th>PhoneNumber</th>
+                            <th>Gender</th>
+                            <th>Default Address</th>
+                            <th>Roles</th>
+                            <th>Lockout Enable</th>
+                            <th>Action</th>
+                        </tr>
+                    </tfoot>
+                    <tbody>
+                        @foreach (var user in Model)
+                        {
+                            <tr>
+                                <td hidden id="userId">@user.Id</td>
+                                <td>
+                                    @if (string.IsNullOrEmpty(user.Avatar))
+                                    {
+                                        <img src="~/template/img/settings/admins/anonymous_user.jpg" alt="" width="50" />
+                                    }
+                                    else
+                                    {
+                                        <img src="@user.Avatar" alt="" width="50" />
+                                    }
+                                </td>
+                                <td>@user.UserName</td>
+                                <td>@user.Email</td>
+                                <td>@user.PhoneNumber</td>
+                                <td>
+                                    @if (user.Gender == 0)
+                                    {
+                                        <span>Female</span>
+                                    }
+                                    else
+                                    {
+                                        <span>Male</span>
+                                    }
+                                </td>
+                                <td>@user.Address</td>
+                                <td>@string.Join(", ", user.Role)</td>
+                                <td>
+                                    @if (user.LockoutEnabled == false)
+                                    {
+                                        <span>Active</span>
+                                    }
+                                    else
+                                    {
+                                        <span>DeActive</span>
+                                    }
+                                </td>
+                                <td>
+                                    @if (user.LockoutEnabled == false)
+                                    {
+                                        <p hidden id="status">true</p>
+                                        <a id="editCustomer" class="mx-1 btn btn-outline-danger" asp-route-id="@user.Id" asp-route-lockoutEnable="true"
+                                           asp-area="Managements" asp-controller="Marketing" asp-action="EditCustomer">Deactive</a>
+                                    }
+                                    else
+                                    {
+                                        <p hidden id="status">false</p>
+                                        <a id="editCustomer" class="mx-1 btn btn-outline-info" asp-route-id="@user.Id" asp-route-lockoutEnable="false"
+                                           asp-area="Managements" asp-controller="Marketing" asp-action="EditCustomer">Active</a>
+                                    }
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

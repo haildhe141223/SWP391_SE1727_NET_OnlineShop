@@ -1,4 +1,5 @@
 ﻿@using SWP391.OnlineShop.ServiceModel.ViewModels.Users
+@using SWP391.OnlineShop.Common.Constraints
 @model List<UserViewModel>
 
 @{
@@ -96,10 +97,11 @@
                                 <td>@user.Address</td>
                                 <td>@string.Join(", ", user.Role)</td>
                                 <td>
-                                    <a class="mx-1 btn btn-outline-info" asp-route-id="@user.Id"
-                                       asp-action="Details">View</a>
-                                    <a class="mx-1 btn btn-outline-danger btn-delete" asp-route-id="@user.Id"
-                                       asp-action="Delete">Delete</a>
+                                    <a class="mx-1 btn btn-outline-info" asp-route-id="@user.Id" asp-action="Details">View</a>
+                                    @if (!user.Role.Contains(RoleConstraints.Admin))
+                                    {
+                                        <a class="mx-1 btn btn-outline-danger btn-delete" asp-route-id="@user.Id" asp-action="Delete">Delete</a>
+                                    }
                                 </td>
                             </tr>
                         }
