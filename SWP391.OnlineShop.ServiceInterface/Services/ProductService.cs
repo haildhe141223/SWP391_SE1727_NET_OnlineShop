@@ -6,6 +6,7 @@ using SWP391.OnlineShop.Core.Models.Identities;
 using SWP391.OnlineShop.ServiceInterface.BaseServices;
 using SWP391.OnlineShop.ServiceInterface.Interfaces;
 using SWP391.OnlineShop.ServiceInterface.Loggers;
+using SWP391.OnlineShop.ServiceModel.Results;
 using SWP391.OnlineShop.ServiceModel.ServiceModels;
 using SWP391.OnlineShop.ServiceModel.ViewModels.Products;
 
@@ -30,19 +31,20 @@ namespace SWP391.OnlineShop.ServiceInterface.Services
             _logger = logger;
             _userManager = userManager;
         }
-        public async Task<ProductViewModel> Delete(DeleteProduct request)
+        public async Task<BaseResultModel> Delete(DeleteProduct request)
         {
-            var result = new ProductViewModel();
+            var result = new BaseResultModel();
             try
             {
                 _unitOfWork.Products.Delete(request.ProductId);
                 var rows = await _unitOfWork.CompleteAsync();
                 if (rows > 0)
                 {
-                    var product = await _unitOfWork.Products.GetByIdAsync(request.ProductId);
-                    result = _mapper.Map<ProductViewModel>(product);
+                    result.StatusCode = Common.Enums.StatusCode.Success;
                     return result;
                 }
+                result.StatusCode = Common.Enums.StatusCode.InternalServerError;
+                result.ErrorMessage = "Error";
             }
             catch (Exception ex)
             {
@@ -175,15 +177,16 @@ namespace SWP391.OnlineShop.ServiceInterface.Services
             return new List<ProductViewModel>();
         }
 
-        public async Task<ProductViewModel> Post(PostAddProduct request)
+        public async Task<BaseResultModel> Post(PostAddProduct request)
         {
-            var result = new ProductViewModel();
+            var result = new BaseResultModel();
             try
             {
                 var product = new Product()
                 {
                     ProductName = request.ProductName,
                     Thumbnail = request.Thumbnail,
+                    Description = request.Description,
                     Amount = request.Amount,
                     Price = request.Price,
                     SalePrice = request.SalePrice,
@@ -192,12 +195,18 @@ namespace SWP391.OnlineShop.ServiceInterface.Services
                     CreatedDateTime = DateTime.Now
                 };
                 await _unitOfWork.Products.AddAsync(product);
-                await _unitOfWork.CompleteAsync();
-
+                int rows = await _unitOfWork.CompleteAsync();
+                if (rows > 0)
+                {
+                    result.StatusCode = Common.Enums.StatusCode.Success;
+                    return result;
+                }
+                result.StatusCode = Common.Enums.StatusCode.InternalServerError;
+                result.ErrorMessage = "Error";
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex.Message);
+                _logger.LogError("Error PostAddProduct" + ex.Message);
             }
             return result;
         }
@@ -216,9 +225,9 @@ namespace SWP391.OnlineShop.ServiceInterface.Services
             _unitOfWork.Complete();
         }
 
-        public async Task<ProductViewModel> Put(PutUpdateProduct request)
+        public async Task<BaseResultModel> Put(PutUpdateProduct request)
         {
-            var result = new ProductViewModel();
+            var result = new BaseResultModel();
             try
             {
                 var product = await _unitOfWork.Products.GetByIdAsync(request.Id);
@@ -256,13 +265,20 @@ namespace SWP391.OnlineShop.ServiceInterface.Services
                     product.Status = request.Status;
 
                     _unitOfWork.Products.Update(product);
-                    _unitOfWork.Complete();
+                    int rows = await _unitOfWork.CompleteAsync();
+                    if (rows > 0)
+                    {
+                        result.StatusCode = Common.Enums.StatusCode.Success;
+                        return result;
+                    }
+                    result.StatusCode = Common.Enums.StatusCode.InternalServerError;
+                    result.ErrorMessage = "Error";
                 }
 
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex.Message);
+                _logger.LogError("Error PutUpdateProduct" + ex.Message);
             }
             return result;
         }

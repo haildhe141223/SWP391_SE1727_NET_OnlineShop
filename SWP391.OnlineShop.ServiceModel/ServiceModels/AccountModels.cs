@@ -58,4 +58,17 @@ public class AccountModels
         public string Category { get; set; }
         public string LinkResetPassword { get; set; }
     }
+
+    [Route("/Account/GetCustomers", "GET")]
+    public class GetCustomers : IReturn<List<UserViewModel>>
+    {
+        public bool IsDesc { get; set; }
+    }
+
+    [Route("/Account/UpdateCustomer", "PUT")]
+    public class UpdateCustomer : IReturn<BaseResultModel>
+    {
+        public int Id { get; set; }
+        public bool LockoutEnabled { get; set; }
+    }
 }

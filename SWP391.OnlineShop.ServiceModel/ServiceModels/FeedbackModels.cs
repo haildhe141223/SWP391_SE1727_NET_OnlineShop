@@ -1,5 +1,6 @@
 ﻿using ServiceStack;
 using SWP391.OnlineShop.Core.Models.Enums;
+using SWP391.OnlineShop.ServiceModel.Results;
 using SWP391.OnlineShop.ServiceModel.ViewModels.Feedback;
 
 namespace SWP391.OnlineShop.ServiceModel.ServiceModels
@@ -18,7 +19,7 @@ namespace SWP391.OnlineShop.ServiceModel.ServiceModels
         }
 
         [Route("/Feedback/EditFeedback", "PUT")]
-        public class EditFeedback : IReturnVoid
+        public class EditFeedback : IReturn<BaseResultModel>
         {
             public int FeedbackId { get; set; }
             public Status Status { get; set; }

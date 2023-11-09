@@ -1,4 +1,5 @@
-﻿using SWP391.OnlineShop.ServiceModel.ViewModels.Feedback;
+﻿using SWP391.OnlineShop.ServiceModel.Results;
+using SWP391.OnlineShop.ServiceModel.ViewModels.Feedback;
 using static SWP391.OnlineShop.ServiceModel.ServiceModels.FeedbackModels;
 
 namespace SWP391.OnlineShop.ServiceInterface.Interfaces
@@ -24,6 +25,6 @@ namespace SWP391.OnlineShop.ServiceInterface.Interfaces
         /// </summary>
         /// <param name="request"></param>
         /// <returns></returns>
-        void Put(EditFeedback request);
+        Task<BaseResultModel> Put(EditFeedback request);
     }
 }

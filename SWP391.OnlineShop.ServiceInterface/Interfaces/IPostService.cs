@@ -61,21 +61,21 @@ namespace SWP391.OnlineShop.ServiceInterface.Interfaces
         /// </summary>
         /// <param name="request"></param>
         /// <returns></returns>
-        Task<PostViewModel> Post(PostAddPost request);
+        Task<BaseResultModel> Post(PostAddPost request);
 
         /// <summary>
         /// Delete Post
         /// </summary>
         /// <param name="request"></param>
         /// <returns></returns>
-        Task<PostViewModel> Delete(DeletePost request);
+        Task<BaseResultModel> Delete(DeletePost request);
 
         /// <summary>
         /// Update Post
         /// </summary>
         /// <param name="request"></param>
         /// <returns></returns>
-        BaseResultModel Put(PutUpdatePost request);
+        Task<BaseResultModel> Put(PutUpdatePost request);
 
         /// <summary>
         /// Get Tag by Post

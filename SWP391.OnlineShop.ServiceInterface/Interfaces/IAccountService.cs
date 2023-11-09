@@ -15,4 +15,7 @@ public interface IAccountService
     Task<BaseResultModel> Post(PostRegisterAccount request);
     Task<BaseResultModel> Post(PostConfirmRegisterEmail request);
     Task<BaseResultModel> Post(PostConfirmChangePasswordEmail request);
+
+    List<UserViewModel> Get(GetCustomers request);
+    Task<BaseResultModel> Put(UpdateCustomer request);
 }

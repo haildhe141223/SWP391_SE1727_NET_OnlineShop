@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using ServiceStack;
 using SWP391.OnlineShop.Core.Models.Enums;
+using SWP391.OnlineShop.ServiceModel.Results;
 using SWP391.OnlineShop.ServiceModel.ViewModels.Products;
 
 namespace SWP391.OnlineShop.ServiceModel.ServiceModels
@@ -40,7 +41,7 @@ namespace SWP391.OnlineShop.ServiceModel.ServiceModels
     }
 
     [Route("/Product/PostAddProduct", "POST")]
-    public class PostAddProduct : IReturn<ProductViewModel>
+    public class PostAddProduct : IReturn<BaseResultModel>
     {
         public string ProductName { get; set; }
         public string Thumbnail { get; set; }
@@ -52,7 +53,7 @@ namespace SWP391.OnlineShop.ServiceModel.ServiceModels
     }
 
     [Route("/Product/PutUpdateProduct", "PUT")]
-    public class PutUpdateProduct : IReturn<ProductViewModel>
+    public class PutUpdateProduct : IReturn<BaseResultModel>
     {
         public string ProductName { get; set; }
         public string Thumbnail { get; set; }
@@ -66,7 +67,7 @@ namespace SWP391.OnlineShop.ServiceModel.ServiceModels
     }
 
     [Route("/Product/DeleteProduct", "DELETE")]
-    public class DeleteProduct : IReturn<ProductViewModel>
+    public class DeleteProduct : IReturn<BaseResultModel>
     {
         public int ProductId { get; set; }
     }
