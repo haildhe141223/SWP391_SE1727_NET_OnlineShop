@@ -1,5 +1,9 @@
 ﻿@using System.Security.Claims
 @using SWP391.OnlineShop.Common.Constraints
+@using Microsoft.AspNetCore.Identity
+@using SWP391.OnlineShop.Core.Models.Enums;
+@using SWP391.OnlineShop.Core.Models.Identities
+@inject UserManager<User> UserManager;
 @model SWP391.OnlineShop.ServiceModel.ViewModels.Profiles.GeneralViewModel
 
 @{
@@ -15,6 +19,20 @@
     var isSuccess = !string.IsNullOrEmpty(successMessage);
 
     var role = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Role)?.Value;
+
+
+    var userEmail = User.Claims.FirstOrDefault(u => u.Type == ClaimTypes.Email)?.Value;
+    var user = UserManager.FindByEmailAsync(userEmail).Result;
+    var userImage = string.Empty;
+
+    if (user != null)
+    {
+        userImage = user.Image;
+        if (!string.IsNullOrEmpty(userImage) && userImage.Contains('~'))
+        {
+            userImage = userImage[1..];
+        }
+    }
 }
 <div class="tab-pane fade show tab-content-item active" id="v-pills-profile">
     <div class="">
@@ -63,6 +81,31 @@
                             </div>
                         </form>
                     </div>
+                    <div class="display-name col-card-6 col-c-md-12 col-c-sm-12">
+                        <form asp-action="ChangePhone" class="tab-acc-form" enctype="multipart/form-data" method="post">
+                            <div class="display-title">
+                                <span>Phone Number</span>
+                                <input asp-for="DisplayPhoneNumber" type="text" class="title-value"/>
+                            </div>
+                            <div class="display-icon">
+                                <input type="submit" hidden="" id="edit-phone" />
+                                <i class="fas fa-pencil-alt fas-phone"></i>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="display-name col-card-6 col-c-md-12 col-c-sm-12">
+                        <form asp-action="ChangeGender" class="tab-acc-form" enctype="multipart/form-data" method="post">
+                            <div class="display-title">
+                                <span>Gender</span>
+                                <select asp-for="DisplayGender" asp-items="Html.GetEnumSelectList<Gender>()" class="title-value">
+                                </select>
+                            </div>
+                            <div class="display-icon">
+                                <input type="submit" hidden="" id="edit-gender" />
+                                <i class="fas fa-pencil-alt fas-gender"></i>
+                            </div>
+                        </form>
+                    </div>
                 </div>
             </div>
             <div class="tab-personal">
@@ -73,7 +116,7 @@
                     not be displayed to other users. View our <a href="https://www.termsfeed.com/live/e3c51e1f-dd04-4568-ba9d-617bca9d4c5d">Privacy Policy</a>
                 </div>
                 <div class="profile-img">
-                    <img alt="profile-img" src="@Model.DisplayImage"/>
+                    <img alt="profile-img" src="@userImage"/>
                 </div>
                 <div class="row-pricing account-info" style="margin: 0;">
                     <div class="display-name col-card-6 col-c-md-12 col-c-sm-12">
