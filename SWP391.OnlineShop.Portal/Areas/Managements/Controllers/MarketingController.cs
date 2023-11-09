@@ -1,12 +1,7 @@
-﻿using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using Org.BouncyCastle.Asn1.Ocsp;
 using ServiceStack;
-using ServiceStack.Web;
 using SWP391.OnlineShop.Core.Models.Enums;
-using SWP391.OnlineShop.Core.Models.Identities;
-using SWP391.OnlineShop.ServiceInterface.Loggers;
 using SWP391.OnlineShop.ServiceModel.ServiceModels;
 using SWP391.OnlineShop.ServiceModel.ViewModels.Feedback;
 using SWP391.OnlineShop.ServiceModel.ViewModels.Products;
@@ -20,17 +15,11 @@ namespace SWP391.OnlineShop.Portal.Areas.Managements.Controllers
     public class MarketingController : BaseController
     {
         private readonly IJsonServiceClient _client;
-        private readonly ILoggerService _logger;
-        private readonly UserManager<User> _userManager;
 
         public MarketingController(
-            IJsonServiceClient client,
-            UserManager<User> userManager
-            ILoggerService logger)
+            IJsonServiceClient client)
         {
-            _logger = logger;
             _client = client;
-            _userManager = userManager;
         }
 
         public async Task<IActionResult> Index()
@@ -266,7 +255,7 @@ namespace SWP391.OnlineShop.Portal.Areas.Managements.Controllers
             }
 
             var imageFolderLink = $"{Convert.ToString(Directory.GetCurrentDirectory())}\\wwwroot\\uploads\\posts\\{request.Title}";
-            
+
             var imageLink = string.Empty;
             if (!Directory.Exists(imageFolderLink))
             {
@@ -454,7 +443,7 @@ namespace SWP391.OnlineShop.Portal.Areas.Managements.Controllers
             };
 
             ViewData["StatusList"] = new SelectList(listStatus);
-            
+
             var feedback = await _client.GetAsync(new GetFeedbackById
             {
                 FeedbackId = id

@@ -76,6 +76,7 @@ public class AccountModels
     {
         public int Id { get; set; }
         public bool LockoutEnabled { get; set; }
+    }
 
     [Route("/Account/DeleteUser", "DELETE")]
     public class DeleteUser : IReturn<BaseResultModel>

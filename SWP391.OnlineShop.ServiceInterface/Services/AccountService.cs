@@ -194,15 +194,11 @@ public class AccountService : BaseService, IAccountService
                         SuccessMessage = "Created user success. Please double-check again."
                     };
                 }
-                else
-                {
-                    throw new Exception($"Create user fail. Cannot find user with email [{request.RegisterViewModel.Email}]");
-                }
+
+                throw new Exception($"Create user fail. Cannot find user with email [{request.RegisterViewModel.Email}]");
             }
-            else
-            {
-                throw new Exception($"Create user fail. {string.Join(", ", isCreatedUser.Errors.ToList())}");
-            }
+
+            throw new Exception($"Create user fail. {string.Join(", ", isCreatedUser.Errors.ToList())}");
         }
         catch (Exception ex)
         {
@@ -309,18 +305,20 @@ public class AccountService : BaseService, IAccountService
     }
 
 
-    public List<UserViewModel> Get(GetCustomers request)
+    public async Task<List<UserViewModel>> Get(GetCustomers request)
     {
         // Descending
         if (request.IsDesc)
         {
-            var customers = _userManager.GetUsersInRoleAsync(RoleConstraints.Customer).Result.OrderByDescending(x => x.Id).ToList();
+            var customers = await _userManager.GetUsersInRoleAsync(RoleConstraints.Customer);
+            customers = customers.OrderByDescending(x => x.Id).ToList();
             return _mapper.Map<List<UserViewModel>>(customers);
         }
         // Ascending
         else
         {
-            var customers = _userManager.GetUsersInRoleAsync(RoleConstraints.Customer).Result.ToList();
+            var customers = await _userManager.GetUsersInRoleAsync(RoleConstraints.Customer);
+            customers = customers.ToList();
             return _mapper.Map<List<UserViewModel>>(customers);
         }
     }
@@ -329,17 +327,17 @@ public class AccountService : BaseService, IAccountService
     {
         try
         {
-            var customer = _userManager.FindByIdAsync(Convert.ToString(request.Id)).Result;
+            var customer = await _userManager.FindByIdAsync(Convert.ToString(request.Id));
             if (customer != null)
             {
                 customer.LockoutEnabled = request.LockoutEnabled;
                 await _userManager.UpdateAsync(customer);
-                }
+            }
 
             return new BaseResultModel
             {
                 StatusCode = StatusCode.Success,
-                SuccessMessage = $"Update status success"
+                SuccessMessage = "Update status success"
             };
         }
         catch (Exception e)
@@ -351,7 +349,7 @@ public class AccountService : BaseService, IAccountService
                 ErrorMessage = e.Message
             };
         }
-        
+
     }
 
     public async Task<BaseResultModel> Delete(DeleteUser request)
@@ -362,6 +360,10 @@ public class AccountService : BaseService, IAccountService
             if (user != null)
             {
                 await _userManager.SetLockoutEnabledAsync(user, true);
+            }
+
+            return new BaseResultModel
+            {
                 StatusCode = StatusCode.Success
             };
         }
