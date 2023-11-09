@@ -1,6 +1,5 @@
 ﻿@model SWP391.OnlineShop.ServiceModel.ViewModels.Feedback.FeedbackViewModels
 @{
-    Layout = "_Layout";
     var statusList = ViewData["StatusList"] as SelectList;
 }
 
@@ -10,10 +9,10 @@
 
 <div class="card shadow mb-4">
     <div class="card-header py-3">
-        <h6 class="m-0 font-weight-bold text-primary">Edit Feedback</h6>
+        <h6 class="m-0 font-weight-bold text-primary">Feedback Detail</h6>
     </div>
     <div class="card-body">
-        <form style="margin:auto !important; width:60% !important" asp-controller="Marketing" asp-action="EditFeedback" method="post" enctype="multipart/form-data">
+        <form style="margin:auto !important; width:60% !important">
             <div class="r-error my-4 text-danger text-center" asp-validation-summary="All">
             </div>
             <div class="mb-3">
@@ -47,15 +46,15 @@
             </div>
             <div class="mb-3">
                 <label asp-for="Comment" class="form-label"></label>
-                <input disabled asp-for="Comment" type="text" class="form-control" />
+                <textarea disabled asp-for="Comment" type="text" class="form-control"></textarea>
                 <span asp-validation-for="Comment" class="r-error d-block text-danger"></span>
             </div>
             <div class="mb-3">
                 <label asp-for="Status" class="form-label">Status</label><br />
-                <select asp-for="Status" class="form-control" asp-items="@statusList"></select>
+                <select disabled asp-for="Status" class="form-control" asp-items="@statusList"></select>
             </div><br />
             <a type="button" class="btn btn-secondary" asp-action="">Back</a>
-            <button type="submit" class="btn btn-primary">Submit</button>
+            <button asp-area="Managements" asp-controller="Marketing" asp-action="EditFeedback" asp-route-id="@Model.Id" class="btn btn-primary">Edit Status</button>
         </form>
     </div>
 </div>

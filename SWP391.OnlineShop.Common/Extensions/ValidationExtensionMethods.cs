@@ -10,4 +10,11 @@ public static class ValidationExtensionMethods
         var isValidEmail = checkEmail.IsValid(email);
         return isValidEmail;
     }
+
+    public static bool IsPhone(this string phone)
+    {
+        var checkPhone = new PhoneAttribute();
+        var isValidPhone = checkPhone.IsValid(phone);
+        return isValidPhone;
+    }
 }

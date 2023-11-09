@@ -59,7 +59,13 @@ public class AccountService : BaseService, IAccountService
         }
     }
 
-    public async Task<BaseResultModel> Get(GetUser request)
+    public async Task<UserViewModel> Get(GetUser request)
+    {
+        var users = await _userManager.FindByIdAsync(request.Id);
+        return _mapper.Map<UserViewModel>(users);
+    }
+
+    public async Task<BaseResultModel> Get(GetExternalUser request)
     {
         try
         {
@@ -188,15 +194,11 @@ public class AccountService : BaseService, IAccountService
                         SuccessMessage = "Created user success. Please double-check again."
                     };
                 }
-                else
-                {
-                    throw new Exception($"Create user fail. Cannot find user with email [{request.RegisterViewModel.Email}]");
-                }
+
+                throw new Exception($"Create user fail. Cannot find user with email [{request.RegisterViewModel.Email}]");
             }
-            else
-            {
-                throw new Exception($"Create user fail. {string.Join(", ", isCreatedUser.Errors.ToList())}");
-            }
+
+            throw new Exception($"Create user fail. {string.Join(", ", isCreatedUser.Errors.ToList())}");
         }
         catch (Exception ex)
         {
@@ -300,6 +302,54 @@ public class AccountService : BaseService, IAccountService
                 ErrorMessage = e.Message
             };
         }
+    }
+
+
+    public async Task<List<UserViewModel>> Get(GetCustomers request)
+    {
+        // Descending
+        if (request.IsDesc)
+        {
+            var customers = await _userManager.GetUsersInRoleAsync(RoleConstraints.Customer);
+            customers = customers.OrderByDescending(x => x.Id).ToList();
+            return _mapper.Map<List<UserViewModel>>(customers);
+        }
+        // Ascending
+        else
+        {
+            var customers = await _userManager.GetUsersInRoleAsync(RoleConstraints.Customer);
+            customers = customers.ToList();
+            return _mapper.Map<List<UserViewModel>>(customers);
+        }
+    }
+
+    public async Task<BaseResultModel> Put(UpdateCustomer request)
+    {
+        try
+        {
+            var customer = await _userManager.FindByIdAsync(Convert.ToString(request.Id));
+            if (customer != null)
+            {
+                customer.LockoutEnabled = request.LockoutEnabled;
+                await _userManager.UpdateAsync(customer);
+            }
+
+            return new BaseResultModel
+            {
+                StatusCode = StatusCode.Success,
+                SuccessMessage = "Update status success"
+            };
+        }
+        catch (Exception e)
+        {
+            _logger.LogError($"Error in UpdateCustomer request - {e}");
+            return new BaseResultModel
+            {
+                StatusCode = StatusCode.InternalServerError,
+                ErrorMessage = e.Message
+            };
+        }
+
     }
 
     public async Task<BaseResultModel> Delete(DeleteUser request)

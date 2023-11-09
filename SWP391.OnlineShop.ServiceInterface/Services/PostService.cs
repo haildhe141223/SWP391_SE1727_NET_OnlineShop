@@ -29,19 +29,20 @@ namespace SWP391.OnlineShop.ServiceInterface.Services
             _logger = logger;
         }
 
-        public async Task<PostViewModel> Delete(DeletePost request)
+        public async Task<BaseResultModel> Delete(DeletePost request)
         {
-            var result = new PostViewModel();
+            var result = new BaseResultModel();
             try
             {
                 _unitOfWork.Posts.Delete(request.PostId);
                 var rows = await _unitOfWork.CompleteAsync();
                 if (rows > 0)
                 {
-                    var post = await _unitOfWork.Posts.GetByIdAsync(request.PostId);
-                    result = _mapper.Map<PostViewModel>(post);
+                    result.StatusCode = Common.Enums.StatusCode.Success;
                     return result;
                 }
+                result.StatusCode = Common.Enums.StatusCode.InternalServerError;
+                result.ErrorMessage = "Error";
             }
             catch (Exception ex)
             {
@@ -55,8 +56,13 @@ namespace SWP391.OnlineShop.ServiceInterface.Services
             var result = new List<PostViewModel>();
             try
             {
-                var post = _unitOfWork.Posts.GetAllPost();
-                result = _mapper.Map<List<PostViewModel>>(post);
+                var posts = _unitOfWork.Posts.GetAllPost().OrderByDescending(x => x.CreatedDateTime);
+                foreach (var post in posts)
+                {
+                    var postVm = _mapper.Map<PostViewModel>(post);
+                    result.Add(postVm);
+                }
+                //result = _mapper.Map<List<PostViewModel>>(post);
                 return result;
             }
             catch (Exception ex)
@@ -180,9 +186,9 @@ namespace SWP391.OnlineShop.ServiceInterface.Services
             return result;
         }
 
-        public async Task<PostViewModel> Post(PostAddPost request)
+        public async Task<BaseResultModel> Post(PostAddPost request)
         {
-            var result = new PostViewModel();
+            var result = new BaseResultModel();
             try
             {
                 var post = new Post()
@@ -198,18 +204,26 @@ namespace SWP391.OnlineShop.ServiceInterface.Services
                     CreatedDateTime = DateTime.Now
                 };
                 await _unitOfWork.Posts.AddAsync(post);
-                await _unitOfWork.CompleteAsync();
+                int rows = await _unitOfWork.CompleteAsync();
+                if (rows > 0)
+                {
+                    result.StatusCode = Common.Enums.StatusCode.Success;
+                    return result;
+                }
+                result.StatusCode = Common.Enums.StatusCode.InternalServerError;
+                result.ErrorMessage = "Error";
 
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex.Message);
+                _logger.LogError("Error PostAddPost" + ex.Message);
             }
             return result;
         }
 
-        public BaseResultModel Put(PutUpdatePost request)
+        public async Task<BaseResultModel> Put(PutUpdatePost request)
         {
+            var result = new BaseResultModel();
             try
             {
                 var post = _unitOfWork.Posts.GetById(request.Id);
@@ -226,13 +240,15 @@ namespace SWP391.OnlineShop.ServiceInterface.Services
                     post.Status = request.Status;
 
                     _unitOfWork.Posts.Update(post);
-                    _unitOfWork.Complete();
+                    int rows = await _unitOfWork.CompleteAsync();
+                    if (rows > 0)
+                    {
+                        result.StatusCode = Common.Enums.StatusCode.Success;
+                        return result;
+                    }
+                    result.StatusCode = Common.Enums.StatusCode.InternalServerError;
+                    result.ErrorMessage = "Error";
                 }
-
-                return new BaseResultModel
-                {
-                    StatusCode = StatusCode.Success
-                };
             }
             catch (Exception ex)
             {
@@ -243,61 +259,62 @@ namespace SWP391.OnlineShop.ServiceInterface.Services
                     ErrorMessage = ex.Message
                 };
             }
+            return result;
         }
-		public List<TagViewModel> Get(GetTagByPost request)
-		{
-			var result = new List<TagViewModel>();
+        public List<TagViewModel> Get(GetTagByPost request)
+        {
+            var result = new List<TagViewModel>();
 
-			try
-			{
-				var query = from t in _unitOfWork.Context.Tags
-							join pt in _unitOfWork.Context.PostTags
-							on t.Id equals pt.TagId
-							join p in _unitOfWork.Context.Posts
-							on pt.PostId equals p.Id
-							where p.Id == request.PostId
-							select t;
-				var listTag = query.ToList();
-				if (listTag.Any())
-				{
-					foreach (var tag in listTag)
-					{
-						var tagVm = _mapper.Map<TagViewModel>(tag);
-						result.Add(tagVm);
-					}
-				}
+            try
+            {
+                var query = from t in _unitOfWork.Context.Tags
+                            join pt in _unitOfWork.Context.PostTags
+                            on t.Id equals pt.TagId
+                            join p in _unitOfWork.Context.Posts
+                            on pt.PostId equals p.Id
+                            where p.Id == request.PostId
+                            select t;
+                var listTag = query.ToList();
+                if (listTag.Any())
+                {
+                    foreach (var tag in listTag)
+                    {
+                        var tagVm = _mapper.Map<TagViewModel>(tag);
+                        result.Add(tagVm);
+                    }
+                }
 
-			}
-			catch (Exception ex)
-			{
-				_logger.LogError("GetTagByPost error" + ex.Message);
-			}
-			return result;
-		}
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError("GetTagByPost error" + ex.Message);
+            }
+            return result;
+        }
 
-		public List<TagViewModel> Get(GetAllTag request)
-		{
-			var result = new List<TagViewModel>();
+        public List<TagViewModel> Get(GetAllTag request)
+        {
+            var result = new List<TagViewModel>();
 
-			try
-			{
-				var query = _unitOfWork.Context.Tags;
-				var listTag = query.ToList();
-				if (listTag.Any())
-				{
-					foreach (var tag in listTag)
-					{
-						var tagVm = _mapper.Map<TagViewModel>(tag);
-						result.Add(tagVm);
-					}
-				}
+            try
+            {
+                var query = _unitOfWork.Context.Tags;
+                var listTag = query.ToList();
+                if (listTag.Any())
+                {
+                    foreach (var tag in listTag)
+                    {
+                        var tagVm = _mapper.Map<TagViewModel>(tag);
+                        result.Add(tagVm);
+                    }
+                }
 
-			}
-			catch (Exception ex)
-			{
-				_logger.LogError("GetTagByPost error" + ex.Message);
-			}
-			return result;
-		}
-	}
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError("GetTagByPost error" + ex.Message);
+            }
+            return result;
+        }
+    }
 }

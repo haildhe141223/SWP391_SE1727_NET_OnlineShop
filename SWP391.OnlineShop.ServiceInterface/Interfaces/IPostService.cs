@@ -8,74 +8,74 @@ namespace SWP391.OnlineShop.ServiceInterface.Interfaces
     public interface IPostService
     {
         /// <summary>
-        /// Post Detail Standard & Criteria of Appendices
+        /// Get all Posts
         /// </summary>
         /// <param name="request"></param>
-        /// <returns>Post Detail Standard & Criteria of Appendices</returns>
+        /// <returns>Get all Posts</returns>
         List<PostViewModel> Get(GetAllPost request);
 
         /// <summary>
-        /// Post Detail Standard & Criteria of Appendices
+        /// Get Paging Posts
         /// </summary>
         /// <param name="request"></param>
-        /// <returns>Post Detail Standard & Criteria of Appendices</returns>
+        /// <returns>Get Paging Posts</returns>
         List<PostViewModel> Get(GetPagingPost request);
 
         /// <summary>
-        /// Post Appendix By Id
+        /// Get Post By Id
         /// </summary>
         /// <param name="request"></param>
-        /// <returns>appendix of selected id</returns>
+        /// <returns>Get Post By Id</returns>
         PostViewModel Get(GetPostById request);
 
         /// <summary>
-        /// Post Appendix By Id
+        /// Get Post By Category
         /// </summary>
         /// <param name="request"></param>
-        /// <returns>appendix of selected id</returns>
+        /// <returns>Get Post By Category</returns>
         List<PostViewModel> Get(GetPostByCategory request);
 
         /// <summary>
-        /// Post Appendix By Id
+        /// Get Post By Author
         /// </summary>
         /// <param name="request"></param>
-        /// <returns>appendix of selected id</returns>
+        /// <returns>Get Post By Author</returns>
         List<PostViewModel> Get(GetPostByAuthor request);
 
         /// <summary>
-        /// Post Appendix By Id
+        /// Get Post by Status
         /// </summary>
         /// <param name="request"></param>
-        /// <returns>appendix of selected id</returns>
+        /// <returns>Get Post by Status</returns>
         List<PostViewModel> Get(GetPostByStatus request);
 
         /// <summary>
-        /// Post Appendix By Id
+        /// Get Post by Title
         /// </summary>
         /// <param name="request"></param>
-        /// <returns>appendix of selected id</returns>
+        /// <returns>Get Post by Title</returns>
         List<PostViewModel> Get(GetPostByTitle request);
 
         /// <summary>
-        /// Add new Appendix
+        /// Post Add new Post
         /// </summary>
         /// <param name="request"></param>
-        /// <returns>appendix of selected id</returns>
-        Task<PostViewModel> Post(PostAddPost request);
+        /// <returns></returns>
+        Task<BaseResultModel> Post(PostAddPost request);
 
         /// <summary>
-        /// Add new Appendix
+        /// Delete Post
         /// </summary>
         /// <param name="request"></param>
-        /// <returns>appendix of selected id</returns>
-        Task<PostViewModel> Delete(DeletePost request);
+        /// <returns></returns>
+        Task<BaseResultModel> Delete(DeletePost request);
 
         /// <summary>
-        /// Add new Appendix
+        /// Update Post
         /// </summary>
         /// <param name="request"></param>
-        /// <returns>appendix of selected id</returns>
-        BaseResultModel Put(PutUpdatePost request);
+        /// <returns></returns>
+        Task<BaseResultModel> Put(PutUpdatePost request);
 
         /// <summary>
         /// Get Tag by Post

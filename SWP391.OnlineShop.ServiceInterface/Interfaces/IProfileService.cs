@@ -8,4 +8,6 @@ public interface IProfileService
     Task<BaseResultModel> Put(PutUpdateUserName request);
     Task<BaseResultModel> Put(PutUpdateUserEmail request);
     Task<BaseResultModel> Put(PutUpdateUserAvatar request);
+    Task<BaseResultModel> Put(PutUpdateUserPhone request);
+    Task<BaseResultModel> Put(PutUpdateUserGender request);
 }
