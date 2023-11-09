@@ -59,7 +59,13 @@ public class AccountService : BaseService, IAccountService
         }
     }
 
-    public async Task<BaseResultModel> Get(GetUser request)
+    public async Task<UserViewModel> Get(GetUser request)
+    {
+        var users = await _userManager.FindByIdAsync(request.Id);
+        return _mapper.Map<UserViewModel>(users);
+    }
+
+    public async Task<BaseResultModel> Get(GetExternalUser request)
     {
         try
         {
@@ -302,6 +308,7 @@ public class AccountService : BaseService, IAccountService
         }
     }
 
+
     public List<UserViewModel> Get(GetCustomers request)
     {
         // Descending
@@ -327,7 +334,7 @@ public class AccountService : BaseService, IAccountService
             {
                 customer.LockoutEnabled = request.LockoutEnabled;
                 await _userManager.UpdateAsync(customer);
-            }
+                }
 
             return new BaseResultModel
             {
@@ -347,4 +354,24 @@ public class AccountService : BaseService, IAccountService
         
     }
 
+    public async Task<BaseResultModel> Delete(DeleteUser request)
+    {
+        try
+        {
+            var user = await _userManager.FindByIdAsync(request.UserId.ToString());
+            if (user != null)
+            {
+                await _userManager.SetLockoutEnabledAsync(user, true);
+                StatusCode = StatusCode.Success
+            };
+        }
+        catch (Exception ex)
+        {
+            return new BaseResultModel
+            {
+                ErrorMessage = $"DeleteUser request - {ex}",
+                StatusCode = StatusCode.InternalServerError
+            };
+        }
+    }
 }

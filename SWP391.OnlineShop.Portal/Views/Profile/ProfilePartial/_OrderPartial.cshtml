@@ -1,0 +1,58 @@
+﻿<div class="tab-pane fade tab-content-item tab-content-all" id="v-pills-favor">
+    <div>
+        <div>
+            <div class="tab-favor-title">Orders</div>
+            <div class="tab-favor-desc">
+                Manage the orders you bought on Karma Shop.
+                Please careful while manage your order page. Your infors will be privated by of
+                <a href="https://www.termsfeed.com/live/e3c51e1f-dd04-4568-ba9d-617bca9d4c5d" title="">Terms of Service</a>
+            </div>
+        </div>
+        <div class="tab-farvor-body">
+            <div class="tab-favor-body-content row-pricing" style="margin: 0;">
+                <div class="favor-item col-card-4 col-c-md-6 col-c-sm-12">
+                    @*item 1*@
+                    <div class="movie-item films-right-item">
+                        <img src="~/template/img/i1.jpg" alt="">
+                        <div class="movie-item-content">
+                            <div class="movie-item-title">
+                                Test
+                            </div>
+                            <div class="movie-infos">
+                                <div class="movie-info">
+                                    <i class="fa-solid fa-money-bill"></i>
+                                    <span>300 $</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="favor-btn">
+                        <a asp-route="details" asp-route-id="" title="" class="favor-btn-item">
+                            <i class="far fa-eye"></i>
+                            <span>View Details</span>
+                        </a>
+                        <a asp-route="deletefa" asp-route-mid="" asp-route-col="4" title="" class="favor-btn-item">
+                            <i class="fa-solid fa-up-right-from-square"></i>
+                            <span>Re-Order</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="favor-pagination">
+            <nav class="pagination-container">
+                <ul class="pagination justify-content-center my-0">
+                    <li class="page-item">
+                        <a class="page-link" asp-route="profile" asp-route-col="4"><i class="fas fa-chevron-left"></i>&nbsp;Prev</a>
+                    </li>
+                    <li class="page-item active">
+                        <a class="page-link">1</a>
+                    </li>
+                    <li class="page-item">
+                        <a class="page-link" asp-route="profile" asp-route-col="4">Next&nbsp;<i class="fas fa-chevron-right"></i></a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+    </div>
+</div>

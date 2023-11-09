@@ -54,12 +54,12 @@
                 </div>
                 <div class="mb-3">
                     <label asp-for="StartDateTime" class="form-label">Start Date Time</label>
-                    <input asp-for="StartDateTime" type="datetime" class="form-control" required />
+                    <input asp-for="StartDateTime" type="datetime" class="form-control" required id="updateStartDate" />
                     <span asp-validation-for="StartDateTime" class="r-error d-block text-danger"></span>
                 </div>
                 <div class="mb-3">
                     <label asp-for="EndDateTime" class="form-label">Expired Date</label>
-                    <input asp-for="EndDateTime" type="datetime" class="form-control" required />
+                    <input asp-for="EndDateTime" type="datetime" class="form-control" required id="updateEndDate" />
                     <span asp-validation-for="EndDateTime" class="r-error d-block text-danger"></span>
                 </div>
                 <div class="mb-3">

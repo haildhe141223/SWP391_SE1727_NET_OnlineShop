@@ -1,9 +1,26 @@
 ﻿@using System.Security.Claims
+@using Microsoft.AspNetCore.Identity
+@using Microsoft.AspNetCore.Mvc.TagHelpers
 @using SWP391.OnlineShop.Common.Constraints
+@using SWP391.OnlineShop.Core.Models.Identities
+@inject UserManager<User> UserManager;
+
 @{
-    //TODO: HaiLD update Avatar Claim here.
-    var userImage = User.Claims.FirstOrDefault(u => u.Type == "Avatar")?.Value;
     var userRole = User.Claims.FirstOrDefault(u => u.Type == ClaimTypes.Role)?.Value;
+
+    var userEmail = User.Claims.FirstOrDefault(u => u.Type == ClaimTypes.Email)?.Value;
+    var user = UserManager.FindByEmailAsync(userEmail).Result;
+    var userImage = string.Empty;
+
+    if (user != null)
+    {
+        userImage = user.Image;
+        if (!string.IsNullOrEmpty(userImage) && userImage.Contains('~'))
+        {
+            userImage = userImage[1..];
+        }
+    }
+    var id = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
 }
 
 <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
@@ -74,7 +91,7 @@
                     <i class="fas fa-home fa-sm fa-fw mr-2 text-gray-400"></i>
                     Home
                 </a>
-                <a class="dropdown-item" asp-controller="Profile" asp-action="Index" asp-area="">
+                <a class="dropdown-item" asp-route-userId="@id" asp-controller="Profile" asp-action="Index" asp-area="">
                     <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
                     Profile
                 </a>

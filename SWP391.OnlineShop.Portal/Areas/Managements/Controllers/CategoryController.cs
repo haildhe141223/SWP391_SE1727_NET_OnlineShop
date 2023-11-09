@@ -5,6 +5,9 @@ using SWP391.OnlineShop.ServiceModel.ServiceModels;
 using ServiceStack;
 using SWP391.OnlineShop.Core.Models.Identities;
 using SWP391.OnlineShop.ServiceInterface.Loggers;
+using SWP391.OnlineShop.ServiceModel.ViewModels.Categories;
+using static SWP391.OnlineShop.ServiceModel.ServiceModels.VoucherModels;
+using SWP391.OnlineShop.Core.Models.Entities;
 
 namespace SWP391.OnlineShop.Portal.Areas.Managements.Controllers
 {
@@ -25,23 +28,82 @@ namespace SWP391.OnlineShop.Portal.Areas.Managements.Controllers
 		}
 		public async Task<IActionResult> Index()
         {
-            var categories = await _client.GetAsync(new GetAllCategory());
+            var categories = await _client.GetAsync(new GetAllCategories());
             return View(categories);
         }
 
-        public IActionResult Update(int id)
+        public async Task<IActionResult> Update(int id)
         {
-            return View();
+            var category = await _client.GetAsync(new GetCategoryById()
+            {
+                Id = id
+            });
+            return View(category);
         }
 
-        public IActionResult Delete(int id)
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Update(CategoryViewModel request)
         {
-            return View();
+            if (!ModelState.IsValid)
+            {
+                return View(request);
+            }
+            var api = await _client.PutAsync(new PutUpdateCategory()
+            {
+                Id = request.Id,
+                CategoryName = request.CategoryName,
+                CategoryType = request.CategoryType
+            });
+            if (api.StatusCode == Common.Enums.StatusCode.Success)
+            {
+                TempData["SuccessMess"] = "Create successfully!";
+                return RedirectToAction("Index");
+            }
+            TempData["ErrorMess"] = $"Create fail! {api.ErrorMessage}";
+            return View(request);
         }
+
+        public async Task<IActionResult> Delete(int id)
+        {
+			var api = await _client.DeleteAsync(new DeleteCategory()
+			{
+				Id = id
+			});
+			if (api.StatusCode == Common.Enums.StatusCode.Success)
+			{
+				TempData["SuccessMess"] = "Delete successfully!";
+				return RedirectToAction("Index");
+			}
+			TempData["ErrorMess"] = $"Delete fail! {api.ErrorMessage}";
+			return RedirectToAction("Index");
+		}
 
         public IActionResult Add()
         {
             return View();
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Add(CategoryViewModel request)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(request);
+            }
+            var api = await _client.PostAsync(new PostAddCategory()
+            {
+                CategoryName = request.CategoryName,
+                CategoryType = request.CategoryType
+            });
+            if (api.StatusCode == Common.Enums.StatusCode.Success)
+            {
+                TempData["SuccessMess"] = "Create successfully!";
+                return RedirectToAction("Index");
+            }
+            TempData["ErrorMess"] = $"Create fail! {api.ErrorMessage}";
+            return View(request);
         }
     }
 }

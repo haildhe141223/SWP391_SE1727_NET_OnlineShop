@@ -1,306 +1,59 @@
-﻿@{
+﻿@model SWP391.OnlineShop.ServiceModel.ViewModels.Profiles.ProfileViewModels
+@{
     ViewBag.Title = "Profile";
+    var homeUrl = Url.Action("Index", "Home");
 }
 <div class="profile-container">
     <div class="d-flex align-items-start">
         <div class="nav flex-column nav-pills tab-header" id="v-pills-tab" role="tablist" aria-orientation="vertical">
-            <button class="tab-header-items tab-gene active" data-bs-toggle="pill" data-bs-target="#v-pills-profile" type="button">
+            <button class="tab-header-items" data-bs-toggle="pill" type="button" onclick="location.href = '@homeUrl'">
+                <div class="header-item-content">
+                    <i class="fa-solid fa-store"></i>
+                    <span>Back to Shop</span>
+                </div>
+            </button>
+            <button class="tab-header-items active" data-bs-toggle="pill" data-bs-target="#v-pills-profile" type="button">
                 <div class="header-item-content">
                     <i class="fas fa-user-secret"></i>
-                    <span class="header-item-name">
-                        General
-                    </span>
+                    <span>General</span>
                 </div>
             </button>
-            <button class="tab-header-items tab-secu" data-bs-toggle="pill" data-bs-target="#v-pills-security" type="button">
+            <button class="tab-header-items" data-bs-toggle="pill" data-bs-target="#v-pills-security" type="button">
                 <div class="header-item-content">
                     <i class="fas fa-key"></i>
-                    <span class="header-item-name">
-                        Security
-                    </span>
+                    <span>Security</span>
                 </div>
             </button>
-            <button class="tab-header-items tab-badge" data-bs-toggle="pill" data-bs-target="#v-pills-badges" type="button">
+            <button class="tab-header-items" data-bs-toggle="pill" data-bs-target="#v-pills-addr" type="button">
                 <div class="header-item-content">
-                    <i class="far fa-id-badge"></i>
-                    <span class="header-item-name">
-                        Vouchers
-                    </span>
+                    <i class="fa-solid fa-map-location-dot"></i>
+                    <span>Addresses</span>
                 </div>
             </button>
-            <button class="tab-header-items tab-favor" data-bs-toggle="pill" data-bs-target="#v-pills-favor" type="button">
+            <button class="tab-header-items" data-bs-toggle="pill" data-bs-target="#v-pills-badges" type="button">
                 <div class="header-item-content">
-                    <i class="far fa-heart"></i>
-                    <span class="header-item-name">
-                        Favorites
-                    </span>
+                    <i class="fa-solid fa-gift"></i>
+                    <span>Vouchers</span>
+                </div>
+            </button>
+            <button class="tab-header-items" data-bs-toggle="pill" data-bs-target="#v-pills-favor" type="button" id="tab-order">
+                <div class="header-item-content">
+                    <i class="fa-solid fa-cart-arrow-down"></i>
+                    <span>Orders</span>
                 </div>
             </button>
         </div>
         <div class="tab-content" id="v-pills-tabContent">
             @*tab profile*@
-            <div class="tab-pane fade show tab-content-item active" id="v-pills-profile">
-                <div class="tab-content-body">
-                    <div class="tab-title">
-                        <span>General Settings</span>
-                        <div>
-                            Manage the account details you've shared with Karma Shop including your name, contact info and more
-                        </div>
-                    </div>
-                    <div class="tab-body">
-                        <div class="tab-account">
-                            <span>Account Info</span>
-                            <p>ID: <span class="user-id">UID: 1</span></p>
-                            <div class="row-pricing account-info" style="margin: 0;">
-                                <div class="display-name col-card-6 col-c-md-12 col-c-sm-12">
-                                    <form asp-route="changeName" class="tab-acc-form" enctype="multipart/form-data" method="post">
-                                        <div class="display-title">
-                                            <div class="wrong-login alert-danger" asp-validation-summary="ModelOnly"></div>
-                                            <span>Display Name</span>
-                                            <input name="userName" type="text" class="title-value" value="Ryuu" />
-                                        </div>
-                                        <div class="display-icon">
-                                            <input class="edit-name" type="submit" hidden="" />
-                                            <i class="fas fa-pencil-alt fas-name"></i>
-                                        </div>
-                                    </form>
-                                </div>
-                                <div class="display-name col-card-6 col-c-md-12 col-c-sm-12">
-                                    <form asp-route="changeMail" class="tab-acc-form" enctype="multipart/form-data" method="post">
-                                        <div class="display-title">
-                                            <span>Email Address</span>
-                                            <input name="userEmail" type="email" class="title-value title-email" value="Ryuu@gmail.coms" />
-                                        </div>
-                                        <div class="display-icon">
-                                            <input class="edit-mail" type="submit" hidden="" />
-                                            <i class="fas fa-pencil-alt fas-mail">
-                                            </i>
-                                        </div>
-                                    </form>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="tab-personal">
-                            <span>Personal Details</span>
-                            <div class="person-infor">
-                                Manage your name and contact info.
-                                These personal details are private and will
-                                not be displayed to other users. View our <a href="https://www.termsfeed.com/live/e3c51e1f-dd04-4568-ba9d-617bca9d4c5d">Privacy Policy</a>
-                            </div>
-                            <div class="profile-img">
-                                <img alt="profile-img" src="~/template/img/settings/admins/anonymous_user.jpg" />
-                            </div>
-                            <div class="row-pricing account-info" style="margin: 0;">
-                                <div class="display-name col-card-6 col-c-md-12 col-c-sm-12">
-                                    <div class="display-title">
-                                        <form asp-route="editprofile" class="tab-acc-form" enctype="multipart/form-data" method="post">
-                                            <div class="profile-img-container">
-                                                <span class="profile-title">Profile Images</span>
-                                                <div class="profile-img-content">
-                                                    <span class="title-value choose">
-                                                        <input class="img-choose" type="file" accept="image/png,image/jpeg,image/jpg" />
-                                                    </span>
-                                                    <span class="title-submit"><input type="submit" value="UPLOAD" /></span>
-                                                </div>
-                                            </div>
-                                        </form>
-                                    </div>
-                                </div>
-                                <div class="display-name col-card-6 col-c-md-12 col-c-sm-12">
-                                    <div class="display-title display-lang">
-                                        <span class="profile-title">Preferred Communication Language</span>
-                                        <span class="title-value language-value">English</span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="tab-footer">
-                        <span>Delete account</span>
-                        <div class="del-acc">
-                            <p>
-                                Click DELETE ACCOUNT to start the process of permanently deleting your Uta95s account including all personal information, profile, movie process, and favorites.
-                            </p>
-                            <a title="del-acc" class="acc-del">Delete Account</a>
-                        </div>
-                    </div>
-                </div>
-            </div>
+            <partial name="ProfilePartial/_GeneralPartial" for="GeneralViewModel"/>
             @*tab security*@
-            <div class="tab-pane fade tab-content-item tab-content-secu" id="v-pills-security">
-                <div class="secu-title">
-                    <span>Change your password</span>
-                    @*TODO: HaiLD add more comment here*@
-                    <p>For your security, we highly recommend that you choose a unique password that you don't use for any other online account.</p>
-                </div>
-                <div class="row-pricing" style="margin: 0">
-                    <div class="col-card-6 col-c-md-12 col-c-sm-12">
-                        <form class="" method="post" enctype="multipart/form-data">
-                            <div class="left-secu-title">
-                                <span class="secu-t1">Current Password</span>
-                                <span class="secu-t2">Required</span>
-                                <input type="password" name="cu-pass" placeholder="CURRENT PASSWORD *" />
-                            </div>
-                            <div class="left-secu-title">
-                                <span class="secu-t1">New Password</span>
-                                <span class="secu-t2">Required</span>
-                                <input class="secu-in" type="password" name="new-pass" placeholder="NEW PASSWORD *" />
-                            </div>
-                            <div class="left-secu-title">
-                                <span class="secu-t1">Retype New Password</span>
-                                <span class="secu-t2">Required</span>
-                                <input class="secu-in" type="password" name="re-new-pass" placeholder="RETYPE PASSWORD *" />
-                            </div>
-                            <div class="last-secu-btn">
-                                <div class="secu-discard">Discard Changes</div>
-                                <input class="secu-in" type="submit" value="Save changes" />
-                            </div>
-                        </form>
-                    </div>
-                    <div class="col-card-6 col-c-md-12 col-c-sm-12 right-secu" style="padding: 20px; ">
-                        <div class="secu-right">
-                            <div class="secu-right-title">
-                                <span class="secu-r-title">Your Passwords</span>
-                                <p>Your password must not be the same as your last passwords used</p>
-                                <p>Your password must have at least 6+ characters</p>
-                                <p>Your password must contain no space(s)</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            @*tab-badges*@
-            <div class="tab-pane fade tab-content-item tab-content-all tab-content-badges" id="v-pills-badges">
-                <div class="badges-container">
-                    <div class="badges-header">
-                        <div class="badges-head">Vouchers</div>
-                        <div class="badges-desc">
-                            Manage the account vouchers you've earn with Karma Shop while gathering and sharing.
-                        </div>
-                    </div>
-                    <div class="badges-body">
-                        <div class="row-pricing badges-content" style="margin: 0; justify-content: center;">
-                            <div class="badges-item col-card-3 col-c-sm-3">
-                                <div class="badges-title">
-                                    <img src="~/sources/badges/santalune.webp" alt="badge" />
-                                </div>
-                                <div class="badges-img">Santalune Badge</div>
-                            </div>
-                            <div class="badges-item col-card-3 col-c-sm-3">
-                                <div class="badges-title">
-                                    <img src="~/sources/badges/cyllage.webp" alt="badge" />
-                                </div>
-                                <div class="badges-img">Cyllage Badge</div>
-                            </div>
-                            <div class="badges-item col-card-3 col-c-sm-3">
-                                <div class="badges-title">
-                                    <img src="~/sources/badges/shalour.webp" alt="badge" />
-                                </div>
-                                <div class="badges-img">Shalour Badge</div>
-                            </div>
-                            <div class="badges-item col-card-3 col-c-sm-3">
-                                <div class="badges-title">
-                                    <img src="~/sources/badges/coumarine.webp" alt="badge" />
-                                </div>
-                                <div class="badges-img">Coumarine Badge</div>
-                            </div>
-                            <div class="badges-item col-card-3 col-c-sm-3">
-                                <div class="badges-title">
-                                    <img src="~/sources/badges/lumiose.webp" alt="badge" />
-                                </div>
-                                <div class="badges-img">Lumiose Badge</div>
-                            </div>
-                            <div class="badges-item col-card-3 col-c-sm-3">
-                                <div class="badges-title">
-                                    <img src="~/sources/badges/laverre.webp" alt="badge" />
-                                </div>
-                                <div class="badges-img">Laverre Badge</div>
-                            </div>
-                            <div class="badges-item col-card-3 col-c-sm-3">
-                                <div class="badges-title">
-                                    <img src="~/sources/badges/anistar.webp" alt="badge" />
-                                </div>
-                                <div class="badges-img">Anistar Badge</div>
-                            </div>
-                            <div class="badges-item col-card-3 col-c-sm-3">
-                                <div class="badges-title">
-                                    <img src="~/sources/badges/snowbelle.webp" alt="badge" />
-                                </div>
-                                <div class="badges-img">Snowbelle Badge</div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            @*tab-favorite*@
-            <div class="tab-pane fade tab-content-item tab-content-all tab-content-favor" id="v-pills-favor">
-                <div class="tab-favor-container">
-                    <div class="tab-favor-header">
-                        <div class="tab-favor-title">Favorites</div>
-                        <div class="tab-favor-desc">
-                            Manage the favorite movies you saved movies on UTA95S list movies.
-                            Please careful while manage your favorite page. Your infors will be privated by of
-                            <a href="https://www.termsfeed.com/live/e3c51e1f-dd04-4568-ba9d-617bca9d4c5d" title="">Terms of Service</a>
-                        </div>
-                    </div>
-                    <div class="tab-farvor-body">
-                        <div class="tab-favor-body-content row-pricing" style="margin: 0;">
-                            <div class="favor-item col-card-4 col-c-md-6 col-c-sm-12">
-                                @*item 1*@
-                                <div class="movie-item films-right-item">
-                                    <img src="~/template/img/i1.jpg" alt="">
-                                    <div class="movie-item-content">
-                                        <div class="movie-item-title">
-                                            Test
-                                        </div>
-                                        <div class="movie-infos">
-                                            <div class="movie-info">
-                                                <i class="bx bxs-star"></i>
-                                                <span>9.5</span>
-                                            </div>
-                                            <div class="movie-info">
-                                                <i class="bx bxs-time"></i>
-                                                <span>Test mins</span>
-                                            </div>
-                                            <div class="movie-info">
-                                                <span>Test</span>
-                                            </div>
-                                            <div class="movie-info">
-                                                <span>10+</span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="favor-btn">
-                                    <a asp-route="details" asp-route-id="" title="" class="favor-btn-item btn-favor-view">
-                                        <i class="far fa-eye"></i>
-                                        <span>View Details</span>
-                                    </a>
-                                    <a asp-route="deletefa" asp-route-mid="" asp-route-col="4" title="" class="favor-btn-item btn-favor-del">
-                                        <i class="far fa-trash-alt"></i>
-                                        <span>Remove Movie</span>
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="favor-pagination">
-                        <nav class="pagination-container">
-                            <ul class="pagination justify-content-center my-0">
-                                <li class="page-item">
-                                    <a class="page-link" asp-route="profile" asp-route-col="4"><i class="fas fa-chevron-left"></i>&nbsp;Prev</a>
-                                </li>
-                                <li class="page-item active">
-                                    <a class="page-link">5</a>
-                                </li>
-                                <li class="page-item">
-                                    <a class="page-link" asp-route="profile" asp-route-col="4">Next&nbsp;<i class="fas fa-chevron-right"></i></a>
-                                </li>
-                            </ul>
-                        </nav>
-                    </div>
-                </div>
-            </div>
+            <partial name="ProfilePartial/_SecurityPartial" for="SecurityViewModel"/>
+            @*tab addresses*@
+            <partial name="ProfilePartial/_AddressPartial" />
+            @*tab vouchers*@
+            <partial name="ProfilePartial/_VoucherPartial" />
+            @*tab orders*@
+            <partial name="ProfilePartial/_OrderPartial" />
         </div>
     </div>
 </div>

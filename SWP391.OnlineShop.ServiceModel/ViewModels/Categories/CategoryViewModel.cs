@@ -1,9 +1,10 @@
 ﻿using SWP391.OnlineShop.Core.Models.Enums;
+using SWP391.OnlineShop.ServiceModel.Results;
 using System.ComponentModel.DataAnnotations;
 
 namespace SWP391.OnlineShop.ServiceModel.ViewModels.Categories
 {
-    public class CategoryViewModel
+    public class CategoryViewModel : BaseResultModel
     {
         public int Id { get; set; }
         public Status Status { get; set; }

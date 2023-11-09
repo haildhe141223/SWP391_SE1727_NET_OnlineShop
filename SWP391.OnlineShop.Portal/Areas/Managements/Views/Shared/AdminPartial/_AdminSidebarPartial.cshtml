@@ -2,9 +2,8 @@
 @using Microsoft.AspNetCore.Mvc.TagHelpers
 @using SWP391.OnlineShop.Common.Constraints
 @{
-    //TODO: HaiLD update Avatar Claim here.
-    var userImage = User.Claims.FirstOrDefault(u => u.Type == "Avatar")?.Value;
     var userRole = User.Claims.FirstOrDefault(u => u.Type == ClaimTypes.Role)?.Value;
+    var id = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
 }
 <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
     <!-- Sidebar - Brand -->
@@ -64,12 +63,10 @@
         <div id="collapseUser" class="collapse" aria-labelledby="headingTwo" data-parent="#collapseUser">
             <div class="bg-white py-2 collapse-inner rounded">
                 <h6 class="collapse-header">Custom Accounts:</h6>
-                <a class="collapse-item">Profile</a>
+                <a asp-action="Index" asp-controller="Profile" asp-area="" asp-route-userId="@id" class="collapse-item">Profile</a>
 
                 @if (!string.IsNullOrEmpty(userRole) &&
-                (userRole.Contains(RoleConstraints.Admin) ||
-                userRole.Contains(RoleConstraints.Marketing) ||
-                userRole.Contains(RoleConstraints.Sale)))
+                (userRole.Contains(RoleConstraints.Admin)))
                 {
                     <a class="collapse-item" asp-area="Managements" asp-action="Index" asp-controller="User">Users</a>
                 }

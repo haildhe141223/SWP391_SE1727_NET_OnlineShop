@@ -2,6 +2,149 @@
 @{
 	var sliders = Model.Sliders.ToList();
 }
+<style>
+	.card {
+		position: relative;
+		display: -webkit-box;
+		display: -ms-flexbox;
+		display: flex;
+		-webkit-box-orient: vertical;
+		-webkit-box-direction: normal;
+		-ms-flex-direction: column;
+		flex-direction: column;
+		min-width: 0;
+		word-wrap: break-word;
+		background-color: #fff;
+		background-clip: border-box;
+		border: 1px solid rgba(0, 0, 0, 0.1);
+		border-radius: 0.10rem
+	}
+
+	.card-header:first-child {
+		border-radius: calc(0.37rem - 1px) calc(0.37rem - 1px) 0 0
+	}
+
+	.card-header {
+		padding: 0.75rem 1.25rem;
+		margin-bottom: 0;
+		background-color: #fff;
+		border-bottom: 1px solid rgba(0, 0, 0, 0.1)
+	}
+
+	.track {
+		position: relative;
+		background-color: #ddd;
+		height: 7px;
+		display: -webkit-box;
+		display: -ms-flexbox;
+		display: flex;
+		margin-bottom: 60px;
+		margin-top: 50px
+	}
+
+		.track .step {
+			-webkit-box-flex: 1;
+			-ms-flex-positive: 1;
+			flex-grow: 1;
+			width: 25%;
+			margin-top: -18px;
+			text-align: center;
+			position: relative
+		}
+
+			.track .step.active:before {
+				background: #FF5722
+			}
+
+			.track .step::before {
+				height: 7px;
+				position: absolute;
+				content: "";
+				width: 100%;
+				left: 0;
+				top: 18px
+			}
+
+			.track .step.active .icon {
+				background: #ee5435;
+				color: #fff
+			}
+
+		.track .icon {
+			display: inline-block;
+			width: 40px;
+			height: 40px;
+			line-height: 40px;
+			position: relative;
+			border-radius: 100%;
+			background: #ddd
+		}
+
+		.track .step.active .text {
+			font-weight: 400;
+			color: #000
+		}
+
+		.track .text {
+			display: block;
+			margin-top: 7px
+		}
+
+	.itemside {
+		position: relative;
+		display: -webkit-box;
+		display: -ms-flexbox;
+		display: flex;
+		width: 100%
+	}
+
+		.itemside .aside {
+			position: relative;
+			-ms-flex-negative: 0;
+			flex-shrink: 0
+		}
+
+	.img-sm {
+		width: 80px;
+		height: 80px;
+		padding: 7px
+	}
+
+	ul.row, ul.row-sm {
+		list-style: none;
+		padding: 0
+	}
+
+	.itemside .info {
+		padding-left: 15px;
+		padding-right: 7px
+	}
+
+	.itemside .title {
+		display: block;
+		margin-bottom: 5px;
+		color: #212529
+	}
+
+	p {
+		margin-top: 0;
+		margin-bottom: 1rem
+	}
+
+	.btn-warning {
+		color: #ffffff;
+		background-color: #ee5435;
+		border-color: #ee5435;
+		border-radius: 1px
+	}
+
+		.btn-warning:hover {
+			color: #ffffff;
+			background-color: #ff2b00;
+			border-color: #ff2b00;
+			border-radius: 1px
+		}
+</style>
 <!-- Start Banner Area -->
 <section class="banner-area organic-breadcrumb">
 	<div class="container">
@@ -17,6 +160,171 @@
 	</div>
 </section>
 <!-- End Banner Area -->
+<div class="container">
+	<article class="card">
+		<header class="card-header"> My Orders / Tracking </header>
+		<div class="card-body">
+			<h6>Order ID: @Model.Id</h6>
+			<article class="card">
+				<div class="card-body row">
+					<div class="col"> <strong>Order Time:</strong> <br>@Model.ModifiedDateTime.ToString("dd/MMM/yyyy") </div>
+					<div class="col"> <strong>Status:</strong> <br>@Model.OrderStatus </div>
+				</div>
+			</article>
+			<div class="track">
+				@if (Model.OrderStatus != SWP391.OnlineShop.Core.Models.Enums.OrderStatus.Canceled)
+				{
+					<div class="step active"> <span class="icon"> <i class="fa fa-check"></i> </span> <span class="text">Order In Cart</span> </div>
+				}
+				else
+				{
+					<div class="step"> <span class="icon"> <i class="fa fa-check"></i> </span> <span class="text">Order In Cart</span> </div>
+				}
+				@if (Model.OrderStatus != SWP391.OnlineShop.Core.Models.Enums.OrderStatus.Canceled
+						&& Model.OrderStatus != SWP391.OnlineShop.Core.Models.Enums.OrderStatus.InCartCompletion
+						&& Model.OrderStatus != SWP391.OnlineShop.Core.Models.Enums.OrderStatus.InCartContact
+						&& Model.OrderStatus != SWP391.OnlineShop.Core.Models.Enums.OrderStatus.InCartCompletion)
+				{
+					<div class="step active"> <span class="icon"> <i class="fa fa-check"></i> </span> <span class="text">Order confirmed</span> </div>
+				}
+				else
+				{
+					<div class="step"> <span class="icon"> <i class="fa fa-check"></i> </span> <span class="text">Order confirmed</span> </div>
+				}
+				@if (Model.OrderStatus != SWP391.OnlineShop.Core.Models.Enums.OrderStatus.Canceled
+						&& Model.OrderStatus != SWP391.OnlineShop.Core.Models.Enums.OrderStatus.InCartCompletion
+						&& Model.OrderStatus != SWP391.OnlineShop.Core.Models.Enums.OrderStatus.InCartContact
+						&& Model.OrderStatus != SWP391.OnlineShop.Core.Models.Enums.OrderStatus.InCartCompletion
+				&& Model.OrderStatus != SWP391.OnlineShop.Core.Models.Enums.OrderStatus.WaitingShipperToDeliver)
+				{
+					<div class="step active"> <span class="icon"> <i class="fa fa-user"></i> </span> <span class="text"> Picked by courier</span> </div>
+					<div class="step active"> <span class="icon"> <i class="fa fa-truck"></i> </span> <span class="text"> On the way </span> </div>
+				}
+				else
+				{
+					<div class="step"> <span class="icon"> <i class="fa fa-user"></i> </span> <span class="text"> Picked by courier</span> </div>
+					<div class="step"> <span class="icon"> <i class="fa fa-truck"></i> </span> <span class="text"> On the way </span> </div>
+				}
+				@if(Model.OrderStatus == SWP391.OnlineShop.Core.Models.Enums.OrderStatus.Received)
+				{
+					<div class="step active"> <span class="icon"> <i class="fa fa-box"></i> </span> <span class="text">Received</span> </div>
+				}
+				else
+				{
+					<div class="step"> <span class="icon"> <i class="fa fa-box"></i> </span> <span class="text">Received</span> </div>
+				}
+			</div>
+			<hr>
+		</div>
+	</article>
+</div>
+<section class="checkout_area section_gap">
+	<div class="container">
+		<div class="row">
+			<div class="col-lg-9">
+				<section class="cart_area">
+					<div class="container">
+						<div class="cart_inner">
+							<div class="table-responsive">
+								<table class="table">
+									<thead>
+										<tr>
+											<th scope="col">Product</th>
+											<th scope="col">Price</th>
+											<th scope="col">Quantity</th>
+											<th scope="col">Category</th>
+											<th scope="col">Total</th>
+											<th scope="col">Action</th>
+										</tr>
+									</thead>
+									<tbody>
+										@if (Model.OrderDetails != null)
+										{
+											@foreach (var order in Model.OrderDetails)
+											{
+												<tr>
+
+													<td>
+														<div class="media">
+															<div class="d-flex">
+																<img src="@order.Product?.Thumbnail" alt="@order.Product?.ProductName" style="max-height: 101.6px;max-width:151.6px">
+															</div>
+															<div class="media-body">
+																<a asp-action="Details" asp-controller="Product" asp-route-id="@order.Product?.Id"><p>@order.Product?.ProductName</p></a>
+															</div>
+														</div>
+													</td>
+													<td>
+														<h5>$ @order.UnitPrice</h5>
+													</td>
+													<td>
+														<div class="product_count">
+															<input type="text" name="qty" id="sst" maxlength="12" value="@order.Quantity" title="Quantity:" disabled
+																   class="input-text qty">
+														</div>
+													</td>
+													<td><p>@order.Product?.Category.CategoryName</p></td>
+													<td>
+														@if (order.Product?.SalePrice > 0)
+														{
+															<h5 class="total">$ @(order.Product.SalePrice * order.Quantity)</h5>
+														}
+														else
+														{
+															<h5 class="total">$ @(order.Product?.Price * order.Quantity)</h5>
+														}
+													</td>
+													<td>
+														<a class="btn primary-btn" asp-action="Details" asp-controller="Product" asp-route-id="@order.Product?.Id">
+															Feed back
+														</a>
+													</td>
+												</tr>
+											}
+										}
+										<tr class="bottom_button">
+											<td>
+											</td>
+											<td>
+											</td>
+											<td>
+											</td>
+											<td>
+												<div class="cupon_text d-flex align-items-center">
+													@if (Model.OrderStatus == SWP391.OnlineShop.Core.Models.Enums.OrderStatus.InCartDetail
+															|| Model.OrderStatus == SWP391.OnlineShop.Core.Models.Enums.OrderStatus.InCartContact
+															|| Model.OrderStatus == SWP391.OnlineShop.Core.Models.Enums.OrderStatus.InCartCompletion)
+													{
+														<a class="btn primary-btn" id="update-cart-info">Update Cart</a>
+													}
+													<a class="btn gray_btn" id="cancel-cart">Cancel Cart</a>
+												</div>
+											</td>
+										</tr>
+									</tbody>
+								</table>
+							</div>
+						</div>
+					</div>
+				</section>
+			</div>
+			<div class="col-lg-3">
+				<div class="order_box" style="padding-top: 100px;padding-bottom: 100px;">
+					<h2>Receiver Information</h2>
+					<ul class="list">
+						<li><a href="#">Name <span>@Model.CustomerName</span></a></li>
+						<li><a href="#">Email <span>@Model.CustomerEmail</span></a></li>
+						<li><a href="#">Phone Number <span>@Model.CustomerPhoneNumber</span></a></li>
+					</ul>
+					<ul class="list list_2">
+						<li><a href="#">Order Total <span>$ @Model.TotalCost</span></a></li>
+						<li><a href="#">Order Status <span>@Model.OrderStatus</span></a></li>
+					</ul>
+				</div>
+			</div>
+		</div>
+	</div>
+</section>
 <section class="owl-carousel active-product-area section_gap">
 	<!-- single product slide -->
 	<div class="single-product-slider">
@@ -124,108 +432,6 @@
 		</div>
 	</div>
 </section>
-<section class="checkout_area section_gap">
-	<div class="container">
-		<div class="row">
-			<div class="col-lg-9">
-				<section class="cart_area">
-					<div class="container">
-						<div class="cart_inner">
-							<div class="table-responsive">
-								<table class="table">
-									<thead>
-										<tr>
-											<th scope="col">Product</th>
-											<th scope="col">Price</th>
-											<th scope="col">Quantity</th>
-											<th scope="col">Category</th>
-											<th scope="col">Total</th>
-											<th scope="col">Action</th>
-										</tr>
-									</thead>
-									<tbody>
-										@if (Model.OrderDetails != null)
-										{
-											@foreach (var order in Model.OrderDetails)
-											{
-												<tr>
-
-													<td>
-														<div class="media">
-															<div class="d-flex">
-																<img src="@order.Product?.Thumbnail" alt="@order.Product?.ProductName" style="max-height: 101.6px;max-width:151.6px">
-															</div>
-															<div class="media-body">
-																<a asp-action="Details" asp-controller="Product" asp-route-id="@order.Product?.Id"><p>@order.Product?.ProductName</p></a>
-															</div>
-														</div>
-													</td>
-													<td>
-														<h5>$ @order.UnitPrice</h5>
-													</td>
-													<td>
-														<div class="product_count">
-															<input type="text" name="qty" id="sst" maxlength="12" value="@order.Quantity" title="Quantity:" disabled
-																   class="input-text qty">
-														</div>
-													</td>
-													<td><p>@order.Product?.Category.CategoryName</p></td>
-													<td>
-														@if (order.Product?.SalePrice > 0)
-														{
-															<h5 class="total">$ @(order.Product.SalePrice * order.Quantity)</h5>
-														}
-														else
-														{
-															<h5 class="total">$ @(order.Product?.Price * order.Quantity)</h5>
-														}
-													</td>
-													<td>
-														<a class="btn primary-btn" asp-action="Details" asp-controller="Product" asp-route-id="@order.Product?.Id">
-															Feed back
-														</a>
-													</td>
-												</tr>
-											}
-										}
-										<tr class="bottom_button">
-											<td>
-											</td>
-											<td>
-											</td>
-											<td>
-											</td>
-											<td>
-												<div class="cupon_text d-flex align-items-center">
-													<a class="btn primary-btn" id="update-cart-info">Update Cart</a>
-													<a class="btn gray_btn" id="cancel-cart">Cancel Cart</a>
-												</div>
-											</td>
-										</tr>
-									</tbody>
-								</table>
-							</div>
-						</div>
-					</div>
-				</section>
-			</div>
-			<div class="col-lg-3">
-				<div class="order_box" style="padding-top: 100px;padding-bottom: 100px;">
-					<h2>Receiver Information</h2>
-					<ul class="list">
-						<li><a href="#">Name <span>@Model.CustomerName</span></a></li>
-						<li><a href="#">Email <span>@Model.CustomerEmail</span></a></li>
-						<li><a href="#">Phone Number <span>@Model.CustomerPhoneNumber</span></a></li>
-					</ul>
-					<ul class="list list_2">
-						<li><a href="#">Order Total <span>$ @Model.TotalCost</span></a></li>
-						<li><a href="#">Order Status <span>@Model.OrderStatus</span></a></li>
-					</ul>
-				</div>
-			</div>
-		</div>
-	</div>
-</section>
 
 <script type="text/javascript">
 
@@ -239,19 +445,17 @@
 				type: 'POST',
 				data: data,
 				success: function (response) {
-					window.location.href="@Url.Action("Index","Cart")";
+					window.location.href = "@Url.Action("Index","Cart")";
 					//$.toaster({ priority: 'success', title: 'Created', message: "Back To Cart Detail Succesfully" });
 					setTimeout(function () {
 						window.location.reload();
 					}, 1000);
 				},
 				failure: function (failed) {
-					alert(failed.responseText)
-					//$.toaster({ priority: 'warning', title: 'Warning', message: failed.responseText });
+					$.toaster({ priority: 'warning', title: 'Warning', message: failed.responseText });
 				},
 				error: function (error) {
-					alert(error.responseText)
-					//$.toaster({ priority: 'danger', title: 'Error', message: error.responseText });
+					$.toaster({ priority: 'danger', title: 'Error', message: error.responseText });
 				}
 			});
 		}
@@ -274,12 +478,10 @@
 					}, 1000);
 				},
 				failure: function (failed) {
-					alert(failed.responseText)
-					//$.toaster({ priority: 'warning', title: 'Warning', message: failed.responseText });
+					$.toaster({ priority: 'warning', title: 'Warning', message: failed.responseText });
 				},
 				error: function (error) {
-					alert(error.responseText)
-					//$.toaster({ priority: 'danger', title: 'Error', message: error.responseText });
+					$.toaster({ priority: 'danger', title: 'Error', message: error.responseText });
 				}
 			});
 		}

@@ -1,0 +1,116 @@
+﻿@using System.Security.Claims
+@using SWP391.OnlineShop.Common.Constraints
+@model SWP391.OnlineShop.ServiceModel.ViewModels.Profiles.GeneralViewModel
+
+@{
+    var isError = false;
+    var errorMessage = TempData["ErrorMess"] as string;
+    var successMessage = TempData["SuccessMess"] as string;
+
+    if (TempData["IsError"] != null)
+    {
+        isError = bool.Parse(TempData["IsError"] as string ?? string.Empty);
+    }
+
+    var isSuccess = !string.IsNullOrEmpty(successMessage);
+
+    var role = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Role)?.Value;
+}
+<div class="tab-pane fade show tab-content-item active" id="v-pills-profile">
+    <div class="">
+        <div class="tab-title">
+            <span>General Settings</span>
+            <div>
+                Manage the account details you've shared with Karma Shop including your name, contact info and more.
+                Please careful while manage your general page. Your information will be private by of
+                <a href="https://www.termsfeed.com/live/e3c51e1f-dd04-4568-ba9d-617bca9d4c5d" title="">Terms of Service</a>
+            </div>
+        </div>
+        <div class="">
+            <div class="tab-account">
+                <span>Account Info</span>
+                <p>ID: <span class="">1</span></p>
+                @if (isSuccess)
+                {
+                    <div class="alert-success" style="padding: 10px;margin: 15px;text-align: center;">@successMessage</div>
+                }
+                @if (isError)
+                {
+                    <div class="wrong-login alert-danger" style="padding: 10px;margin: 15px;text-align: center;">@errorMessage</div>
+                }
+                <div class="row-pricing account-info" style="margin: 0;">
+                    <div class="display-name col-card-6 col-c-md-12 col-c-sm-12">
+                        <form asp-action="ChangeName" class="tab-acc-form" enctype="multipart/form-data" method="post">
+                            <div class="display-title">
+                                <span>Display Name</span>
+                                <input asp-for="DisplayName" type="text" class="title-value" />
+                            </div>
+                            <div class="display-icon">
+                                <input type="submit" hidden="" id="edit-name" />
+                                <i class="fas fa-pencil-alt fas-name"></i>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="display-name col-card-6 col-c-md-12 col-c-sm-12">
+                        <form asp-action="ChangeEmail" class="tab-acc-form" enctype="multipart/form-data" method="post">
+                            <div class="display-title">
+                                <span>Email Address</span>
+                                <input asp-for="DisplayEmail" type="email" class="title-value title-email" />
+                            </div>
+                            <div class="display-icon">
+                                <input type="submit" hidden="" id="edit-mail" />
+                                <i class="fas fa-pencil-alt fas-mail"></i>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <div class="tab-personal">
+                <span>Personal Details</span>
+                <div class="person-infor">
+                    Manage your name and contact info.
+                    These personal details are private and will
+                    not be displayed to other users. View our <a href="https://www.termsfeed.com/live/e3c51e1f-dd04-4568-ba9d-617bca9d4c5d">Privacy Policy</a>
+                </div>
+                <div class="profile-img">
+                    <img alt="profile-img" src="@Model.DisplayImage"/>
+                </div>
+                <div class="row-pricing account-info" style="margin: 0;">
+                    <div class="display-name col-card-6 col-c-md-12 col-c-sm-12">
+                        <div class="display-title">
+                            <form asp-action="ChangeAvatar" class="tab-acc-form" enctype="multipart/form-data" method="post">
+                                <div class="profile-img-container">
+                                    <span class="profile-title">Profile Images</span>
+                                    <div class="profile-img-content">
+                                        <span class="title-value choose">
+                                            <input class="img-choose" name="updateAvatar" type="file" accept="image/png,image/jpeg,image/jpg" />
+                                        </span>
+                                        <span class="title-submit"><input type="submit" value="UPLOAD" /></span>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                    <div class="display-name col-card-6 col-c-md-12 col-c-sm-12">
+                        <div class="display-title display-lang">
+                            <span class="profile-title">Preferred Communication Language</span>
+                            <span class="title-value language-value">English</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        @if (!string.IsNullOrEmpty(role) && !role.Contains(RoleConstraints.Admin))
+        {
+            <div class="tab-footer">
+                <span>Delete account</span>
+                <div class="del-acc">
+                    <p>
+                        Click DELETE ACCOUNT to start the process of permanently deleting your Karma account including all personal information, profile, vouchers, and orders.
+                    </p>
+                    <a title="del-acc" id="acc-del" asp-action="DeleteAccount" asp-route-id="@Model.Id">Delete Account</a>
+                </div>
+            </div>
+        }
+    </div>
+</div>
