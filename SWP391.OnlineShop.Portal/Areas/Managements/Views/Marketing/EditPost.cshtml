@@ -2,11 +2,26 @@
 @{
     var genreList = ViewData["GenreList"] as SelectList;
     var statusList = ViewData["StatusList"] as SelectList;
+    var errorMess = TempData["ErrorMess"] as string;
+    var successMess = TempData["SuccessMess"] as string;
 }
 
 <div class="m-headers" style="margin-top: 10% !important;">
     <h4 class="fw-bold ml-5">Manage Post</h4>
 </div>
+
+@if (!string.IsNullOrWhiteSpace(errorMess))
+{
+    <div class="alert alert-danger my-2 text-center">
+        @errorMess
+    </div>
+}
+@if (!string.IsNullOrWhiteSpace(successMess))
+{
+    <div class="alert alert-success my-2 text-center">
+        @successMess
+    </div>
+}
 
 <!-- DataTales Example -->
 <div class="card shadow mb-4">
@@ -56,7 +71,7 @@
             <div class="mb-3">
                 <label asp-for="CategoryId" class="form-label">Category</label><br />
                 <select asp-for="CategoryId" class="form-control" asp-items="@genreList"></select>
-            </div><br /><br />
+            </div><br />
             <div class="mb-3">
                 <label asp-for="Status" class="form-label">Status</label><br />
                 <select asp-for="Status" class="form-control" asp-items="@statusList"></select>

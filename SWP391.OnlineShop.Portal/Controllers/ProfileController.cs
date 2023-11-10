@@ -54,14 +54,15 @@ namespace SWP391.OnlineShop.Portal.Controllers
                 Id = user.Id.ToString(),
                 DisplayEmail = user.Email,
                 DisplayImage = user.Image,
-                DisplayName = user.UserName
+                DisplayName = user.UserName,
+                DisplayGender = user.Gender,
+                DisplayPhoneNumber = user.PhoneNumber
             };
 
             var profileVm = new ProfileViewModels
             {
                 GeneralViewModel = generalViewModel,
                 SecurityViewModel = new SecurityViewModel(),
-
             };
 
             return View(profileVm);
@@ -70,15 +71,15 @@ namespace SWP391.OnlineShop.Portal.Controllers
         [HttpPost]
         public async Task<IActionResult> ChangeName(ProfileViewModels request)
         {
+            var email = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Email)?.Value;
+            var user = await _userManager.FindByEmailAsync(email);
+
             if (string.IsNullOrEmpty(request.GeneralViewModel.DisplayName.Trim()))
             {
                 TempData["IsError"] = "true";
                 TempData["ErrorMess"] = "Display name is empty or null. Please re-enter";
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction(nameof(Index), new { userId = user.Id });
             }
-
-            var email = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Email)?.Value;
-            var user = await _userManager.FindByEmailAsync(email);
 
             if (user.UserName.Equals(request.GeneralViewModel.DisplayName.Trim()))
             {
@@ -115,22 +116,23 @@ namespace SWP391.OnlineShop.Portal.Controllers
         [HttpPost]
         public async Task<IActionResult> ChangeEmail(ProfileViewModels request)
         {
+            var email = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Email)?.Value;
+            var user = await _userManager.FindByEmailAsync(email);
+
             if (string.IsNullOrEmpty(request.GeneralViewModel.DisplayEmail.Trim()))
             {
                 TempData["IsError"] = "true";
                 TempData["ErrorMess"] = "Display email is empty or null. Please re-enter";
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction(nameof(Index), new { userId = user.Id });
             }
 
-            if (request.GeneralViewModel.DisplayEmail.IsEmail())
+            if (!request.GeneralViewModel.DisplayEmail.IsEmail())
             {
                 TempData["IsError"] = "true";
                 TempData["ErrorMess"] = "Data input does not match with email template. Please re-enter";
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction(nameof(Index), new { userId = user.Id });
             }
 
-            var email = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Email)?.Value;
-            var user = await _userManager.FindByEmailAsync(email);
             var checkUser = await _userManager.FindByEmailAsync(request.GeneralViewModel.DisplayEmail.Trim());
 
             if (checkUser == null)
@@ -197,6 +199,73 @@ namespace SWP391.OnlineShop.Portal.Controllers
             }
 
             TempData["SuccessMess"] = "Update avatar success. Please double-check";
+            return RedirectToAction(nameof(Index), new { userId = user.Id });
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> ChangeGender(ProfileViewModels request)
+        {
+            var email = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Email)?.Value;
+            var user = await _userManager.FindByEmailAsync(email);
+
+            if (request.GeneralViewModel.DisplayGender < 0)
+            {
+                TempData["IsError"] = "true";
+                TempData["ErrorMess"] = "Display gender is not valid. Please re-enter";
+                return RedirectToAction(nameof(Index), new { userId = user.Id });
+            }
+
+            var isUpdateGender = await _client.PutAsync(new PutUpdateUserGender
+            {
+                UserId = user.Id,
+                NewGender = request.GeneralViewModel.DisplayGender
+            });
+
+            if (isUpdateGender.StatusCode != Common.Enums.StatusCode.Success)
+            {
+                TempData["IsError"] = "true";
+                TempData["ErrorMess"] = $"{isUpdateGender.ErrorMessage}. Please re-enter";
+                return RedirectToAction(nameof(Index), new { userId = user.Id });
+            }
+
+            TempData["SuccessMess"] = "Update display gender success. Please double-check";
+            return RedirectToAction(nameof(Index), new { userId = user.Id });
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> ChangePhone(ProfileViewModels request)
+        {
+            var email = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Email)?.Value;
+            var user = await _userManager.FindByEmailAsync(email);
+
+            if (string.IsNullOrEmpty(request.GeneralViewModel.DisplayPhoneNumber.Trim()))
+            {
+                TempData["IsError"] = "true";
+                TempData["ErrorMess"] = "Display phone is empty or null. Please re-enter";
+                return RedirectToAction(nameof(Index), new { userId = user.Id });
+            }
+
+            if (!request.GeneralViewModel.DisplayEmail.IsPhone())
+            {
+                TempData["IsError"] = "true";
+                TempData["ErrorMess"] = "Data input does not match with phone template. Please re-enter";
+                return RedirectToAction(nameof(Index), new { userId = user.Id });
+            }
+
+            var isUpdatePhone = await _client.PutAsync(new PutUpdateUserPhone
+            {
+                UserId = user.Id,
+                NewPhone = request.GeneralViewModel.DisplayPhoneNumber.Trim()
+            });
+
+            if (isUpdatePhone.StatusCode != Common.Enums.StatusCode.Success)
+            {
+                TempData["IsError"] = "true";
+                TempData["ErrorMess"] = $"{isUpdatePhone.ErrorMessage}. Please re-enter";
+                return RedirectToAction(nameof(Index), new { userId = user.Id });
+            }
+
+            TempData["SuccessMess"] = "Update display phone success. Please double-check";
             return RedirectToAction(nameof(Index), new { userId = user.Id });
         }
 

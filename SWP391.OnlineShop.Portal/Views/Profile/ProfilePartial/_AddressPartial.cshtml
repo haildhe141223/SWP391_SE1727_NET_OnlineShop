@@ -7,6 +7,11 @@
             <a href="https://www.termsfeed.com/live/e3c51e1f-dd04-4568-ba9d-617bca9d4c5d" title="">Terms of Service</a>
         </p>
     </div>
+    <div class="address-header">
+        <a class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#addAddress">
+            Add New Address
+        </a>
+    </div>
     <div class="address-container">
         <div class="address-content">
             <div class="address-left">
@@ -30,6 +35,41 @@
                     <a class="btn btn-outline-secondary">Set as Default</a>
                 </div>
             </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="addAddress" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form>
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">ADD NEW ADDRESS</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label for="" class="form-label">Full Name</label>
+                        <input type="text" class="form-control" id="">
+                    </div>
+                    <div class="mb-3">
+                        <label for="" class="form-label">Phone Number</label>
+                        <input type="text" class="form-control" id="">
+                    </div>
+                    <div class="mb-3">
+                        <label for="" class="form-label">Address</label>
+                        <textarea class="form-control" id="" rows="2"></textarea>
+                    </div>
+                    <div class="mb-3">
+                        <input type="checkbox" class="form-check-input" id="add-checkout">
+                        <label class="form-check-label" for="add-checkout">Is Default</label>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-outline-primary">Save changes</button>
+                </div>
+            </form>
         </div>
     </div>
 </div>

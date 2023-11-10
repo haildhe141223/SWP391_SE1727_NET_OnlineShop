@@ -1,11 +1,26 @@
 ﻿@model SWP391.OnlineShop.ServiceModel.ViewModels.Feedback.FeedbackViewModels
 @{
     var statusList = ViewData["StatusList"] as SelectList;
+    var successMess = TempData["SuccessMess"] as string;
+    var errorMess = TempData["ErrorMess"] as string;
 }
 
 <div class="m-headers" style="margin-top: 10% !important;">
     <h4 class="fw-bold ml-5">Manage Feedback</h4>
 </div>
+
+@if (!string.IsNullOrWhiteSpace(errorMess))
+{
+    <div class="alert alert-danger my-2 text-center">
+        @errorMess
+    </div>
+}
+@if (!string.IsNullOrWhiteSpace(successMess))
+{
+    <div class="alert alert-success my-2 text-center">
+        @successMess
+    </div>
+}
 
 <div class="card shadow mb-4">
     <div class="card-header py-3">

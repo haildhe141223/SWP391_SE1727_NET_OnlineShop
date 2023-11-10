@@ -54,7 +54,7 @@ namespace SWP391.OnlineShop.ServiceModel.ServiceModels
 
 
     [Route("/Post/PostAddPost", "POST")]
-    public class PostAddPost : IReturn<PostViewModel>
+    public class PostAddPost : IReturn<BaseResultModel>
     {
         public string Title { get; set; }
         public string Featured { get; set; }
@@ -81,7 +81,7 @@ namespace SWP391.OnlineShop.ServiceModel.ServiceModels
     }
 
     [Route("/Post/DeletePost", "DELETE")]
-    public class DeletePost : IReturn<PostViewModel>
+    public class DeletePost : IReturn<BaseResultModel>
     {
         public int PostId { get; set; }
     }

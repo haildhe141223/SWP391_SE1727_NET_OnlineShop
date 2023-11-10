@@ -124,4 +124,62 @@ public class ProfileService : BaseService, IProfileService
             };
         }
     }
+
+    public async Task<BaseResultModel> Put(PutUpdateUserPhone request)
+    {
+        try
+        {
+            var user = await _userManager.Users.FirstOrDefaultAsync(u => u.Id == request.UserId);
+            if (user != null)
+            {
+                user.PhoneNumber = request.NewPhone;
+                await _userManager.UpdateAsync(user);
+
+                return new BaseResultModel
+                {
+                    StatusCode = StatusCode.Success
+                };
+            }
+
+            throw new Exception("User does not exist. Please re-check");
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError($"PutUpdateUserPhone request - {ex}");
+            return new BaseResultModel
+            {
+                ErrorMessage = ex.Message,
+                StatusCode = StatusCode.InternalServerError
+            };
+        }
+    }
+
+    public async Task<BaseResultModel> Put(PutUpdateUserGender request)
+    {
+        try
+        {
+            var user = await _userManager.Users.FirstOrDefaultAsync(u => u.Id == request.UserId);
+            if (user != null)
+            {
+                user.Gender = request.NewGender;
+                await _userManager.UpdateAsync(user);
+
+                return new BaseResultModel
+                {
+                    StatusCode = StatusCode.Success
+                };
+            }
+
+            throw new Exception("User does not exist. Please re-check");
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError($"PutUpdateUserGender request - {ex}");
+            return new BaseResultModel
+            {
+                ErrorMessage = ex.Message,
+                StatusCode = StatusCode.InternalServerError
+            };
+        }
+    }
 }
