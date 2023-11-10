@@ -107,5 +107,10 @@ namespace SWP391.OnlineShop.ServiceModel.ServiceModels
             public int Id { get; set; }
             public string OrderNotes { get; set; }
         }
-    }
+
+		[Route("/Order/GetAllOrder", "GET")]
+		public class GetAllOrder : IReturn<List<OrderViewModels>>
+		{
+		}
+	}
 }

@@ -11,6 +11,7 @@ using SWP391.OnlineShop.ServiceInterface.Loggers;
 using SWP391.OnlineShop.ServiceModel.ServiceModels;
 using SWP391.OnlineShop.ServiceModel.ViewModels.Carts;
 using System.Globalization;
+using System.Net;
 using System.Security.Claims;
 using static SWP391.OnlineShop.ServiceModel.ServiceModels.AddressModel;
 using static SWP391.OnlineShop.ServiceModel.ServiceModels.EmailModel;
@@ -184,8 +185,15 @@ namespace SWP391.OnlineShop.Portal.Controllers
             return View(order);
         }
 
-        public async Task<IActionResult> Confirmation([FromQuery(Name = "token")] string token)
+        public async Task<IActionResult> Confirmation([FromQuery(Name = "token")] string token, [FromQuery(Name = "payerId")] string payerId,
+            [FromQuery(Name = "paymentId")] string paymentId)
         {
+            var environment = new SandboxEnvironment(PaypalHelper.ClientId, PaypalHelper.SecretId);
+            var client = new PayPalHttpClient(environment);
+            var response = await ExecutePaymentAsync(client, payerId, paymentId);
+
+            if (response.StatusCode != HttpStatusCode.OK) return RedirectToAction(nameof(PaymentFailed));
+
             if (string.IsNullOrEmpty(token))
             {
                 return RedirectToAction("Index", "Home");
@@ -361,24 +369,24 @@ namespace SWP391.OnlineShop.Portal.Controllers
             });
             if (api.StatusCode == Common.Enums.StatusCode.Success)
             {
-				var order = await _client.GetAsync(new GetCartInfo()
-				{
-					Id = orderId
-				});
-				foreach (var item in order.OrderDetails)
-				{
-					var product = await _client.GetAsync(new GetProductById()
-					{
-						ProductId = item.Product.Id
-					});
-					var quantity = product.Amount - item.Quantity;
-					await _client.PutAsync(new PutUpdateProduct()
-					{
-						Amount = quantity,
-						Id = product.Id
-					});
-				}
-				return Ok(api);
+                var order = await _client.GetAsync(new GetCartInfo()
+                {
+                    Id = orderId
+                });
+                foreach (var item in order.OrderDetails)
+                {
+                    var product = await _client.GetAsync(new GetProductById()
+                    {
+                        ProductId = item.Product.Id
+                    });
+                    var quantity = product.Amount - item.Quantity;
+                    await _client.PutAsync(new PutUpdateProduct()
+                    {
+                        Amount = quantity,
+                        Id = product.Id
+                    });
+                }
+                return Ok(api);
             }
             return RedirectToAction("Error", "Home");
         }
@@ -438,7 +446,6 @@ namespace SWP391.OnlineShop.Portal.Controllers
             }
             var environment = new SandboxEnvironment(PaypalHelper.ClientId, PaypalHelper.SecretId);
             var client = new PayPalHttpClient(environment);
-
             #region Create Paypal Order
 
             var itemList = new ItemList()
@@ -567,6 +574,17 @@ namespace SWP391.OnlineShop.Portal.Controllers
             }
         }
 
+        public async Task<BraintreeHttp.HttpResponse> ExecutePaymentAsync(PayPalHttpClient http, string payerId, string paymentId)
+        {
+            var paymentExecution = new PaymentExecution()
+            {
+                PayerId = payerId
+            };
+            var request = new PaymentExecuteRequest(paymentId);
+            request.RequestBody(paymentExecution);
+            var response = await http.Execute(request);
+            return response;
+        }
         #endregion
 
         #region Address

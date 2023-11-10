@@ -421,8 +421,7 @@
             type: 'POST',
             data: data,
             success: function (response) {
-                alert('Add To Cart Complete Succesfully');
-                //$.toaster({ priority: 'success', title: 'Created', message: "Back To Cart Detail Succesfully" });
+                $.toaster({ priority: 'success', title: 'Created', message: "Back To Cart Detail Succesfully" });
                 setTimeout(function () {
                     window.location.reload();
                 }, 1000);
