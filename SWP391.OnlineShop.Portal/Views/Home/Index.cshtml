@@ -19,7 +19,13 @@
                                         </p>
                                         <div class="add-bag d-flex align-items-center">
                                             <a class="add-btn" href=""><span class="lnr lnr-cross"></span></a>
-                                            <span class="add-text text-uppercase">Add to Bag</span>
+                                            @if(item.SalePrice == 0)
+                                            {
+                                                <span class="add-text text-uppercase" onclick="AddToCart(@item.Id,@item.Price)">Add to Bag</span>
+                                            }else
+                                            {
+                                                <span class="add-text text-uppercase" onclick="AddToCart(@item.Id,@item.SalePrice)">Add to Bag</span>
+                                            }
                                         </div>
                                     </div>
                                 </div>
@@ -255,8 +261,14 @@
 
                                         <a href="" class="social-info">
                                             <span class="ti-bag"></span>
-                                            <p class="hover-text">add to bag</p>
-                                        </a>
+                                            @if(product.SalePrice == 0)
+                                            {
+                                                <p class="hover-text" onclick="AddToCart(@product.Id,@product.Price)">add to bag</p>
+                                            }else
+                                            {
+                                                <p class="hover-text" onclick="AddToCart(@product.Id,@product.SalePrice)">add to bag</p>
+                                            }
+                                                </a>
                                         <a href="" class="social-info">
                                             <span class="lnr lnr-heart"></span>
                                             <p class="hover-text">Wishlist</p>
@@ -667,7 +679,13 @@
                                     </h4>
                                     <div class="add-bag d-flex align-items-center justify-content-center">
                                         <a class="add-btn" href=""><span class="ti-bag"></span></a>
-                                        <span class="add-text text-uppercase">Add to Bag</span>
+                                        @if(item.SalePrice == 0)
+                                        {
+                                            <span class="add-text text-uppercase" onclick="AddToCart(@item.Id,@item.Price)">Add to Bag</span>
+                                        }else
+                                        {
+                                            <span class="add-text text-uppercase" onclick="AddToCart(@item.Id,@item.SalePrice)">Add to Bag</span>
+                                        }
                                     </div>
                                 </div>
                             </div>
@@ -785,3 +803,32 @@
     </div>
 </section>
 <!-- End related-product Area -->
+
+<script type="text/javascript">
+    function AddToCart(productId, productPrice) {
+        const data = {
+            productId: productId,
+            price: productPrice,
+            quantity: $('#sst').val(),
+        };
+        $.ajax({
+            url: '@Url.Action("AddToCard","Cart")',
+            type: 'POST',
+            data: data,
+            success: function (response) {
+                $.toaster({ priority: 'success', title: 'Created', message: "Add To Cart Detail Succesfully" });
+                setTimeout(function () {
+                    window.location.reload();
+                }, 1000);
+            },
+            failure: function (failed) {
+                alert(failed.responseText)
+                //$.toaster({ priority: 'warning', title: 'Warning', message: failed.responseText });
+            },
+            error: function (error) {
+                alert(error.responseText)
+                //$.toaster({ priority: 'danger', title: 'Error', message: error.responseText });
+            }
+        });
+    }
+</script>
