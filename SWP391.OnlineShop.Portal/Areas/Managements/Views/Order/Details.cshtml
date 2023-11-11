@@ -7,93 +7,83 @@
 }
 
 <div class="container-fluid">
-	<!-- Page Heading -->
-	<h1 class="h3 mb-2 text-gray-800">Order Containers</h1>
-	<p class="mb-4">
-	</p>
-	@if (!string.IsNullOrWhiteSpace(errorMess))
-	{
-		<div class="alert alert-danger my-2 text-center">
-			@errorMess
-		</div>
-	}
-	@if (!string.IsNullOrWhiteSpace(successMess))
-	{
-		<div class="alert alert-success my-2 text-center">
-			@successMess
-		</div>
-	}
-	@*<div>
+    <!-- Page Heading -->
+    <h1 class="h3 mb-2 text-gray-800">Order Containers</h1>
+    <p class="mb-4">
+    </p>
+    @if (!string.IsNullOrWhiteSpace(errorMess))
+    {
+        <div class="alert alert-danger my-2 text-center">
+            @errorMess
+        </div>
+    }
+    @if (!string.IsNullOrWhiteSpace(successMess))
+    {
+        <div class="alert alert-success my-2 text-center">
+            @successMess
+        </div>
+    }
+    @*<div>
 	<a class="btn btn-outline-primary my-3" asp-action="Add">Add New Voucher</a>
 	</div>
 	*@
-	<!-- DataTales Example -->
-	<div class="card shadow mb-4">
-		<div class="card-header py-3">
-			<h6 class="m-0 font-weight-bold text-primary">Order Details DataTables</h6>
-		</div>
-		<div class="card-body">
-			<div class="table-responsive">
-				<table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
-					<thead>
-						<tr>
-							<th>Product Name</th>
-							<th>Quantity</th>
-							<th>Sale Price</th>
-							<th>Unit Price</th>
-							<th>TotalCost</th>
-						</tr>
-					</thead>
-					<tfoot>
-						<tr>
-							<th>Product Name</th>
-							<th>Quantity</th>
-							<th>Sale Price</th>
-							<th>Unit Price</th>
-							<th>TotalCost</th>
-						</tr>
-					</tfoot>
-					<tbody>
-						@if (Model != null)
-						{
-							@foreach (var item in Model.OrderDetails)
-							{
-								<tr>
-									<td>
-										@(item.Product.ProductName)
-									</td>
-									<td>@item.Quantity</td>
-									<td>@item.SalePrice</td>
-									<td>@item.UnitPrice</td>
-									@if(item.SalePrice == 0)
-									{
-										<td>$@(item.Quantity * item.UnitPrice)</td>
-									}
-									else
-									{
-										<td>$@(item.Quantity * item.SalePrice)</td>
-									}
-								</tr>
-							}
-
-						}
-						else
-						{
-							<tr>
-								<td colspan="8">
-									No Data
-								</td>
-							</tr>
-						}
-					</tbody>
-				</table>
-			</div>
-		</div>
-	</div>
+    <!-- DataTales Example -->
+    <div class="card shadow mb-4">
+        <div class="card-header py-3">
+            <h6 class="m-0 font-weight-bold text-primary">Order Details DataTables</h6>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                    <thead>
+                    <tr>
+                        <th>Product Name</th>
+                        <th>Quantity</th>
+                        <th>Sale Price</th>
+                        <th>Unit Price</th>
+                        <th>TotalCost</th>
+                    </tr>
+                    </thead>
+                    <tfoot>
+                    <tr>
+                        <th>Product Name</th>
+                        <th>Quantity</th>
+                        <th>Sale Price</th>
+                        <th>Unit Price</th>
+                        <th>TotalCost</th>
+                    </tr>
+                    </tfoot>
+                    <tbody>
+                    @foreach (var item in Model.OrderDetails)
+                    {
+                        <tr>
+                            <td>
+                                @item.Product.ProductName
+                            </td>
+                            <td>@item.Quantity</td>
+                            <td>@item.SalePrice</td>
+                            <td>@item.UnitPrice</td>
+                            @if(item.SalePrice == 0)
+                            {
+                                <td>$@(item.Quantity * item.UnitPrice)</td>
+                            }
+                            else
+                            {
+                                <td>$@(item.Quantity * item.SalePrice)</td>
+                            }
+                        </tr>
+                    }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
 </div>
-<a type="button" class="btn btn-secondary" asp-action="">Back</a>
-<button type="reset" class="btn btn-info">Reset</button>
-<button type="submit" class="btn btn-primary">Submit</button>
+<div style="padding-left: 30px">
+    <a type="button" class="btn btn-secondary" asp-action="">Back</a>
+    <button type="reset" class="btn btn-info">Reset</button>
+    <button type="submit" class="btn btn-primary">Submit</button>
+</div>
 
 <script type="text/javascript">
 	function confirmDelete() {

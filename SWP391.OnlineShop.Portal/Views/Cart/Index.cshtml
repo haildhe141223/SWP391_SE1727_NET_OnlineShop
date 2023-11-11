@@ -534,7 +534,7 @@ else
 				type: 'POST',
 				data: data,
 				success: function (response) {
-					$.toaster({ priority: 'success', title: 'Created', message: Update Cart Detail Succesfully" });
+					$.toaster({ priority: 'success', title: 'Created', message: "Update Cart Detail Successfully" });
 					setTimeout(function () {
 						window.location.reload();
 					}, 1000);
@@ -565,7 +565,7 @@ else
 								window.location.reload();
 							}, 1000);
 						} else {
-							$.toaster({ priority: 'success', title: 'Success', message: "Delete Cart Item Succesfully" });
+							$.toaster({ priority: 'success', title: 'Success', message: "Delete Cart Item Successfully" });
 							$(event).closest("tr").remove();
 						}
 					},
@@ -645,7 +645,7 @@ else
 								window.location.reload();
 							}, 1000);
 						} else {
-							$.toaster({ priority: 'success', title: 'Success', message: "Delete Cart Item Succesfully" });
+							$.toaster({ priority: 'success', title: 'Success', message: "Delete Cart Item Successfully" });
 							$(event).closest("tr").remove();
 						}
 					},
@@ -679,7 +679,7 @@ else
 	}
 
 	function confirmDelete(message) {
-		if (message == '' || message == null || message == undefined) {
+		if (message == '' || message == null) {
 			message = "Are you sure you want to delete this item?";
 		}
 		return confirm(message);
@@ -705,7 +705,7 @@ else
 					type: 'POST',
 					data: data,
 					success: function (response) {
-						$.toaster({ priority: 'success', title: 'Created', message: "Add To Cart Contact Succesfully" });
+						$.toaster({ priority: 'success', title: 'Created', message: "Add To Cart Contact Successfully" });
 						setTimeout(function () {
 							window.location.reload();
 						}, 1000);
@@ -733,7 +733,7 @@ else
 				type: 'POST',
 				data: data,
 				success: function (response) {
-					$.toaster({ priority: 'success', title: 'Created', message: "Add To Cart Complete Succesfully" });
+					$.toaster({ priority: 'success', title: 'Created', message: "Add To Cart Complete Successfully" });
 					setTimeout(function () {
 						window.location.reload();
 					}, 1000);
