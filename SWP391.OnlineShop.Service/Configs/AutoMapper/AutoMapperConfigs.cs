@@ -7,6 +7,7 @@ using SWP391.OnlineShop.ServiceModel.ViewModels.Categories;
 using SWP391.OnlineShop.ServiceModel.ViewModels.Emails;
 using SWP391.OnlineShop.ServiceModel.ViewModels.Feedback;
 using SWP391.OnlineShop.ServiceModel.ViewModels.Products;
+using SWP391.OnlineShop.ServiceModel.ViewModels.Profiles;
 using SWP391.OnlineShop.ServiceModel.ViewModels.Settings;
 using SWP391.OnlineShop.ServiceModel.ViewModels.Tags;
 using SWP391.OnlineShop.ServiceModel.ViewModels.Users;
@@ -43,6 +44,9 @@ public class AutoMapperConfigs : Profile
 
         //// Slider
         CreateMap<Slider, SliderViewModel>().ReverseMap();
+
+        //// Address
+        CreateMap<Address, AddressViewModel>().ReverseMap();
 
         if (unitOfWork != null)
         {
