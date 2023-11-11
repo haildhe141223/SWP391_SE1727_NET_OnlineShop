@@ -69,6 +69,7 @@
                 userRole.Contains(RoleConstraints.Admin))
                 {
                     <a class="collapse-item" asp-area="Managements" asp-action="Index" asp-controller="User">Users</a>
+                    <a class="collapse-item" asp-area="Managements" asp-action="Requests" asp-controller="User">Requests</a>
                 }
                 
                 @if (!string.IsNullOrEmpty(userRole) &&
