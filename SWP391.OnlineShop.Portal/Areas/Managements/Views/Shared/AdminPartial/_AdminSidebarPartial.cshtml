@@ -96,7 +96,7 @@
                     userRole.Contains(RoleConstraints.Sale) ||
                     userRole.Contains(RoleConstraints.SaleManager)))
                 {
-                    <a class="collapse-item">Orders</a>
+                    <a class="collapse-item" asp-area="Managements" asp-action="Index" asp-controller="Order">Orders</a>
                     <a class="collapse-item" asp-area="Managements" asp-action="Index" asp-controller="Voucher">Vouchers</a>
                     <a class="collapse-item" asp-area="Managements" asp-controller="Marketing" asp-action="Index">Products</a>
 
