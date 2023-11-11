@@ -4,6 +4,7 @@
     {
         public const string DomainEmailRequired = "@FPT.EDU.VN";
         public const string EmailNotificationCategory = "Notification";
+        public const string EmailNotificationWithPasswordCategory = "NotificationWithPassword";
 
         #region Email Split Keys
         public const string EmailConstraintSplit = ";";

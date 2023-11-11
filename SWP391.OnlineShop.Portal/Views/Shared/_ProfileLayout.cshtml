@@ -1,7 +1,12 @@
-﻿@{
+﻿@using SWP391.OnlineShop.Common.Enums;
+@using SWP391.OnlineShop.ServiceModel.ViewModels.Profiles;
+@{
     Layout = null;
     ViewBag.Title = "Karma Profile";
 }
+
+@model ProfileViewModels
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -56,18 +61,25 @@
     </script>
 
 
-    @if (ViewBag.Col != null)
+    @if (Model.RequestTab == ProfileTab.Address)
     {
-        if (ViewBag.Col == 4)
-        {
-            <script>
-                $(".tab-content-item").removeClass('active');
-                $(".tab-content-item").removeClass('show');
-                $(".tab-header-items").removeClass('active');
-                $("#v-pills-favor").addClass('active show');
-                $("#tab-order").addClass('active');
-            </script>
-        }
+        <script>
+            $(".tab-content-item").removeClass('active');
+            $(".tab-content-item").removeClass('show');
+            $(".tab-header-items").removeClass('active');
+            $("#v-pills-addr").addClass('active show');
+            $("#tab-address").addClass('active');
+        </script>
+    }
+    @if (Model.RequestTab == ProfileTab.Security)
+    {
+        <script>
+            $(".tab-content-item").removeClass('active');
+            $(".tab-content-item").removeClass('show');
+            $(".tab-header-items").removeClass('active');
+            $("#v-pills-security").addClass('active show');
+            $("#tab-security").addClass('active');
+        </script>
     }
 </body>
 </html>

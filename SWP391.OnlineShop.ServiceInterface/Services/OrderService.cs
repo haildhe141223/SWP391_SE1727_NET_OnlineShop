@@ -201,7 +201,29 @@ namespace SWP391.OnlineShop.ServiceInterface.Services
             return result;
         }
 
-        public async Task<OrderViewModels> Post(PostAddToCart request)
+		public List<OrderViewModels> Get(GetAllOrder request)
+		{
+			var result = new List<OrderViewModels>();
+			_logger.LogInfo("GetAllOrder");
+			try
+			{
+				var listModel = _unitOfWork.Orders.GetAllOrders()
+					 .OrderByDescending(o => o.OrderDateTime)
+					 .ToList();
+				foreach (var item in listModel)
+				{
+					var order = _mapper.Map<OrderViewModels>(item);
+					result.Add(order);
+				}
+			}
+			catch (Exception ex)
+			{
+				_logger.LogError($"GetAllOrder error {ex.Message}");
+			}
+			return result;
+		}
+
+		public async Task<OrderViewModels> Post(PostAddToCart request)
         {
             var result = new OrderViewModels();
             try

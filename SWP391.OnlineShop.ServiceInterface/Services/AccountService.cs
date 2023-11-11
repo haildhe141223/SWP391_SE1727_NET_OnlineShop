@@ -198,7 +198,7 @@ public class AccountService : BaseService, IAccountService
                 throw new Exception($"Create user fail. Cannot find user with email [{request.RegisterViewModel.Email}]");
             }
 
-            throw new Exception($"Create user fail. {string.Join(", ", isCreatedUser.Errors.ToList())}");
+            throw new Exception($"Create user fail. {string.Join(", ", isCreatedUser.Errors.Select(x => x.Description).ToList())}");
         }
         catch (Exception ex)
         {
@@ -216,36 +216,74 @@ public class AccountService : BaseService, IAccountService
     {
         try
         {
-            var userEmail = request.To;
-            var userName = request.To.Split('@')[0];
-
-            var confirmEmailSubject = EmailTemplates.RegisterEmailConfirmSubject;
-            var confirmEmailBody = EmailTemplates.RegisterEmailConfirmTemplate;
-
-            if (!string.IsNullOrEmpty(confirmEmailBody))
+            if (request.Category == EmailConstraints.EmailNotificationCategory)
             {
-                confirmEmailBody = confirmEmailBody
-                    .Replace("{{Username}}", userName)
-                    .Replace("{{UserEmail}}", userEmail)
-                    .Replace("{{ConfirmRegisterLink}}", request.LinkConfirmPassword);
+                var userEmail = request.To;
+                var userName = request.To.Split('@')[0];
+
+                var confirmEmailSubject = EmailTemplates.RegisterEmailConfirmSubject;
+                var confirmEmailBody = EmailTemplates.RegisterEmailConfirmTemplate;
+
+                if (!string.IsNullOrEmpty(confirmEmailBody))
+                {
+                    confirmEmailBody = confirmEmailBody
+                        .Replace("{{Username}}", userName)
+                        .Replace("{{UserEmail}}", userEmail)
+                        .Replace("{{ConfirmRegisterLink}}", request.LinkConfirmPassword);
+                }
+
+                var email = new Email
+                {
+                    Subject = confirmEmailSubject,
+                    Body = confirmEmailBody,
+                    To = userEmail,
+                    Category = request.Category,
+                    Title = confirmEmailSubject
+                };
+
+                var mailId = await _mailService.SendAsync(email);
+                return new BaseResultModel
+                {
+                    StatusCode = StatusCode.Success,
+                    SuccessMessage = $"Send mail success with id [{mailId}]"
+                };
             }
 
-            var email = new Email
+            if (request.Category == EmailConstraints.EmailNotificationWithPasswordCategory)
             {
-                Subject = confirmEmailSubject,
-                Body = confirmEmailBody,
-                To = userEmail,
-                Category = request.Category,
-                Title = confirmEmailSubject
-            };
+                var userEmail = request.To;
+                var userName = request.To.Split('@')[0];
 
-            var mailId = await _mailService.SendAsync(email);
+                var confirmEmailSubject = EmailTemplates.RegisterEmailConfirmSubject;
+                var confirmEmailBody = EmailTemplates.RegisterEmailConfirmWithPasswordTemplate;
 
-            return new BaseResultModel
-            {
-                StatusCode = StatusCode.Success,
-                SuccessMessage = $"Send mail success with id [{mailId}]"
-            };
+                if (!string.IsNullOrEmpty(confirmEmailBody))
+                {
+                    confirmEmailBody = confirmEmailBody
+                        .Replace("{{Username}}", userName)
+                        .Replace("{{UserEmail}}", userEmail)
+                        .Replace("{{DefaultPassword}}", LoginKeyConstraints.DefaultPassword)
+                        .Replace("{{ConfirmRegisterLink}}", request.LinkConfirmPassword);
+                }
+
+                var email = new Email
+                {
+                    Subject = confirmEmailSubject,
+                    Body = confirmEmailBody,
+                    To = userEmail,
+                    Category = request.Category,
+                    Title = confirmEmailSubject
+                };
+
+                var mailId = await _mailService.SendAsync(email);
+                return new BaseResultModel
+                {
+                    StatusCode = StatusCode.Success,
+                    SuccessMessage = $"Send mail success with id [{mailId}]"
+                };
+            }
+
+            throw new Exception("Send mail notification fail, please contact admin for double-check system.");
         }
         catch (Exception e)
         {

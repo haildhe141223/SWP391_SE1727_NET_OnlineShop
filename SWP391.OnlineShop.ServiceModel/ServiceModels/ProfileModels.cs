@@ -1,6 +1,7 @@
 ﻿using ServiceStack;
 using SWP391.OnlineShop.Core.Models.Enums;
 using SWP391.OnlineShop.ServiceModel.Results;
+using SWP391.OnlineShop.ServiceModel.ViewModels.Profiles;
 
 namespace SWP391.OnlineShop.ServiceModel.ServiceModels;
 
@@ -39,5 +40,28 @@ public class ProfileModels
     {
         public int UserId { get; set; }
         public Gender NewGender { get; set; }
+    }
+
+    [Route("/Profile/PutUpdateDefaultAddress", "PUT")]
+    public class PutUpdateDefaultAddress : IReturn<BaseResultModel>
+    {
+        public int UserId { get; set; }
+        public int AddressId { get; set; }
+    }
+
+    [Route("/Profile/GetUserAddresses", "GET")]
+    public class GetUserAddresses : IReturn<List<AddressViewModel>>
+    {
+        public int UserId { get; set; }
+    }
+
+    [Route("/Profile/PostAddUserAddress", "POST")]
+    public class PostAddUserAddress : IReturn<BaseResultModel>
+    {
+        public int UserId { get; set; }
+        public string FullName { get; set; }
+        public string PhoneNumber { get; set; }
+        public string Address { get; set; }
+        public bool IsDefault { get; set; }
     }
 }
