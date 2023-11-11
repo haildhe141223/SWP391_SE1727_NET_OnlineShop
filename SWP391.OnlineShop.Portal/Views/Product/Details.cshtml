@@ -6,8 +6,8 @@
             <div class="col-first">
                 <h1>Product Details Page</h1>
                 <nav class="d-flex align-items-center">
-                    <a href="index.html">Home<span class="lnr lnr-arrow-right"></span></a>
-                    <a href="#">Shop<span class="lnr lnr-arrow-right"></span></a>
+                    <a asp-action="Index" asp-controller="Home">Home<span class="lnr lnr-arrow-right"></span></a>
+                    <a asp-action="Index" asp-controller="Product">Shop<span class="lnr lnr-arrow-right"></span></a>
                     <a href="single-product.html">product-details</a>
                 </nav>
             </div>
@@ -22,13 +22,13 @@
             <div class="col-lg-6">
                 <div class="s_Product_carousel">
                     <div class="single-prd-item">
-                        <img class="img-fluid" src="@Model.ProductDetail?.Thumbnail" alt="">
+                        <img class="img-fluid" src="@Model.ProductDetail.Thumbnail" alt="">
                     </div>
                     <div class="single-prd-item">
-                        <img class="img-fluid" src="@Model.ProductDetail?.Thumbnail" alt="">
+                        <img class="img-fluid" src="@Model.ProductDetail.Thumbnail" alt="">
                     </div>
                     <div class="single-prd-item">
-                        <img class="img-fluid" src="@Model.ProductDetail?.Thumbnail" alt="">
+                        <img class="img-fluid" src="@Model.ProductDetail.Thumbnail" alt="">
                     </div>
                 </div>
             </div>
@@ -40,11 +40,11 @@
                         <li><a class="active" href="#"><span>Category</span> : @Model.ProductDetail?.Category?.CategoryName</a></li>
                         @if (Model.ProductDetail?.Amount > 0)
                         {
-                            <li><a href="#"><span>Availibility</span> : In Stock</a></li>
+                            <li><a href="#"><span>Availability</span> : In Stock</a></li>
                         }
                         else
                         {
-                            <li><a href="#"><span>Availibility</span> : Sold Out</a></li>
+                            <li><a href="#"><span>Availability</span> : Sold Out</a></li>
                         }
                     </ul>
                     <p>
@@ -186,10 +186,10 @@
                                             </div>
                                             <div class="media-body">
                                                 <h4>@feedback.User.UserName</h4>
-                                                @for (int i = 0; i < Convert.ToInt32(feedback.RatedStar); i++)
+                                                @*@for (int i = 0; i < Convert.ToInt32(feedback.RatedStar); i++)
                                                 {
                                                     <i class="fa fa-star"></i>
-                                                }
+                                                }*@
                                                 <h5>@feedback.CreatedDateTime</h5>
                                                 <a class="reply_btn" href="#">Reply</a>
                                             </div>
@@ -414,25 +414,24 @@
         const data = {
             productId: productId,
             price: productPrice,
-            quantity: $('#sst').val(),
+            quantity: $('#sst').val()
         };
         $.ajax({
             url: '@Url.Action("AddToCard","Cart")',
             type: 'POST',
             data: data,
             success: function (response) {
-                alert('Add To Cart Complete Succesfully');
-                //$.toaster({ priority: 'success', title: 'Created', message: "Back To Cart Detail Succesfully" });
+                $.toaster({ priority: 'success', title: 'Created', message: "Back To Cart Detail Succesfully" });
                 setTimeout(function () {
                     window.location.reload();
                 }, 1000);
             },
             failure: function (failed) {
-                alert(failed.responseText)
+                alert(failed.responseText);
                 //$.toaster({ priority: 'warning', title: 'Warning', message: failed.responseText });
             },
             error: function (error) {
-                alert(error.responseText)
+                alert(error.responseText);
                 //$.toaster({ priority: 'danger', title: 'Error', message: error.responseText });
             }
         });

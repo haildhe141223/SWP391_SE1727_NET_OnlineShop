@@ -131,7 +131,7 @@ if (isDeveloperEnvironment != null && Convert.ToBoolean(isDeveloperEnvironment))
 {
     options = new DashboardOptions
     {
-        //IsReadOnlyFunc = context => !authorize.IsReadOnlyHangFireDashboard(context),
+        IsReadOnlyFunc = context => !authorize.IsReadOnlyHangFireDashboard(context),
     };
 }
 

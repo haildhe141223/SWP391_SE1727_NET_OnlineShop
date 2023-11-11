@@ -27,7 +27,8 @@ namespace SWP391.OnlineShop.ServiceModel.ViewModels.Vouchers
         public VoucherType Type { get; set; }
         [Required(ErrorMessage = "Voucher Value is required")]
         public decimal Value { get; set; }
-        public List<int> ProductIds { get; set; }
+		[Required(ErrorMessage = "Please choose product to apply")]
+		public List<int> ProductIds { get; set; }
         public List<ProductVoucherViewModel> ProductVouchers { get; set; }
     }
 }

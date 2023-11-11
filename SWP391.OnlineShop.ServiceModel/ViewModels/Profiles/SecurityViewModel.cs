@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using SWP391.OnlineShop.Common.Enums;
+using System.ComponentModel.DataAnnotations;
 
 namespace SWP391.OnlineShop.ServiceModel.ViewModels.Profiles;
 
@@ -14,4 +15,6 @@ public class SecurityViewModel
     [StringLength(50, ErrorMessage = "Must be between 8 and 50 characters", MinimumLength = 8)]
     [Compare(nameof(NewPassword))]
     public string RePassword { get; set; }
+
+    public ProfileTab ProfileTab { get; set; } = ProfileTab.Security;
 }

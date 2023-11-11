@@ -13,7 +13,7 @@
                 <h1>Blog Page</h1>
                 <nav class="d-flex align-items-center">
                     <a asp-action="Index" asp-controller="Home">Home<span class="lnr lnr-arrow-right"></span></a>
-                    <a href="category.html">Blog</a>
+                    <a asp-action="Index" asp-controller="Post">Blog</a>
                 </nav>
             </div>
         </div>
@@ -47,10 +47,10 @@
                                 <li><a href="#">@Model.CreatedDateTime<i class="lnr lnr-calendar-full"></i></a></li>
                             </ul>
                             <ul class="social-links">
-                                <li><a href="#"><i class="fa fa-facebook"></i></a></li>
-                                <li><a href="#"><i class="fa fa-twitter"></i></a></li>
-                                <li><a href="#"><i class="fa fa-github"></i></a></li>
-                                <li><a href="#"><i class="fa fa-behance"></i></a></li>
+                                <li><a href="#"><i class="fa-brands fa-facebook"></i></a></li>
+                                <li><a href="#"><i class="fa-brands fa-twitter"></i></a></li>
+                                <li><a href="#"><i class="fa-brands fa-github"></i></a></li>
+                                <li><a href="#"><i class="fa-brands fa-behance"></i></a></li>
                             </ul>
                         </div>
                     </div>
@@ -61,7 +61,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="navigation-area">
+                @*<div class="navigation-area">
                     <div class="row">
                         <div class="col-lg-6 col-md-6 col-12 nav-left flex-row d-flex justify-content-start align-items-center">
                             <div class="thumb">
@@ -92,7 +92,7 @@
                             </div>
                         </div>
                     </div>
-                </div>
+                </div>*@
 
             </div>
             <div class="col-lg-4">
@@ -111,10 +111,10 @@
                         <h4>Charlie Barber</h4>
                         <p>Senior blog writer</p>
                         <div class="social_icon">
-                            <a href="#"><i class="fa fa-facebook"></i></a>
-                            <a href="#"><i class="fa fa-twitter"></i></a>
-                            <a href="#"><i class="fa fa-github"></i></a>
-                            <a href="#"><i class="fa fa-behance"></i></a>
+                            <a href="#"><i class="fa-brands fa-facebook"></i></a>
+                            <a href="#"><i class="fa-brands fa-twitter"></i></a>
+                            <a href="#"><i class="fa-brands fa-github"></i></a>
+                            <a href="#"><i class="fa-brands fa-behance"></i></a>
                         </div>
                         <p>
                             Boot camps have its supporters andit sdetractors. Some people do not understand why you
