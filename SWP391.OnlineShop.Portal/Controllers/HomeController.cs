@@ -3,8 +3,10 @@ using ServiceStack;
 using SWP391.OnlineShop.Portal.Models;
 using SWP391.OnlineShop.ServiceInterface.Loggers;
 using SWP391.OnlineShop.ServiceModel.ServiceModels;
+using SWP391.OnlineShop.ServiceModel.ViewModels.Contacts;
 using SWP391.OnlineShop.ServiceModel.ViewModels.Products;
 using System.Diagnostics;
+using static SWP391.OnlineShop.ServiceModel.ServiceModels.ContactModels;
 
 namespace SWP391.OnlineShop.Portal.Controllers
 {
@@ -15,7 +17,7 @@ namespace SWP391.OnlineShop.Portal.Controllers
 
         public HomeController(
             IJsonServiceClient client,
-        ILoggerService logger)
+            ILoggerService logger)
         {
             _logger = logger;
             _client = client;
@@ -48,6 +50,28 @@ namespace SWP391.OnlineShop.Portal.Controllers
 
         public IActionResult Contact()
         {
+            return View();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Contact(ContactViewModel request)
+        {
+            //TODO: HaiLD update message return here
+            if (!ModelState.IsValid)
+            {
+                var errors = ModelState.Values.SelectMany(x => x.Errors).Select(x => x.ErrorMessage);
+                var modelError = $"{string.Join(", ", errors)}";
+                _logger.LogError($"Login Error - Model Invalid: {modelError}");
+                return StatusCode(500, "Please enter email or password.");
+            }
+
+            var addContact = await _client.PostAsync(new PostAddContact
+            {
+                Subject = request.Subject,
+                Message = request.Message,
+                Email = request.Email,
+                Name = request.Name
+            });
             return View();
         }
 

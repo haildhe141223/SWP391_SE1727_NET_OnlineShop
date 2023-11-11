@@ -65,6 +65,11 @@ namespace SWP391.OnlineShop.Portal.Controllers
 
             var user = await _userManager.FindByEmailAsync(request.Email);
 
+            if (user == null)
+            {
+                return StatusCode(500, $"User with email {request.Email} does not exist in our system. " +
+                                       "Please contact admin for more information");
+            }
             if (user.LockoutEnabled)
             {
                 return StatusCode(500, $"User with email {request.Email} does not exist or your account got locked. " +
@@ -136,8 +141,55 @@ namespace SWP391.OnlineShop.Portal.Controllers
 
             var userExist = await _userManager.FindByEmailAsync(externalEmail.Value);
 
-            if(userExist == null)
+            if (userExist == null)
             {
+                var registerVm = new RegisterViewModel
+                {
+                    Email = externalEmail.Value,
+                    Username = externalUsername?.Value,
+                    Password = LoginKeyConstraints.DefaultPassword,
+                    RePassword = LoginKeyConstraints.DefaultPassword
+                };
+
+                var registerResult = await _client.PostAsync(new PostRegisterAccount
+                {
+                    RegisterViewModel = registerVm,
+                });
+
+                if (registerResult.StatusCode == Common.Enums.StatusCode.InternalServerError)
+                {
+                    return StatusCode(500, registerResult.ErrorMessage);
+                }
+
+                var user = await _userManager.FindByEmailAsync(registerVm.Email);
+                if (user == null)
+                {
+                    return StatusCode(500, $"Success register account. Fail to find user with email [{registerVm.Email}]. " +
+                                           "Please contact admin or support team.");
+                }
+
+                var emailConfirmToken = await _userManager.GenerateEmailConfirmationTokenAsync(user);
+                var linkConfirmEmail = Url.Action(
+                    protocol: HttpContext.Request.Scheme,
+                    host: HttpContext.Request.Host.Value,
+                    controller: "Account",
+                    action: "ConfirmEmailRegister",
+                    values: new { userId = user.Id, emailToken = emailConfirmToken }
+                );
+
+                var createEmail = await _client.PostAsync(new PostConfirmRegisterEmail
+                {
+                    Category = EmailConstraints.EmailNotificationWithPasswordCategory,
+                    LinkConfirmPassword = linkConfirmEmail,
+                    To = registerVm.Email
+                });
+
+                if (createEmail.StatusCode == Common.Enums.StatusCode.Success)
+                {
+                    return Ok("Register success. Please check your email address to confirm your email.");
+                }
+
+
                 return StatusCode(500, $"Your email {externalEmail.Value} does not exist " +
                                        "Please contact admin for more information");
             }
@@ -286,7 +338,6 @@ namespace SWP391.OnlineShop.Portal.Controllers
                 values: new { userId = user.Id, emailToken = emailConfirmToken }
             );
 
-            //TODO: HaiLD update send mail here
             var createEmail = await _client.PostAsync(new PostConfirmRegisterEmail
             {
                 Category = EmailConstraints.EmailNotificationCategory,

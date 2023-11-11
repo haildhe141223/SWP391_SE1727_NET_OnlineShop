@@ -2,6 +2,8 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using ServiceStack;
+using SWP391.OnlineShop.Common.Constraints;
+using SWP391.OnlineShop.Common.Enums;
 using SWP391.OnlineShop.Common.Extensions;
 using SWP391.OnlineShop.Core.Models.Identities;
 using SWP391.OnlineShop.ServiceModel.ViewModels.Profiles;
@@ -37,8 +39,6 @@ namespace SWP391.OnlineShop.Portal.Controllers
 
         #endregion
 
-        #region General
-
         public async Task<IActionResult> Index(int userId)
         {
             var user = await _userManager.FindByIdAsync(userId.ToString());
@@ -59,14 +59,33 @@ namespace SWP391.OnlineShop.Portal.Controllers
                 DisplayPhoneNumber = user.PhoneNumber
             };
 
+            var addresses = await _client.GetAsync(new GetUserAddresses
+            {
+                UserId = user.Id
+            });
+
             var profileVm = new ProfileViewModels
             {
                 GeneralViewModel = generalViewModel,
                 SecurityViewModel = new SecurityViewModel(),
+                AddressViewModel = new AddressViewModels
+                {
+                    AddressViewModelList = addresses
+                },
             };
+
+            var requestTabString = TempData["RequestTab"] as string ?? string.Empty;
+
+            if (!string.IsNullOrEmpty(requestTabString))
+            {
+                var requestTab = requestTabString.ToEnum<ProfileTab>();
+                profileVm.RequestTab = requestTab;
+            }
 
             return View(profileVm);
         }
+
+        #region General
 
         [HttpPost]
         public async Task<IActionResult> ChangeName(ProfileViewModels request)
@@ -308,6 +327,11 @@ namespace SWP391.OnlineShop.Portal.Controllers
             var newPassword = request.SecurityViewModel.NewPassword.Trim();
             var retypePassword = request.SecurityViewModel.RePassword.Trim();
 
+            if (request.SecurityViewModel.ProfileTab == ProfileTab.Security)
+            {
+                TempData["RequestTab"] = ProfileConstraints.SecurityTab;
+            }
+
             if (!ModelState.IsValid)
             {
                 var errors = ModelState.Values.SelectMany(x => x.Errors).Select(x => x.ErrorMessage);
@@ -323,8 +347,8 @@ namespace SWP391.OnlineShop.Portal.Controllers
             {
                 if (retypePassword.Equals(newPassword))
                 {
-                    var isChangePass = await _userManager.CheckPasswordAsync(user, newPassword);
-                    if (isChangePass)
+                    var isChangePass = await _userManager.ChangePasswordAsync(user, password, newPassword);
+                    if (isChangePass.Succeeded)
                     {
                         TempData["SuccessPassMess"] = "Change password success. Now you can login with new password.";
                         return RedirectToAction(nameof(Index), new { userId = user.Id });
@@ -342,6 +366,89 @@ namespace SWP391.OnlineShop.Portal.Controllers
 
             TempData["IsPassError"] = "true";
             TempData["ErrorPassMess"] = "Current password does not match. Please re-enter.";
+            return RedirectToAction(nameof(Index), new { userId = user.Id });
+        }
+
+        #endregion
+
+        #region Address
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> AddAddress(ProfileViewModels request)
+        {
+            var email = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Email)?.Value;
+            var user = await _userManager.FindByEmailAsync(email);
+
+
+            if (!ModelState.IsValid)
+            {
+                var errors = ModelState.Values.SelectMany(x => x.Errors).Select(x => x.ErrorMessage);
+                var modelError = $"{string.Join(", ", errors)}";
+
+                TempData["IsAddressError"] = "true";
+                TempData["ErrorAddressMess"] = $"{modelError}. Please re-enter";
+                return RedirectToAction(nameof(Index), new { userId = user.Id });
+            }
+
+            if (request.AddressViewModel.ProfileTab == ProfileTab.Address)
+            {
+                TempData["RequestTab"] = ProfileConstraints.AddressTab;
+            }
+
+            var address = request.AddressViewModel.Address.Trim();
+            var fullName = request.AddressViewModel.FullName.Trim();
+            var phone = request.AddressViewModel.PhoneNumber.Trim();
+            var isDefault = request.AddressViewModel.IsDefault;
+
+            var isAddAddress = await _client.PostAsync(new PostAddUserAddress
+            {
+                PhoneNumber = phone,
+                Address = address,
+                FullName = fullName,
+                IsDefault = isDefault,
+                UserId = user.Id
+            });
+
+            if (isAddAddress.StatusCode != Common.Enums.StatusCode.Success)
+            {
+                TempData["IsAddError"] = "true";
+                TempData["ErrorAddMess"] = $"Error while adding address. {isAddAddress.ErrorMessage}.";
+                return RedirectToAction(nameof(Index), new { userId = user.Id });
+            }
+
+            TempData["SuccessAddressMess"] = "Adding address success. Please double-check";
+            return RedirectToAction(nameof(Index), new { userId = user.Id });
+        }
+
+        public async Task<IActionResult> UpdateAddress(int ud, int id)
+        {
+            var user = await _userManager.FindByIdAsync(ud.ToString());
+            if (user == null)
+            {
+                return RedirectToAction("ErrorForbidden", "Account");
+            }
+
+            var isCheckUser = CheckUserRequest(user);
+            if (!isCheckUser)
+            {
+                return RedirectToAction("ErrorForbidden", "Account");
+            }
+
+            var isSetDefault = await _client.PutAsync(new PutUpdateDefaultAddress
+            {
+                AddressId = id,
+                UserId = user.Id
+            });
+
+            if (isSetDefault.StatusCode != Common.Enums.StatusCode.Success)
+            {
+                TempData["IsAddError"] = "true";
+                TempData["ErrorAddMess"] = $"Error while adding address. {isSetDefault.ErrorMessage}.";
+                return RedirectToAction(nameof(Index), new { userId = user.Id });
+            }
+
+            TempData["SuccessAddressMess"] = "Set default address success. Please double-check";
             return RedirectToAction(nameof(Index), new { userId = user.Id });
         }
 

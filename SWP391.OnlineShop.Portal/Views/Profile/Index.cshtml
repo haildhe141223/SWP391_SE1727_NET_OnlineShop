@@ -22,13 +22,13 @@
                     <span>General</span>
                 </div>
             </button>
-            <button class="tab-header-items" data-bs-toggle="pill" data-bs-target="#v-pills-security" type="button">
+            <button class="tab-header-items" data-bs-toggle="pill" data-bs-target="#v-pills-security" type="button" id="tab-security">
                 <div class="header-item-content">
                     <i class="fas fa-key"></i>
                     <span>Security</span>
                 </div>
             </button>
-            <button class="tab-header-items" data-bs-toggle="pill" data-bs-target="#v-pills-addr" type="button">
+            <button class="tab-header-items" data-bs-toggle="pill" data-bs-target="#v-pills-addr" type="button" id="tab-address">
                 <div class="header-item-content">
                     <i class="fa-solid fa-map-location-dot"></i>
                     <span>Addresses</span>
@@ -40,18 +40,20 @@
                     <span>Vouchers</span>
                 </div>
             </button>
-            <button class="tab-header-items" data-bs-toggle="pill" data-bs-target="#v-pills-favor" type="button" id="tab-order">
+            <button class="tab-header-items" data-bs-toggle="pill" data-bs-target="#v-pills-order" type="button" id="tab-order">
                 <div class="header-item-content">
                     <i class="fa-solid fa-cart-arrow-down"></i>
                     <span>Orders</span>
                 </div>
             </button>
+            @*
             <button class="tab-header-items" data-bs-toggle="pill" data-bs-target="#v-pills-request" type="button" id="tab-request">
-                <div class="header-item-content">
-                    <i class="fa-regular fa-handshake"></i>
-                    <span>Collaboration</span>
-                </div>
+            <div class="header-item-content">
+            <i class="fa-regular fa-handshake"></i>
+            <span>Collaboration</span>
+            </div>
             </button>
+            *@
             @if (!string.IsNullOrEmpty(userRoles) && userRoles.Contains(RoleConstraints.Admin))
             {
                 <button class="tab-header-items" data-bs-toggle="pill" type="button" onclick="location.href = '@managementUrl'">
@@ -64,11 +66,11 @@
         </div>
         <div class="tab-content" id="v-pills-tabContent">
             @*tab profile*@
-            <partial name="ProfilePartial/_GeneralPartial" for="GeneralViewModel"/>
+            <partial name="ProfilePartial/_GeneralPartial" for="GeneralViewModel" />
             @*tab security*@
-            <partial name="ProfilePartial/_SecurityPartial" for="SecurityViewModel"/>
+            <partial name="ProfilePartial/_SecurityPartial" for="SecurityViewModel" />
             @*tab addresses*@
-            <partial name="ProfilePartial/_AddressPartial" />
+            <partial name="ProfilePartial/_AddressPartial" for="AddressViewModel" />
             @*tab vouchers*@
             <partial name="ProfilePartial/_VoucherPartial" />
             @*tab orders*@

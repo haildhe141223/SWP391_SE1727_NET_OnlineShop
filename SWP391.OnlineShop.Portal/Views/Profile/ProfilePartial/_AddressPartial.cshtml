@@ -1,4 +1,19 @@
-﻿<div class="tab-pane fade tab-content-item tab-content-secu" id="v-pills-addr">
+﻿@using SWP391.OnlineShop.ServiceModel.ViewModels.Profiles;
+@model AddressViewModels
+
+@{
+    var isError = false;
+    var errorMessage = TempData["ErrorAddressMess"] as string;
+    var successMessage = TempData["SuccessAddressMess"] as string;
+
+    if (TempData["IsAddressError"] != null)
+    {
+        isError = bool.Parse(TempData["IsAddressError"] as string ?? string.Empty);
+    }
+
+    var isSuccess = !string.IsNullOrEmpty(successMessage);
+}
+<div class="tab-pane fade tab-content-item tab-content-secu" id="v-pills-addr">
     <div class="secu-title">
         <span>Choose your addresses</span>
         <p>
@@ -7,62 +22,79 @@
             <a href="https://www.termsfeed.com/live/e3c51e1f-dd04-4568-ba9d-617bca9d4c5d" title="">Terms of Service</a>
         </p>
     </div>
+    @if (isSuccess)
+    {
+        <div class="alert-success" style="padding: 10px;margin: 15px;text-align: center;">@successMessage</div>
+    }
+    @if (isError)
+    {
+        <div class="wrong-login alert-danger" style="padding: 10px;margin: 15px;text-align: center;">@errorMessage</div>
+    }
     <div class="address-header">
         <a class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#addAddress">
             Add New Address
         </a>
     </div>
     <div class="address-container">
-        <div class="address-content">
-            <div class="address-left">
-                <p class="add-l-info">
-                    <span class="add-l-name">Lục Dương Hải</span>
-                    <span class="add-l-phone">| 0911000426</span>
-                </p>
-                <p class="add-l-address">
-                    Ký Túc Xá Khu A Đại Học Quốc Gia Cổng Chính
-                    Phường Đông Hòa, Thành Phố Dĩ An, Bình Dương
-                </p>
-                <div>
-                    <button type="button" class="btn btn-outline-danger">Default</button>
+        @foreach (var item in Model.AddressViewModelList)
+        {
+            <div class="address-content mt-3">
+                <div class="address-left">
+                    <p class="add-l-info">
+                        <span class="add-l-name">@item.FullName</span>
+                        <span class="add-l-phone">| @item.PhoneNumber</span>
+                    </p>
+                    <p class="add-l-address">
+                        @item.FullAddress
+                    </p>
+                </div>
+                <div class="address-right">
+                    <div>
+                        @*<a class="btn btn-outline-info" asp-route-id="@item.Id">Edit</a>*@
+                    </div>
+                    @if (!item.IsDefault)
+                    {
+                        <div>
+                            <a class="btn btn-outline-secondary" asp-route-ud="@item.UserId" asp-route-id="@item.Id">_ Set as Default</a>
+                        </div>
+                    }
+                    else
+                    {
+                        <div>
+                            <a class="btn btn-outline-danger pe-none">Default Address</a>
+                        </div>
+                    }
                 </div>
             </div>
-            <div class="address-right">
-                <div>
-                    <a class="btn btn-outline-info">Edit</a>
-                </div>
-                <div>
-                    <a class="btn btn-outline-secondary">Set as Default</a>
-                </div>
-            </div>
-        </div>
+        }
     </div>
 </div>
 
 <div class="modal fade" id="addAddress" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
-            <form>
+            <form asp-action="AddAddress" method="post">
                 <div class="modal-header">
                     <h5 class="modal-title" id="exampleModalLabel">ADD NEW ADDRESS</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
                     <div class="mb-3">
-                        <label for="" class="form-label">Full Name</label>
-                        <input type="text" class="form-control" id="">
+                        <input type="text" class="form-control" asp-for="ProfileTab" hidden readonly>
+                        <label asp-for="FullName" class="form-label">Full Name</label>
+                        <input type="text" class="form-control" asp-for="FullName">
                     </div>
                     <div class="mb-3">
-                        <label for="" class="form-label">Phone Number</label>
-                        <input type="text" class="form-control" id="">
+                        <label asp-for="PhoneNumber" class="form-label">Phone Number</label>
+                        <input type="text" class="form-control" asp-for="PhoneNumber">
                     </div>
                     <div class="mb-3">
-                        <label for="" class="form-label">Address</label>
-                        <textarea class="form-control" id="" rows="2"></textarea>
+                        <label asp-for="Address" class="form-label">Address</label>
+                        <textarea class="form-control" asp-for="Address" rows="2"></textarea>
                     </div>
                     <div class="mb-3">
-                        <input type="checkbox" class="form-check-input" id="add-checkout">
-                        <label class="form-check-label" for="add-checkout">Is Default</label>
+                        <input type="checkbox" class="form-check-input" asp-for="IsDefault">
+                        <label class="form-check-label" asp-for="IsDefault">Is Default</label>
                     </div>
                 </div>
                 <div class="modal-footer">
