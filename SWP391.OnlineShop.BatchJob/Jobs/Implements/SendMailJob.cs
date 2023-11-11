@@ -133,8 +133,8 @@ namespace SWP391.OnlineShop.BatchJob.Jobs.Implements
                 // Initialize mail instance
                 var mail = new MimeMessage();
 
-                mail.From.Add(new MailboxAddress("Eqa Systems", _smtp.Value.Email));
-                mail.Sender = new MailboxAddress("Eqa Systems", _smtp.Value.Email);
+                mail.From.Add(new MailboxAddress("Karma Shop Services", _smtp.Value.Email));
+                mail.Sender = new MailboxAddress("Karma Shop Services", _smtp.Value.Email);
 
                 // Prepare sending email
 

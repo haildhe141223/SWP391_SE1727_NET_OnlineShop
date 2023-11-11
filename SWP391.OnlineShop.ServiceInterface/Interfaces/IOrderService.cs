@@ -96,5 +96,12 @@ namespace SWP391.OnlineShop.ServiceInterface.Interfaces
         /// <param name="request"></param>
         /// <returns>list of orders</returns>
         List<OrderViewModels> Get(GetAllOrderByUser request);
-    }
+
+		/// <summary>
+		/// Get All orders
+		/// </summary>
+		/// <param name="request"></param>
+		/// <returns>list of orders</returns>
+		List<OrderViewModels> Get(GetAllOrder request);
+	}
 }
