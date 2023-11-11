@@ -27,10 +27,10 @@ public class AutoMapperConfigs : Profile
         CreateMap<Product, ProductViewModel>().ReverseMap();
         CreateMap<Post, PostViewModel>().ReverseMap();
         CreateMap<Post, ManagePostViewModel>().ReverseMap();
-		CreateMap<Tag, TagViewModel>().ReverseMap();
+        CreateMap<Tag, TagViewModel>().ReverseMap();
 
-		//// Category
-		CreateMap<Category, CategoryViewModel>().ReverseMap();
+        //// Category
+        CreateMap<Category, CategoryViewModel>().ReverseMap();
 
         //// Feedback
         CreateMap<FeedBack, FeedbackViewModels>().ReverseMap();
@@ -38,15 +38,18 @@ public class AutoMapperConfigs : Profile
         //// Email
         CreateMap<Email, EmailViewModel>().ReverseMap();
 
-		//// Voucher
-		CreateMap<Voucher, VoucherViewModels>().ReverseMap();
-		CreateMap<ProductVoucherViewModel, ProductVoucher>().ReverseMap();
+        //// Voucher
+        CreateMap<Voucher, VoucherViewModels>().ReverseMap();
+        CreateMap<ProductVoucherViewModel, ProductVoucher>().ReverseMap();
 
         //// Slider
         CreateMap<Slider, SliderViewModel>().ReverseMap();
 
         //// Address
         CreateMap<Address, AddressViewModel>().ReverseMap();
+
+        //// Contact
+        CreateMap<Email, EmailContactViewModel>().ReverseMap();
 
         if (unitOfWork != null)
         {
