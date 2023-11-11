@@ -19,10 +19,11 @@
                                         </p>
                                         <div class="add-bag d-flex align-items-center">
                                             <a class="add-btn" href=""><span class="lnr lnr-cross"></span></a>
-                                            @if(item.SalePrice == 0)
+                                            @if (item.SalePrice == 0)
                                             {
                                                 <span class="add-text text-uppercase" onclick="AddToCart(@item.Id,@item.Price)">Add to Bag</span>
-                                            }else
+                                            }
+                                            else
                                             {
                                                 <span class="add-text text-uppercase" onclick="AddToCart(@item.Id,@item.SalePrice)">Add to Bag</span>
                                             }
@@ -204,7 +205,6 @@
                                 </div>
                             }
                         }
-
                     }
                 </div>
             </div>
@@ -260,14 +260,15 @@
                                     <div class="prd-bottom">
                                         <a href="" class="social-info">
                                             <span class="ti-bag"></span>
-                                            @if(product.SalePrice == 0)
+                                            @if (product.SalePrice == 0)
                                             {
                                                 <p class="hover-text" onclick="AddToCart(@product.Id,@product.Price)">add to bag</p>
-                                            }else
+                                            }
+                                            else
                                             {
                                                 <p class="hover-text" onclick="AddToCart(@product.Id,@product.SalePrice)">add to bag</p>
                                             }
-                                                </a>
+                                        </a>
                                         <a href="" class="social-info">
                                             <span class="lnr lnr-heart"></span>
                                             <p class="hover-text">Wishlist</p>
@@ -302,8 +303,8 @@
                             </div>
                             <div class="prd-bottom">
                                 @*<a href="" class="social-info">
-                                    <span class="ti-bag"></span>
-                                    <p class="hover-text">add to bag</p>
+                                <span class="ti-bag"></span>
+                                <p class="hover-text">add to bag</p>
                                 </a>*@
                                 <a href="" class="social-info">
                                     <span class="lnr lnr-heart"></span>
@@ -354,9 +355,9 @@
                                 <h6 class="l-through">$210.00</h6>
                             </div>
                             <div class="prd-bottom">
-                               @*<a href="" class="social-info">
-                                    <span class="ti-bag"></span>
-                                    <p class="hover-text">add to bag</p>
+                                @*<a href="" class="social-info">
+                                <span class="ti-bag"></span>
+                                <p class="hover-text">add to bag</p>
                                 </a>*@
                                 <a href="" class="social-info">
                                     <span class="lnr lnr-heart"></span>
@@ -389,8 +390,8 @@
                             </div>
                             <div class="prd-bottom">
                                 @*<a href="" class="social-info">
-                                    <span class="ti-bag"></span>
-                                    <p class="hover-text">add to bag</p>
+                                <span class="ti-bag"></span>
+                                <p class="hover-text">add to bag</p>
                                 </a>*@
                                 <a href="" class="social-info">
                                     <span class="lnr lnr-heart"></span>
@@ -423,8 +424,8 @@
                             </div>
                             <div class="prd-bottom">
                                 @*<a href="" class="social-info">
-                                    <span class="ti-bag"></span>
-                                    <p class="hover-text">add to bag</p>
+                                <span class="ti-bag"></span>
+                                <p class="hover-text">add to bag</p>
                                 </a>*@
                                 <a href="" class="social-info">
                                     <span class="lnr lnr-heart"></span>
@@ -457,8 +458,8 @@
                             </div>
                             <div class="prd-bottom">
                                 @*<a href="" class="social-info">
-                                    <span class="ti-bag"></span>
-                                    <p class="hover-text">add to bag</p>
+                                <span class="ti-bag"></span>
+                                <p class="hover-text">add to bag</p>
                                 </a>*@
                                 <a href="" class="social-info">
                                     <span class="lnr lnr-heart"></span>
@@ -491,8 +492,8 @@
                             </div>
                             <div class="prd-bottom">
                                 @*<a href="" class="social-info">
-                                    <span class="ti-bag"></span>
-                                    <p class="hover-text">add to bag</p>
+                                <span class="ti-bag"></span>
+                                <p class="hover-text">add to bag</p>
                                 </a>*@
                                 <a href="" class="social-info">
                                     <span class="lnr lnr-heart"></span>
@@ -525,8 +526,8 @@
                             </div>
                             <div class="prd-bottom">
                                 @*<a href="" class="social-info">
-                                    <span class="ti-bag"></span>
-                                    <p class="hover-text">add to bag</p>
+                                <span class="ti-bag"></span>
+                                <p class="hover-text">add to bag</p>
                                 </a>*@
                                 <a href="" class="social-info">
                                     <span class="lnr lnr-heart"></span>
@@ -559,8 +560,8 @@
                             </div>
                             <div class="prd-bottom">
                                 @*<a href="" class="social-info">
-                                    <span class="ti-bag"></span>
-                                    <p class="hover-text">add to bag</p>
+                                <span class="ti-bag"></span>
+                                <p class="hover-text">add to bag</p>
                                 </a>*@
                                 <a href="" class="social-info">
                                     <span class="lnr lnr-heart"></span>
@@ -593,8 +594,8 @@
                             </div>
                             <div class="prd-bottom">
                                 @*<a href="" class="social-info">
-                                    <span class="ti-bag"></span>
-                                    <p class="hover-text">add to bag</p>
+                                <span class="ti-bag"></span>
+                                <p class="hover-text">add to bag</p>
                                 </a>*@
                                 <a href="" class="social-info">
                                     <span class="lnr lnr-heart"></span>
@@ -669,10 +670,11 @@
                                     </h4>
                                     <div class="add-bag d-flex align-items-center justify-content-center">
                                         <a class="add-btn" href=""><span class="ti-bag"></span></a>
-                                        @if(item.SalePrice == 0)
+                                        @if (item.SalePrice == 0)
                                         {
                                             <span class="add-text text-uppercase" onclick="AddToCart(@item.Id,@item.Price)">Add to Bag</span>
-                                        }else
+                                        }
+                                        else
                                         {
                                             <span class="add-text text-uppercase" onclick="AddToCart(@item.Id,@item.SalePrice)">Add to Bag</span>
                                         }
@@ -696,9 +698,9 @@
                                     for Sports person
                                 </h4>
                                 @*<div class="add-bag d-flex align-items-center justify-content-center">
-                                    <a class="add-btn" href=""><span class="ti-bag"></span></a>
-                                    <span class="add-text text-uppercase">Add to Bag</span>
-                                </div>*@
+                            <a class="add-btn" href=""><span class="ti-bag"></span></a>
+                            <span class="add-text text-uppercase">Add to Bag</span>
+                            </div>*@
                             </div>
                         </div>
                         <!-- single exclusive carousel -->
@@ -714,9 +716,9 @@
                                     for Sports person
                                 </h4>
                                 @*<div class="add-bag d-flex align-items-center justify-content-center">
-                                    <a class="add-btn" href=""><span class="ti-bag"></span></a>
-                                    <span class="add-text text-uppercase">Add to Bag</span>
-                                </div>*@
+                            <a class="add-btn" href=""><span class="ti-bag"></span></a>
+                            <span class="add-text text-uppercase">Add to Bag</span>
+                            </div>*@
                             </div>
                         </div>
                     }
