@@ -21,7 +21,7 @@ var serviceStackLicense = config.GetSection("ServiceStack:LicenseKey").Value;
 
 builder.WebHost.ConfigureKestrel(c =>
 {
-    c.Limits.KeepAliveTimeout = TimeSpan.FromMinutes(30);
+	c.Limits.KeepAliveTimeout = TimeSpan.FromMinutes(30);
 });
 
 var path = Directory.GetCurrentDirectory();
@@ -36,48 +36,49 @@ services.AddControllers();
 
 // Cors service
 services.AddCors(options =>
-    options.AddPolicy("CorsSettings",
-        p =>
-        {
-            p.WithOrigins("*");
-            p.AllowAnyMethod();
-            p.AllowAnyHeader();
-        }));
+	options.AddPolicy("CorsSettings",
+		p =>
+		{
+			p.WithOrigins("*");
+			p.AllowAnyMethod();
+			p.AllowAnyHeader();
+		}));
 
 // Add DbContext
 services.AddDbContext<OnlineShopContext>(options =>
 {
-    options.UseSqlServer(config.GetConnectionString("SWP391.OnlineShop"));
+	options.UseSqlServer(config.GetConnectionString("SWP391.OnlineShop"));
 });
 
 // Add services to the container.
 services.AddHangfire(c =>
 {
-    c.UseSimpleAssemblyNameTypeSerializer();
-    c.UseRecommendedSerializerSettings();
-    c.UseSqlServerStorage(config.GetConnectionString("SWP391.OnlineShop.HangFire"));
+	c.UseSimpleAssemblyNameTypeSerializer();
+	c.UseRecommendedSerializerSettings();
+	c.UseSqlServerStorage(config.GetConnectionString("SWP391.OnlineShop.HangFire"));
 });
 
 services.AddHangfireServer();
 
 // Add identity configs
 services.AddIdentity<User, Role>(options =>
-    {
-        options.Password.RequiredLength = 8;
-        options.Password.RequireUppercase = true;
-        options.Password.RequireLowercase = true;
-        options.Password.RequireDigit = true;
-        options.Password.RequireNonAlphanumeric = true;
-        options.User.AllowedUserNameCharacters = string.Join("",
-            LoginKeyConstraints.VietnameseDictionary);
+	{
+		options.Password.RequiredLength = 8;
+		options.Password.RequireUppercase = true;
+		options.Password.RequireLowercase = true;
+		options.Password.RequireDigit = true;
+		options.Password.RequireNonAlphanumeric = true;
+		options.User.AllowedUserNameCharacters = string.Join("",
+			LoginKeyConstraints.VietnameseDictionary);
 
-        options.Lockout.MaxFailedAccessAttempts = 5;
-        options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromDays(1);
-        options.User.RequireUniqueEmail = true;
-        options.SignIn.RequireConfirmedEmail = true;
-    })
-    .AddEntityFrameworkStores<OnlineShopContext>()
-    .AddDefaultTokenProviders();
+		options.Lockout.MaxFailedAccessAttempts = 5;
+		options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromDays(1);
+		options.User.RequireUniqueEmail = true;
+		options.SignIn.RequireConfirmedEmail = true;
+		options.Lockout.AllowedForNewUsers = false;
+	})
+	.AddEntityFrameworkStores<OnlineShopContext>()
+	.AddDefaultTokenProviders();
 
 // Configs dependence inject
 services.AddScoped<IUnitOfWork, UnitOfWork>();
@@ -93,7 +94,7 @@ services.Configure<Smtp>(config.GetSection("Smtp"));
 //services.AddAutoMapper(typeof(Program));
 services.AddScoped(provider => new MapperConfiguration(cfg =>
 {
-    cfg.AddProfile(new AutoMapperConfigs(provider.GetService<IUnitOfWork>()));
+	cfg.AddProfile(new AutoMapperConfigs(provider.GetService<IUnitOfWork>()));
 }).CreateMapper());
 
 var app = builder.Build();
@@ -101,8 +102,8 @@ var app = builder.Build();
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
 {
-    app.UseExceptionHandler("/Error");
-    app.UseHsts();
+	app.UseExceptionHandler("/Error");
+	app.UseHsts();
 }
 
 app.UseCors("CorsSettings");
