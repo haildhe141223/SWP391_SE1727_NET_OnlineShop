@@ -22,6 +22,7 @@ namespace SWP391.OnlineShop.ServiceModel.ViewModels.Products
         [Required(ErrorMessage = "Amount is required")]
         [Range(0, 1000, ErrorMessage = "Amount must greater than 0 and less than 1000")]
         public int Amount { get; set; }
+        public List<ProductSizeViewModel> ProductSize { get; set; }
 
         [Required(ErrorMessage = "Price is required")]
         [Range(0, double.MaxValue, ErrorMessage = "Price must greater than 0")]
