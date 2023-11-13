@@ -5,10 +5,6 @@
     var errorMess = TempData["ErrorMess"] as string;
 }
 
-<div class="m-headers" style="margin-top: 10% !important;">
-    <h4 class="fw-bold ml-5">Manage Slider</h4>
-</div>
-
 @if (!string.IsNullOrWhiteSpace(errorMess))
 {
     <div class="alert alert-danger my-2 text-center">
@@ -33,16 +29,16 @@
             </div>
             <div class="mb-3">
                 <label hidden asp-for="Id" class="form-label">Product ID</label>
-                <input hidden type="text" class="form-control" asp-for="Id" id="name">
+                <input hidden type="text" class="form-control" asp-for="Id">
             </div>
             <div class="mb-3">
                 <label asp-for="Title" class="form-label">Title</label>
-                <input type="text" class="form-control" asp-for="Title" id="name">
+                <input type="text" class="form-control" asp-for="Title">
                 <span asp-validation-for="Title" class="r-error d-block text-danger"></span>
             </div>
             <div class="mb-3">
                 <label asp-for="ThumbnailFile" class="form-label">Image</label><br />
-                <img width="300" height="300" src="@Model.Image"><br /><br />
+                <img width="300" height="300" src="@Model.Image" alt=""><br /><br />
                 <input asp-for="ThumbnailFile" type="file" class="form-control">
                 <span asp-validation-for="ThumbnailFile" class="r-error d-block text-danger"></span>
             </div>

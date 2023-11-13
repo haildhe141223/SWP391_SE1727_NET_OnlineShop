@@ -46,14 +46,12 @@
                     <span>Orders</span>
                 </div>
             </button>
-            @*
             <button class="tab-header-items" data-bs-toggle="pill" data-bs-target="#v-pills-request" type="button" id="tab-request">
-            <div class="header-item-content">
-            <i class="fa-regular fa-handshake"></i>
-            <span>Collaboration</span>
-            </div>
+                <div class="header-item-content">
+                    <i class="fa-regular fa-handshake"></i>
+                    <span>Collaboration</span>
+                </div>
             </button>
-            *@
             @if (!string.IsNullOrEmpty(userRoles) && userRoles.Contains(RoleConstraints.Admin))
             {
                 <button class="tab-header-items" data-bs-toggle="pill" type="button" onclick="location.href = '@managementUrl'">
