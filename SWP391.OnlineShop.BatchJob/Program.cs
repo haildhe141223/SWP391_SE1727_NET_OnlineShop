@@ -30,48 +30,48 @@ services.AddControllersWithViews();
 // Add DbContext service
 services.AddDbContext<OnlineShopContext>(options =>
 {
-    options.UseSqlServer(config.GetConnectionString("SWP391.OnlineShop"));
+	options.UseSqlServer(config.GetConnectionString("SWP391.OnlineShop"));
 });
 
 services.Configure<RouteOptions>(options =>
 {
-    options.LowercaseUrls = true;
+	options.LowercaseUrls = true;
 });
 
 // Add identity configs
 services.AddIdentity<User, Role>(options =>
-    {
-        options.Password.RequiredLength = 8;
-        options.Password.RequireUppercase = true;
-        options.Password.RequireLowercase = true;
-        options.Password.RequireDigit = true;
-        options.Password.RequireNonAlphanumeric = true;
-        options.User.AllowedUserNameCharacters = string.Join("",
-            LoginKeyConstraints.VietnameseDictionary);
+	{
+		options.Password.RequiredLength = 8;
+		options.Password.RequireUppercase = true;
+		options.Password.RequireLowercase = true;
+		options.Password.RequireDigit = true;
+		options.Password.RequireNonAlphanumeric = true;
+		options.User.AllowedUserNameCharacters = string.Join("",
+			LoginKeyConstraints.VietnameseDictionary);
 
-        options.Lockout.MaxFailedAccessAttempts = 5;
-        options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromDays(1);
-        options.User.RequireUniqueEmail = true;
-        //options.SignIn.RequireConfirmedEmail = true;
-    })
-    .AddEntityFrameworkStores<OnlineShopContext>()
-    .AddDefaultTokenProviders();
+		options.Lockout.MaxFailedAccessAttempts = 5;
+		options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromDays(1);
+		options.User.RequireUniqueEmail = true;
+		options.Lockout.AllowedForNewUsers = false;
+	})
+	.AddEntityFrameworkStores<OnlineShopContext>()
+	.AddDefaultTokenProviders();
 
 // Add defaultCookie services
 services.ConfigureApplicationCookie(options =>
 {
-    options.AccessDeniedPath = "/Account/ErrorForbidden";
-    options.LoginPath = "/Account/Login";
-    options.Cookie.Name = "OnlineShopUser";
-    options.ExpireTimeSpan = TimeSpan.FromDays(1);
+	options.AccessDeniedPath = "/Account/ErrorForbidden";
+	options.LoginPath = "/Account/Login";
+	options.Cookie.Name = "OnlineShopUser";
+	options.ExpireTimeSpan = TimeSpan.FromDays(1);
 });
 
 // Add services to the container.
 services.AddHangfire(c =>
 {
-    c.UseSimpleAssemblyNameTypeSerializer();
-    c.UseRecommendedSerializerSettings();
-    c.UseSqlServerStorage(config.GetConnectionString("SWP391.OnlineShop.HangFire"));
+	c.UseSimpleAssemblyNameTypeSerializer();
+	c.UseRecommendedSerializerSettings();
+	c.UseSqlServerStorage(config.GetConnectionString("SWP391.OnlineShop.HangFire"));
 });
 
 services.AddHangfireServer();
@@ -102,8 +102,8 @@ var app = builder.Build();
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
 {
-    app.UseExceptionHandler("/Error");
-    app.UseHsts();
+	app.UseExceptionHandler("/Error");
+	app.UseHsts();
 }
 
 app.UseHttpsRedirection();
@@ -115,24 +115,24 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllerRoute(
-    name: "route",
-    pattern: "{controller}/{action}/{id?}");
+	name: "route",
+	pattern: "{controller}/{action}/{id?}");
 
 // Hang-fire application control
 var authorize = new HangFireAuthorizationFilter();
 
 var options = new DashboardOptions
 {
-    Authorization = new[] { authorize }
+	Authorization = new[] { authorize }
 };
 
 var isDeveloperEnvironment = config.GetSection("DeveloperEnvironment:Enable")?.Value;
 if (isDeveloperEnvironment != null && Convert.ToBoolean(isDeveloperEnvironment))
 {
-    options = new DashboardOptions
-    {
-        IsReadOnlyFunc = context => !authorize.IsReadOnlyHangFireDashboard(context),
-    };
+	options = new DashboardOptions
+	{
+		IsReadOnlyFunc = context => !authorize.IsReadOnlyHangFireDashboard(context),
+	};
 }
 
 app.UseHangfireDashboard("/hangfire", options);
@@ -140,7 +140,7 @@ app.MapHangfireDashboard();
 
 var job = new RecurringRegistrationWindowServiceJob(null, null) as IJobRegistration;
 RecurringJob.AddOrUpdate<IJobRegistration>("WebService Hosted JobRegistration",
-    r => job.InitiateJob(),
-    "35 15 31 12 *");
+	r => job.InitiateJob(),
+	"35 15 31 12 *");
 
 app.Run();
