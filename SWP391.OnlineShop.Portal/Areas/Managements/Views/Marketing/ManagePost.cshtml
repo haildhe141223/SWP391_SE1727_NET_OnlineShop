@@ -21,21 +21,15 @@
             @successMess
         </div>
     }
-    <div class="m-headers ml-3" style="margin-top: 10% !important;">
-        <h4 class="fw-bold">Post Management</h4>
-        <div>
-            <a class="btn btn-outline-primary my-3" asp-area="Managements" asp-controller="Marketing" asp-action="AddPost">Add New Post</a>
-        </div>
+    <div>
+        <a class="btn btn-outline-primary my-3" asp-area="Managements" asp-controller="Marketing" asp-action="AddPost">Add New Post</a>
     </div>
 
     <div class="card shadow mb-4 mt-3">
-        <div class="card-header py-3">
-            <h6 class="m-0 font-weight-bold text-primary">Feedbacks</h6>
-        </div>
         <!-- DataTales Example -->
         <div class="card shadow mb-4">
             <div class="card-header py-3">
-                <h6 class="m-0 font-weight-bold text-primary">Feedbacks DataTables</h6>
+                <h6 class="m-0 font-weight-bold text-primary">Post DataTables</h6>
             </div>
             <div class="card-body">
                 <div class="table-responsive">
@@ -71,7 +65,9 @@
                                     <td>@postViewModel.Title</td>
                                     <td>@postViewModel.Brief</td>
                                     <td>@postViewModel.Featured</td>
-                                    <td><img width="300" height="300" src="@postViewModel.Thumbnail"></td>
+                                    <td>
+                                        <img width="60" src="@postViewModel.Thumbnail" alt="">
+                                    </td>
                                     <td>@Html.Raw(@postViewModel.Description)</td>
                                     <td>@postViewModel.Author</td>
                                     @if (postViewModel.Status == Status.Active)
@@ -85,11 +81,11 @@
                                     <td>
                                         <div class="table-action">
                                             <a class="m-1 btn btn-outline-info" asp-area="Managements" asp-controller="Marketing"
-                                               asp-action="ViewPost" asp-route-id="@postViewModel.Id">View</a>
+                                           asp-action="ViewPost" asp-route-id="@postViewModel.Id">View</a>
                                             <a class="m-1 btn btn-outline-success" asp-area="Managements" asp-controller="Marketing"
-                                               asp-action="EditPost" asp-route-id="@postViewModel.Id">Edit</a>
+                                           asp-action="EditPost" asp-route-id="@postViewModel.Id">Edit</a>
                                             <a class="m-1 btn btn-outline-danger btn-delete" asp-area="Managements" asp-controller="Marketing"
-                                               asp-action="DeletePost" asp-route-id="@postViewModel.Id">Delete</a>
+                                           asp-action="DeletePost" asp-route-id="@postViewModel.Id">Delete</a>
                                         </div>
                                     </td>
                                 </tr>

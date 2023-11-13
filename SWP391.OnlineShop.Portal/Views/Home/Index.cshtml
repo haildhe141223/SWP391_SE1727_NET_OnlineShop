@@ -19,10 +19,11 @@
                                         </p>
                                         <div class="add-bag d-flex align-items-center">
                                             <a class="add-btn" href=""><span class="lnr lnr-cross"></span></a>
-                                            @if(item.SalePrice == 0)
+                                            @if (item.SalePrice == 0)
                                             {
                                                 <span class="add-text text-uppercase" onclick="AddToCart(@item.Id,@item.Price)">Add to Bag</span>
-                                            }else
+                                            }
+                                            else
                                             {
                                                 <span class="add-text text-uppercase" onclick="AddToCart(@item.Id,@item.SalePrice)">Add to Bag</span>
                                             }
@@ -43,7 +44,7 @@
                         <div class="row single-slide align-items-center d-flex">
                             <div class="col-lg-5 col-md-6">
                                 <div class="banner-content">
-                                    <h1>Nike New <br>Collection!</h1>
+                                    <h1>New <br>Collection!</h1>
                                     <p>
                                         Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et
                                         dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation.
@@ -137,92 +138,6 @@
     </div>
 </section>
 <!-- end features Area -->
-<!-- Start category Area -->
-<section class="category-area">
-    <div class="container">
-        <div class="row justify-content-center">
-            <div class="col-lg-8 col-md-12">
-                <div class="row">
-                    @foreach (var item in Model.Categories)
-                    {
-                        if (Model.Categories.IndexOf(item) != -1)
-                        {
-                            if (Model.Categories.IndexOf(item) == 0)
-                            {
-                                <div class="col-lg-8 col-md-8">
-                                    <div class="single-deal text-center">
-                                        <div class="overlay"></div>
-                                        <img class="" src="@item.Thumbnail" alt="" style="width:300px !important; height:180px !important">
-                                        <a href="~/template/img/category/c1.jpg" class="img-pop-up" target="_blank">
-                                            <div class="deal-details">
-                                                <h6 class="deal-title">@item.CategoryName</h6>
-                                            </div>
-                                        </a>
-                                    </div>
-                                </div>
-                            }
-                            if (Model.Categories.IndexOf(item) == 1)
-                            {
-                                <div class="col-lg-4 col-md-4">
-                                    <div class="single-deal">
-                                        <div class="overlay"></div>
-                                        <img class="img-fluid w-100" src="@item.Thumbnail" alt="" style="width:300px !important; height:180px !important">
-                                        <a href="~/template/img/category/c1.jpg" class="img-pop-up" target="_blank">
-                                            <div class="deal-details">
-                                                <h6 class="deal-title">@item.CategoryName</h6>
-                                            </div>
-                                        </a>
-                                    </div>
-                                </div>
-                            }
-                            if (Model.Categories.IndexOf(item) == 2)
-                            {
-                                <div class="col-lg-4 col-md-4">
-                                    <div class="single-deal">
-                                        <div class="overlay"></div>
-                                        <img class="img-fluid w-100" src="@item.Thumbnail" alt="" style="width:4300px !important; height:180px !important">
-                                        <a href="~/template/img/category/c1.jpg" class="img-pop-up" target="_blank">
-                                            <div class="deal-details">
-                                                <h6 class="deal-title">@item.CategoryName</h6>
-                                            </div>
-                                        </a>
-                                    </div>
-                                </div>
-                            }
-                            if (Model.Categories.IndexOf(item) == 3)
-                            {
-                                <div class="col-lg-8 col-md-8">
-                                    <div class="single-deal text-center">
-                                        <div class="overlay"></div>
-                                        <img class="" src="@item.Thumbnail" alt="" style="width:300px !important; height:180px !important">
-                                        <a href="~/template/img/category/c1.jpg" class="img-pop-up" target="_blank">
-                                            <div class="deal-details">
-                                                <h6 class="deal-title">@item.CategoryName</h6>
-                                            </div>
-                                        </a>
-                                    </div>
-                                </div>
-                            }
-                        }
-
-                    }
-                </div>
-            </div>
-            <div class="col-lg-4 col-md-6">
-                <div class="single-deal">
-                    <div class="overlay"></div>
-                    <img class="img-fluid w-100" src="@Model.Categories.LastOrDefault()?.Thumbnail" alt="">
-                    <a href="~/template/img/category/c5.jpg" class="img-pop-up" target="_blank">
-                        <div class="deal-details">
-                            <h6 class="deal-title">@Model.Categories.LastOrDefault()?.CategoryName</h6>
-                        </div>
-                    </a>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
-<!-- End category Area -->
 <!-- start product Area -->
 <section class="owl-carousel active-product-area section_gap">
     <!-- single product slide -->
@@ -258,20 +173,20 @@
                                         <h6 class="l-through">@product.Price</h6>
                                     </div>
                                     <div class="prd-bottom">
-
                                         <a href="" class="social-info">
                                             <span class="ti-bag"></span>
-                                            @if(product.SalePrice == 0)
+                                            @if (product.SalePrice == 0)
                                             {
                                                 <p class="hover-text" onclick="AddToCart(@product.Id,@product.Price)">add to bag</p>
-                                            }else
+                                            }
+                                            else
                                             {
                                                 <p class="hover-text" onclick="AddToCart(@product.Id,@product.SalePrice)">add to bag</p>
                                             }
-                                                </a>
+                                        </a>
                                         <a href="" class="social-info">
                                             <span class="lnr lnr-heart"></span>
-                                            <p class="hover-text">Wishlist</p>
+                                            <p class="hover-text">WishList</p>
                                         </a>
                                         <a href="" class="social-info">
                                             <span class="lnr lnr-sync"></span>
@@ -302,14 +217,13 @@
                                 <h6 class="l-through">$210.00</h6>
                             </div>
                             <div class="prd-bottom">
-
                                 <a href="" class="social-info">
                                     <span class="ti-bag"></span>
                                     <p class="hover-text">add to bag</p>
                                 </a>
                                 <a href="" class="social-info">
                                     <span class="lnr lnr-heart"></span>
-                                    <p class="hover-text">Wishlist</p>
+                                    <p class="hover-text">WishList</p>
                                 </a>
                                 <a href="" class="social-info">
                                     <span class="lnr lnr-sync"></span>
@@ -356,14 +270,13 @@
                                 <h6 class="l-through">$210.00</h6>
                             </div>
                             <div class="prd-bottom">
-
                                 <a href="" class="social-info">
                                     <span class="ti-bag"></span>
                                     <p class="hover-text">add to bag</p>
                                 </a>
                                 <a href="" class="social-info">
                                     <span class="lnr lnr-heart"></span>
-                                    <p class="hover-text">Wishlist</p>
+                                    <p class="hover-text">WishList</p>
                                 </a>
                                 <a href="" class="social-info">
                                     <span class="lnr lnr-sync"></span>
@@ -391,14 +304,13 @@
                                 <h6 class="l-through">$210.00</h6>
                             </div>
                             <div class="prd-bottom">
-
                                 <a href="" class="social-info">
                                     <span class="ti-bag"></span>
                                     <p class="hover-text">add to bag</p>
                                 </a>
                                 <a href="" class="social-info">
                                     <span class="lnr lnr-heart"></span>
-                                    <p class="hover-text">Wishlist</p>
+                                    <p class="hover-text">WishList</p>
                                 </a>
                                 <a href="" class="social-info">
                                     <span class="lnr lnr-sync"></span>
@@ -426,14 +338,13 @@
                                 <h6 class="l-through">$210.00</h6>
                             </div>
                             <div class="prd-bottom">
-
                                 <a href="" class="social-info">
                                     <span class="ti-bag"></span>
                                     <p class="hover-text">add to bag</p>
                                 </a>
                                 <a href="" class="social-info">
                                     <span class="lnr lnr-heart"></span>
-                                    <p class="hover-text">Wishlist</p>
+                                    <p class="hover-text">WishList</p>
                                 </a>
                                 <a href="" class="social-info">
                                     <span class="lnr lnr-sync"></span>
@@ -461,14 +372,13 @@
                                 <h6 class="l-through">$210.00</h6>
                             </div>
                             <div class="prd-bottom">
-
                                 <a href="" class="social-info">
                                     <span class="ti-bag"></span>
                                     <p class="hover-text">add to bag</p>
                                 </a>
                                 <a href="" class="social-info">
                                     <span class="lnr lnr-heart"></span>
-                                    <p class="hover-text">Wishlist</p>
+                                    <p class="hover-text">WishList</p>
                                 </a>
                                 <a href="" class="social-info">
                                     <span class="lnr lnr-sync"></span>
@@ -496,14 +406,13 @@
                                 <h6 class="l-through">$210.00</h6>
                             </div>
                             <div class="prd-bottom">
-
                                 <a href="" class="social-info">
                                     <span class="ti-bag"></span>
                                     <p class="hover-text">add to bag</p>
                                 </a>
                                 <a href="" class="social-info">
                                     <span class="lnr lnr-heart"></span>
-                                    <p class="hover-text">Wishlist</p>
+                                    <p class="hover-text">WishList</p>
                                 </a>
                                 <a href="" class="social-info">
                                     <span class="lnr lnr-sync"></span>
@@ -531,14 +440,13 @@
                                 <h6 class="l-through">$210.00</h6>
                             </div>
                             <div class="prd-bottom">
-
                                 <a href="" class="social-info">
                                     <span class="ti-bag"></span>
                                     <p class="hover-text">add to bag</p>
                                 </a>
                                 <a href="" class="social-info">
                                     <span class="lnr lnr-heart"></span>
-                                    <p class="hover-text">Wishlist</p>
+                                    <p class="hover-text">WishList</p>
                                 </a>
                                 <a href="" class="social-info">
                                     <span class="lnr lnr-sync"></span>
@@ -566,14 +474,13 @@
                                 <h6 class="l-through">$210.00</h6>
                             </div>
                             <div class="prd-bottom">
-
                                 <a href="" class="social-info">
                                     <span class="ti-bag"></span>
                                     <p class="hover-text">add to bag</p>
                                 </a>
                                 <a href="" class="social-info">
                                     <span class="lnr lnr-heart"></span>
-                                    <p class="hover-text">Wishlist</p>
+                                    <p class="hover-text">WishList</p>
                                 </a>
                                 <a href="" class="social-info">
                                     <span class="lnr lnr-sync"></span>
@@ -601,14 +508,13 @@
                                 <h6 class="l-through">$210.00</h6>
                             </div>
                             <div class="prd-bottom">
-
                                 <a href="" class="social-info">
                                     <span class="ti-bag"></span>
                                     <p class="hover-text">add to bag</p>
                                 </a>
                                 <a href="" class="social-info">
                                     <span class="lnr lnr-heart"></span>
-                                    <p class="hover-text">Wishlist</p>
+                                    <p class="hover-text">WishList</p>
                                 </a>
                                 <a href="" class="social-info">
                                     <span class="lnr lnr-sync"></span>
@@ -675,14 +581,15 @@
                                         <h6 class="l-through">$@item.Price</h6>
                                     </div>
                                     <h4>
-                                        @item.Description
+                                        @item.ProductName
                                     </h4>
                                     <div class="add-bag d-flex align-items-center justify-content-center">
                                         <a class="add-btn" href=""><span class="ti-bag"></span></a>
-                                        @if(item.SalePrice == 0)
+                                        @if (item.SalePrice == 0)
                                         {
                                             <span class="add-text text-uppercase" onclick="AddToCart(@item.Id,@item.Price)">Add to Bag</span>
-                                        }else
+                                        }
+                                        else
                                         {
                                             <span class="add-text text-uppercase" onclick="AddToCart(@item.Id,@item.SalePrice)">Add to Bag</span>
                                         }
@@ -778,11 +685,15 @@
                         {
                             <div class="col-lg-4 col-md-4 col-sm-6 mb-20">
                                 <div class="single-related-product d-flex">
-                                    <a href="#"><img src="@productOfWeek.Thumbnail" width="70" height="70" alt=""></a>
+                                    <a asp-action="Details" asp-controller="Product" asp-route-id="@productOfWeek.Id">
+                                        <img src="@productOfWeek.Thumbnail" width="70" height="70" alt="">
+                                    </a>
                                     <div class="desc">
-                                        <a href="#" class="title">@productOfWeek.ProductName</a>
+                                        <a asp-action="Details" asp-controller="Product" asp-route-id="@productOfWeek.Id" class="title">
+                                            @productOfWeek.ProductName
+                                        </a>
                                         <div class="price">
-                                            <h6>@productOfWeek.SalePrice</h6>
+                                            <h6>@productOfWeek.Price</h6>
                                             <h6 class="l-through">@productOfWeek.SalePrice</h6>
                                         </div>
                                     </div>
@@ -816,17 +727,17 @@
             type: 'POST',
             data: data,
             success: function (response) {
-                $.toaster({ priority: 'success', title: 'Created', message: "Add To Cart Detail Succesfully" });
+                $.toaster({ priority: 'success', title: 'Created', message: "Add To Cart Detail Successfully" });
                 setTimeout(function () {
                     window.location.reload();
                 }, 1000);
             },
             failure: function (failed) {
-                alert(failed.responseText)
+                alert(failed.responseText);
                 //$.toaster({ priority: 'warning', title: 'Warning', message: failed.responseText });
             },
             error: function (error) {
-                alert(error.responseText)
+                alert(error.responseText);
                 //$.toaster({ priority: 'danger', title: 'Error', message: error.responseText });
             }
         });

@@ -1,0 +1,16 @@
+{
+  "dependencies": {
+    "mssql1": {
+      "secretStore": "AzureAppSettings",
+      "resourceId": "/subscriptions/[parameters('subscriptionId')]/resourceGroups/[parameters('resourceGroupName')]/providers/Microsoft.Sql/servers/osp-database/databases/OSP_Database",
+      "type": "mssql.azure",
+      "connectionId": "ConnectionStrings:SWP391.OnlineShop"
+    },
+    "mssql2": {
+      "secretStore": "AzureAppSettings",
+      "resourceId": "/subscriptions/[parameters('subscriptionId')]/resourceGroups/[parameters('resourceGroupName')]/providers/Microsoft.Sql/servers/osp-database/databases/OSP_Database_Hangfire",
+      "type": "mssql.azure",
+      "connectionId": "ConnectionStrings:SWP391.OnlineShop.HangFire"
+    }
+  }
+}

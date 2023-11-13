@@ -8,7 +8,7 @@
 
 <div class="container-fluid">
     <!-- Page Heading -->
-    <h1 class="h3 mb-2 text-gray-800">Manage Customers</h1>
+    <h1 class="h3 mb-2 text-gray-800">Customer Containers</h1>
     <p class="mb-4">
     </p>
     @if (!string.IsNullOrWhiteSpace(errorMess))
@@ -27,7 +27,7 @@
     <!-- DataTales Example -->
     <div class="card shadow mb-4">
         <div class="card-header py-3">
-            <h6 class="m-0 font-weight-bold text-primary">User DataTables</h6>
+            <h6 class="m-0 font-weight-bold text-primary">Customer DataTables</h6>
         </div>
         <div class="card-body">
             <div class="table-responsive">
@@ -103,7 +103,7 @@
                                     {
                                         <p hidden id="status">true</p>
                                         <a id="editCustomer" class="mx-1 btn btn-outline-danger" asp-route-id="@user.Id" asp-route-lockoutEnable="true"
-                                           asp-area="Managements" asp-controller="Marketing" asp-action="EditCustomer">Deactive</a>
+                                           asp-area="Managements" asp-controller="Marketing" asp-action="EditCustomer">DeActive</a>
                                     }
                                     else
                                     {

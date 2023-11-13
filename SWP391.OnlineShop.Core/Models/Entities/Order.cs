@@ -18,6 +18,7 @@ public class Order : BaseEntity<int>
     public string CustomerAddress { get; set; }
     public Gender CustomerGender { get; set; }
     public string CustomerEmail { get; set; }
+    public string CustomerPhone { get; set; }
     public decimal TotalCost { get; set; }
     public OrderStatus? OrderStatus { get; set; }
     public string OrderNotes { get; set; }

@@ -2,8 +2,10 @@
 {
     public class EmailConstraints
     {
+        public const string DomainSenderName = "Karma Shop Services";
         public const string DomainEmailRequired = "@FPT.EDU.VN";
         public const string EmailNotificationCategory = "Notification";
+        public const string EmailNotificationWithPasswordCategory = "NotificationWithPassword";
 
         #region Email Split Keys
         public const string EmailConstraintSplit = ";";

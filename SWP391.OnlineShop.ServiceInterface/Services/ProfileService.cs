@@ -3,12 +3,14 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using SWP391.OnlineShop.Common.Enums;
 using SWP391.OnlineShop.Core.Cores.UnitOfWork;
+using SWP391.OnlineShop.Core.Models.Entities;
 using SWP391.OnlineShop.Core.Models.Identities;
 using SWP391.OnlineShop.ServiceInterface.BaseServices;
 using SWP391.OnlineShop.ServiceInterface.Emails;
 using SWP391.OnlineShop.ServiceInterface.Interfaces;
 using SWP391.OnlineShop.ServiceInterface.Loggers;
 using SWP391.OnlineShop.ServiceModel.Results;
+using SWP391.OnlineShop.ServiceModel.ViewModels.Profiles;
 using static SWP391.OnlineShop.ServiceModel.ServiceModels.ProfileModels;
 
 namespace SWP391.OnlineShop.ServiceInterface.Services;
@@ -36,6 +38,72 @@ public class ProfileService : BaseService, IProfileService
         _unitOfWork = unitOfWork;
         _mapper = mapper;
         _mailService = mailService;
+    }
+
+    public async Task<List<AddressViewModel>> Get(GetUserAddresses request)
+    {
+        var user = await _userManager.Users
+                .Include(u => u.Addresses)
+                .FirstOrDefaultAsync(u => u.Id == request.UserId);
+
+        if (user != null)
+            return _mapper.Map<List<AddressViewModel>>(user.Addresses.OrderByDescending(x => x.IsDefault).ToList());
+
+        return new List<AddressViewModel>();
+    }
+
+    public async Task<BaseResultModel> Post(PostAddUserAddress request)
+    {
+        try
+        {
+            var user = await _userManager.Users
+                .Include(u => u.Addresses)
+                .FirstOrDefaultAsync(u => u.Id == request.UserId);
+
+            if (user != null)
+            {
+                if (request.IsDefault)
+                {
+                    var addresses = user.Addresses;
+                    foreach (var addressExist in addresses)
+                    {
+                        addressExist.IsDefault = false;
+                    }
+
+                    _unitOfWork.Context.UpdateRange(addresses);
+                    await _unitOfWork.CompleteAsync();
+                }
+
+                var address = new Address
+                {
+                    IsDefault = request.IsDefault,
+                    FullAddress = request.Address,
+                    UserId = user.Id,
+                    Status = Core.Models.Enums.Status.Active,
+                    PhoneNumber = request.PhoneNumber,
+                    FullName = request.FullName
+                };
+
+                await _unitOfWork.Context.AddAsync(address);
+                await _unitOfWork.CompleteAsync();
+
+                return new BaseResultModel
+                {
+                    StatusCode = StatusCode.Success
+                };
+            }
+
+            throw new Exception("User does not exist. Please re-check");
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError($"PostAddUserAddress request - {ex}");
+            return new BaseResultModel
+            {
+                ErrorMessage = ex.Message,
+                StatusCode = StatusCode.InternalServerError
+            };
+        }
     }
 
     public async Task<BaseResultModel> Put(PutUpdateUserName request)
@@ -175,6 +243,53 @@ public class ProfileService : BaseService, IProfileService
         catch (Exception ex)
         {
             _logger.LogError($"PutUpdateUserGender request - {ex}");
+            return new BaseResultModel
+            {
+                ErrorMessage = ex.Message,
+                StatusCode = StatusCode.InternalServerError
+            };
+        }
+    }
+
+    public async Task<BaseResultModel> Put(PutUpdateDefaultAddress request)
+    {
+        try
+        {
+            var user = await _userManager.Users
+                .Include(u => u.Addresses)
+                .FirstOrDefaultAsync(u => u.Id == request.UserId);
+
+            if (user != null)
+            {
+                var addresses = user.Addresses;
+                foreach (var addressExist in addresses)
+                {
+                    addressExist.IsDefault = false;
+                }
+
+                _unitOfWork.Context.UpdateRange(addresses);
+                await _unitOfWork.CompleteAsync();
+
+
+                var address = addresses.FirstOrDefault(x => x.Id == request.AddressId);
+                if (address != null)
+                {
+                    address.IsDefault = true;
+                    _unitOfWork.Context.Update(address);
+                    await _unitOfWork.CompleteAsync();
+                }
+
+                return new BaseResultModel
+                {
+                    StatusCode = StatusCode.Success
+                };
+            }
+
+            throw new Exception("User does not exist. Please re-check");
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError($"PutUpdateDefaultAddress request - {ex}");
             return new BaseResultModel
             {
                 ErrorMessage = ex.Message,
