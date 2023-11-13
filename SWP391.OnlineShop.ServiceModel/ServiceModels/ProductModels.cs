@@ -70,6 +70,7 @@ namespace SWP391.OnlineShop.ServiceModel.ServiceModels
     public class DeleteProduct : IReturn<BaseResultModel>
     {
         public int ProductId { get; set; }
+        public bool IsHardDelete { get; set; }
     }
 
     [Route("/Product/Comment", "POST")]

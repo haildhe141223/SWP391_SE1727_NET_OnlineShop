@@ -207,7 +207,8 @@ namespace SWP391.OnlineShop.Portal.Areas.Managements.Controllers
         {
             var result = await _client.DeleteAsync(new DeleteProduct
             {
-                ProductId = id
+                ProductId = id,
+                IsHardDelete = true
             });
             if (result.StatusCode == Common.Enums.StatusCode.Success)
             {
@@ -391,7 +392,8 @@ namespace SWP391.OnlineShop.Portal.Areas.Managements.Controllers
         {
             var result = await _client.DeleteAsync(new DeletePost
             {
-                PostId = id
+                PostId = id,
+                IsHardDelete = true
             });
             if (result.StatusCode == Common.Enums.StatusCode.Success)
             {
@@ -619,7 +621,8 @@ namespace SWP391.OnlineShop.Portal.Areas.Managements.Controllers
         {
             var result = await _client.DeleteAsync(new DeleteSlider
             {
-                SliderId = id
+                SliderId = id,
+                IsHardDelete = true
             });
             if (result.StatusCode == Common.Enums.StatusCode.Success)
             {
@@ -658,6 +661,20 @@ namespace SWP391.OnlineShop.Portal.Areas.Managements.Controllers
             }
             TempData["ErrorMess"] = $"Update fail! {result.ErrorMessage}";
             return RedirectToAction("ManageCustomer");
+        }
+
+        public async Task<IActionResult> ManageTag()
+        {
+            var email = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Email)?.Value;
+            if (string.IsNullOrEmpty(email))
+            {
+                return RedirectToAction("Login", "Account", new { area = "" });
+            }
+
+            //Get all products
+            var tags = await _client.GetAsync(new GetAllTag());
+
+            return View(tags);
         }
     }
 }

@@ -40,11 +40,11 @@
                         <li><a class="active" href="#"><span>Category</span> : @Model.ProductDetail?.Category?.CategoryName</a></li>
                         @if (Model.ProductDetail?.Amount > 0)
                         {
-                            <li><a href="#"><span>Availability</span> : In Stock</a></li>
+                            <li><span>Availability</span> : In Stock</li>
                         }
                         else
                         {
-                            <li><a href="#"><span>Availability</span> : Sold Out</a></li>
+                            <li><span>Availability</span> : Sold Out</li>
                         }
                     </ul>
                     <p>
@@ -52,7 +52,7 @@
                     </p>
                     <div class="product_count">
                         <label for="qty">Quantity:</label>
-                        <input type="text" name="qty" id="sst" maxlength="12" value="@Model.ProductDetail?.Amount" title="Quantity:" class="input-text qty">
+                        <input type="text" name="qty" id="sst" maxlength="12" value="1" title="Quantity:" class="input-text qty">
                         <button onclick="var result = document.getElementById('sst'); var sst = result.value; if( !isNaN( sst )) result.value++;return false;"
                                 class="increase items-count" type="button">
                             <i class="lnr lnr-chevron-up"></i>
@@ -64,8 +64,6 @@
                     </div>
                     <div class="card_area d-flex align-items-center">
                         <a class="primary-btn" onclick="AddToCart(@Model.ProductDetail?.Id,@Model.ProductDetail?.Price)">Add to Cart</a>
-                        <a class="icon_btn" href="#"><i class="lnr lnr lnr-diamond"></i></a>
-                        <a class="icon_btn" href="#"><i class="lnr lnr lnr-heart"></i></a>
                     </div>
                 </div>
             </div>
@@ -80,10 +78,10 @@
             <li class="nav-item">
                 <a class="nav-link" id="home-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home" aria-selected="true">Description</a>
             </li>
-            <li class="nav-item">
+            @* <li class="nav-item">
                 <a class="nav-link" id="profile-tab" data-toggle="tab" href="#profile" role="tab" aria-controls="profile"
                    aria-selected="false">Specification</a>
-            </li>
+            </li> *@
             <li class="nav-item">
                 <a class="nav-link active" id="contact-tab" data-toggle="tab" href="#contact" role="tab" aria-controls="contact"
                    aria-selected="false">Comments</a>
@@ -98,78 +96,6 @@
                 <p>
                     @Model.ProductDetail?.Description
                 </p>
-            </div>
-            <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
-                <div class="table-responsive">
-                    <table class="table">
-                        <tbody>
-                            <tr>
-                                <td>
-                                    <h5>Width</h5>
-                                </td>
-                                <td>
-                                    <h5>128mm</h5>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <h5>Height</h5>
-                                </td>
-                                <td>
-                                    <h5>508mm</h5>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <h5>Depth</h5>
-                                </td>
-                                <td>
-                                    <h5>85mm</h5>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <h5>Weight</h5>
-                                </td>
-                                <td>
-                                    <h5>52gm</h5>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <h5>Quality checking</h5>
-                                </td>
-                                <td>
-                                    <h5>yes</h5>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <h5>Freshness Duration</h5>
-                                </td>
-                                <td>
-                                    <h5>03days</h5>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <h5>When packeting</h5>
-                                </td>
-                                <td>
-                                    <h5>Without touch of hand</h5>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <h5>Each Box contains</h5>
-                                </td>
-                                <td>
-                                    <h5>60pcs</h5>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
             </div>
             <div class="tab-pane fade show active" id="contact" role="tabpanel" aria-labelledby="contact-tab">
                 <div class="row">
@@ -385,7 +311,7 @@
                                 <div class="single-related-product d-flex">
                                     <a href="#"><img src="@productOfWeek.Thumbnail" width="70" height="70" alt=""></a>
                                     <div class="desc">
-                                        <a href="#" class="title">@productOfWeek.ProductName</a>
+                                        <a asp-controller="Product" asp-action="Details" asp-route-id="@productOfWeek.Id" class="title">@productOfWeek.ProductName</a>
                                         <div class="price">
                                             <h6>@productOfWeek.SalePrice</h6>
                                             <h6 class="l-through">@productOfWeek.SalePrice</h6>
