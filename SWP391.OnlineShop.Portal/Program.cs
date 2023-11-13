@@ -16,7 +16,7 @@ var config = builder.Configuration;
 
 builder.WebHost.ConfigureKestrel(c =>
 {
-    c.Limits.KeepAliveTimeout = TimeSpan.FromMinutes(30);
+	c.Limits.KeepAliveTimeout = TimeSpan.FromMinutes(30);
 });
 
 var path = Directory.GetCurrentDirectory();
@@ -30,74 +30,74 @@ builder.Services.AddControllersWithViews();
 
 // Cors service
 services.AddCors(options =>
-    options.AddPolicy("CorsSettings",
-        p =>
-        {
-            p.WithOrigins("*");
-            p.AllowAnyMethod();
-            p.AllowAnyHeader();
-        }));
+	options.AddPolicy("CorsSettings",
+		p =>
+		{
+			p.WithOrigins("*");
+			p.AllowAnyMethod();
+			p.AllowAnyHeader();
+		}));
 
 // Add authentication services
 services.AddAuthentication()
-    .AddGoogle(googleOptions =>
-    {
-        var googleConfig = config.GetSection("Authentication:Google");
+	.AddGoogle(googleOptions =>
+	{
+		var googleConfig = config.GetSection("Authentication:Google");
 
-        googleOptions.ClientId = googleConfig["ClientId"];
-        googleOptions.ClientSecret = googleConfig["ClientSecret"];
-        // https://localhost:host/signin-google
-        googleOptions.CallbackPath = "/signin-google";
-    });
+		googleOptions.ClientId = googleConfig["ClientId"];
+		googleOptions.ClientSecret = googleConfig["ClientSecret"];
+		// https://localhost:host/signin-google
+		googleOptions.CallbackPath = "/signin-google";
+	});
 
 // Add DbContext
 services.AddDbContext<OnlineShopContext>(options =>
 {
-    options.UseSqlServer(config.GetConnectionString("SWP391.OnlineShop"));
+	options.UseSqlServer(config.GetConnectionString("SWP391.OnlineShop"));
 });
 
 services.Configure<RouteOptions>(options =>
 {
-    options.LowercaseUrls = true;
+	options.LowercaseUrls = true;
 });
 
 // Add time expired for session
 services.AddSession(options =>
 {
-    options.IdleTimeout = TimeSpan.FromDays(1);
+	options.IdleTimeout = TimeSpan.FromDays(1);
 });
 
 // Add time expired for identity token
 services.Configure<DataProtectionTokenProviderOptions>(options =>
-    options.TokenLifespan = TimeSpan.FromMinutes(30));
+	options.TokenLifespan = TimeSpan.FromMinutes(30));
 
 // Add identity configs
 services.AddIdentity<User, Role>(options =>
-    {
-        options.Password.RequiredLength = 8;
-        options.Password.RequireUppercase = true;
-        options.Password.RequireLowercase = true;
-        options.Password.RequireDigit = true;
-        options.Password.RequireNonAlphanumeric = true;
-        options.User.AllowedUserNameCharacters = string.Join("",
-            LoginKeyConstraints.VietnameseDictionary);
+	{
+		options.Password.RequiredLength = 8;
+		options.Password.RequireUppercase = true;
+		options.Password.RequireLowercase = true;
+		options.Password.RequireDigit = true;
+		options.Password.RequireNonAlphanumeric = true;
+		options.User.AllowedUserNameCharacters = string.Join("",
+			LoginKeyConstraints.VietnameseDictionary);
 
-        options.Lockout.MaxFailedAccessAttempts = 5;
-        options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromDays(1);
-        options.User.RequireUniqueEmail = true;
-        options.SignIn.RequireConfirmedEmail = true;
-        options.Lockout.AllowedForNewUsers = false;
-    })
-    .AddEntityFrameworkStores<OnlineShopContext>()
-    .AddDefaultTokenProviders();
+		options.Lockout.MaxFailedAccessAttempts = 5;
+		options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromDays(1);
+		options.User.RequireUniqueEmail = true;
+		options.SignIn.RequireConfirmedEmail = true;
+		options.Lockout.AllowedForNewUsers = false;
+	})
+	.AddEntityFrameworkStores<OnlineShopContext>()
+	.AddDefaultTokenProviders();
 
 // Add defaultCookie services
 services.ConfigureApplicationCookie(options =>
 {
-    options.AccessDeniedPath = "/Account/ErrorForbidden";
-    options.LoginPath = "/Account/Login";
-    options.Cookie.Name = "OnlineShopUser";
-    options.ExpireTimeSpan = TimeSpan.FromDays(3);
+	options.AccessDeniedPath = "/Account/ErrorForbidden";
+	options.LoginPath = "/Account/Login";
+	options.Cookie.Name = "OnlineShopUser";
+	options.ExpireTimeSpan = TimeSpan.FromDays(3);
 });
 
 // Add ServiceStack services
@@ -117,15 +117,15 @@ app.UseCors("CorsSettings");
 
 if (app.Environment.IsDevelopment())
 {
-    app.UseDeveloperExceptionPage();
-    var db = new OnlineShopDbInitializer();
-    db.Seed();
+	app.UseDeveloperExceptionPage();
+	var db = new OnlineShopDbInitializer();
+	db.Seed();
 }
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
 {
-    app.UseExceptionHandler("/Home/Error");
-    app.UseHsts();
+	app.UseExceptionHandler("/Home/Error");
+	app.UseHsts();
 }
 
 app.UseHttpsRedirection();
@@ -139,21 +139,21 @@ app.UseAuthorization();
 
 app.UseCookiePolicy(new CookiePolicyOptions()
 {
-    MinimumSameSitePolicy = SameSiteMode.Lax
+	MinimumSameSitePolicy = SameSiteMode.Lax
 });
 
 app.UseExceptionHandler("/Home/Error");
 
 app.UseEndpoints(endpoints =>
 {
-    endpoints.MapControllerRoute(
-        name: "areas",
-        pattern: "{area:exists}/{controller=Home}/{action=Index}/{id?}"
-    );
+	endpoints.MapControllerRoute(
+		name: "areas",
+		pattern: "{area:exists}/{controller=Home}/{action=Index}/{id?}"
+	);
 });
 
 app.MapControllerRoute(
-    name: "default",
-    pattern: "{controller=Home}/{action=Index}/{id?}");
+	name: "default",
+	pattern: "{controller=Home}/{action=Index}/{id?}");
 
 app.Run();
