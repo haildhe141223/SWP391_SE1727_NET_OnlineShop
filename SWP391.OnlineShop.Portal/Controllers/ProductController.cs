@@ -1,5 +1,7 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.EntityFrameworkCore;
 using ServiceStack;
 using SWP391.OnlineShop.Core.Models.Identities;
 using SWP391.OnlineShop.ServiceInterface.Loggers;
@@ -74,6 +76,10 @@ namespace SWP391.OnlineShop.Portal.Controllers
                 ProductDetail = product,
                 ProductsOfWeek = dealProductOfWeeks
             };
+
+            var sizeList = product.ProductSizes.Select
+            (x => new SelectListItem { Value = Convert.ToString(x.Size.SizeId), Text = x.Size.SizeType }).ToList();
+            ViewBag.SizeLists = sizeList;
 
             return View(productDetail);
         }
