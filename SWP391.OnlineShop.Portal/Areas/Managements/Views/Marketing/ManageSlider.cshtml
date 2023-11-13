@@ -6,7 +6,7 @@
 }
 <div class="container-fluid">
     <!-- Page Heading -->
-    <h1 class="h3 mb-2 text-gray-800">Post Containers</h1>
+    <h1 class="h3 mb-2 text-gray-800">Slider Containers</h1>
     @if (!string.IsNullOrWhiteSpace(errorMess))
     {
         <div class="alert alert-danger my-2 text-center">
@@ -19,22 +19,16 @@
             @successMess
         </div>
     }
-    <div class="m-headers ml-3" style="margin-top: 10% !important;">
-        <h4 class="fw-bold">Slider Management</h4>
-        <div>
-            <a class="btn btn-outline-primary my-3" asp-area="Managements" asp-controller="Marketing" asp-action="AddSlider">Add New Slider</a>
-        </div>
 
+    <div>
+        <a class="btn btn-outline-primary my-3" asp-area="Managements" asp-controller="Marketing" asp-action="AddSlider">Add New Slider</a>
     </div>
 
     <div class="card shadow mb-4 mt-3">
-        <div class="card-header py-3">
-            <h6 class="m-0 font-weight-bold text-primary">Feedbacks</h6>
-        </div>
         <!-- DataTales Example -->
         <div class="card shadow mb-4">
             <div class="card-header py-3">
-                <h6 class="m-0 font-weight-bold text-primary">Feedbacks DataTables</h6>
+                <h6 class="m-0 font-weight-bold text-primary">Slider DataTables</h6>
             </div>
             <div class="card-body">
                 <div class="table-responsive">
@@ -62,7 +56,9 @@
                             {
                                 <tr>
                                     <td>@sliderViewModel.Title</td>
-                                    <td><img width="300" height="300" src="@sliderViewModel.Image"></td>
+                                    <td>
+                                        <img width="60" src="@sliderViewModel.Image" alt="">
+                                    </td>
                                     <td>@sliderViewModel.BlackLink</td>
                                     @if (sliderViewModel.Status == Status.Active)
                                     {
@@ -75,11 +71,11 @@
                                     <td>
                                         <div class="table-action">
                                             <a class="m-1 btn btn-outline-info" asp-area="Managements" asp-controller="Marketing"
-                                               asp-action="ViewSlider" asp-route-id="@sliderViewModel.Id">View</a>
+                                           asp-action="ViewSlider" asp-route-id="@sliderViewModel.Id">View</a>
                                             <a class="m-1 btn btn-outline-success" asp-area="Managements" asp-controller="Marketing"
-                                               asp-action="EditSlider" asp-route-id="@sliderViewModel.Id">Edit</a>
+                                           asp-action="EditSlider" asp-route-id="@sliderViewModel.Id">Edit</a>
                                             <a class="m-1 btn btn-outline-danger btn-delete" asp-area="Managements" asp-controller="Marketing"
-                                               asp-action="DeleteSlider" asp-route-id="@sliderViewModel.Id">Delete</a>
+                                           asp-action="DeleteSlider" asp-route-id="@sliderViewModel.Id">Delete</a>
                                         </div>
                                     </td>
                                 </tr>

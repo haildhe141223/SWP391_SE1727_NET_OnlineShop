@@ -4,10 +4,6 @@
     var statusList = ViewData["StatusList"] as SelectList;
 }
 
-<div class="m-headers" style="margin-top: 10% !important;">
-    <h4 class="fw-bold ml-5">Manage Post</h4>
-</div>
-
 <!-- DataTales Example -->
 <div class="card shadow mb-4">
     <div class="card-header py-3">
@@ -24,7 +20,7 @@
             </div>
             <div class="mb-3">
                 <label asp-for="ThumbnailFile" class="form-label">Thumbnail</label><br />
-                <img width="300" height="300" src="@Model.Thumbnail"><br /><br />
+                <img width="300" height="300" src="@Model.Thumbnail" alt=""><br /><br />
                 <span asp-validation-for="ThumbnailFile" class="r-error d-block text-danger"></span>
             </div>
             <div hidden class="mb-3">
@@ -55,11 +51,14 @@
             <div class="mb-3">
                 <label asp-for="CategoryId" class="form-label">Category</label><br />
                 <select disabled asp-for="CategoryId" class="form-control" asp-items="@genreList"></select>
-            </div><br /><br />
+            </div>
+            <br />
+            <br />
             <div class="mb-3">
                 <label asp-for="Status" class="form-label">Status</label><br />
                 <select disabled asp-for="Status" class="form-control" asp-items="@statusList"></select>
-            </div><br />
+            </div>
+            <br />
             <a type="button" class="btn btn-secondary" asp-action="">Back</a>
             <button asp-area="Managements" asp-controller="Marketing" asp-action="EditPost" asp-route-id="@Model.Id" class="btn btn-primary">Edit</button>
             <button asp-area="Managements" asp-controller="Marketing" asp-action="DeletePost" asp-route-id="@Model.Id" class="btn btn-danger">Delete</button>

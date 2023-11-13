@@ -5,10 +5,6 @@
     var errorMess = TempData["ErrorMess"] as string;
 }
 
-<div class="m-headers" style="margin-top: 10% !important;">
-    <h4 class="fw-bold ml-5">Manage Feedback</h4>
-</div>
-
 @if (!string.IsNullOrWhiteSpace(errorMess))
 {
     <div class="alert alert-danger my-2 text-center">
@@ -32,16 +28,16 @@
             </div>
             <div class="mb-3">
                 <label hidden asp-for="Id" class="form-label">Feedback ID</label>
-                <input disabled hidden type="text" class="form-control" asp-for="Id" id="name">
+                <input disabled hidden type="text" class="form-control" asp-for="Id">
             </div>
             <div class="mb-3">
                 <label asp-for="UserName" class="form-label">User Name</label>
-                <input disabled type="text" class="form-control" asp-for="UserName" id="name">
+                <input disabled type="text" class="form-control" asp-for="UserName">
                 <span asp-validation-for="UserName" class="r-error d-block text-danger"></span>
             </div>
             <div class="mb-3">
                 <label asp-for="Email" class="form-label">Email</label><br />
-                <input disabled type="text" class="form-control" asp-for="Email" id="name">
+                <input disabled type="text" class="form-control" asp-for="Email">
                 <span asp-validation-for="Email" class="r-error d-block text-danger"></span>
             </div>
             <div hidden class="mb-3">
