@@ -183,7 +183,7 @@ namespace SWP391.OnlineShop.ServiceInterface.Services
             return new List<ProductViewModel>();
         }
 
-        public async Task<BaseResultModel> Post(PostAddProduct request)
+		public async Task<BaseResultModel> Post(PostAddProduct request)
         {
             var result = new BaseResultModel();
             try

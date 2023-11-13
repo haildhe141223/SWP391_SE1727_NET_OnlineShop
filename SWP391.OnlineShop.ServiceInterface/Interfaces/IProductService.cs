@@ -82,6 +82,6 @@ namespace SWP391.OnlineShop.ServiceInterface.Interfaces
         /// <param name="request"></param>
         /// <returns>product of voucher</returns>
         List<ProductViewModel> Get(GetProductOfVoucher request);
-    }
+	}
 }
 
