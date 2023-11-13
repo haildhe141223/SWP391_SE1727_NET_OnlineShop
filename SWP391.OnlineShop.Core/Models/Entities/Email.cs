@@ -15,4 +15,5 @@ public class Email : BaseEntity<int>
     public string ErrorMessage { get; set; }
     public MailStatus MailStatus { get; set; }
     public int RetryCounter { get; set; }
+    public string CreatedBy { get; set; }
 }

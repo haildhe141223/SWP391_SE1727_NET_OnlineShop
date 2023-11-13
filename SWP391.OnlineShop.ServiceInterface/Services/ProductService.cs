@@ -186,12 +186,13 @@ namespace SWP391.OnlineShop.ServiceInterface.Services
             var result = new BaseResultModel();
             try
             {
+                //TODO: PhuongNL amount error
                 var product = new Product()
                 {
                     ProductName = request.ProductName,
                     Thumbnail = request.Thumbnail,
                     Description = request.Description,
-                    Amount = request.Amount,
+                    //Amount = request.Amount,
                     Price = request.Price,
                     SalePrice = request.SalePrice,
                     CategoryId = request.CategoryId,
@@ -247,10 +248,12 @@ namespace SWP391.OnlineShop.ServiceInterface.Services
                     {
                         product.Thumbnail = request.Thumbnail;
                     }
-                    if (request.Amount > 0)
-                    {
-                        product.Amount = request.Amount;
-                    }
+
+                    //TODO: PhuongNL check amount here
+                    //if (request.Amount > 0)
+                    //{
+                    //    product.Amount = request.Amount;
+                    //}
                     if (request.Price > 0)
                     {
                         product.Price = request.Price;
