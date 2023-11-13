@@ -19,9 +19,8 @@ public class Voucher : BaseEntity<int>
     public User User { get; set; }
     public DateTime StartDateTime { get; set; }
     public DateTime EndDateTime { get; set; }
-	public VoucherType Type { get; set; }
-	public decimal Value { get; set; }
-	public ICollection<ProductVoucher> ProductVouchers { get; set; }
+    public VoucherType Type { get; set; }
+    public decimal Value { get; set; }
+    public ICollection<ProductVoucher> ProductVouchers { get; set; }
     public ICollection<UserVoucher> UserVouchers { get; set; }
-
 }

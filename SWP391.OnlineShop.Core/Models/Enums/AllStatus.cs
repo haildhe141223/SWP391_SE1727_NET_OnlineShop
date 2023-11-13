@@ -34,12 +34,12 @@ public enum OrderStatus
     InCartDetail = 0,
     InCartContact = 1,
     InCartCompletion = 2,
-	WaitingShipperToDeliverUnPaid = 3,
+    WaitingShipperToDeliverUnPaid = 3,
     WaitingShipperToDeliver = 4,
     Delivering = 5,
     Delivered = 6,
     Received = 7,
-	DeliveringUnPaid = 8,
+    DeliveringUnPaid = 8,
     Canceled = 9
 }
 
@@ -47,4 +47,12 @@ public enum VoucherType
 {
     Percent = 0,
     Money = 1
+}
+
+public enum ProductType
+{
+    InStock = 0,
+    SoldOut = 1,
+    InComing = 2,
+    Event = 3
 }

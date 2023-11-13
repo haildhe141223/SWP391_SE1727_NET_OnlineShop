@@ -18,5 +18,8 @@ public class FeedBackConfigs : IEntityTypeConfiguration<FeedBack>
             .WithMany(p => p.FeedBacks)
             .HasForeignKey(fb => fb.ProductId)
             .OnDelete(DeleteBehavior.Cascade);
+
+        builder.Property(fb => fb.RatedStar)
+            .HasPrecision(18, 2);
     }
 }

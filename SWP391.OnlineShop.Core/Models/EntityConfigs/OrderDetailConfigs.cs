@@ -18,5 +18,11 @@ public class OrderDetailConfigs : IEntityTypeConfiguration<OrderDetail>
             .WithMany(p => p.OrderDetails)
             .HasForeignKey(o => o.ProductId)
             .OnDelete(DeleteBehavior.Cascade);
+
+        builder.Property(fb => fb.SalePrice)
+            .HasPrecision(18, 2);
+
+        builder.Property(fb => fb.UnitPrice)
+            .HasPrecision(18, 2);
     }
 }

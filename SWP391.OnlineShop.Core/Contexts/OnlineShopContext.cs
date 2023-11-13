@@ -33,15 +33,14 @@ public class OnlineShopContext : IdentityDbContext<User, Role, int>
     public DbSet<ProductTag> ProductTags { get; set; }
     public DbSet<ProductVoucher> ProductVouchers { get; set; }
     public DbSet<UserVoucher> UserVouchers { get; set; }
-
     public DbSet<Setting> Settings { get; set; }
     public DbSet<Slider> Sliders { get; set; }
     public DbSet<Address> Addresses { get; set; }
     public DbSet<District> Districts { get; set; }
     public DbSet<Province> Provinces { get; set; }
     public DbSet<Ward> Wards { get; set; }
-
-
+    public DbSet<Size> Sizes { get; set; }
+    public DbSet<ProductSize> ProductSizes { get; set; }
 
     protected override void OnModelCreating(ModelBuilder builder)
     {
@@ -58,7 +57,8 @@ public class OnlineShopContext : IdentityDbContext<User, Role, int>
         builder.ApplyConfiguration(new ProductVoucherConfigs());
         builder.ApplyConfiguration(new UserVoucherConfigs());
         builder.ApplyConfiguration(new VoucherConfigs());
-        builder.ApplyConfiguration(new AddressConfig());
+        builder.ApplyConfiguration(new AddressConfigs());
+        builder.ApplyConfiguration(new ProductSizeConfigs());
 
         // Custom Identities Configs
         // Change name of identity tables
