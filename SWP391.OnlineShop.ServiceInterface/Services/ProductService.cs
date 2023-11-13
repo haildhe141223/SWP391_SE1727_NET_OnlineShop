@@ -36,7 +36,7 @@ namespace SWP391.OnlineShop.ServiceInterface.Services
             var result = new BaseResultModel();
             try
             {
-                _unitOfWork.Products.Delete(request.ProductId);
+                _unitOfWork.Products.Delete(request.ProductId, request.IsHardDelete);
                 var rows = await _unitOfWork.CompleteAsync();
                 if (rows > 0)
                 {
@@ -58,7 +58,9 @@ namespace SWP391.OnlineShop.ServiceInterface.Services
             var result = new List<ProductViewModel>();
             try
             {
-                var product = _unitOfWork.Products.GetAll().OrderByDescending(x => x.CreatedDateTime).ToList();
+                var product = _unitOfWork.Products.GetAll()
+                    .Where(x => x.Status == Core.Models.Enums.Status.Active)
+                    .OrderByDescending(x => x.CreatedDateTime).ToList();
                 result = _mapper.Map<List<ProductViewModel>>(product);
                 return result;
             }

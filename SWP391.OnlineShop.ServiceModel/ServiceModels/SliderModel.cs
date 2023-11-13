@@ -41,6 +41,7 @@ namespace SWP391.OnlineShop.ServiceModel.ServiceModels
         public class DeleteSlider : IReturn<BaseResultModel>
         {
             public int SliderId { get; set; }
+            public bool IsHardDelete { get; set; }
         }
     }
 }

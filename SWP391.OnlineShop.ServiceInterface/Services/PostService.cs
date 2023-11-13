@@ -34,7 +34,7 @@ namespace SWP391.OnlineShop.ServiceInterface.Services
             var result = new BaseResultModel();
             try
             {
-                _unitOfWork.Posts.Delete(request.PostId);
+                _unitOfWork.Posts.Delete(request.PostId, request.IsHardDelete);
                 var rows = await _unitOfWork.CompleteAsync();
                 if (rows > 0)
                 {
@@ -56,7 +56,9 @@ namespace SWP391.OnlineShop.ServiceInterface.Services
             var result = new List<PostViewModel>();
             try
             {
-                var posts = _unitOfWork.Posts.GetAllPost().OrderByDescending(x => x.CreatedDateTime);
+                var posts = _unitOfWork.Posts.GetAllPost()
+                    .Where(x => x.Status == Core.Models.Enums.Status.Active)
+                    .OrderByDescending(x => x.CreatedDateTime);
                 foreach (var post in posts)
                 {
                     var postVm = _mapper.Map<PostViewModel>(post);

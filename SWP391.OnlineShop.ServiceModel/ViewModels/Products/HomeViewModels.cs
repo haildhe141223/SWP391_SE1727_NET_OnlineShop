@@ -1,4 +1,4 @@
-﻿using SWP391.OnlineShop.ServiceModel.ViewModels.Categories;
+﻿using SWP391.OnlineShop.ServiceModel.ViewModels.Settings;
 
 namespace SWP391.OnlineShop.ServiceModel.ViewModels.Products
 {
@@ -8,6 +8,6 @@ namespace SWP391.OnlineShop.ServiceModel.ViewModels.Products
         public List<ProductViewModel> HotDealProduct { get; set; }
         public ProductViewModel ProductDetail { get; set; }
         public List<ProductViewModel> ProductsOfWeek { get; set; }
-        public List<CategoryViewModel> Categories { get; set; }
+        public List<SliderViewModel> Sliders { get; set; }
     }
 }

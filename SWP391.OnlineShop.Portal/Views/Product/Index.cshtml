@@ -110,25 +110,16 @@
 									<img class="img-fluid" src="@product.Thumbnail" alt="">
 									<div class="product-details">
 										<h6>
-											@product.ProductName
+											<a asp-controller="Product" asp-action="Details" asp-route-id="@product.Id">@product.ProductName</a>
 										</h6>
 										<div class="price">
 											<h6>$@product.SalePrice</h6>
 											<h6 class="l-through">$@product.Price</h6>
 										</div>
 										<div class="prd-bottom">
-
 											<a href="" class="social-info">
 												<span class="ti-bag"></span>
 												<p class="hover-text">add to bag</p>
-											</a>
-											<a href="" class="social-info">
-												<span class="lnr lnr-heart"></span>
-												<p class="hover-text">WishList</p>
-											</a>
-											<a href="" class="social-info">
-												<span class="lnr lnr-sync"></span>
-												<p class="hover-text">compare</p>
 											</a>
 											<a asp-action="Details" asp-controller="Product" asp-route-id="@product.Id" class="social-info">
 												<span class="lnr lnr-move"></span>
@@ -190,7 +181,7 @@
 								<div class="single-related-product d-flex">
 									<a href="#"><img src="@product.Thumbnail" width="70" height="70" alt=""></a>
 									<div class="desc">
-										<a href="#" class="title">@product.ProductName</a>
+										<a asp-controller="Product" asp-action="Details" asp-route-id="@product.Id" class="title">@product.ProductName</a>
 										<div class="price">
 											<h6>$@product.SalePrice</h6>
 											<h6 class="l-through">$@product.Price</h6>
