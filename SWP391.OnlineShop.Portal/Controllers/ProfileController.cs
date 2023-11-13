@@ -321,26 +321,27 @@ namespace SWP391.OnlineShop.Portal.Controllers
         [HttpPost]
         public async Task<IActionResult> ChangePassword(ProfileViewModels request)
         {
-            var email = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Email)?.Value;
-            var user = await _userManager.FindByEmailAsync(email);
-            var password = request.SecurityViewModel.CurrentPassword.Trim();
-            var newPassword = request.SecurityViewModel.NewPassword.Trim();
-            var retypePassword = request.SecurityViewModel.RePassword.Trim();
-
             if (request.SecurityViewModel.ProfileTab == ProfileTab.Security)
             {
                 TempData["RequestTab"] = ProfileConstraints.SecurityTab;
             }
 
+            var email = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Email)?.Value;
+            var user = await _userManager.FindByEmailAsync(email);
+
             if (!ModelState.IsValid)
             {
                 var errors = ModelState.Values.SelectMany(x => x.Errors).Select(x => x.ErrorMessage);
-                var modelError = $"{string.Join(", ", errors)}";
+                var modelError = $"{string.Join(", </br>", errors)}";
 
                 TempData["IsPassError"] = "true";
                 TempData["ErrorPassMess"] = $"{modelError}. Please re-enter";
                 return RedirectToAction(nameof(Index), new { userId = user.Id });
             }
+
+            var password = request.SecurityViewModel.CurrentPassword.Trim();
+            var newPassword = request.SecurityViewModel.NewPassword.Trim();
+            var retypePassword = request.SecurityViewModel.RePassword.Trim();
 
             var isPassword = await _userManager.CheckPasswordAsync(user, password);
             if (isPassword)
@@ -377,28 +378,27 @@ namespace SWP391.OnlineShop.Portal.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> AddAddress(ProfileViewModels request)
         {
+            if (request.AddressViewModel.ProfileTab == ProfileTab.Address)
+            {
+                TempData["RequestTab"] = ProfileConstraints.AddressTab;
+            }
+
             var email = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Email)?.Value;
             var user = await _userManager.FindByEmailAsync(email);
-
 
             if (!ModelState.IsValid)
             {
                 var errors = ModelState.Values.SelectMany(x => x.Errors).Select(x => x.ErrorMessage);
-                var modelError = $"{string.Join(", ", errors)}";
+                var modelError = $"{string.Join(", </br>", errors)}";
 
                 TempData["IsAddressError"] = "true";
                 TempData["ErrorAddressMess"] = $"{modelError}. Please re-enter";
                 return RedirectToAction(nameof(Index), new { userId = user.Id });
             }
 
-            if (request.AddressViewModel.ProfileTab == ProfileTab.Address)
-            {
-                TempData["RequestTab"] = ProfileConstraints.AddressTab;
-            }
-
-            var address = request.AddressViewModel.Address.Trim();
-            var fullName = request.AddressViewModel.FullName.Trim();
-            var phone = request.AddressViewModel.PhoneNumber.Trim();
+            var address = request.AddressViewModel.Address.Trim().ReplaceSpecialCharacters();
+            var fullName = request.AddressViewModel.FullName.Trim().ReplaceSpecialCharacters();
+            var phone = request.AddressViewModel.PhoneNumber.Trim().ReplaceSpecialCharacters();
             var isDefault = request.AddressViewModel.IsDefault;
 
             var isAddAddress = await _client.PostAsync(new PostAddUserAddress
@@ -421,8 +421,10 @@ namespace SWP391.OnlineShop.Portal.Controllers
             return RedirectToAction(nameof(Index), new { userId = user.Id });
         }
 
-        public async Task<IActionResult> UpdateAddress(int ud, int id)
+        public async Task<IActionResult> SetAsDefault(int ud, int id)
         {
+            TempData["RequestTab"] = ProfileConstraints.AddressTab;
+
             var user = await _userManager.FindByIdAsync(ud.ToString());
             if (user == null)
             {
@@ -450,6 +452,11 @@ namespace SWP391.OnlineShop.Portal.Controllers
 
             TempData["SuccessAddressMess"] = "Set default address success. Please double-check";
             return RedirectToAction(nameof(Index), new { userId = user.Id });
+        }
+
+        public async Task<IActionResult> UpdateAddress(AddressViewModels request)
+        {
+            return Ok();
         }
 
         #endregion

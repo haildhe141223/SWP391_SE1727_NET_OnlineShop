@@ -5,6 +5,7 @@ namespace SWP391.OnlineShop.ServiceModel.ViewModels.Profiles
 {
     public class AddressViewModels
     {
+        public string Id { get; set; }
         [Required(ErrorMessage = "Please input fullname. This field is required")]
         public string FullName { get; set; }
 
