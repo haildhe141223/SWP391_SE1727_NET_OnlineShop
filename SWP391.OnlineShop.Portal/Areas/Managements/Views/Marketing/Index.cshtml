@@ -68,7 +68,7 @@
                                         <img width="60" src="@productViewModel.Thumbnail" alt="">
                                     </td>
                                     <td>@productViewModel.Description</td>
-                                    <td>@productViewModel.Amount</td>
+                                    <td>@productViewModel.ProductSizes.FirstOrDefault().Quantity</td>
                                     <td>@productViewModel.Price</td>
                                     <td>@productViewModel.SalePrice</td>
                                     @if (productViewModel.Status == Status.Active)

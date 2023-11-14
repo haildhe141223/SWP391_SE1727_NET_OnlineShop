@@ -91,20 +91,20 @@
 														</div>
 													</td>
 													<td>
-														@if(item.SalePrice > 0)
+														@if (item.Product.SalePrice > 0)
 														{
 															<h5 class="price">$ @item.Product?.SalePrice</h5>
 														}
 														else
 														{
-														<h5 class="price">$ @item.Product?.Price</h5>
+															<h5 class="price">$ @item.Product?.Price</h5>
 														}
 													</td>
 													<td>
 														<div class="product_count">
-															<input type="number" name="qty" id="sst" maxlength="12" value="@item.Quantity" min="1" max="@item.Product?.Amount" title="Quantity:"
-																   class="qty numberonly" onchange="onQuantityChange(this,@item.Id, @item.Product?.Amount,@order.OrderDetails.Count)">
-															<button onclick="onAddClick(this, @item.Product?.Amount, @item.Id)"
+															<input type="number" name="qty" id="sst" maxlength="12" value="@item.Quantity" min="1" max="@item.Product?.ProductSizes.FirstOrDefault().Quantity" title="Quantity:"
+																   class="qty numberonly" onchange="onQuantityChange(this,@item.Id, @item.Product?.ProductSizes.FirstOrDefault().Quantity,@order.OrderDetails.Count)">
+															<button onclick="onAddClick(this, @item.Product?.ProductSizes.FirstOrDefault().Quantity, @item.Id)"
 																	class="increase items-count" type="button">
 																<i class="lnr lnr-chevron-up"></i>
 															</button>
@@ -136,82 +136,6 @@
 												</tr>
 											}
 										}
-										<tr class="bottom_button">
-											<td>
-												<a class="gray_btn" id="update-cart" style="cursor:pointer" onclick="UpdateCart(@order.Id)">Update Cart</a>
-											</td>
-											<td>
-											</td>
-											<td>
-											</td>
-											<td>
-												<div class="cupon_text d-flex align-items-center">
-													<input type="text" placeholder="Coupon Code">
-													<a class="btn primary-btn" href="#">Apply</a>
-													<a class="btn gray_btn" href="#">Close Coupon</a>
-												</div>
-											</td>
-										</tr>
-										<tr>
-											<td>
-											</td>
-											<td>
-											</td>
-											<td>
-												<h5>Subtotal</h5>
-											</td>
-											<td>
-												<h5 id="sub-total-cost-@order.Id">$ @order.TotalCost</h5>
-											</td>
-										</tr>
-										<tr class="shipping_area">
-											<td>
-											</td>
-											<td>
-											</td>
-											<td>
-											</td>
-											<td>
-												<div class="shipping_box">
-													@*<ul class="list">
-									<li><a href="#">Flat Rate: $5.00</a></li>
-									<li><a href="#">Free Shipping</a></li>
-									<li><a href="#">Flat Rate: $10.00</a></li>
-									<li class="active"><a href="#">Local Delivery: $2.00</a></li>
-									</ul>*@
-													@*<h6>Calculate Shipping <i class="fa fa-caret-down" aria-hidden="true"></i></h6>*@
-													@*<select class="shipping_select">
-									<option value="1">Bangladesh</option>
-									<option value="2">India</option>
-									<option value="4">Pakistan</option>
-									</select>
-									<select class="shipping_select">
-									<option value="1">Select a State</option>
-									<option value="2">Select a State</option>
-									<option value="4">Select a State</option>
-									</select>*@
-													<input type="text" placeholder="Mobile Phone" id="receiver-phoneNumber" value="@order.CustomerPhoneNumber">
-													<select class="shipping_select" id="province">
-														<option value="0">--Province--</option>
-														@foreach (var p in order.Provinces)
-														{
-															<option value="@p.Id">@p.ProvinceName</option>
-														}
-													</select>
-													<select class="shipping_select" id="ddl-district">
-														<option value="0">--District--</option>
-													</select>
-													<select class="shipping_select" id="ward">
-														<option value="0">--Ward--</option>
-													</select>
-													<input type="text" placeholder="Address" id="receiver-address" value="@order.CustomerAddress">
-													<input type="text" placeholder="Address" id="receiver-address-new" value="">
-													<a class="gray_btn" id="update-details-btn">Update Details</a>
-													<a class="primary-btn" id="save-details-btn" style="border-radius: 0;top: 14px;height: 40px;">Save</a>
-													<a class="gray_btn" id="cancel-save-details-btn" style="border-radius: 0;">Cancel</a>
-												</div>
-											</td>
-										</tr>
 										<tr class="out_button_area">
 											<td>
 											</td>
@@ -402,19 +326,19 @@ else
 		$('select[id="ddl-district"]').niceSelect('destroy'); //destroy the plugin
 		var phoneNum = $('#receiver-phoneNumber');
 		var address = $('#receiver-address');
-		var saveBtn = $('#save-details-btn');
-		var cancelBtn = $('#cancel-save-details-btn');
+		var saveBtn = $('[id*=save-details-btn]');
+		var cancelBtn = $('[id*=cancel-save-btn]');
 		if (phoneNum != undefined) {
 			phoneNum.prop('disabled', true);
 		}
 		if (address != undefined) {
 			address.prop('disabled', true);
 		}
-		if (saveBtn != undefined) {
-			saveBtn.hide();
+		if ($('[id*=save-details-btn]') != undefined) {
+			$('[id*=save-details-btn]').hide();
 		}
-		if (cancelBtn != undefined) {
-			cancelBtn.hide();
+		if ($('[id*=cancel-save-btn]') != undefined) {
+			$('[id*=cancel-save-btn]').hide();
 		}
 		$('select[id="province"]').hide();
 		$('select[id="ward"]').hide();
@@ -425,15 +349,15 @@ else
 	$('#update-details-btn').click(function () {
 		$('#receiver-address').hide();
 		$('#receiver-address-new').show();
-		$('#save-details-btn').show();
+		$('[id*=save-details-btn]').show();
 		$(this).hide()
 		$('select[id="province"]').show();
 		$('select[id="ward"]').show();
 		$('select[id="ddl-district"]').show();
-		$('#cancel-save-details-btn').show();
+		$('[id*=cancel-save-btn]').show();
 	});
 
-	$('#save-details-btn').click(function () {
+	$('[id*=save-details-btn]').click(function () {
 		var province = $('select[id="province"] option:selected').val();
 		var district = $('select[id="ddl-district"] option:selected').val();
 		var ward = $('select[id="ward"] option:selected').val();
@@ -462,10 +386,10 @@ else
 		$('select[id="ward"]').hide();
 		$('select[id="ddl-district"]').hide();
 		$(this).hide();
-		$('#cancel-save-details-btn').hide();
+		$('[id*=cancel-save-btn]').hide();
 	});
 
-	$('#cancel-save-details-btn').click(function () {
+	$('[id*=cancel-save-btn]').click(function () {
 		$('#update-details-btn').show();
 		$('select[id="province"]').hide();
 		$('select[id="ward"]').hide();
@@ -539,10 +463,10 @@ else
 		});
 	});
 
-	function UpdateCart(id){
+	function UpdateCart(id) {
 		const data = {
 			orderId: id,
-			total: $("#sub-total-cost-"+id).text().split(' ')[1]
+			total: $("#sub-total-cost-" + id).text().split(' ')[1]
 		};
 		$.ajax({
 			url: '@Url.Action("UpdateCart","Cart")',
@@ -707,7 +631,7 @@ else
 		}
 	});
 
-	function ProceedToCheckOut(id){
+	function ProceedToCheckOut(id) {
 		const data = {
 			orderId: id
 		};
@@ -718,7 +642,7 @@ else
 			success: function (response) {
 				$.toaster({ priority: 'success', title: 'Created', message: "Add To Cart Contact Successfully" });
 				setTimeout(function () {
-					window.location.reload();
+					window.location.href = "/cart/cartcontact/"+id;
 				}, 1000);
 			},
 			failure: function (failed) {

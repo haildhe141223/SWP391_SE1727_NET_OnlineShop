@@ -89,9 +89,9 @@
                                         </td>
                                         <td>
                                             <div class="product_count">
-                                                <input type="number" name="qty" id="sst" maxlength="12" value="@item.Quantity" min="1" max="@item.Product?.Amount" title="Quantity:"
-                                                       class="qty numberonly" onchange="onQuantityChange(this,@item.Id, @item.Product?.Amount)">
-                                                <button onclick="onAddClick(this, @item.Product?.Amount, @item.Id)"
+                                                <input type="number" name="qty" id="sst" maxlength="12" value="@item.Quantity" min="1" max="@item.Product?.ProductSizes.FirstOrDefault().Quantity" title="Quantity:"
+                                                       class="qty numberonly" onchange="onQuantityChange(this,@item.Id, @item.Product?.ProductSizes.FirstOrDefault().Quantity)">
+                                                <button onclick="onAddClick(this, @item.Product?.ProductSizes.FirstOrDefault().Quantity, @item.Id)"
                                                         class="increase items-count" type="button">
                                                     <i class="lnr lnr-chevron-up"></i>
                                                 </button>
@@ -202,23 +202,11 @@
                                 </td>
                                 <td>
                                 </td>
-                                @if (Model.OrderStatus == SWP391.OnlineShop.Core.Models.Enums.OrderStatus.InCartDetail)
-                                {
-                                    <td>
-                                        <div class="checkout_btn_inner d-flex align-items-center">
-                                            <a class="gray_btn" asp-action="Index" asp-controller="Home">Continue Shopping</a>
-                                            <a class="primary-btn" id="proceed-check-out-btn">Proceed to checkout</a>
-                                        </div>
-                                    </td>
-                                }
-                                else if (Model.OrderStatus == SWP391.OnlineShop.Core.Models.Enums.OrderStatus.InCartContact)
-                                {
                                     <td>
                                         <div class="checkout_btn_inner d-flex align-items-center" style="float: right;">
                                             <a class="primary-btn" href="#" id="submit-to-cart-completion">Submit</a>
                                         </div>
                                     </td>
-                                }
                             </tr>
                         </tbody>
                     </table>
@@ -734,7 +722,7 @@ else
                 success: function (response) {
                     $.toaster({ priority: 'success', title: 'Created', message: "Add To Cart Complete Successfully" });
                     setTimeout(function () {
-                        window.location.reload();
+                        window.location.href= "/cart/checkout/"+id
                     }, 1000);
                 },
                 failure: function (failed) {

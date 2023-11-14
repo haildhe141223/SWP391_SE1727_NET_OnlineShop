@@ -48,6 +48,13 @@ namespace SWP391.OnlineShop.ServiceInterface.Interfaces
 		/// <returns>Product</returns>
 		ProductViewModel Get(GetProductById request);
 
+        /// <summary>
+        /// Get Product By Id and SizeId
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns>Product</returns>
+        ProductSizeViewModel Get(GetProductByIdAndSizeId request);
+
 		/// <summary>
 		/// Get product's feedback by id
 		/// </summary>

@@ -200,6 +200,34 @@ namespace SWP391.OnlineShop.ServiceInterface.Services
             return new List<ProductViewModel>();
         }
 
+        public ProductSizeViewModel Get(GetProductByIdAndSizeId request)
+        {
+            var result = new ProductSizeViewModel();
+            try
+            {
+                var query = from p in _unitOfWork.Context.Products
+                            join ps in _unitOfWork.Context.ProductSizes
+                            on p.Id equals ps.ProductId
+                            where ps.ProductId == request.ProductId
+                            && ps.SizeId == request.SizeId
+                            select new ProductSizeViewModel()
+                            {
+                                ProductId = ps.ProductId,
+                                SizeId = ps.SizeId,
+                                Quantity = ps.Quantity,
+                            };
+                if(query != null)
+                {
+                    return query.First();
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"GetProductByIdAndSizeId error {ex.Message}");
+            }
+            return result;
+        }
+
         public async Task<BaseResultModel> Post(PostAddProduct request)
         {
             var result = new BaseResultModel();

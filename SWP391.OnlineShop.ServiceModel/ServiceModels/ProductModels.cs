@@ -39,7 +39,7 @@ namespace SWP391.OnlineShop.ServiceModel.ServiceModels
         public int ProductId { get; set; }
     }
 	[Route("/Product/GetProductByIdAndSizeId", "GET")]
-	public class GetProductByIdAndSizeId : IReturn<ProductViewModel>
+	public class GetProductByIdAndSizeId : IReturn<ProductSizeViewModel>
 	{
 		public int ProductId { get; set; }
         public int SizeId { get; set; }

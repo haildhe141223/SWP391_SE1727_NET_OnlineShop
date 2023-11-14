@@ -38,7 +38,7 @@
                     <h2>@Model.ProductDetail?.SalePrice</h2>
                     <ul class="list">
                         <li><a class="active" href="#"><span>Category</span> : @Model.ProductDetail?.Category?.CategoryName</a></li>
-                        @if (Model.ProductDetail?.Amount > 0)
+                        @if (Model.ProductDetail?.ProductSizes.FirstOrDefault().Quantity > 0)
                         {
                             <li><span>Availability</span> : In Stock</li>
                         }
@@ -46,7 +46,7 @@
                         {
                             <li><span>Availability</span> : Sold Out</li>
                         }
-                        <li><select name="sizeList" class="" style="width:20% !important" asp-items="@(new SelectList(ViewBag.SizeLists, "Value", "Text"))"></select></li>
+                        <li><select name="sizeList" id="sizeList" class="" style="width:20% !important" asp-items="@(new SelectList(ViewBag.SizeLists, "Value", "Text"))"></select></li>
                     </ul>
                     <br/><br/>
                     <div class="product_count">
@@ -220,10 +220,12 @@
 
 <script type="text/javascript">
     function AddToCart(productId, productPrice) {
+        var sizeId = $("#sizeList").val();
         const data = {
             productId: productId,
             price: productPrice,
-            quantity: $('#sst').val()
+            quantity: $('#sst').val(),
+            sizeId: sizeId
         };
         $.ajax({
             url: '@Url.Action("AddToCard","Cart")',

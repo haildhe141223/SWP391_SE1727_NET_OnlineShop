@@ -118,8 +118,7 @@ namespace SWP391.OnlineShop.ServiceInterface.Services
 			{
 				var model = _unitOfWork.Orders.GetCartContactByUser(request.Email)
 				   .OrderByDescending(o => o.OrderDateTime)
-				   .ToList()
-				   .FirstOrDefault();
+				   .ToList();
 				if (model is not null)
 				{
 					result = _mapper.Map<List<OrderViewModels>>(model);
@@ -140,8 +139,7 @@ namespace SWP391.OnlineShop.ServiceInterface.Services
 			{
 				var model = _unitOfWork.Orders.GetCartCompletionByUser(request.Email)
 					.OrderByDescending(o => o.OrderDateTime)
-					.ToList()
-					.FirstOrDefault();
+					.ToList();
 				if (model is not null)
 				{
 					result = _mapper.Map<List<OrderViewModels>>(model);

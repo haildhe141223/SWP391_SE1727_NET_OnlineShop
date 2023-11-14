@@ -89,13 +89,13 @@ namespace SWP391.OnlineShop.Portal.Controllers
 			{
 				Email = email
 			});
-			
+
 			var province = await _client.GetAsync(new GetAllProvince());
 			if (cartDetailOrders != null)
 			{
 				foreach (var item in cartDetailOrders)
 				{
-					if(item.OrderDetails != null)
+					if (item.OrderDetails != null)
 					{
 						item.CustomerAddress = userAddress.FullAddress;
 						item.AddressId = userAddress.Id;
@@ -185,7 +185,10 @@ namespace SWP391.OnlineShop.Portal.Controllers
 				Email = email
 			});
 			cartCompleteOrders.CustomerName = user.UserName;
-			cartCompleteOrders.CustomerAddress = userAddress.FullAddress;
+			if (string.IsNullOrEmpty(cartCompleteOrders.CustomerAddress))
+			{
+				cartCompleteOrders.CustomerAddress = userAddress.FullAddress;
+			}
 			cartCompleteOrders.AddressId = userAddress.Id;
 			cartCompleteOrders.CustomerPhoneNumber = user.PhoneNumber;
 			cartCompleteOrders.CustomerEmail = email;
@@ -251,15 +254,16 @@ namespace SWP391.OnlineShop.Portal.Controllers
 				});
 				foreach (var item in order.OrderDetails)
 				{
-					var product = await _client.GetAsync(new GetProductById()
+					var product = await _client.GetAsync(new GetProductByIdAndSizeId()
 					{
-						ProductId = item.Product.Id
+						ProductId = item.Product.Id,
+						SizeId = item.Product.ProductSizes.First().SizeId
 					});
-					var quantity = product.Amount - item.Quantity;
+					var quantity = product.Quantity - item.Quantity;
 					await _client.PutAsync(new PutUpdateProduct()
 					{
 						Amount = quantity,
-						Id = product.Id
+						Id = product.ProductId
 					});
 				}
 				var api = await _client.PutAsync(new PutUpdateCartStatus()
@@ -419,15 +423,16 @@ namespace SWP391.OnlineShop.Portal.Controllers
 				});
 				foreach (var item in order.OrderDetails)
 				{
-					var product = await _client.GetAsync(new GetProductById()
+					var product = await _client.GetAsync(new GetProductByIdAndSizeId()
 					{
-						ProductId = item.Product.Id
+						ProductId = item.Product.Id,
+						SizeId = item.Product.ProductSizes.First().SizeId
 					});
-					var quantity = product.Amount - item.Quantity;
+					var quantity = product.Quantity - item.Quantity;
 					await _client.PutAsync(new PutUpdateProduct()
 					{
 						Amount = quantity,
-						Id = product.Id
+						Id = product.ProductId
 					});
 				}
 				return Ok(api);
@@ -448,13 +453,14 @@ namespace SWP391.OnlineShop.Portal.Controllers
 			{
 				Email = email
 			});
-			var product = await _client.GetAsync(new GetProductById
+			var product = await _client.GetAsync(new GetProductByIdAndSizeId
 			{
-				ProductId = productId
+				ProductId = productId,
+				SizeId = sizeId
 			});
-			if (product.Amount < quantity)
+			if (product.Quantity < quantity)
 			{
-				return StatusCode(500, $"There's not enough product in store. Current in store {product.Amount}");
+				return StatusCode(500, $"There's not enough product in store. Current in store {product.Quantity}");
 			}
 			var api = await _client.PostAsync(new PostAddToCart
 			{
@@ -464,17 +470,18 @@ namespace SWP391.OnlineShop.Portal.Controllers
 				OrderStatus = Core.Models.Enums.OrderStatus.InCartDetail,
 				Quantity = quantity,
 				Price = price,
-				ProductId = productId
+				ProductId = productId,
+				SizeId = sizeId
 			});
-			if(api.StatusCode == Common.Enums.StatusCode.Success)
+			if (api.StatusCode == Common.Enums.StatusCode.Success)
 			{
-			return Ok();
+				return Ok();
 			}
 			else
 			{
 				if (!string.IsNullOrEmpty(api.ErrorMessage))
 				{
-					return StatusCode(500,api.ErrorMessage);
+					return StatusCode(500, api.ErrorMessage);
 				}
 				else
 				{
@@ -570,9 +577,7 @@ namespace SWP391.OnlineShop.Portal.Controllers
 					OrderNotes = notes
 				});
 			}
-
 			#endregion
-
 			PaypalData.Add(paypalDirectUrl.Split("&token=")[1], model.Id);
 			return Ok(paypalDirectUrl);
 		}

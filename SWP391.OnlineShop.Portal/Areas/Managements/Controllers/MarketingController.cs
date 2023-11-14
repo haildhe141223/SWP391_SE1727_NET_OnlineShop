@@ -92,7 +92,7 @@ namespace SWP391.OnlineShop.Portal.Areas.Managements.Controllers
             {
                 ProductName = request.ProductName,
                 Description = request.Description,
-                Amount = request.Amount,
+                //Amount = request.Amount,
                 Price = request.Price,
                 SalePrice = request.SalePrice,
                 Thumbnail = imageLink,
