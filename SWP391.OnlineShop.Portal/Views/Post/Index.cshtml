@@ -6,7 +6,6 @@
     var existedCategory = new List<int>();
     var existedCategoryRightSide = new List<int>();
     var allTags = ViewData["AllTags"] as List<TagViewModel>;
-    var lastestPost = ViewData["LastesPost"] as List<PostViewModel>;
     var pagesNumber = (int)ViewBag.Pages;
     var currentNumber = (int)ViewBag.CurrentPage;
 }
@@ -16,10 +15,6 @@
         <div class="breadcrumb-banner d-flex flex-wrap align-items-center justify-content-end">
             <div class="col-first">
                 <h1>Blog Page</h1>
-                <nav class="d-flex align-items-center">
-                    <a asp-action="Index" asp-controller="Home">Home<span class="lnr lnr-arrow-right"></span></a>
-                    <a href="#">Blog</a>
-                </nav>
             </div>
         </div>
     </div>
@@ -112,7 +107,7 @@
                                     </a>
                                 </li>
                             }
-                            @for (int i = 1; i <= pagesNumber; i++)
+                            @for (var i = 1; i <= pagesNumber; i++)
                             {
                                 if (i == currentNumber)
                                 {
@@ -172,7 +167,7 @@
                         @foreach (var post in Model.OrderByDescending(p => p.CreatedDateTime))
                         {
                             <div class="media post_item">
-                                <img src=@post.Thumbnail width="50" height="50" alt="post">
+                                @*<img src=@post.Thumbnail width="50" height="50" alt="post">*@
                                 <div class="media-body">
                                     <a asp-action="Details" asp-controller="Post" asp-route-id="@post.Id">
                                         <h3>@post.Title</h3>
@@ -184,11 +179,11 @@
                         <div class="br"></div>
                     </aside>
                     <aside class="single_sidebar_widget ads_widget">
-                        @* <a href="#"><img class="img-fluid" src="~/template/img/blog/add.jpg" alt=""></a> *@
+                         <a href="#"><img class="img-fluid" src="~/template/img/blog/add.jpg" alt=""></a> 
                         <div class="br"></div>
                     </aside>
                     <aside class="single_sidebar_widget post_category_widget">
-                        <h4 class="widget_title">Post Catgories</h4>
+                        <h4 class="widget_title">Post Categories</h4>
                         <ul class="list cat-list">
                             @foreach (var item in Model)
                             {
@@ -223,7 +218,7 @@
                                 <input type="text" class="form-control" id="inlineFormInputGroup" placeholder="Enter email"
                                        onfocus="this.placeholder = ''" onblur="this.placeholder = 'Enter email'">
                             </div>
-                            <a href="#" class="bbtns">Subcribe</a>
+                            <a href="#" class="bbtns">Subscribe</a>
                         </div>
                         <p class="text-bottom">You can unsubscribe at any time</p>
                         <div class="br"></div>

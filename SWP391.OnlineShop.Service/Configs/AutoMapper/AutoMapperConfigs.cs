@@ -23,12 +23,14 @@ public class AutoMapperConfigs : Profile
         CreateMap<Order, OrderViewModels>().ReverseMap();
         CreateMap<OrderDetail, OrderDetailViewModels>().ReverseMap();
 
-        //// Product
-        CreateMap<Product, ProductViewModel>().ReverseMap();
+		//// Product
+		CreateMap<ProductSize, ProductSizeViewModel>().ReverseMap();
+		CreateMap<Product, ProductViewModel>().ReverseMap();
         CreateMap<Post, PostViewModel>().ReverseMap();
         CreateMap<Post, ManagePostViewModel>().ReverseMap();
         CreateMap<Tag, TagViewModel>().ReverseMap();
-
+        CreateMap<Size, SizeViewModel>().ReverseMap();
+        
         //// Category
         CreateMap<Category, CategoryViewModel>().ReverseMap();
 
@@ -41,6 +43,7 @@ public class AutoMapperConfigs : Profile
         //// Voucher
         CreateMap<Voucher, VoucherViewModels>().ReverseMap();
         CreateMap<ProductVoucherViewModel, ProductVoucher>().ReverseMap();
+        CreateMap<Voucher, UserVoucherViewModel>().ReverseMap();
 
         //// Slider
         CreateMap<Slider, SliderViewModel>().ReverseMap();

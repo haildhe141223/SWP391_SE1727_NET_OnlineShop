@@ -6,10 +6,6 @@
     var successMess = TempData["SuccessMess"] as string;
 }
 
-<div class="m-headers" style="margin-top: 10% !important;">
-    <h4 class="fw-bold ml-5">Manage Post</h4>
-</div>
-
 @if (!string.IsNullOrWhiteSpace(errorMess))
 {
     <div class="alert alert-danger my-2 text-center">
@@ -39,7 +35,7 @@
             </div>
             <div class="mb-3">
                 <label asp-for="ThumbnailFile" class="form-label">Thumbnail</label><br />
-                <img width="300" height="300" src="@Model.Thumbnail"><br /><br />
+                <img width="300" height="300" src="@Model.Thumbnail" alt=""><br /><br />
                 <input asp-for="ThumbnailFile" type="file" class="form-control">
                 <span asp-validation-for="ThumbnailFile" class="r-error d-block text-danger"></span>
             </div>

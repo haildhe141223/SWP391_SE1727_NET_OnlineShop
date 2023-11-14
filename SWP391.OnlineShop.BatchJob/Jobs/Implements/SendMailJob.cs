@@ -1,5 +1,4 @@
-﻿using Hangfire;
-using MailKit.Net.Smtp;
+﻿using MailKit.Net.Smtp;
 using MailKit.Security;
 using Microsoft.EntityFrameworkCore;
 using MimeKit;
@@ -38,8 +37,6 @@ namespace SWP391.OnlineShop.BatchJob.Jobs.Implements
             _smtp = smtp;
         }
 
-        [AutomaticRetry(Attempts = 0)]
-        [DisableConcurrentExecution(10)]
         public void RunJob()
         {
             _logger.LogInfo("SendMailJob Start: " + DateTime.Now);
@@ -133,8 +130,8 @@ namespace SWP391.OnlineShop.BatchJob.Jobs.Implements
                 // Initialize mail instance
                 var mail = new MimeMessage();
 
-                mail.From.Add(new MailboxAddress("Karma Shop Services", _smtp.Value.Email));
-                mail.Sender = new MailboxAddress("Karma Shop Services", _smtp.Value.Email);
+                mail.From.Add(new MailboxAddress(EmailConstraints.DomainSenderName, _smtp.Value.Email));
+                mail.Sender = new MailboxAddress(EmailConstraints.DomainSenderName, _smtp.Value.Email);
 
                 // Prepare sending email
 

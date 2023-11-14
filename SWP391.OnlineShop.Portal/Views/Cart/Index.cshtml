@@ -1,6 +1,6 @@
-﻿@model SWP391.OnlineShop.ServiceModel.ViewModels.Carts.OrderViewModels
+﻿@model List<SWP391.OnlineShop.ServiceModel.ViewModels.Carts.OrderViewModels>
 @{
-	var sliders = Model.Sliders.ToList();
+	var sliders = TempData["slider"] as List<SWP391.OnlineShop.ServiceModel.ViewModels.Products.ProductViewModel>;
 }
 <style>
 	.mt-100 {
@@ -53,180 +53,134 @@
 </section>
 <!-- End Banner Area -->
 <!--================Cart Area =================-->
-@if (Model.OrderDetails != null && Model.OrderDetails.Count > 0)
+@if (Model.Count > 0)
 {
-	<section class="cart_area">
-		<div class="container">
-			<div class="cart_inner">
-				<div class="table-responsive">
-					<table class="table" id="cart">
-						<thead>
-							<tr>
-								<th scope="col">Product</th>
-								<th scope="col">Price</th>
-								<th scope="col">Quantity</th>
-								<th scope="col">Total</th>
-							</tr>
-						</thead>
-						<tbody>
-							@foreach (var item in Model.OrderDetails)
-							{
-								if (item.Status == SWP391.OnlineShop.Core.Models.Enums.Status.Active)
-								{
-									<tr class="cart-item">
-										<td>
-											<div class="media">
-												<div class="d-flex">
-													<img src="@item.Product?.Thumbnail" alt="" style="max-height: 101.6px;max-width:151.6px">
-												</div>
-												<div class="media-body">
-													<a asp-action="Details" asp-controller="Product" asp-route-id="@item.Product?.Id"><p>@item.Product?.ProductName</p></a>
-												</div>
-											</div>
-										</td>
-										<td>
-											<h5 class="price">$ @item.Product?.Price</h5>
-										</td>
-										<td>
-											<div class="product_count">
-												<input type="number" name="qty" id="sst" maxlength="12" value="@item.Quantity" min="1" max="@item.Product?.Amount" title="Quantity:"
-													   class="qty numberonly" onchange="onQuantityChange(this,@item.Id, @item.Product?.Amount)">
-												<button onclick="onAddClick(this, @item.Product?.Amount, @item.Id)"
-														class="increase items-count" type="button">
-													<i class="lnr lnr-chevron-up"></i>
-												</button>
-												<button onclick="onMinusClick(this, @item.Id)"
-														class="reduced items-count" type="button">
-													<i class="lnr lnr-chevron-down"></i>
-												</button>
-											</div>
-										</td>
-										<td>
-											@if (item.Product?.SalePrice > 0)
+	foreach (var order in Model)
+	{
+		if (order.OrderDetails is { Count: > 0 })
+		{
+			if (order.OrderStatus == SWP391.OnlineShop.Core.Models.Enums.OrderStatus.InCartDetail)
+			{
+				<section class="cart_area">
+					<div class="container">
+						<div class="cart_inner">
+							<div class="table-responsive">
+								<table class="table" id="cart">
+									<thead>
+										<tr>
+											<th scope="col">Product</th>
+											<th scope="col">Price</th>
+											<th scope="col">Quantity</th>
+											<th scope="col">Total</th>
+										</tr>
+									</thead>
+									<tbody>
+										@foreach (var item in order.OrderDetails)
+										{
+											if (item.Status == SWP391.OnlineShop.Core.Models.Enums.Status.Active)
 											{
-												<h5 class="total">$ @(item.Product.SalePrice * item.Quantity)</h5>
+												<tr class="cart-item">
+													<td>
+														<div class="media">
+															<div class="d-flex">
+																<img src="@item.Product?.Thumbnail" alt="" style="max-height: 101.6px;max-width:151.6px">
+															</div>
+															<div class="media-body">
+																<a asp-action="Details" asp-controller="Product" asp-route-id="@item.Product?.Id"><p>@item.Product?.ProductName</p></a>
+															</div>
+														</div>
+													</td>
+													<td>
+														@if (item.Product?.SalePrice > 0)
+														{
+															<h5 class="price">$ @item.Product?.SalePrice</h5>
+														}
+														else
+														{
+															<h5 class="price">$ @item.Product?.Price</h5>
+														}
+													</td>
+													<td>
+														<div class="product_count">
+															<input type="number" name="qty" id="sst" maxlength="12" value="@item.Quantity" min="1" max="@item.Product?.ProductSizes.FirstOrDefault()?.Quantity" title="Quantity:"
+																   class="qty numberonly" onchange="onQuantityChange(this,@item.Id, @item.Product?.ProductSizes.FirstOrDefault()?.Quantity,@order.OrderDetails.Count)">
+															<button onclick="onAddClick(this, @item.Product?.ProductSizes.FirstOrDefault()?.Quantity, @item.Id)"
+																	class="increase items-count" type="button">
+																<i class="lnr lnr-chevron-up"></i>
+															</button>
+															<button onclick="onMinusClick(this, @item.Id,@order.OrderDetails.Count)"
+																	class="reduced items-count" type="button">
+																<i class="lnr lnr-chevron-down"></i>
+															</button>
+														</div>
+													</td>
+													<td>
+														@if (item.Product?.SalePrice > 0)
+														{
+															<h5 class="total">
+																$ @(
+																		item.Product.SalePrice * item.Quantity
+																		)
+															</h5>
+														}
+														else
+														{
+															<h5 class="total">
+																$ @(
+																		item.Product?.Price * item.Quantity
+																		)
+															</h5>
+														}
+
+													</td>
+												</tr>
 											}
-											else
-											{
-												<h5 class="total">$ @(item.Product?.Price * item.Quantity)</h5>
-											}
-
-										</td>
-									</tr>
-								}
-							}
-							@if (Model.OrderStatus == SWP391.OnlineShop.Core.Models.Enums.OrderStatus.InCartContact)
-							{
-								<tr class="bottom_button">
-									<td>
-										<a class="gray_btn" id="update-cart" style="cursor:pointer">Update Cart</a>
-									</td>
-									<td>
-									</td>
-									<td>
-									</td>
-									<td>
-										<div class="cupon_text d-flex align-items-center">
-											<input type="text" placeholder="Coupon Code">
-											<a class="btn primary-btn" href="#">Apply</a>
-											<a class="btn gray_btn" href="#">Close Coupon</a>
-										</div>
-									</td>
-								</tr>
-								<tr>
-									<td>
-									</td>
-									<td>
-									</td>
-									<td>
-										<h5>Subtotal</h5>
-									</td>
-									<td>
-										<h5 id="sub-total-cost">$ @Model.TotalCost</h5>
-									</td>
-								</tr>
-								<tr class="shipping_area">
-									<td>
-									</td>
-									<td>
-									</td>
-									<td>
-									</td>
-									<td>
-										<div class="shipping_box">
-											@*<ul class="list">
-									<li><a href="#">Flat Rate: $5.00</a></li>
-									<li><a href="#">Free Shipping</a></li>
-									<li><a href="#">Flat Rate: $10.00</a></li>
-									<li class="active"><a href="#">Local Delivery: $2.00</a></li>
-									</ul>*@
-											@*<h6>Calculate Shipping <i class="fa fa-caret-down" aria-hidden="true"></i></h6>*@
-											@*<select class="shipping_select">
-									<option value="1">Bangladesh</option>
-									<option value="2">India</option>
-									<option value="4">Pakistan</option>
-									</select>
-									<select class="shipping_select">
-									<option value="1">Select a State</option>
-									<option value="2">Select a State</option>
-									<option value="4">Select a State</option>
-									</select>*@
-											<input type="text" placeholder="Mobile Phone" id="receiver-phoneNumber" value="@Model.CustomerPhoneNumber">
-											<select class="shipping_select" id="province">
-												<option value="0">--Province--</option>
-												@foreach (var p in Model.Provinces)
-												{
-													<option value="@p.Id">@p.ProvinceName</option>
-												}
-											</select>
-											<select class="shipping_select" id="ddl-district">
-												<option value="0">--District--</option>
-											</select>
-											<select class="shipping_select" id="ward">
-												<option value="0">--Ward--</option>
-											</select>
-											<input type="text" placeholder="Address" id="receiver-address" value="@Model.CustomerAddress">
-											<input type="text" placeholder="Address" id="receiver-address-new" value="">
-											<a class="gray_btn" id="update-details-btn">Update Details</a>
-											<a class="primary-btn" id="save-details-btn" style="border-radius: 0;top: 14px;height: 40px;">Save</a>
-											<a class="gray_btn" id="cancel-save-details-btn" style="border-radius: 0;">Cancel</a>
-										</div>
-									</td>
-								</tr>
-							}
-
-							<tr class="out_button_area">
-								<td>
-								</td>
-								<td>
-								</td>
-								<td>
-								</td>
-								@if (Model.OrderStatus == SWP391.OnlineShop.Core.Models.Enums.OrderStatus.InCartDetail)
-								{
-									<td>
-										<div class="checkout_btn_inner d-flex align-items-center">
-											<a class="gray_btn" asp-action="Index" asp-controller="Home">Continue Shopping</a>
-											<a class="primary-btn" id="proceed-check-out-btn">Proceed to checkout</a>
-										</div>
-									</td>
-								}
-								else if (Model.OrderStatus == SWP391.OnlineShop.Core.Models.Enums.OrderStatus.InCartContact)
-								{
-									<td>
-										<div class="checkout_btn_inner d-flex align-items-center" style="float: right;">
-											<a class="primary-btn" href="#" id="submit-to-cart-completion">Submit</a>
-										</div>
-									</td>
-								}
-							</tr>
-
-						</tbody>
-					</table>
-				</div>
-			</div>
-		</div>
-	</section>
+										}
+										<tr class="out_button_area">
+											<td>
+											</td>
+											<td>
+											</td>
+											<td>
+											</td>
+											<td>
+												<div class="checkout_btn_inner d-flex align-items-center">
+													<a class="gray_btn" asp-action="Index" asp-controller="Home">Continue Shopping</a>
+													<a class="primary-btn" id="proceed-check-out-btn-@order.Id" onclick="ProceedToCheckOut(@order.Id)">Proceed to checkout</a>
+												</div>
+											</td>
+										</tr>
+									</tbody>
+								</table>
+							</div>
+						</div>
+					</div>
+				</section>
+			}
+			else if (order.OrderStatus == SWP391.OnlineShop.Core.Models.Enums.OrderStatus.InCartContact)
+			{
+				<section class="cart_area">
+					<div class="container">
+						<div class="cart_inner">
+							<span>This Cart is in Cart Contact</span>
+							<a asp-action="CartContact" asp-controller="Cart" asp-route-id="@order.Id">Continue Buying</a>
+						</div>
+					</div>
+				</section>
+			}
+			else
+			{
+				<section class="cart_area">
+					<div class="container">
+						<div class="cart_inner">
+							<span>This Cart is in Cart Complete</span>
+							<a asp-action="Checkout" asp-controller="Cart" asp-route-id="@order.Id">Continue Checkout</a>
+						</div>
+					</div>
+				</section>
+			}
+		}
+	}
 }
 else
 {
@@ -258,46 +212,49 @@ else
 					<div class="section-title">
 						<h1>Latest Products</h1>
 						<p>
-							Lastest Products Of All Category
+							Latest Products Of All Category
 						</p>
 					</div>
 				</div>
 			</div>
 			<div class="row">
-				@for (int i = 0; i < sliders.Count() / 2; i++)
+				@if (sliders != null)
 				{
-					<!-- single product -->
-					<div class="col-lg-3 col-md-6">
-						<div class="single-product">
-							<a asp-action="Details" asp-controller="Product" asp-route-id="@sliders[i].Id"><img class="img-fluid" src="@sliders[i].Thumbnail" alt="@sliders[i].ProductName"></a>
-							<div class="product-details">
-								<h6>
-									<a asp-action="Details" asp-controller="Product" asp-route-id="@sliders[i].Id">@sliders[i].ProductName</a>
-								</h6>
-								<div class="price">
-									<h6>$ @sliders[i].Price</h6>
-									@if (sliders[i].SalePrice > 0)
-									{
-										<h6 class="l-through">$ @sliders[i].SalePrice</h6>
-									}
-								</div>
-								<div class="prd-bottom">
-									<a href="" class="social-info">
-										<span class="lnr lnr-heart"></span>
-										<p class="hover-text">Wishlist</p>
-									</a>
-									<a href="" class="social-info">
-										<span class="lnr lnr-sync"></span>
-										<p class="hover-text">compare</p>
-									</a>
-									<a href="" class="social-info">
-										<span class="lnr lnr-move"></span>
-										<p class="hover-text">view more</p>
-									</a>
+					for (int i = 0; i < sliders.Count() / 2; i++)
+					{
+						<!-- single product -->
+						<div class="col-lg-3 col-md-6">
+							<div class="single-product">
+								<a asp-action="Details" asp-controller="Product" asp-route-id="@sliders[i].Id"><img class="img-fluid" src="@sliders[i].Thumbnail" alt="@sliders[i].ProductName"></a>
+								<div class="product-details">
+									<h6>
+										<a asp-action="Details" asp-controller="Product" asp-route-id="@sliders[i].Id">@sliders[i].ProductName</a>
+									</h6>
+									<div class="price">
+										<h6>$ @sliders[i].Price</h6>
+										@if (sliders[i].SalePrice > 0)
+										{
+											<h6 class="l-through">$ @sliders[i].SalePrice</h6>
+										}
+									</div>
+									<div class="prd-bottom">
+										<a href="" class="social-info">
+											<span class="lnr lnr-heart"></span>
+											<p class="hover-text">WishList</p>
+										</a>
+										<a href="" class="social-info">
+											<span class="lnr lnr-sync"></span>
+											<p class="hover-text">compare</p>
+										</a>
+										<a href="" class="social-info">
+											<span class="lnr lnr-move"></span>
+											<p class="hover-text">view more</p>
+										</a>
+									</div>
 								</div>
 							</div>
 						</div>
-					</div>
+					}
 				}
 			</div>
 		</div>
@@ -308,49 +265,52 @@ else
 			<div class="row justify-content-center">
 				<div class="col-lg-6 text-center">
 					<div class="section-title">
-						<h1>Lastest Products</h1>
+						<h1>Latest Products</h1>
 						<p>
-							Lastest Products Of All Category
+							Latest Products Of All Category
 						</p>
 					</div>
 				</div>
 			</div>
 			<div class="row">
 				<!-- single product -->
-				@for (int i = sliders.Count() / 2; i < sliders.Count(); i++)
+				@if (sliders != null)
 				{
-					<!-- single product -->
-					<div class="col-lg-3 col-md-6">
-						<div class="single-product">
-							<a asp-action="Details" asp-controller="Product" asp-route-id="@sliders[i].Id"><img class="img-fluid" src="@sliders[i].Thumbnail" alt="@sliders[i].ProductName"></a>
-							<div class="product-details">
-								<h6>
-									<a asp-action="Details" asp-controller="Product" asp-route-id="@sliders[i].Id">@sliders[i].ProductName</a>
-								</h6>
-								<div class="price">
-									<h6>$ @sliders[i].Price</h6>
-									@if (sliders[i].SalePrice > 0)
-									{
-										<h6 class="l-through">$ @sliders[i].SalePrice</h6>
-									}
-								</div>
-								<div class="prd-bottom">
-									<a href="" class="social-info">
-										<span class="lnr lnr-heart"></span>
-										<p class="hover-text">Wishlist</p>
-									</a>
-									<a href="" class="social-info">
-										<span class="lnr lnr-sync"></span>
-										<p class="hover-text">compare</p>
-									</a>
-									<a href="" class="social-info">
-										<span class="lnr lnr-move"></span>
-										<p class="hover-text">view more</p>
-									</a>
+					@for (int i = sliders.Count() / 2; i < sliders.Count(); i++)
+					{
+						<!-- single product -->
+						<div class="col-lg-3 col-md-6">
+							<div class="single-product">
+								<a asp-action="Details" asp-controller="Product" asp-route-id="@sliders[i].Id"><img class="img-fluid" src="@sliders[i].Thumbnail" alt="@sliders[i].ProductName"></a>
+								<div class="product-details">
+									<h6>
+										<a asp-action="Details" asp-controller="Product" asp-route-id="@sliders[i].Id">@sliders[i].ProductName</a>
+									</h6>
+									<div class="price">
+										<h6>$ @sliders[i].Price</h6>
+										@if (sliders[i].SalePrice > 0)
+										{
+											<h6 class="l-through">$ @sliders[i].SalePrice</h6>
+										}
+									</div>
+									<div class="prd-bottom">
+										<a href="" class="social-info">
+											<span class="lnr lnr-heart"></span>
+											<p class="hover-text">WishList</p>
+										</a>
+										<a href="" class="social-info">
+											<span class="lnr lnr-sync"></span>
+											<p class="hover-text">compare</p>
+										</a>
+										<a href="" class="social-info">
+											<span class="lnr lnr-move"></span>
+											<p class="hover-text">view more</p>
+										</a>
+									</div>
 								</div>
 							</div>
 						</div>
-					</div>
+					}
 				}
 			</div>
 		</div>
@@ -366,19 +326,19 @@ else
 		$('select[id="ddl-district"]').niceSelect('destroy'); //destroy the plugin
 		var phoneNum = $('#receiver-phoneNumber');
 		var address = $('#receiver-address');
-		var saveBtn = $('#save-details-btn');
-		var cancelBtn = $('#cancel-save-details-btn');
+		var saveBtn = $('[id*=save-details-btn]');
+		var cancelBtn = $('[id*=cancel-save-btn]');
 		if (phoneNum != undefined) {
 			phoneNum.prop('disabled', true);
 		}
 		if (address != undefined) {
 			address.prop('disabled', true);
 		}
-		if (saveBtn != undefined) {
-			saveBtn.hide();
+		if ($('[id*=save-details-btn]') != undefined) {
+			$('[id*=save-details-btn]').hide();
 		}
-		if (cancelBtn != undefined) {
-			cancelBtn.hide();
+		if ($('[id*=cancel-save-btn]') != undefined) {
+			$('[id*=cancel-save-btn]').hide();
 		}
 		$('select[id="province"]').hide();
 		$('select[id="ward"]').hide();
@@ -386,22 +346,18 @@ else
 		$('#receiver-address-new').hide();
 	});
 
-	if ('@Model.OrderStatus' != 'InCartDetail') {
-		$(".cart-item").find("input, button, a").prop("disabled", true);
-	}
-
 	$('#update-details-btn').click(function () {
 		$('#receiver-address').hide();
 		$('#receiver-address-new').show();
-		$('#save-details-btn').show();
+		$('[id*=save-details-btn]').show();
 		$(this).hide()
 		$('select[id="province"]').show();
 		$('select[id="ward"]').show();
 		$('select[id="ddl-district"]').show();
-		$('#cancel-save-details-btn').show();
+		$('[id*=cancel-save-btn]').show();
 	});
 
-	$('#save-details-btn').click(function () {
+	$('[id*=save-details-btn]').click(function () {
 		var province = $('select[id="province"] option:selected').val();
 		var district = $('select[id="ddl-district"] option:selected').val();
 		var ward = $('select[id="ward"] option:selected').val();
@@ -422,22 +378,6 @@ else
 		let wardName = $('select[id="ward"] option:selected').text();
 		var address = `${wardName}, ${districtName}, ${provinceName}`;
 		$('#receiver-address-new').val(address);
-		/*$.ajax({
-			type: "POSE",
-			url: "@Url.Action("UpdateAddress", "Cart")",
-			data: { id : @Model.AddressId, fullAddress : address },
-			success: function (response) {
-				$('#receiver-address').val(address);
-				$('#receiver-address').show();
-				$('#receiver-address-new').hide();
-			},
-			failure: function (failed) {
-				$.toaster({ priority: 'warning', title: 'Warning', message: failed.responseText });
-			},
-			error: function (error) {
-				$.toaster({ priority: 'danger', title: 'Error', message: error.responseText });
-			}
-		});*/
 		$('#receiver-address').val(address);
 		$('#receiver-address').show();
 		$('#receiver-address-new').hide();
@@ -446,10 +386,10 @@ else
 		$('select[id="ward"]').hide();
 		$('select[id="ddl-district"]').hide();
 		$(this).hide();
-		$('#cancel-save-details-btn').hide();
+		$('[id*=cancel-save-btn]').hide();
 	});
 
-	$('#cancel-save-details-btn').click(function () {
+	$('[id*=cancel-save-btn]').click(function () {
 		$('#update-details-btn').show();
 		$('select[id="province"]').hide();
 		$('select[id="ward"]').hide();
@@ -523,33 +463,31 @@ else
 		});
 	});
 
-	$('#update-cart').click(function(e) {
-		if (!e.detail || e.detail == 1) {
-			const data = {
-				orderId: @Model.Id,
-				total: $("#sub-total-cost").text().split(' ')[1]
-			};
-			$.ajax({
-				url: '@Url.Action("UpdateCart","Cart")',
-				type: 'POST',
-				data: data,
-				success: function (response) {
-					$.toaster({ priority: 'success', title: 'Created', message: "Update Cart Detail Successfully" });
-					setTimeout(function () {
-						window.location.reload();
-					}, 1000);
-				},
-				failure: function (failed) {
-					$.toaster({ priority: 'warning', title: 'Warning', message: failed.responseText });
-				},
-				error: function (error) {
-					$.toaster({ priority: 'danger', title: 'Error', message: error.responseText });
-				}
-			});
-		}
-	});
+	function UpdateCart(id) {
+		const data = {
+			orderId: id,
+			total: $("#sub-total-cost-" + id).text().split(' ')[1]
+		};
+		$.ajax({
+			url: '@Url.Action("UpdateCart","Cart")',
+			type: 'POST',
+			data: data,
+			success: function (response) {
+				$.toaster({ priority: 'success', title: 'Created', message: "Update Cart Detail Successfully" });
+				setTimeout(function () {
+					window.location.reload();
+				}, 1000);
+			},
+			failure: function (failed) {
+				$.toaster({ priority: 'warning', title: 'Warning', message: failed.responseText });
+			},
+			error: function (error) {
+				$.toaster({ priority: 'danger', title: 'Error', message: error.responseText });
+			}
+		});
+	}
 
-	function onMinusClick(event, orderDetailId) {
+	function onMinusClick(event, orderDetailId, count) {
 		var stringQ = $(event).closest("tr").find("input[name='qty']").val();
 		var quantity = Number(stringQ);
 		var newQuantity = quantity - 1;
@@ -560,7 +498,7 @@ else
 					url: "@Url.Action("DeleteOrderDetail", "Cart")",
 					data: { id: orderDetailId, quantity: newQuantity },
 					success: function (response) {
-						if (@Model.OrderDetails?.Count == 1) {
+						if (count == 1) {
 							setTimeout(function () {
 								window.location.reload();
 							}, 1000);
@@ -625,7 +563,7 @@ else
 		});
 	}
 
-	function onQuantityChange(event, orderDetailId, max) {
+	function onQuantityChange(event, orderDetailId, max, count) {
 		var newQuantity = Number(event.value);
 		if (newQuantity > max) {
 			$.toaster({ priority: 'warning', title: 'Warning', message: "There not enough item in the store" });
@@ -640,7 +578,7 @@ else
 					url: "@Url.Action("DeleteOrderDetail", "Cart")",
 					data: { id: orderDetailId, quantity: newQuantity },
 					success: function (response) {
-						if (@Model.OrderDetails?.Count == 1) {
+						if (count == 1) {
 							setTimeout(function () {
 								window.location.reload();
 							}, 1000);
@@ -693,58 +631,26 @@ else
 		}
 	});
 
-	var proceedCheckoutButton = $('#proceed-check-out-btn');
-	if (proceedCheckoutButton != undefined) {
-		$(proceedCheckoutButton).click(function (e) {
-			if (!e.detail || e.detail == 1) {
-				const data = {
-					orderId: @Model.Id
-					};
-				$.ajax({
-					url: '@Url.Action("ProcessToCheckout","Cart")',
-					type: 'POST',
-					data: data,
-					success: function (response) {
-						$.toaster({ priority: 'success', title: 'Created', message: "Add To Cart Contact Successfully" });
-						setTimeout(function () {
-							window.location.reload();
-						}, 1000);
-					},
-					failure: function (failed) {
-						$.toaster({ priority: 'warning', title: 'Warning', message: failed.responseText });
-					},
-					error: function (error) {
-						$.toaster({ priority: 'danger', title: 'Error', message: error.responseText });
-					}
-				});
+	function ProceedToCheckOut(id) {
+		const data = {
+			orderId: id
+		};
+		$.ajax({
+			url: '@Url.Action("ProcessToCheckout","Cart")',
+			type: 'POST',
+			data: data,
+			success: function (response) {
+				$.toaster({ priority: 'success', title: 'Created', message: "Add To Cart Contact Successfully" });
+				setTimeout(function () {
+					window.location.href = "/cart/cartcontact/"+id;
+				}, 1000);
+			},
+			failure: function (failed) {
+				$.toaster({ priority: 'warning', title: 'Warning', message: failed.responseText });
+			},
+			error: function (error) {
+				$.toaster({ priority: 'danger', title: 'Error', message: error.responseText });
 			}
 		});
 	}
-
-	$('#submit-to-cart-completion').click(function(e){
-		if (!e.detail || e.detail == 1) {
-			const data = {
-				orderId: @Model.Id,
-				total: $("#sub-total-cost").text().split(' ')[1],
-				address: $('#receiver-address').val(),
-			};
-			$.ajax({
-				url: '@Url.Action("UpdateCartToComplete","Cart")',
-				type: 'POST',
-				data: data,
-				success: function (response) {
-					$.toaster({ priority: 'success', title: 'Created', message: "Add To Cart Complete Successfully" });
-					setTimeout(function () {
-						window.location.reload();
-					}, 1000);
-				},
-				failure: function (failed) {
-					$.toaster({ priority: 'warning', title: 'Warning', message: failed.responseText });
-				},
-				error: function (error) {
-					$.toaster({ priority: 'danger', title: 'Error', message: error.responseText });
-				}
-			});
-		}
-	});
 </script>

@@ -24,11 +24,11 @@
     </div>
     @if (isSuccess)
     {
-        <div class="alert-success" style="padding: 10px;margin: 15px;text-align: center;">@successMessage</div>
+        <div class="alert-success" style="padding: 10px;margin: 15px;text-align: center;">@Html.Raw(successMessage)</div>
     }
     @if (isError)
     {
-        <div class="wrong-login alert-danger" style="padding: 10px;margin: 15px;text-align: center;">@errorMessage</div>
+        <div class="wrong-login alert-danger" style="padding: 10px;margin: 15px;text-align: center;">@Html.Raw(errorMessage)</div>
     }
     <div class="address-header">
         <a class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#addAddress">
@@ -50,18 +50,25 @@
                 </div>
                 <div class="address-right">
                     <div>
-                        @*<a class="btn btn-outline-info" asp-route-id="@item.Id">Edit</a>*@
+                        <a class="btn btn-outline-info" data-bs-toggle="modal" data-bs-target="#updateAddress"
+                           onclick="showAddress('@item.Id', '@item.FullName', '@item.PhoneNumber', '@item.FullAddress', '@item.IsDefault')">
+                            Edit
+                        </a>
+                        &nbsp;
+                        <a class="btn btn-outline-danger btn-profile-delete" asp-action="DeleteAddress" asp-route-ud="@item.UserId" asp-route-id="@item.Id">
+                            Delete
+                        </a>
                     </div>
                     @if (!item.IsDefault)
                     {
                         <div>
-                            <a class="btn btn-outline-secondary" asp-route-ud="@item.UserId" asp-route-id="@item.Id">_ Set as Default</a>
+                            <a class="btn btn-outline-secondary" asp-action="SetAsDefault" asp-route-ud="@item.UserId" asp-route-id="@item.Id">_ Set as Default</a>
                         </div>
                     }
                     else
                     {
                         <div>
-                            <a class="btn btn-outline-danger pe-none">Default Address</a>
+                            <a class="btn btn-outline-success pe-none">Default Address</a>
                         </div>
                     }
                 </div>
@@ -70,12 +77,12 @@
     </div>
 </div>
 
-<div class="modal fade" id="addAddress" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal fade" id="addAddress" tabindex="-1" aria-labelledby="modelAddAddress" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <form asp-action="AddAddress" method="post">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">ADD NEW ADDRESS</h5>
+                    <h5 class="modal-title" id="modelAddAddress">ADD NEW ADDRESS</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
@@ -105,3 +112,95 @@
         </div>
     </div>
 </div>
+
+
+<div class="modal fade" id="updateAddress" tabindex="-1" aria-labelledby="modelUpdateAddress" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form method="post" id="formUpdateAddress">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modelUpdateAddress">UPDATE CURRENT ADDRESS</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <input type="text" class="form-control" id="u-address-id" hidden readonly>
+                        <label for="u-address-fullname" class="form-label">Full Name</label>
+                        <input type="text" class="form-control" id="u-address-fullname">
+                    </div>
+                    <div class="mb-3">
+                        <label for="u-address-phone" class="form-label">Phone Number</label>
+                        <input type="text" class="form-control" id="u-address-phone">
+                    </div>
+                    <div class="mb-3">
+                        <label for="u-address-address" class="form-label">Address</label>
+                        <textarea class="form-control" id="u-address-address" rows="2"></textarea>
+                    </div>
+                    <div class="mb-3">
+                        <input type="checkbox" class="form-check-input" id="u-address-isDefault">
+                        <label class="form-check-label" for="u-address-isDefault">Is Default</label>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-outline-primary">Save changes</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    function showAddress(id, name, phone, address, isDefault) {
+        $("#u-address-id").val(id);
+        $("#u-address-fullname").val(name);
+        $("#u-address-phone").val(phone);
+        $("#u-address-address").val(address);
+
+        if (isDefault != null && isDefault == "True") {
+            $('#u-address-isDefault').prop('checked', true);
+        }
+        else if (isDefault == "False") {
+            $('#u-address-isDefault').prop('checked', false);
+        }
+    };
+
+    var formUpdateAddress = $("#formUpdateAddress");
+    if (formUpdateAddress != undefined && formUpdateAddress != null) {
+        formUpdateAddress.submit(function (e) {
+            e.preventDefault();
+            const id = $("#u-address-id").val();
+            const fullName = $("#u-address-fullname").val();
+            const phone = $("#u-address-phone").val();
+            const address = $("#u-address-address").val();
+            const isDefault = $("#u-address-isDefault").prop('checked');
+
+            const data = {
+                Id: id,
+                FullName: fullName,
+                PhoneNumber: phone,
+                Address: address,
+                IsDefault: isDefault
+            }
+
+            $.ajax({
+                type: "POST",
+                url: "@Url.Action("UpdateAddress", "Profile")",
+                data: data,
+                success: function (res) {
+                    var isUpdate = confirm(res);
+                    if(isUpdate){
+                        $(".btn-close").trigger('click');
+                        location.reload();
+                    }
+                },
+                failure: function (failed) {
+                    alert(failed.responseText);
+                },
+                error: function (error) {
+                    alert(error.responseText);
+                }
+            });
+        });
+    };
+</script>

@@ -4,8 +4,8 @@ using SWP391.OnlineShop.Core.Models.Entities;
 using SWP391.OnlineShop.ServiceInterface.BaseServices;
 using SWP391.OnlineShop.ServiceInterface.Interfaces;
 using SWP391.OnlineShop.ServiceInterface.Loggers;
-using SWP391.OnlineShop.ServiceModel.ServiceModels;
 using SWP391.OnlineShop.ServiceModel.ViewModels.Settings;
+using static SWP391.OnlineShop.ServiceModel.ServiceModels.SettingModels;
 
 namespace SWP391.OnlineShop.ServiceInterface.Services
 {
@@ -23,7 +23,7 @@ namespace SWP391.OnlineShop.ServiceInterface.Services
             _logger = logger;
         }
 
-        public async Task<SettingViewModel> Delete(SettingModels.DeleteSetting request)
+        public async Task<SettingViewModel> Delete(DeleteSetting request)
         {
             var result = new SettingViewModel();
             try
@@ -45,7 +45,7 @@ namespace SWP391.OnlineShop.ServiceInterface.Services
             return result;
         }
 
-        public List<SettingViewModel> Get(SettingModels.GetAllSetting request)
+        public List<SettingViewModel> Get(GetAllSetting request)
         {
             var result = new List<SettingViewModel>();
             try
@@ -62,7 +62,7 @@ namespace SWP391.OnlineShop.ServiceInterface.Services
             return result;
         }
 
-        public SettingViewModel Get(SettingModels.GetSettingById request)
+        public SettingViewModel Get(GetSettingById request)
         {
             var result = new SettingViewModel();
             try
@@ -81,7 +81,7 @@ namespace SWP391.OnlineShop.ServiceInterface.Services
             return result;
         }
 
-        public async Task<SettingViewModel> Post(SettingModels.PostAddSetting request)
+        public async Task<SettingViewModel> Post(PostAddSetting request)
         {
             var result = new SettingViewModel();
             try
@@ -89,8 +89,6 @@ namespace SWP391.OnlineShop.ServiceInterface.Services
                 var setting = new Setting
                 {
                     Type = request.Type,
-                    Value = result.Value,
-                    SettingStatus = Core.Models.Enums.Status.Active
                 };
                 await _unitOfWork.Settings.AddAsync(setting);
 
@@ -103,7 +101,7 @@ namespace SWP391.OnlineShop.ServiceInterface.Services
             return result;
         }
 
-        public async Task<SettingViewModel> Put(SettingModels.PutUpdateSetting request)
+        public async Task<SettingViewModel> Put(PutUpdateSetting request)
         {
             var result = new SettingViewModel();
             try

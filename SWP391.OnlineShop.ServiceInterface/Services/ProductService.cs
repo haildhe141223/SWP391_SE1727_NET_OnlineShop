@@ -36,7 +36,7 @@ namespace SWP391.OnlineShop.ServiceInterface.Services
             var result = new BaseResultModel();
             try
             {
-                _unitOfWork.Products.Delete(request.ProductId);
+                _unitOfWork.Products.Delete(request.ProductId, request.IsHardDelete);
                 var rows = await _unitOfWork.CompleteAsync();
                 if (rows > 0)
                 {
@@ -58,7 +58,26 @@ namespace SWP391.OnlineShop.ServiceInterface.Services
             var result = new List<ProductViewModel>();
             try
             {
-                var product = _unitOfWork.Products.GetAll().OrderByDescending(x => x.CreatedDateTime).ToList();
+                var product = _unitOfWork.Products.GetAll()
+                    .OrderByDescending(x => x.CreatedDateTime).ToList();
+                result = _mapper.Map<List<ProductViewModel>>(product);
+                return result;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message);
+            }
+            return result;
+        }
+
+        public List<ProductViewModel> Get(GetAllActiveProduct request)
+        {
+            var result = new List<ProductViewModel>();
+            try
+            {
+                var product = _unitOfWork.Products.GetAll()
+                    .Where(x => x.Status == Core.Models.Enums.Status.Active)
+                    .OrderByDescending(x => x.CreatedDateTime).ToList();
                 result = _mapper.Map<List<ProductViewModel>>(product);
                 return result;
             }
@@ -126,10 +145,10 @@ namespace SWP391.OnlineShop.ServiceInterface.Services
             var result = new ProductViewModel();
             try
             {
-                var appendix = _unitOfWork.Products.GetById(request.ProductId);
-                if (appendix != null)
+                var product = _unitOfWork.Products.GetProductFeedbackById(request.ProductId);
+                if (product != null)
                 {
-                    result = _mapper.Map<ProductViewModel>(appendix);
+                    result = _mapper.Map<ProductViewModel>(product);
                 }
             }
             catch (Exception ex)
@@ -181,27 +200,79 @@ namespace SWP391.OnlineShop.ServiceInterface.Services
             return new List<ProductViewModel>();
         }
 
+        public ProductSizeViewModel Get(GetProductByIdAndSizeId request)
+        {
+            var result = new ProductSizeViewModel();
+            try
+            {
+                var query = from p in _unitOfWork.Context.Products
+                            join ps in _unitOfWork.Context.ProductSizes
+                            on p.Id equals ps.ProductId
+                            where ps.ProductId == request.ProductId
+                            && ps.SizeId == request.SizeId
+                            select new ProductSizeViewModel()
+                            {
+                                ProductId = ps.ProductId,
+                                SizeId = ps.SizeId,
+                                Quantity = ps.Quantity,
+                            };
+                if(query != null)
+                {
+                    return query.First();
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"GetProductByIdAndSizeId error {ex.Message}");
+            }
+            return result;
+        }
+
         public async Task<BaseResultModel> Post(PostAddProduct request)
         {
             var result = new BaseResultModel();
             try
             {
+                //TODO: PhuongNL amount error
                 var product = new Product()
                 {
                     ProductName = request.ProductName,
                     Thumbnail = request.Thumbnail,
                     Description = request.Description,
-                    Amount = request.Amount,
+                    //Amount = request.Amount,
                     Price = request.Price,
                     SalePrice = request.SalePrice,
                     CategoryId = request.CategoryId,
                     Status = Core.Models.Enums.Status.Active,
-                    CreatedDateTime = DateTime.Now
+                    CreatedDateTime = DateTime.Now,
                 };
                 await _unitOfWork.Products.AddAsync(product);
                 int rows = await _unitOfWork.CompleteAsync();
+
                 if (rows > 0)
                 {
+                    var lastestProduct = _unitOfWork.Products.GetAll().OrderByDescending(x => x.CreatedDateTime).FirstOrDefault();
+                    var listProductSize = new List<ProductSize>();
+
+                    for (int i = 0; i < request.Sizes.Count; i++)
+                    {
+                        var productSize = new ProductSize()
+                        {
+                            ProductId = Convert.ToInt32(lastestProduct?.Id),
+                            SizeId = _unitOfWork.Sizes.GetSizeByName(request.Sizes[i]).Id,
+                            Quantity = request.Quantities[i],
+                            CreatedDateTime = DateTime.Now,
+                            Status = Core.Models.Enums.Status.Active
+                        };
+                        listProductSize.Add(productSize);
+                    }
+                    if (lastestProduct != null)
+                    {
+                        lastestProduct.ProductSizes = listProductSize;
+                        _unitOfWork.Products.Update(lastestProduct);
+                        await _unitOfWork.CompleteAsync();
+                    }
+
                     result.StatusCode = Common.Enums.StatusCode.Success;
                     return result;
                 }
@@ -235,7 +306,7 @@ namespace SWP391.OnlineShop.ServiceInterface.Services
             var result = new BaseResultModel();
             try
             {
-                var product = await _unitOfWork.Products.GetByIdAsync(request.Id);
+                var product = _unitOfWork.Products.GetProductFeedbackById(request.Id);
 
                 if (product != null)
                 {
@@ -247,10 +318,12 @@ namespace SWP391.OnlineShop.ServiceInterface.Services
                     {
                         product.Thumbnail = request.Thumbnail;
                     }
-                    if (request.Amount > 0)
-                    {
-                        product.Amount = request.Amount;
-                    }
+
+                    //TODO: PhuongNL check amount here
+                    //if (request.Amount > 0)
+                    //{
+                    //    product.Amount = request.Amount;
+                    //}
                     if (request.Price > 0)
                     {
                         product.Price = request.Price;
@@ -267,7 +340,15 @@ namespace SWP391.OnlineShop.ServiceInterface.Services
                     {
                         product.Description = request.Description;
                     }
+
                     product.Status = request.Status;
+
+                    var listProductSize = product.ProductSizes.OrderBy(x => x.Size.SizeType).ToList();
+                    
+                    for (int i = 0; i < listProductSize.Count; i++)
+                    {
+                        listProductSize[i].Quantity = request.Quantities[i];
+                    }
 
                     _unitOfWork.Products.Update(product);
                     int rows = await _unitOfWork.CompleteAsync();

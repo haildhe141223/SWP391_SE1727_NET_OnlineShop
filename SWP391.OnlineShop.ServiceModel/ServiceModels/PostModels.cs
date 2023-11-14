@@ -84,6 +84,7 @@ namespace SWP391.OnlineShop.ServiceModel.ServiceModels
     public class DeletePost : IReturn<BaseResultModel>
     {
         public int PostId { get; set; }
+        public bool IsHardDelete { get; set; }
     }
 
 	[Route("/Post/GetTagByPost", "GET")]

@@ -13,12 +13,19 @@ namespace SWP391.OnlineShop.ServiceInterface.Interfaces
 		/// <returns>Products</returns>
 		List<ProductViewModel> Get(GetAllProduct request);
 
-		/// <summary>
-		/// Get product by category id
-		/// </summary>
-		/// <param name="request"></param>
-		/// <returns>Product</returns>
-		List<ProductViewModel> Get(GetProductByCategoryId request);
+        /// <summary>
+        /// Get all active products
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns>Products</returns>
+        List<ProductViewModel> Get(GetAllActiveProduct request);
+
+        /// <summary>
+        /// Get product by category id
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns>Product</returns>
+        List<ProductViewModel> Get(GetProductByCategoryId request);
 
 		/// <summary>
 		/// Get hot deals products
@@ -40,6 +47,13 @@ namespace SWP391.OnlineShop.ServiceInterface.Interfaces
 		/// <param name="request"></param>
 		/// <returns>Product</returns>
 		ProductViewModel Get(GetProductById request);
+
+        /// <summary>
+        /// Get Product By Id and SizeId
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns>Product</returns>
+        ProductSizeViewModel Get(GetProductByIdAndSizeId request);
 
 		/// <summary>
 		/// Get product's feedback by id
@@ -82,6 +96,6 @@ namespace SWP391.OnlineShop.ServiceInterface.Interfaces
         /// <param name="request"></param>
         /// <returns>product of voucher</returns>
         List<ProductViewModel> Get(GetProductOfVoucher request);
-    }
+	}
 }
 
