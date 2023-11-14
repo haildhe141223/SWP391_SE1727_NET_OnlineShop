@@ -26,8 +26,8 @@ namespace SWP391.OnlineShop.Portal.Controllers
 
         public async Task<IActionResult> Index()
         {
-            //Get all products
-            var latestProducts = await _client.GetAsync(new GetAllProduct());
+            //Get all active products
+            var latestProducts = await _client.GetAsync(new GetAllActiveProduct());
 
             //Get hot deal product
             var hotDealProduct = await _client.GetAsync(new GetHotDealProduct());

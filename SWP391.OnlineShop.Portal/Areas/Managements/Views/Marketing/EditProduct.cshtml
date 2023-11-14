@@ -54,11 +54,11 @@
                     <textarea asp-for="Description" type="text" class="form-control"></textarea>
                     <span asp-validation-for="Description" class="r-error d-block text-danger"></span>
                 </div>
-                <div class="mb-3">
+                @* <div class="mb-3">
                     <label asp-for="Amount" class="form-label"></label>
                     <input asp-for="Amount" type="number" min="1" class="form-control" />
                     <span asp-validation-for="Amount" class="r-error d-block text-danger"></span>
-                </div>
+                </div> *@
                 <div class="mb-3">
                     <label asp-for="Price" class="form-label"></label>
                     <input asp-for="Price" type="text" class="form-control" />
@@ -72,7 +72,19 @@
                 <div class="mb-3">
                     <label asp-for="CategoryId" class="form-label">Category</label><br />
                     <select asp-for="CategoryId" class="form-control" asp-items="@genreList"></select>
-                </div><br />
+                </div>
+                <div class="mb-3">
+                    @if (Model.ProductSizes != null)
+                    {
+                        @foreach (var item in Model.ProductSizes.OrderBy(x => x.Size.SizeType))
+                        {
+                            <label>Size: </label>
+                            <input readonly name="size" type="text" value="@item.Size.SizeType" />
+                            <input type="number" name="quantity" min="0" value="@item.Quantity" />
+                            <br />
+                        }
+                    }
+                </div>
                 <div class="mb-3">
                     <label asp-for="Status" class="form-label">Status</label><br />
                     <select asp-for="Status" class="form-control" asp-items="@statusList"></select>
