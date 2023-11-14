@@ -55,7 +55,7 @@
                             Edit
                         </a>
                         &nbsp;
-                        <a class="btn btn-outline-danger">
+                        <a class="btn btn-outline-danger btn-profile-delete" asp-action="DeleteAddress" asp-route-ud="@item.UserId" asp-route-id="@item.Id">
                             Delete
                         </a>
                     </div>
@@ -187,13 +187,18 @@
                 type: "POST",
                 url: "@Url.Action("UpdateAddress", "Profile")",
                 data: data,
-                success: function () {
+                success: function (res) {
+                    var isUpdate = confirm(res);
+                    if(isUpdate){
+                        $(".btn-close").trigger('click');
+                        location.reload();
+                    }
                 },
                 failure: function (failed) {
-                    console.log(failed.responseText);
+                    alert(failed.responseText);
                 },
                 error: function (error) {
-                    console.log(error.responseText);
+                    alert(error.responseText);
                 }
             });
         });
