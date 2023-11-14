@@ -27,10 +27,10 @@
                                aria-expanded="false">Shop</a>
                             <ul class="dropdown-menu">
                                 <li class="nav-item"><a asp-action="Index" asp-controller="Product" class="nav-link">Shop</a></li>
-                                <li class="nav-item"><a asp-action="Index" asp-controller="Cart" class="nav-link">Shopping Cart</a></li>
                                 
                                 @if (User.Identity is { IsAuthenticated: true })
                                 {
+                                    <li class="nav-item"><a asp-action="Index" asp-controller="Cart" class="nav-link">Shopping Cart</a></li>
                                     <li class="nav-item"><a asp-action="MyOrders" asp-controller="Cart" class="nav-link">My Orders</a></li>
                                     <li class="nav-item"><a asp-action="ReceiveVoucher" asp-controller="Voucher" class="nav-link">Receive Voucher</a></li>
                                 }
@@ -51,11 +51,11 @@
                                 {
                                     <li class="nav-item"><a asp-action="Index" asp-controller="Profile" asp-route-userId="@id" class="nav-link">User Profile</a></li>
                                     <li class="nav-item"><a asp-action="Logout" asp-controller="Account" class="nav-link">Logout</a></li>
-                                    <li class="nav-item"><a asp-action="Tracking" asp-controller="Product" class="nav-link">Tracking</a></li>
+                                    @*<li class="nav-item"><a asp-action="Tracking" asp-controller="Product" class="nav-link">Tracking</a></li>*@
 
                                     @if (role == RoleConstraints.Admin)
                                     {
-                                        <li class="nav-item"><a asp-action="Index" asp-controller="Element" class="nav-link">Elements</a></li>
+                                        @*<li class="nav-item"><a asp-action="Index" asp-controller="Element" class="nav-link">Elements</a></li>*@
                                     }
                                 }
                                 else

@@ -40,20 +40,20 @@
                     <span>Vouchers</span>
                 </div>
             </button>
-            <button class="tab-header-items" data-bs-toggle="pill" data-bs-target="#v-pills-order" type="button" id="tab-order">
-                <div class="header-item-content">
-                    <i class="fa-solid fa-cart-arrow-down"></i>
-                    <span>Orders</span>
-                </div>
-            </button>
             @*
-            <button class="tab-header-items" data-bs-toggle="pill" data-bs-target="#v-pills-request" type="button" id="tab-request">
+            <button class="tab-header-items" data-bs-toggle="pill" data-bs-target="#v-pills-order" type="button" id="tab-order">
             <div class="header-item-content">
-            <i class="fa-regular fa-handshake"></i>
-            <span>Collaboration</span>
+            <i class="fa-solid fa-cart-arrow-down"></i>
+            <span>Orders</span>
             </div>
             </button>
             *@
+            <button class="tab-header-items" data-bs-toggle="pill" data-bs-target="#v-pills-request" type="button" id="tab-request">
+                <div class="header-item-content">
+                    <i class="fa-regular fa-handshake"></i>
+                    <span>Collaboration</span>
+                </div>
+            </button>
             @if (!string.IsNullOrEmpty(userRoles) && userRoles.Contains(RoleConstraints.Admin))
             {
                 <button class="tab-header-items" data-bs-toggle="pill" type="button" onclick="location.href = '@managementUrl'">
@@ -72,7 +72,7 @@
             @*tab addresses*@
             <partial name="ProfilePartial/_AddressPartial" for="AddressViewModel" />
             @*tab vouchers*@
-            <partial name="ProfilePartial/_VoucherPartial" />
+            <partial name="ProfilePartial/_VoucherPartial" for="VoucherViewModels" />
             @*tab orders*@
             <partial name="ProfilePartial/_OrderPartial" />
             @*tab requests*@

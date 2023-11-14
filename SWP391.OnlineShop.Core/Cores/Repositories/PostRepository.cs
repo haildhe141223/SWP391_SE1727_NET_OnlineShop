@@ -17,7 +17,7 @@ public class PostRepository : GenericRepository<Post, int>, IPostRepository
 		var result = new List<Post>();
 		if (Context.Posts == null) return result;
 
-		var posts = Context.Posts.Where(x => x.Title.ToLower().Contains(postName.ToLower()))
+		var posts = Context.Posts.Where(x => x.Status == Models.Enums.Status.Active && x.Title.ToLower().Contains(postName.ToLower()))
 			.ToList();
 
 		result = posts.ToList();
@@ -112,7 +112,7 @@ public class PostRepository : GenericRepository<Post, int>, IPostRepository
 		var result = new List<Post>();
 		if (Context.Posts == null) return result;
 
-		var posts = Context.Posts.Include(p => p.PostTags).ThenInclude(p => p.Tag).Include(p => p.Category)
+		var posts = Context.Posts.Where(x => x.Status == Models.Enums.Status.Active).Include(p => p.PostTags).ThenInclude(p => p.Tag).Include(p => p.Category)
 			.OrderByDescending(p => p.CreatedDateTime)
 			.ToList();
 

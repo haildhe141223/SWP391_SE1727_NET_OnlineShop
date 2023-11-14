@@ -16,6 +16,7 @@ public interface IUnitOfWork : IDisposable
     IVoucherRepository Vouchers { get; }
     ISettingRepository Settings { get; }
     ISliderRepository Sliders { get; }
+    ISizeRepository Sizes { get; }
 
     void Complete();
     Task<int> CompleteAsync();

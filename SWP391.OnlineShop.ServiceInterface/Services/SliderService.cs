@@ -29,7 +29,7 @@ namespace SWP391.OnlineShop.ServiceInterface.Services
             var result = new BaseResultModel();
             try
             {
-                _unitOfWork.Sliders.Delete(request.SliderId);
+                _unitOfWork.Sliders.Delete(request.SliderId, request.IsHardDelete);
                 var rows = await _unitOfWork.CompleteAsync();
                 if (rows > 0)
                 {

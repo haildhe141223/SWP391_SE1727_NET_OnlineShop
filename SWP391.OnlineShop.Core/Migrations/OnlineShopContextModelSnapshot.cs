@@ -242,6 +242,9 @@ namespace SWP391.OnlineShop.Core.Migrations
                     b.Property<string>("Cc")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<DateTime>("CreatedDateTime")
                         .HasColumnType("datetime2");
 
@@ -295,6 +298,7 @@ namespace SWP391.OnlineShop.Core.Migrations
                         .HasColumnType("int");
 
                     b.Property<decimal>("RatedStar")
+                        .HasPrecision(18, 2)
                         .HasColumnType("decimal(18,2)");
 
                     b.Property<int>("Status")
@@ -338,6 +342,9 @@ namespace SWP391.OnlineShop.Core.Migrations
                     b.Property<string>("CustomerName")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("CustomerPhone")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<DateTime>("ModifiedDateTime")
                         .HasColumnType("datetime2");
 
@@ -354,6 +361,7 @@ namespace SWP391.OnlineShop.Core.Migrations
                         .HasColumnType("int");
 
                     b.Property<decimal>("TotalCost")
+                        .HasPrecision(18, 2)
                         .HasColumnType("decimal(18,2)");
 
                     b.HasKey("Id");
@@ -390,12 +398,14 @@ namespace SWP391.OnlineShop.Core.Migrations
                         .HasColumnType("int");
 
                     b.Property<decimal>("SalePrice")
+                        .HasPrecision(18, 2)
                         .HasColumnType("decimal(18,2)");
 
                     b.Property<int>("Status")
                         .HasColumnType("int");
 
                     b.Property<decimal>("UnitPrice")
+                        .HasPrecision(18, 2)
                         .HasColumnType("decimal(18,2)");
 
                     b.HasKey("Id");
@@ -492,9 +502,6 @@ namespace SWP391.OnlineShop.Core.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
-                    b.Property<int>("Amount")
-                        .HasColumnType("int");
-
                     b.Property<int?>("CategoryId")
                         .HasColumnType("int");
 
@@ -508,12 +515,17 @@ namespace SWP391.OnlineShop.Core.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<decimal>("Price")
+                        .HasPrecision(18, 2)
                         .HasColumnType("decimal(18,2)");
 
                     b.Property<string>("ProductName")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int>("ProductType")
+                        .HasColumnType("int");
+
                     b.Property<decimal>("SalePrice")
+                        .HasPrecision(18, 2)
                         .HasColumnType("decimal(18,2)");
 
                     b.Property<int>("Status")
@@ -527,6 +539,41 @@ namespace SWP391.OnlineShop.Core.Migrations
                     b.HasIndex("CategoryId");
 
                     b.ToTable("Products");
+                });
+
+            modelBuilder.Entity("SWP391.OnlineShop.Core.Models.Entities.ProductSize", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<DateTime>("CreatedDateTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("ModifiedDateTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("ProductId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Quantity")
+                        .HasColumnType("int");
+
+                    b.Property<int>("SizeId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ProductId");
+
+                    b.HasIndex("SizeId");
+
+                    b.ToTable("ProductSizes");
                 });
 
             modelBuilder.Entity("SWP391.OnlineShop.Core.Models.Entities.ProductTag", b =>
@@ -616,6 +663,45 @@ namespace SWP391.OnlineShop.Core.Migrations
                     b.ToTable("Provinces");
                 });
 
+            modelBuilder.Entity("SWP391.OnlineShop.Core.Models.Entities.Request", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<DateTime>("CreatedDateTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("ModifiedDateTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Reply")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("RequestData")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("RequestStatus")
+                        .HasColumnType("int");
+
+                    b.Property<int>("RequestType")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Requests");
+                });
+
             modelBuilder.Entity("SWP391.OnlineShop.Core.Models.Entities.Setting", b =>
                 {
                     b.Property<int>("Id")
@@ -630,21 +716,40 @@ namespace SWP391.OnlineShop.Core.Migrations
                     b.Property<DateTime>("ModifiedDateTime")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("SettingStatus")
-                        .HasColumnType("int");
-
                     b.Property<int>("Status")
                         .HasColumnType("int");
 
                     b.Property<string>("Type")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<decimal>("Value")
-                        .HasColumnType("decimal(18,2)");
-
                     b.HasKey("Id");
 
                     b.ToTable("Settings");
+                });
+
+            modelBuilder.Entity("SWP391.OnlineShop.Core.Models.Entities.Size", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<DateTime>("CreatedDateTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("ModifiedDateTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("SizeType")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Sizes");
                 });
 
             modelBuilder.Entity("SWP391.OnlineShop.Core.Models.Entities.Slider", b =>
@@ -771,6 +876,7 @@ namespace SWP391.OnlineShop.Core.Migrations
                         .HasColumnType("int");
 
                     b.Property<decimal>("Value")
+                        .HasPrecision(18, 2)
                         .HasColumnType("decimal(18,2)");
 
                     b.Property<string>("VoucherCode")
@@ -1081,6 +1187,25 @@ namespace SWP391.OnlineShop.Core.Migrations
                     b.Navigation("Category");
                 });
 
+            modelBuilder.Entity("SWP391.OnlineShop.Core.Models.Entities.ProductSize", b =>
+                {
+                    b.HasOne("SWP391.OnlineShop.Core.Models.Entities.Product", "Product")
+                        .WithMany("ProductSizes")
+                        .HasForeignKey("ProductId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("SWP391.OnlineShop.Core.Models.Entities.Size", "Size")
+                        .WithMany("ProductSizes")
+                        .HasForeignKey("SizeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Product");
+
+                    b.Navigation("Size");
+                });
+
             modelBuilder.Entity("SWP391.OnlineShop.Core.Models.Entities.ProductTag", b =>
                 {
                     b.HasOne("SWP391.OnlineShop.Core.Models.Entities.Product", "Product")
@@ -1117,6 +1242,17 @@ namespace SWP391.OnlineShop.Core.Migrations
                     b.Navigation("Product");
 
                     b.Navigation("Voucher");
+                });
+
+            modelBuilder.Entity("SWP391.OnlineShop.Core.Models.Entities.Request", b =>
+                {
+                    b.HasOne("SWP391.OnlineShop.Core.Models.Identities.User", "User")
+                        .WithMany("Requests")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("SWP391.OnlineShop.Core.Models.Entities.UserVoucher", b =>
@@ -1188,6 +1324,8 @@ namespace SWP391.OnlineShop.Core.Migrations
 
                     b.Navigation("OrderDetails");
 
+                    b.Navigation("ProductSizes");
+
                     b.Navigation("ProductTags");
 
                     b.Navigation("ProductVouchers");
@@ -1196,6 +1334,11 @@ namespace SWP391.OnlineShop.Core.Migrations
             modelBuilder.Entity("SWP391.OnlineShop.Core.Models.Entities.Province", b =>
                 {
                     b.Navigation("Districts");
+                });
+
+            modelBuilder.Entity("SWP391.OnlineShop.Core.Models.Entities.Size", b =>
+                {
+                    b.Navigation("ProductSizes");
                 });
 
             modelBuilder.Entity("SWP391.OnlineShop.Core.Models.Entities.Tag", b =>
@@ -1219,6 +1362,8 @@ namespace SWP391.OnlineShop.Core.Migrations
                     b.Navigation("FeedBacks");
 
                     b.Navigation("Orders");
+
+                    b.Navigation("Requests");
 
                     b.Navigation("UserVouchers");
 

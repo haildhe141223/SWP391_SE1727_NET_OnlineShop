@@ -20,6 +20,7 @@ public class UnitOfWork : IUnitOfWork
         Vouchers = new VoucherRepository(Context);
         Settings = new SettingRepository(Context);
         Sliders = new SliderRepository(Context);
+        Sizes = new SizeRepository(Context);
     }
 
     public OnlineShopContext Context { get; }
@@ -33,6 +34,7 @@ public class UnitOfWork : IUnitOfWork
     public IVoucherRepository Vouchers { get; }
     public ISettingRepository Settings { get; }
     public ISliderRepository Sliders { get; }
+    public ISizeRepository Sizes { get; }
 
     public void Dispose()
     {

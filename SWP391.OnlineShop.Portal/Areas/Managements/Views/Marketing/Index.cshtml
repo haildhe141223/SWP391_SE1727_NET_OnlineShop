@@ -21,22 +21,16 @@
             @successMess
         </div>
     }
-
-    <div class="m-headers ml-3" style="margin-top: 10% !important;">
-        <h4 class="fw-bold">Product Management</h4>
-        <div>
-            <a class="btn btn-outline-primary my-3" asp-area="Managements" asp-controller="Marketing" asp-action="AddProduct">Add New Product</a>
-        </div>
-
+    
+    <div>
+        <a class="btn btn-outline-primary my-3" asp-area="Managements" asp-controller="Marketing" asp-action="AddProduct">Add New Product</a>
     </div>
+
     <div class="card shadow mb-4 mt-3">
-        <div class="card-header py-3">
-            <h6 class="m-0 font-weight-bold text-primary">Feedbacks</h6>
-        </div>
         <!-- DataTales Example -->
         <div class="card shadow mb-4">
             <div class="card-header py-3">
-                <h6 class="m-0 font-weight-bold text-primary">Feedbacks DataTables</h6>
+                <h6 class="m-0 font-weight-bold text-primary">Product DataTables</h6>
             </div>
             <div class="card-body">
                 <div class="table-responsive">
@@ -70,9 +64,11 @@
                             {
                                 <tr>
                                     <td>@productViewModel.ProductName</td>
-                                    <td><img width="300" height="300" src="@productViewModel.Thumbnail"></td>
+                                    <td>
+                                        <img width="60" src="@productViewModel.Thumbnail" alt="">
+                                    </td>
                                     <td>@productViewModel.Description</td>
-                                    <td>@productViewModel.Amount</td>
+                                    <td>@productViewModel.ProductSizes.FirstOrDefault()?.Quantity</td>
                                     <td>@productViewModel.Price</td>
                                     <td>@productViewModel.SalePrice</td>
                                     @if (productViewModel.Status == Status.Active)

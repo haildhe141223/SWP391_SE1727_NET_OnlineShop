@@ -67,7 +67,8 @@ namespace SWP391.OnlineShop.ServiceInterface.Services
             var result = new List<CategoryViewModel>();
             try
             {
-                var categories = _unitOfWork.Categories.GetAll().Where(x => x.CategoryType == request.CategoryType);
+                var categories = _unitOfWork.Categories.GetAll().Where(x => x.CategoryType == request.CategoryType 
+                                            && x.Status == Core.Models.Enums.Status.Active);
                 foreach (var item in categories)
                 {
                     var categoryVm = _mapper.Map<CategoryViewModel>(item);
