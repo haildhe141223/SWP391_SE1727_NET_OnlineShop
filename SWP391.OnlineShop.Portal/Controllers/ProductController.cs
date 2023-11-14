@@ -30,8 +30,8 @@ namespace SWP391.OnlineShop.Portal.Controllers
             List<ProductViewModel> latestProducts;
             if (categoryId == 0)
             {
-                //Get all products
-                latestProducts = await _client.GetAsync(new GetAllProduct());
+                //Get all active products
+                latestProducts = await _client.GetAsync(new GetAllActiveProduct());
             }
             else
             {
@@ -78,7 +78,7 @@ namespace SWP391.OnlineShop.Portal.Controllers
             };
 
             var sizeList = product.ProductSizes.Select
-            (x => new SelectListItem { Value = Convert.ToString(x.Size.SizeId), Text = x.Size.SizeType }).ToList();
+            (x => new SelectListItem { Value = Convert.ToString(x.Size.Id), Text = x.Size.SizeType }).ToList();
             ViewBag.SizeLists = sizeList;
 
             return View(productDetail);
