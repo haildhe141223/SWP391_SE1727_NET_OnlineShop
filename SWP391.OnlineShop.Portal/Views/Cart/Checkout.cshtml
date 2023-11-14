@@ -262,9 +262,7 @@
 				data: data,
 				success: function (response) {
 					$.toaster({ priority: 'success', title: 'Created', message: "Back To Cart Detail Succesfully" });
-					setTimeout(function () {
-						window.location.reload();
-					}, 1000);
+					window.location.href = '@Url.Action("Index","Cart")'
 				},
 				failure: function (failed) {
 					$.toaster({ priority: 'warning', title: 'Warning', message: failed.responseText });

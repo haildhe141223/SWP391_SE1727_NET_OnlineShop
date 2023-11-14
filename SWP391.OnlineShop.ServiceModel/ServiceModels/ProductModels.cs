@@ -12,6 +12,11 @@ namespace SWP391.OnlineShop.ServiceModel.ServiceModels
     {
     }
 
+    [Route("/Product/GetAllActiveProduct", "GET")]
+    public class GetAllActiveProduct : IReturn<List<ProductViewModel>>
+    {
+    }
+
     [Route("/Product/GetProductByCategoryId", "GET")]
     public class GetProductByCategoryId : IReturn<List<ProductViewModel>>
     {
@@ -33,8 +38,14 @@ namespace SWP391.OnlineShop.ServiceModel.ServiceModels
     {
         public int ProductId { get; set; }
     }
+	[Route("/Product/GetProductByIdAndSizeId", "GET")]
+	public class GetProductByIdAndSizeId : IReturn<ProductSizeViewModel>
+	{
+		public int ProductId { get; set; }
+        public int SizeId { get; set; }
+    }
 
-    [Route("/Product/GetProductFeedbackById", "GET")]
+	[Route("/Product/GetProductFeedbackById", "GET")]
     public class GetProductFeedbackById : IReturn<ProductViewModel>
     {
         public int ProductId { get; set; }
@@ -50,6 +61,8 @@ namespace SWP391.OnlineShop.ServiceModel.ServiceModels
         public decimal Price { get; set; }
         public decimal SalePrice { get; set; }
         public int? CategoryId { get; set; }
+        public List<string> Sizes { get; set; }
+        public List<int> Quantities { get; set; }
     }
 
     [Route("/Product/PutUpdateProduct", "PUT")]
@@ -64,12 +77,15 @@ namespace SWP391.OnlineShop.ServiceModel.ServiceModels
         public int? CategoryId { get; set; }
         public int Id { get; set; }
         public Status Status { get; set; }
+        public List<string> Sizes { get; set; }
+        public List<int> Quantities { get; set; }
     }
 
     [Route("/Product/DeleteProduct", "DELETE")]
     public class DeleteProduct : IReturn<BaseResultModel>
     {
         public int ProductId { get; set; }
+        public bool IsHardDelete { get; set; }
     }
 
     [Route("/Product/Comment", "POST")]

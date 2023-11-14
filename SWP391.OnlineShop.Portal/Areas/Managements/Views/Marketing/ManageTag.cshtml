@@ -1,5 +1,5 @@
 ﻿@using SWP391.OnlineShop.Core.Models.Enums;
-@model List<SWP391.OnlineShop.ServiceModel.ViewModels.Products.ProductViewModel>
+@model List<SWP391.OnlineShop.ServiceModel.ViewModels.Tags.TagViewModel>
 
 @{
     var successMess = TempData["SuccessMess"] as string;
@@ -21,9 +21,9 @@
             @successMess
         </div>
     }
-    
+
     <div>
-        <a class="btn btn-outline-primary my-3" asp-area="Managements" asp-controller="Marketing" asp-action="AddProduct">Add New Product</a>
+        <a class="btn btn-outline-primary my-3" asp-area="Managements" asp-controller="Marketing" asp-action="AddTag">Add New Tag</a>
     </div>
 
     <div class="card shadow mb-4 mt-3">
@@ -37,41 +37,27 @@
                     <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                         <thead>
                             <tr>
-                                <th>Product Name</th>
-                                <th>Image</th>
-                                <th>Description</th>
-                                <th>Amount</th>
-                                <th>Price</th>
-                                <th>Sale Price</th>
+                                <th>Id</th>
+                                <th>Tag Name</th>
                                 <th>Status</th>
                                 <th>Action</th>
                             </tr>
                         </thead>
                         <tfoot>
                             <tr>
-                                <th>Product Name</th>
-                                <th>Image</th>
-                                <th>Description</th>
-                                <th>Amount</th>
-                                <th>Price</th>
-                                <th>Sale Price</th>
+                                <th>Id</th>
+                                <th>Tag Name</th>
                                 <th>Status</th>
                                 <th>Action</th>
                             </tr>
                         </tfoot>
                         <tbody>
-                            @foreach (var productViewModel in Model)
+                            @foreach (var tagViewModel in Model)
                             {
                                 <tr>
-                                    <td>@productViewModel.ProductName</td>
-                                    <td>
-                                        <img width="60" src="@productViewModel.Thumbnail" alt="">
-                                    </td>
-                                    <td>@productViewModel.Description</td>
-                                    <td>@productViewModel.ProductSizes.FirstOrDefault().Quantity</td>
-                                    <td>@productViewModel.Price</td>
-                                    <td>@productViewModel.SalePrice</td>
-                                    @if (productViewModel.Status == Status.Active)
+                                    <td>@tagViewModel.Id</td>
+                                    <td>@tagViewModel.TagName</td>
+                                    @if (tagViewModel.Status == Status.Active)
                                     {
                                         <td class="text-success">Active</td>
                                     }
@@ -82,11 +68,11 @@
                                     <td>
                                         <div class="table-action">
                                             <a class="m-1 btn btn-outline-info" asp-area="Managements" asp-controller="Marketing"
-                                               asp-action="ViewProduct" asp-route-id="@productViewModel.Id">View</a>
+                                               asp-action="ViewTag" asp-route-id="@tagViewModel.Id">View</a>
                                             <a class="m-1 btn btn-outline-success" asp-area="Managements" asp-controller="Marketing"
-                                               asp-action="EditProduct" asp-route-id="@productViewModel.Id">Edit</a>
+                                               asp-action="EditTag" asp-route-id="@tagViewModel.Id">Edit</a>
                                             <a class="m-1 btn btn-outline-danger btn-delete" asp-area="Managements" asp-controller="Marketing"
-                                               asp-action="DeleteProduct" asp-route-id="@productViewModel.Id">Delete</a>
+                                               asp-action="DeleteTag" asp-route-id="@tagViewModel.Id">Delete</a>
                                         </div>
                                     </td>
                                 </tr>

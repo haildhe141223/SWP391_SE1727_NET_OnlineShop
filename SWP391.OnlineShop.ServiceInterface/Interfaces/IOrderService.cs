@@ -6,26 +6,26 @@ namespace SWP391.OnlineShop.ServiceInterface.Interfaces
 {
     public interface IOrderService
     {
-        /// <summary>
-        /// Get Cart Detail By User
-        /// </summary>
-        /// <param name="request"></param>
-        /// <returns>Order Model</returns>
-        OrderViewModels Get(GetCartDetailByUser request);
+		/// <summary>
+		/// Get Cart Detail By User
+		/// </summary>
+		/// <param name="request"></param>
+		/// <returns>Order Model</returns>
+		List<OrderViewModels> Get(GetCartDetailByUser request);
 
-        /// <summary>
-        /// Get Cart Contact By User
-        /// </summary>
-        /// <param name="request"></param>
-        /// <returns>Order Model</returns>
-        OrderViewModels Get(GetCartContactByUser request);
+		/// <summary>
+		/// Get Cart Contact By User
+		/// </summary>
+		/// <param name="request"></param>
+		/// <returns>Order Model</returns>
+		List<OrderViewModels> Get(GetCartContactByUser request);
 
-        /// <summary>
-        /// Get Cart Completion By User
-        /// </summary>
-        /// <param name="request"></param>
-        /// <returns>Order Model</returns>
-        OrderViewModels Get(GetCartCompletionByUser request);
+		/// <summary>
+		/// Get Cart Completion By User
+		/// </summary>
+		/// <param name="request"></param>
+		/// <returns>Order Model</returns>
+		List<OrderViewModels> Get(GetCartCompletionByUser request);
 
         /// <summary>
         /// Get Cart Information

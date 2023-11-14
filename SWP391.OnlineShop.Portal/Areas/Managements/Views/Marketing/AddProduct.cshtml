@@ -1,8 +1,10 @@
-﻿@model SWP391.OnlineShop.ServiceModel.ViewModels.Products.ProductViewModel
+﻿@using SWP391.OnlineShop.ServiceModel.ViewModels.Products;
+@model SWP391.OnlineShop.ServiceModel.ViewModels.Products.ProductViewModel
 @{
     var genreList = ViewData["GenreList"] as SelectList;
     var errorMess = TempData["ErrorMess"] as string;
     var successMess = TempData["SuccessMess"] as string;
+    var sizeList = (List<SizeViewModel>?)ViewData["SizeList"];
 }
 
 @if (!string.IsNullOrWhiteSpace(errorMess))
@@ -24,7 +26,7 @@
         <h6 class="m-0 font-weight-bold text-primary">Create New Product</h6>
     </div>
     <div class="card-body">
-        <form style="margin:auto !important; width:60% !important" asp-area="Managements" asp-controller="Marketing" asp-action="AddProduct" method="post" enctype="multipart/form-data">
+        <form style="margin:auto !important; width:60% !important" id="addProduct" asp-area="Managements" asp-controller="Marketing" asp-action="AddProduct" method="post" enctype="multipart/form-data">
             <div class="r-error my-4 text-danger text-center" asp-validation-summary="All">
             </div>
             <div class="mb-3">
@@ -42,11 +44,11 @@
                 <textarea asp-for="Description" type="text" class="form-control"></textarea>
                 <span asp-validation-for="Description" class="r-error d-block text-danger"></span>
             </div>
-            <div class="mb-3">
+            @* <div class="mb-3">
                 <label asp-for="Amount" class="form-label"></label>
                 <input asp-for="Amount" type="number" min="1" class="form-control" />
                 <span asp-validation-for="Amount" class="r-error d-block text-danger"></span>
-            </div>
+            </div> *@
             <div class="mb-3">
                 <label asp-for="Price" class="form-label"></label>
                 <input asp-for="Price" type="text" class="form-control" />
@@ -60,7 +62,17 @@
             <div class="mb-3">
                 <label asp-for="CategoryId" class="form-label">Category</label><br />
                 <select asp-for="CategoryId" class="form-control" asp-items="@genreList"></select><br />
-            </div><br />
+            </div>
+            <div class="mb-3">
+                @if(sizeList != null)
+                {
+                    @foreach (var item in sizeList.OrderBy(x => x.SizeType))
+                    {
+                        <label>Size: </label><input readonly name="size" type="text" value="@item.SizeType" />
+                        <input type="number" name="quantity" min="0" /><br/>
+                    }
+                }
+            </div>
             <div class="mb-3">
                 <a type="button" class="btn btn-secondary" asp-action="">Back</a>
                 <button type="submit" class="btn btn-primary">Submit</button>
