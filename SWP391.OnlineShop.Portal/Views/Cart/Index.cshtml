@@ -91,7 +91,7 @@
 														</div>
 													</td>
 													<td>
-														@if (item.Product.SalePrice > 0)
+														@if (item.Product?.SalePrice > 0)
 														{
 															<h5 class="price">$ @item.Product?.SalePrice</h5>
 														}
@@ -102,9 +102,9 @@
 													</td>
 													<td>
 														<div class="product_count">
-															<input type="number" name="qty" id="sst" maxlength="12" value="@item.Quantity" min="1" max="@item.Product?.ProductSizes.FirstOrDefault().Quantity" title="Quantity:"
-																   class="qty numberonly" onchange="onQuantityChange(this,@item.Id, @item.Product?.ProductSizes.FirstOrDefault().Quantity,@order.OrderDetails.Count)">
-															<button onclick="onAddClick(this, @item.Product?.ProductSizes.FirstOrDefault().Quantity, @item.Id)"
+															<input type="number" name="qty" id="sst" maxlength="12" value="@item.Quantity" min="1" max="@item.Product?.ProductSizes.FirstOrDefault()?.Quantity" title="Quantity:"
+																   class="qty numberonly" onchange="onQuantityChange(this,@item.Id, @item.Product?.ProductSizes.FirstOrDefault()?.Quantity,@order.OrderDetails.Count)">
+															<button onclick="onAddClick(this, @item.Product?.ProductSizes.FirstOrDefault()?.Quantity, @item.Id)"
 																	class="increase items-count" type="button">
 																<i class="lnr lnr-chevron-up"></i>
 															</button>

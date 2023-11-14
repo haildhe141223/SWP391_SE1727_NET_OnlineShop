@@ -43,10 +43,6 @@
         <div class="breadcrumb-banner d-flex flex-wrap align-items-center justify-content-end">
             <div class="col-first">
                 <h1>Shopping Cart</h1>
-                <nav class="d-flex align-items-center">
-                    <a asp-action="Index" asp-controller="Home">Home<span class="lnr lnr-arrow-right"></span></a>
-                    <a href="category.html">Cart</a>
-                </nav>
             </div>
         </div>
     </div>
@@ -89,9 +85,9 @@
                                         </td>
                                         <td>
                                             <div class="product_count">
-                                                <input type="number" name="qty" id="sst" maxlength="12" value="@item.Quantity" min="1" max="@item.Product?.ProductSizes.FirstOrDefault().Quantity" title="Quantity:"
-                                                       class="qty numberonly" onchange="onQuantityChange(this,@item.Id, @item.Product?.ProductSizes.FirstOrDefault().Quantity)">
-                                                <button onclick="onAddClick(this, @item.Product?.ProductSizes.FirstOrDefault().Quantity, @item.Id)"
+                                                <input type="number" name="qty" id="sst" maxlength="12" value="@item.Quantity" min="1" max="@item.Product?.ProductSizes.FirstOrDefault()?.Quantity" title="Quantity:"
+                                                       class="qty numberonly" onchange="onQuantityChange(this,@item.Id, @item.Product?.ProductSizes.FirstOrDefault()?.Quantity)">
+                                                <button onclick="onAddClick(this, @item.Product?.ProductSizes.FirstOrDefault()?.Quantity, @item.Id)"
                                                         class="increase items-count" type="button">
                                                     <i class="lnr lnr-chevron-up"></i>
                                                 </button>
