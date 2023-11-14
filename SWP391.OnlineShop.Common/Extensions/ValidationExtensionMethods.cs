@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using SWP391.OnlineShop.Common.Constraints;
+using System.ComponentModel.DataAnnotations;
 
 namespace SWP391.OnlineShop.Common.Extensions;
 
@@ -16,5 +17,24 @@ public static class ValidationExtensionMethods
         var checkPhone = new PhoneAttribute();
         var isValidPhone = checkPhone.IsValid(phone);
         return isValidPhone;
+    }
+
+    public static string ReplaceSpecialCharacters(this string input)
+    {
+        var output = string.Empty;
+        foreach (var charData in input)
+        {
+            var data = charData.ToString();
+            if (CommonConstraints.InvalidDictionary.Contains(data))
+            {
+                output += " ";
+            }
+            else
+            {
+                output += charData;
+            }
+        }
+
+        return output;
     }
 }

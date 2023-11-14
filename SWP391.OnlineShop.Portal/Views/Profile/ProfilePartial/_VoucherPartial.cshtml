@@ -1,4 +1,6 @@
-﻿<div class="tab-pane fade tab-content-item tab-content-all tab-content-badges" id="v-pills-badges">
+﻿@model List<SWP391.OnlineShop.ServiceModel.ViewModels.Vouchers.UserVoucherViewModel>
+
+<div class="tab-pane fade tab-content-item tab-content-all tab-content-badges" id="v-pills-badges">
     <div>
         <div>
             <div class="badges-head">Vouchers</div>
@@ -8,54 +10,16 @@
         </div>
         <div class="badges-body">
             <div class="row-pricing" style="margin: 0; justify-content: center;">
-                <div class="badges-item col-card-3 col-c-sm-3">
-                    <div>
-                        <img src="~/sources/vouchers/voucher.png" width="100" alt="badge" />
+                @foreach (var userVoucherViewModel in Model)
+                {
+                    <div class="badges-item col-card-3 col-c-sm-3">
+                        <div>
+                            <img src="~/sources/vouchers/voucher.png" width="100" alt="badge" />
+                        </div>
+                        <div>@userVoucherViewModel.VoucherCode</div>
+                        <div>Expired Date: @userVoucherViewModel.EndDateTime.ToString("dd/MM/yyyy")</div>
                     </div>
-                    <div>Santalune Voucher</div>
-                </div>
-                <div class="badges-item col-card-3 col-c-sm-3">
-                    <div>
-                        <img src="~/sources/vouchers/voucher.png" width="100" alt="badge" />
-                    </div>
-                    <div>Cyllage Voucher</div>
-                </div>
-                <div class="badges-item col-card-3 col-c-sm-3">
-                    <div>
-                        <img src="~/sources/vouchers/voucher.png" width="100" alt="badge" />
-                    </div>
-                    <div>Shalour Voucher</div>
-                </div>
-                <div class="badges-item col-card-3 col-c-sm-3">
-                    <div>
-                        <img src="~/sources/vouchers/voucher.png" width="100" alt="badge" />
-                    </div>
-                    <div>Coumarine Voucher</div>
-                </div>
-                <div class="badges-item col-card-3 col-c-sm-3">
-                    <div>
-                        <img src="~/sources/vouchers/voucher.png" width="100" alt="badge" />
-                    </div>
-                    <div>Lumiose Voucher</div>
-                </div>
-                <div class="badges-item col-card-3 col-c-sm-3">
-                    <div>
-                        <img src="~/sources/vouchers/voucher.png" width="100" alt="badge" />
-                    </div>
-                    <div>Laverre Voucher</div>
-                </div>
-                <div class="badges-item col-card-3 col-c-sm-3">
-                    <div>
-                        <img src="~/sources/vouchers/voucher.png" width="100" alt="badge" />
-                    </div>
-                    <div>Anistar Voucher</div>
-                </div>
-                <div class="badges-item col-card-3 col-c-sm-3">
-                    <div>
-                        <img src="~/sources/vouchers/voucher.png" width="100" alt="badge" />
-                    </div>
-                    <div>Snowbelle Voucher</div>
-                </div>
+                }
             </div>
         </div>
     </div>

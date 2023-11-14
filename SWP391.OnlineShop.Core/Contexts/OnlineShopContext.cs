@@ -41,6 +41,7 @@ public class OnlineShopContext : IdentityDbContext<User, Role, int>
     public DbSet<Ward> Wards { get; set; }
     public DbSet<Size> Sizes { get; set; }
     public DbSet<ProductSize> ProductSizes { get; set; }
+    public DbSet<Request> Requests { get; set; }
 
     protected override void OnModelCreating(ModelBuilder builder)
     {
@@ -59,6 +60,7 @@ public class OnlineShopContext : IdentityDbContext<User, Role, int>
         builder.ApplyConfiguration(new VoucherConfigs());
         builder.ApplyConfiguration(new AddressConfigs());
         builder.ApplyConfiguration(new ProductSizeConfigs());
+        builder.ApplyConfiguration(new RequestConfigs());
 
         // Custom Identities Configs
         // Change name of identity tables

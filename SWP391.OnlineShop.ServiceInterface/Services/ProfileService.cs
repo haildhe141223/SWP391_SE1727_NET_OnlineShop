@@ -11,6 +11,7 @@ using SWP391.OnlineShop.ServiceInterface.Interfaces;
 using SWP391.OnlineShop.ServiceInterface.Loggers;
 using SWP391.OnlineShop.ServiceModel.Results;
 using SWP391.OnlineShop.ServiceModel.ViewModels.Profiles;
+using SWP391.OnlineShop.ServiceModel.ViewModels.Vouchers;
 using static SWP391.OnlineShop.ServiceModel.ServiceModels.ProfileModels;
 
 namespace SWP391.OnlineShop.ServiceInterface.Services;
@@ -40,6 +41,36 @@ public class ProfileService : BaseService, IProfileService
         _mailService = mailService;
     }
 
+    public async Task<BaseResultModel> Delete(DeleteUserAddress request)
+    {
+        try
+        {
+            var address = await _unitOfWork.Context.Addresses
+                .FirstOrDefaultAsync(x => x.Id == request.AddressId);
+            if (address != null)
+            {
+                _unitOfWork.Context.Remove(address);
+                await _unitOfWork.CompleteAsync();
+
+                return new BaseResultModel
+                {
+                    StatusCode = StatusCode.Success
+                };
+            }
+
+            throw new Exception("Address does not exist. Please re-check");
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError($"DeleteUserAddress request - {ex}");
+            return new BaseResultModel
+            {
+                ErrorMessage = ex.Message,
+                StatusCode = StatusCode.InternalServerError
+            };
+        }
+    }
+
     public async Task<List<AddressViewModel>> Get(GetUserAddresses request)
     {
         var user = await _userManager.Users
@@ -50,6 +81,12 @@ public class ProfileService : BaseService, IProfileService
             return _mapper.Map<List<AddressViewModel>>(user.Addresses.OrderByDescending(x => x.IsDefault).ToList());
 
         return new List<AddressViewModel>();
+    }
+
+    public List<UserVoucherViewModel> Get(GetUserVouchers request)
+    {
+        var vouchers = _unitOfWork.Vouchers.GetAvailableVouchersOfUser(request.UserId);
+        return _mapper.Map<List<UserVoucherViewModel>>(vouchers);
     }
 
     public async Task<BaseResultModel> Post(PostAddUserAddress request)
@@ -98,6 +135,66 @@ public class ProfileService : BaseService, IProfileService
         catch (Exception ex)
         {
             _logger.LogError($"PostAddUserAddress request - {ex}");
+            return new BaseResultModel
+            {
+                ErrorMessage = ex.Message,
+                StatusCode = StatusCode.InternalServerError
+            };
+        }
+    }
+
+    public async Task<BaseResultModel> Put(PutUpdateUserAddress request)
+    {
+        try
+        {
+            var isValidAddressId = int.TryParse(request.AddressId, out var id);
+            if (!isValidAddressId)
+            {
+                throw new Exception("Invalid address id - Please re-check");
+            }
+
+            if (request.IsDefault)
+            {
+                var user = await _userManager.Users
+                .Include(u => u.Addresses)
+                .FirstOrDefaultAsync(u => u.Id == request.UserId);
+
+                if (user != null)
+                {
+                    var addresses = user.Addresses;
+                    foreach (var addressExist in addresses)
+                    {
+                        addressExist.IsDefault = false;
+                    }
+
+                    _unitOfWork.Context.UpdateRange(addresses);
+                    await _unitOfWork.CompleteAsync();
+                }
+            }
+
+            var address = await _unitOfWork.Context.Addresses
+                .FirstOrDefaultAsync(x => x.Id == id);
+            if (address != null)
+            {
+                address.FullAddress = request.Address;
+                address.PhoneNumber = request.PhoneNumber;
+                address.FullName = request.FullName;
+                address.IsDefault = request.IsDefault;
+
+                _unitOfWork.Context.Update(address);
+                await _unitOfWork.CompleteAsync();
+
+                return new BaseResultModel
+                {
+                    StatusCode = StatusCode.Success
+                };
+            }
+
+            throw new Exception("Address does not exist. Please re-check");
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError($"PutUpdateUserAddress request - {ex}");
             return new BaseResultModel
             {
                 ErrorMessage = ex.Message,
