@@ -17,8 +17,8 @@ public class OrderRepository : GenericRepository<Order, int>, IOrderRepository
 	{
 		var result = Context.Orders
 			.Include(o => o.OrderDetails.Where(od => od.Status == Status.Active)).
-			ThenInclude(od => od.Product).
-			Include(o => o.User).
+			ThenInclude(od => od.Product).ThenInclude(p => p.ProductSizes).
+            Include(o => o.User).
 			Where(o => o.OrderStatus == OrderStatus.InCartCompletion
 			&& o.Status == Status.Active
 			&& o.User.Email.Equals(email)).
@@ -30,8 +30,8 @@ public class OrderRepository : GenericRepository<Order, int>, IOrderRepository
 	{
 		var result = Context.Orders.
 			Include(o => o.OrderDetails.Where(od => od.Status == Status.Active)).
-			ThenInclude(od => od.Product).
-			Include(o => o.User).
+			ThenInclude(od => od.Product).ThenInclude(p => p.ProductSizes).
+            Include(o => o.User).
 			Where(o => o.OrderStatus == OrderStatus.InCartContact
 			  && o.Status == Status.Active
 			&& o.User.Email.Equals(email)).
@@ -43,8 +43,8 @@ public class OrderRepository : GenericRepository<Order, int>, IOrderRepository
 	{
 		var query = Context.Orders.
 			Include(o => o.OrderDetails.Where(od => od.Status == Status.Active)).
-			ThenInclude(od => od.Product).
-			Include(o => o.User);
+			ThenInclude(od => od.Product).ThenInclude(p => p.ProductSizes).
+            Include(o => o.User);
 		var result = query.Where(o => o.OrderStatus == OrderStatus.InCartDetail
 			&& o.Status == Status.Active
 			&& o.User.Email.Equals(email)).
@@ -64,7 +64,7 @@ public class OrderRepository : GenericRepository<Order, int>, IOrderRepository
 	public OrderDetail GetOrderDetailByOrderDetailId(int orderDetailId)
 	{
 		var result = Context.OrderDetails.
-			Include(od => od.Product).
+			Include(od => od.Product).ThenInclude(p => p.ProductSizes).
 			FirstOrDefault(od => od.Id == orderDetailId
 								 && od.Status == Status.Active);
 		return result;
@@ -74,7 +74,7 @@ public class OrderRepository : GenericRepository<Order, int>, IOrderRepository
 	{
 		var result = Context.Orders
 			.Include(o => o.OrderDetails.Where(od => od.Status == Status.Active)).
-			ThenInclude(od => od.Product)
+			ThenInclude(od => od.Product).ThenInclude(p => p.ProductSizes)
 			.Where(o => o.OrderStatus == status
 			&& o.Status == Status.Active)
 			.ToList();
@@ -85,12 +85,9 @@ public class OrderRepository : GenericRepository<Order, int>, IOrderRepository
 	{
 		var result = Context.Orders.
 			Include(o => o.OrderDetails.Where(od => od.Status == Status.Active)).
-			ThenInclude(o => o.Product).
+			ThenInclude(o => o.Product).ThenInclude(p => p.ProductSizes).
 			Include(o => o.User).
-			Where(o => o.OrderStatus != OrderStatus.InCartDetail
-			&& o.OrderStatus != OrderStatus.InCartContact
-			&& o.OrderStatus != OrderStatus.InCartCompletion
-			 && o.Status == Status.Active
+			Where(o => o.Status == Status.Active
 			&& o.User.Email.Equals(email)).
 			ToList();
 		return result;
@@ -112,8 +109,10 @@ public class OrderRepository : GenericRepository<Order, int>, IOrderRepository
 	{
 		var result = Context.Orders
 			.Include(o => o.OrderDetails.Where(od => od.Status == Status.Active))
-			.ThenInclude(o => o.Product).ThenInclude(p => p.Category).FirstOrDefault(o => o.Id == id && o.Status == Status.Active);
-		return result;
+			.ThenInclude(o => o.Product).ThenInclude(p => p.Category)
+             .Include(o => o.OrderDetails.Where(od => od.Status == Status.Active))
+            .ThenInclude(o => o.Product).ThenInclude(p => p.ProductSizes).FirstOrDefault(o => o.Id == id && o.Status == Status.Active);
+        return result;
 	}
 
 	public void UpdateOrderStatusBy(int id, OrderStatus orderStatus)
@@ -126,7 +125,7 @@ public class OrderRepository : GenericRepository<Order, int>, IOrderRepository
 	{
 		var result = Context.Orders.
 		   Include(o => o.OrderDetails.Where(od => od.Status == Status.Active)).
-		   ThenInclude(o => o.Product).
+		   ThenInclude(o => o.Product).ThenInclude(p => p.ProductSizes).
 		   Include(o => o.User).
 		   Where(o => o.OrderStatus != OrderStatus.InCartDetail
 		   && o.OrderStatus != OrderStatus.InCartContact

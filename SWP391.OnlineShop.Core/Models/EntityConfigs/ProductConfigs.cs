@@ -12,5 +12,11 @@ public class ProductConfigs : IEntityTypeConfiguration<Product>
             .WithMany(c => c.Products)
             .HasForeignKey(p => p.CategoryId)
             .OnDelete(DeleteBehavior.SetNull);
+
+        builder.Property(fb => fb.Price)
+            .HasPrecision(18, 2);
+
+        builder.Property(fb => fb.SalePrice)
+            .HasPrecision(18, 2);
     }
 }

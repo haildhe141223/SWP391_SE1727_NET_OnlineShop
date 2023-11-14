@@ -7,6 +7,7 @@ using SWP391.OnlineShop.ServiceModel.ViewModels.Contacts;
 using SWP391.OnlineShop.ServiceModel.ViewModels.Products;
 using System.Diagnostics;
 using static SWP391.OnlineShop.ServiceModel.ServiceModels.ContactModels;
+using static SWP391.OnlineShop.ServiceModel.ServiceModels.SliderModel;
 
 namespace SWP391.OnlineShop.Portal.Controllers
 {
@@ -25,8 +26,8 @@ namespace SWP391.OnlineShop.Portal.Controllers
 
         public async Task<IActionResult> Index()
         {
-            //Get all products
-            var latestProducts = await _client.GetAsync(new GetAllProduct());
+            //Get all active products
+            var latestProducts = await _client.GetAsync(new GetAllActiveProduct());
 
             //Get hot deal product
             var hotDealProduct = await _client.GetAsync(new GetHotDealProduct());
@@ -35,14 +36,14 @@ namespace SWP391.OnlineShop.Portal.Controllers
             var dealProductOfWeeks = await _client.GetAsync(new GetDealProductOfWeek());
 
             //Get all categories
-            var categories = await _client.GetAsync(new GetAllCategory());
+            var sliders = await _client.GetAsync(new GetAllSlider());
 
             var products = new HomeViewModels
             {
-                LatestProducts = latestProducts,
-                HotDealProduct = hotDealProduct,
-                ProductsOfWeek = dealProductOfWeeks,
-                Categories = categories
+                LatestProducts = latestProducts ?? new List<ProductViewModel>(),
+                HotDealProduct = hotDealProduct ?? new List<ProductViewModel>(),
+                ProductsOfWeek = dealProductOfWeeks ?? new List<ProductViewModel>(),
+                Sliders = sliders
             };
 
             return View(products);

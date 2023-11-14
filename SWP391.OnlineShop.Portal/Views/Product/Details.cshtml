@@ -5,11 +5,6 @@
         <div class="breadcrumb-banner d-flex flex-wrap align-items-center justify-content-end">
             <div class="col-first">
                 <h1>Product Details Page</h1>
-                <nav class="d-flex align-items-center">
-                    <a asp-action="Index" asp-controller="Home">Home<span class="lnr lnr-arrow-right"></span></a>
-                    <a asp-action="Index" asp-controller="Product">Shop<span class="lnr lnr-arrow-right"></span></a>
-                    <a href="single-product.html">product-details</a>
-                </nav>
             </div>
         </div>
     </div>
@@ -38,21 +33,20 @@
                     <h2>@Model.ProductDetail?.SalePrice</h2>
                     <ul class="list">
                         <li><a class="active" href="#"><span>Category</span> : @Model.ProductDetail?.Category?.CategoryName</a></li>
-                        @if (Model.ProductDetail?.Amount > 0)
+                        @if (Model.ProductDetail?.ProductSizes.FirstOrDefault()?.Quantity > 0)
                         {
-                            <li><a href="#"><span>Availability</span> : In Stock</a></li>
+                            <li><span>Availability</span> : In Stock</li>
                         }
                         else
                         {
-                            <li><a href="#"><span>Availability</span> : Sold Out</a></li>
+                            <li><span>Availability</span> : Sold Out</li>
                         }
+                        <li><select name="sizeList" id="sizeList" class="" style="width:20% !important" asp-items="@(new SelectList(ViewBag.SizeLists, "Value", "Text"))"></select></li>
                     </ul>
-                    <p>
-                        @Model.ProductDetail?.Description
-                    </p>
+                    <br/><br/>
                     <div class="product_count">
                         <label for="qty">Quantity:</label>
-                        <input type="text" name="qty" id="sst" maxlength="12" value="@Model.ProductDetail?.Amount" title="Quantity:" class="input-text qty">
+                        <input type="text" name="qty" id="sst" maxlength="12" value="1" title="Quantity:" class="input-text qty">
                         <button onclick="var result = document.getElementById('sst'); var sst = result.value; if( !isNaN( sst )) result.value++;return false;"
                                 class="increase items-count" type="button">
                             <i class="lnr lnr-chevron-up"></i>
@@ -64,8 +58,6 @@
                     </div>
                     <div class="card_area d-flex align-items-center">
                         <a class="primary-btn" onclick="AddToCart(@Model.ProductDetail?.Id,@Model.ProductDetail?.Price)">Add to Cart</a>
-                        <a class="icon_btn" href="#"><i class="lnr lnr lnr-diamond"></i></a>
-                        <a class="icon_btn" href="#"><i class="lnr lnr lnr-heart"></i></a>
                     </div>
                 </div>
             </div>
@@ -80,17 +72,17 @@
             <li class="nav-item">
                 <a class="nav-link" id="home-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home" aria-selected="true">Description</a>
             </li>
-            <li class="nav-item">
-                <a class="nav-link" id="profile-tab" data-toggle="tab" href="#profile" role="tab" aria-controls="profile"
-                   aria-selected="false">Specification</a>
-            </li>
+            @* <li class="nav-item">
+            <a class="nav-link" id="profile-tab" data-toggle="tab" href="#profile" role="tab" aria-controls="profile"
+            aria-selected="false">Specification</a>
+            </li> *@
             <li class="nav-item">
                 <a class="nav-link active" id="contact-tab" data-toggle="tab" href="#contact" role="tab" aria-controls="contact"
                    aria-selected="false">Comments</a>
             </li>
             @* <li class="nav-item">
-                <a class="nav-link active" id="review-tab" data-toggle="tab" href="#review" role="tab" aria-controls="review"
-                   aria-selected="false">Reviews</a>
+            <a class="nav-link active" id="review-tab" data-toggle="tab" href="#review" role="tab" aria-controls="review"
+            aria-selected="false">Reviews</a>
             </li> *@
         </ul>
         <div class="tab-content" id="myTabContent">
@@ -98,78 +90,6 @@
                 <p>
                     @Model.ProductDetail?.Description
                 </p>
-            </div>
-            <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
-                <div class="table-responsive">
-                    <table class="table">
-                        <tbody>
-                            <tr>
-                                <td>
-                                    <h5>Width</h5>
-                                </td>
-                                <td>
-                                    <h5>128mm</h5>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <h5>Height</h5>
-                                </td>
-                                <td>
-                                    <h5>508mm</h5>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <h5>Depth</h5>
-                                </td>
-                                <td>
-                                    <h5>85mm</h5>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <h5>Weight</h5>
-                                </td>
-                                <td>
-                                    <h5>52gm</h5>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <h5>Quality checking</h5>
-                                </td>
-                                <td>
-                                    <h5>yes</h5>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <h5>Freshness Duration</h5>
-                                </td>
-                                <td>
-                                    <h5>03days</h5>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <h5>When packeting</h5>
-                                </td>
-                                <td>
-                                    <h5>Without touch of hand</h5>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <h5>Each Box contains</h5>
-                                </td>
-                                <td>
-                                    <h5>60pcs</h5>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
             </div>
             <div class="tab-pane fade show active" id="contact" role="tabpanel" aria-labelledby="contact-tab">
                 <div class="row">
@@ -187,9 +107,9 @@
                                             <div class="media-body">
                                                 <h4>@feedback.User.UserName</h4>
                                                 @*@for (int i = 0; i < Convert.ToInt32(feedback.RatedStar); i++)
-                                                {
-                                                    <i class="fa fa-star"></i>
-                                                }*@
+                                        {
+                                        <i class="fa fa-star"></i>
+                                        }*@
                                                 <h5>@feedback.CreatedDateTime</h5>
                                                 <a class="reply_btn" href="#">Reply</a>
                                             </div>
@@ -240,122 +160,6 @@
                     </div>
                 </div>
             </div>
-            @* <div class="tab-pane fade show active" id="review" role="tabpanel" aria-labelledby="review-tab">
-                <div class="row">
-                    <div class="col-lg-6">
-                        <div class="row total_rate">
-                            <div class="col-6">
-                                <div class="box_total">
-                                    <h5>Overall</h5>
-                                    <h4>4.0</h4>
-                                    <h6>(03 Reviews)</h6>
-                                </div>
-                            </div>
-                            <div class="col-6">
-                                <div class="rating_list">
-                                    <h3>Based on 3 Reviews</h3>
-                                    <ul class="list">
-                                        <li>
-                                            <a href="#">
-                                                5 Star <i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star"></i> 01
-                                            </a>
-                                        </li>
-                                        <li>
-                                            <a href="#">
-                                                4 Star <i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star"></i> 01
-                                            </a>
-                                        </li>
-                                        <li>
-                                            <a href="#">
-                                                3 Star <i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star"></i> 01
-                                            </a>
-                                        </li>
-                                        <li>
-                                            <a href="#">
-                                                2 Star <i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star"></i> 01
-                                            </a>
-                                        </li>
-                                        <li>
-                                            <a href="#">
-                                                1 Star <i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star"></i> 01
-                                            </a>
-                                        </li>
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="review_list">
-                            @if (Model.ProductDetail?.FeedBacks != null)
-                            {
-                                @foreach (var feedback in Model.ProductDetail.FeedBacks)
-                                {
-                                    <div class="review_item">
-                                        <div class="media">
-                                            <div class="d-flex">
-                                                <img src="@feedback.Image" alt="">
-                                            </div>
-                                            <div class="media-body">
-                                                <h4>@feedback.UserName</h4> &nbsp;
-                                                @for (int i = 0; i < feedback.RatedStar; i++)
-                                                {
-                                                    <i class="fa fa-star"></i>
-                                                }
-                                            </div>
-                                        </div>
-                                        <p>
-                                            @feedback.Comment
-                                        </p>
-                                    </div>
-                                }
-                            }
-                        </div>
-                    </div>
-                     <div class="col-lg-6">
-                        <div class="review_box">
-                            <h4>Add a Review</h4>
-                            <p>Your Rating:</p>
-                            <ul class="list">
-                                <li><a href="#"><i class="fa fa-star"></i></a></li>
-                                <li><a href="#"><i class="fa fa-star"></i></a></li>
-                                <li><a href="#"><i class="fa fa-star"></i></a></li>
-                                <li><a href="#"><i class="fa fa-star"></i></a></li>
-                                <li><a href="#"><i class="fa fa-star"></i></a></li>
-                            </ul>
-                            <p>Outstanding</p>
-                            <form class="row contact_form" action="contact_process.php" method="post" id="contactForm" novalidate="novalidate">
-                                <div class="col-md-12">
-                                    <div class="form-group">
-                                        <input type="text" class="form-control" id="name" name="name" placeholder="Your Full name" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Your Full name'">
-                                    </div>
-                                </div>
-                                <div class="col-md-12">
-                                    <div class="form-group">
-                                        <input type="email" class="form-control" id="email" name="email" placeholder="Email Address" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Email Address'">
-                                    </div>
-                                </div>
-                                <div class="col-md-12">
-                                    <div class="form-group">
-                                        <input type="text" class="form-control" id="number" name="number" placeholder="Phone Number" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Phone Number'">
-                                    </div>
-                                </div>
-                                <div class="col-md-12">
-                                    <div class="form-group">
-                                        <input type="number" step="1" class="form-control" id="point" name="point" placeholder="Rate Point" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Rate Point'">
-                                    </div>
-                                </div>
-                                <div class="col-md-12">
-                                    <div class="form-group">
-                                        <textarea class="form-control" name="message" id="message" rows="1" placeholder="Review" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Review'"></textarea>
-                                    </div>
-                                </div>
-                                <div class="col-md-12 text-right">
-                                    <button type="submit" value="submit" class="primary-btn">Submit Now</button>
-                                </div>
-                            </form>
-                        </div>
-                    </div>
-                </div>
-            </div> *@
         </div>
     </div>
 </section>
@@ -385,7 +189,7 @@
                                 <div class="single-related-product d-flex">
                                     <a href="#"><img src="@productOfWeek.Thumbnail" width="70" height="70" alt=""></a>
                                     <div class="desc">
-                                        <a href="#" class="title">@productOfWeek.ProductName</a>
+                                        <a asp-controller="Product" asp-action="Details" asp-route-id="@productOfWeek.Id" class="title">@productOfWeek.ProductName</a>
                                         <div class="price">
                                             <h6>@productOfWeek.SalePrice</h6>
                                             <h6 class="l-through">@productOfWeek.SalePrice</h6>
@@ -410,11 +214,13 @@
 <!-- End related-product Area -->
 
 <script type="text/javascript">
-    function AddToCart(productId, productPrice){
+    function AddToCart(productId, productPrice) {
+        var sizeId = $("#sizeList").val();
         const data = {
             productId: productId,
             price: productPrice,
-            quantity: $('#sst').val()
+            quantity: $('#sst').val(),
+            sizeId: sizeId
         };
         $.ajax({
             url: '@Url.Action("AddToCard","Cart")',

@@ -186,7 +186,9 @@ namespace SWP391.OnlineShop.Portal.Controllers
 
                 if (createEmail.StatusCode == Common.Enums.StatusCode.Success)
                 {
-                    return Ok("Register success. Please check your email address to confirm your email.");
+                    //return Ok("Register success. Please check your email address to confirm your email.");
+                    TempData["SuccessMess"] = "Register success. Please check your email address to confirm your email.";
+                    return RedirectToAction("Login");
                 }
 
 

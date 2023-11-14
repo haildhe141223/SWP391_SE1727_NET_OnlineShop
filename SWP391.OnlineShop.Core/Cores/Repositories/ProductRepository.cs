@@ -49,7 +49,7 @@ public class ProductRepository : GenericRepository<Product, int>, IProductReposi
         if (Context.Products == null) return result;
 
         var products = Context.Products
-            .Where(x => x.CategoryId == categoryId)
+            .Where(x => x.CategoryId == categoryId && x.Status == Models.Enums.Status.Active)
             .ToList();
 
         result = products.ToList();
@@ -65,7 +65,7 @@ public class ProductRepository : GenericRepository<Product, int>, IProductReposi
         if (Context.Products == null) return Task.FromResult(result);
 
         var products = Context.Products
-            .Where(x => x.ProductName.ToLower().Contains(productName.ToLower()))
+            .Where(x => x.Status == Models.Enums.Status.Active && x.ProductName.ToLower().Contains(productName.ToLower()))
             .ToList();
 
         result = products.ToList();
@@ -96,6 +96,7 @@ public class ProductRepository : GenericRepository<Product, int>, IProductReposi
         if (Context.Products == null) return Task.FromResult(result);
 
         var products = Context.Products
+            .Where(x => x.Status == Models.Enums.Status.Active)
             .Skip(skip)
             .Take(take)
             .ToList();
@@ -135,6 +136,7 @@ public class ProductRepository : GenericRepository<Product, int>, IProductReposi
                         .GroupBy(x => x.Product.Id)
                         .OrderByDescending(g => g.Count())
                         .SelectMany(g => g.Select(p => p.Product))
+                        .Where(x => x.Status == Models.Enums.Status.Active)
                         .Take(5)
                         .ToList();
 
@@ -150,7 +152,9 @@ public class ProductRepository : GenericRepository<Product, int>, IProductReposi
         if (Context.Products == null) return result;
         var products = Context
                         .Products
-                        .OrderByDescending(x => x.OrderDetails.Count).Take(6)
+                        .Where(x => x.Status == Models.Enums.Status.Active)
+                        .OrderByDescending(x => x.OrderDetails.Count)
+                        .Take(6)
                         .ToList();
 
         result = products;
@@ -164,7 +168,8 @@ public class ProductRepository : GenericRepository<Product, int>, IProductReposi
         if (Context.Products == null) return result;
 
         var products = Context.Products
-            .Where(x => x.Id == productId).Include(x => x.Category).Include(x => x.FeedBacks).ThenInclude(f => f.User).FirstOrDefault();
+            .Where(x => x.Id == productId).Include(x => x.Category).Include(x => x.FeedBacks).ThenInclude(f => f.User)
+            .Include(x => x.ProductSizes).ThenInclude(s => s.Size).FirstOrDefault();
 
         result = products;
 

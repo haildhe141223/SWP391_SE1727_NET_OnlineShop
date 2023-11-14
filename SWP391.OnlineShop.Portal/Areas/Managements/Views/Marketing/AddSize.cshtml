@@ -1,0 +1,41 @@
+﻿@model SWP391.OnlineShop.ServiceModel.ViewModels.Products.SizeViewModel
+@{
+    var genreList = ViewData["GenreList"] as SelectList;
+    var errorMess = TempData["ErrorMess"] as string;
+    var successMess = TempData["SuccessMess"] as string;
+}
+
+@if (!string.IsNullOrWhiteSpace(errorMess))
+{
+    <div class="alert alert-danger my-2 text-center">
+        @errorMess
+    </div>
+}
+@if (!string.IsNullOrWhiteSpace(successMess))
+{
+    <div class="alert alert-success my-2 text-center">
+        @successMess
+    </div>
+}
+
+<!-- DataTales Example -->
+<div class="card shadow mb-4">
+    <div class="card-header py-3">
+        <h6 class="m-0 font-weight-bold text-primary">Create New Product</h6>
+    </div>
+    <div class="card-body">
+        <form style="margin:auto !important; width:60% !important" asp-area="Managements" asp-controller="Marketing" asp-action="AddSize" method="post" enctype="multipart/form-data">
+            <div class="r-error my-4 text-danger text-center" asp-validation-summary="All">
+            </div>
+            <div class="mb-3">
+                <label asp-for="SizeType" class="form-label">SIze Type</label>
+                <input type="text" class="form-control" asp-for="SizeType" id="name">
+                <span asp-validation-for="SizeType" class="r-error d-block text-danger"></span>
+            </div>
+            <div class="mb-3">
+                <a type="button" class="btn btn-secondary" asp-action="">Back</a>
+                <button type="submit" class="btn btn-primary">Submit</button>
+            </div>
+        </form>
+    </div>
+</div>

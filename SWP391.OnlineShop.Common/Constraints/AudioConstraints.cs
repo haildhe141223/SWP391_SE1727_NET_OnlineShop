@@ -2,18 +2,18 @@
 {
     public class AudioConstraints
     {
-        //// Uppercase ImageExtentions
-        public const string MP3 = ".MP3";
-        public const string AAC = ".AAC";
-        public const string OGG = ".OGG";
-        public const string FLAC = ".FLAC";
-        public const string ALAC = ".ALAC";
-        public const string WAV = ".WAV";
+        //// Uppercase ImageExtensions
+        public const string Mp3 = ".MP3";
+        public const string Aac = ".AAC";
+        public const string Ogg = ".OGG";
+        public const string FLac = ".FLAC";
+        public const string ALac = ".ALAC";
+        public const string Wav = ".WAV";
         public const string M4A = ".M4A";
-        public const string VOC = ".VOC";
-        public const string WEBM = ".WEBM";
+        public const string Voc = ".VOC";
+        public const string WEbm = ".WEBM";
 
-        //// Lowercase ImageExtentions
+        //// Lowercase ImageExtensions
         public const string mp3 = ".mp3";
         public const string aac = ".aac";
         public const string ogg = ".ogg";
@@ -24,17 +24,17 @@
         public const string voc = ".voc";
         public const string webm = ".webm";
 
-        public static List<string> audioExtentionLists = new List<string>
+        public static List<string> AudioExtensionLists = new List<string>
         {
-            MP3,
-            AAC,
-            OGG,
-            FLAC,
-            ALAC,
-            WAV,
+            Mp3,
+            Aac,
+            Ogg,
+            FLac,
+            ALac,
+            Wav,
             M4A,
-            VOC,
-            WEBM,
+            Voc,
+            WEbm,
 
             mp3,
             aac,
