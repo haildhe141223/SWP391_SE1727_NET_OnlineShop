@@ -48,12 +48,16 @@ namespace SWP391.OnlineShop.Portal.Areas.Managements.Controllers
             {
                 CategoryType = CategoryType.ProductCategory
             }), "Id", "CategoryName");
+
+            var sizeList = await _client.GetAsync(new GetAllActiveSize());
+            ViewData["SizeList"] = sizeList;
+
             return View();
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> AddProduct(ProductViewModel request)
+        public async Task<IActionResult> AddProduct(ProductViewModel request, List<string> size, List<int> quantity)
         {
             if (!ModelState.IsValid)
             {
@@ -92,7 +96,9 @@ namespace SWP391.OnlineShop.Portal.Areas.Managements.Controllers
                 Price = request.Price,
                 SalePrice = request.SalePrice,
                 Thumbnail = imageLink,
-                CategoryId = request.CategoryId
+                CategoryId = request.CategoryId,
+                Sizes = size,
+                Quantities = quantity
             });
 
             if (result.StatusCode == Common.Enums.StatusCode.Success)
@@ -150,7 +156,7 @@ namespace SWP391.OnlineShop.Portal.Areas.Managements.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> EditProduct(ProductViewModel request)
+        public async Task<IActionResult> EditProduct(ProductViewModel request, List<string> size, List<int> quantity)
         {
             if (!ModelState.IsValid)
             {
@@ -185,13 +191,15 @@ namespace SWP391.OnlineShop.Portal.Areas.Managements.Controllers
             {
                 ProductName = request.ProductName,
                 Description = request.Description,
-                Amount = request.Amount,
+                //Amount = request.Amount,
                 Price = request.Price,
                 SalePrice = request.SalePrice,
                 Thumbnail = string.IsNullOrEmpty(imageLink) ? request.Thumbnail : imageLink,
                 CategoryId = request.CategoryId,
                 Status = request.Status,
-                Id = request.Id
+                Id = request.Id,
+                Quantities = quantity,
+                Sizes = size
             });
 
             if (result.StatusCode == Common.Enums.StatusCode.Success)
@@ -207,7 +215,8 @@ namespace SWP391.OnlineShop.Portal.Areas.Managements.Controllers
         {
             var result = await _client.DeleteAsync(new DeleteProduct
             {
-                ProductId = id
+                ProductId = id,
+                IsHardDelete = true
             });
             if (result.StatusCode == Common.Enums.StatusCode.Success)
             {
@@ -391,7 +400,8 @@ namespace SWP391.OnlineShop.Portal.Areas.Managements.Controllers
         {
             var result = await _client.DeleteAsync(new DeletePost
             {
-                PostId = id
+                PostId = id,
+                IsHardDelete = true
             });
             if (result.StatusCode == Common.Enums.StatusCode.Success)
             {
@@ -619,7 +629,8 @@ namespace SWP391.OnlineShop.Portal.Areas.Managements.Controllers
         {
             var result = await _client.DeleteAsync(new DeleteSlider
             {
-                SliderId = id
+                SliderId = id,
+                IsHardDelete = true
             });
             if (result.StatusCode == Common.Enums.StatusCode.Success)
             {
@@ -658,6 +669,130 @@ namespace SWP391.OnlineShop.Portal.Areas.Managements.Controllers
             }
             TempData["ErrorMess"] = $"Update fail! {result.ErrorMessage}";
             return RedirectToAction("ManageCustomer");
+        }
+
+        public async Task<IActionResult> ManageTag()
+        {
+            var email = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Email)?.Value;
+            if (string.IsNullOrEmpty(email))
+            {
+                return RedirectToAction("Login", "Account", new { area = "" });
+            }
+
+            //Get all products
+            var tags = await _client.GetAsync(new GetAllTag());
+
+            return View(tags);
+        }
+
+        public async Task<IActionResult> ManageSize()
+        {
+            var email = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Email)?.Value;
+            if (string.IsNullOrEmpty(email))
+            {
+                return RedirectToAction("Login", "Account", new { area = "" });
+            }
+
+            //Get all sizes
+            var sizes = await _client.GetAsync(new GetAllSize());
+
+            return View(sizes);
+        }
+
+        public IActionResult AddSize()
+        {
+            var email = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Email)?.Value;
+            if (string.IsNullOrEmpty(email))
+            {
+                return RedirectToAction("Login", "Account", new { area = "" });
+            }
+
+            return View();
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> AddSize(SizeViewModel request)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(request);
+            }
+
+            var result = await _client.PostAsync(new PostAddSize
+            {
+                SizeType = request.SizeType
+            });
+
+            if (result.StatusCode == Common.Enums.StatusCode.Success)
+            {
+                TempData["SuccessMess"] = "Create successfully!";
+                return RedirectToAction("ManageSize");
+            }
+            TempData["ErrorMess"] = $"Create fail! {result.ErrorMessage}";
+            return View(request);
+        }
+
+        public async Task<IActionResult> EditSize(int id)
+        {
+            var email = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Email)?.Value;
+            if (string.IsNullOrEmpty(email))
+            {
+                return RedirectToAction("Login", "Account", new { area = "" });
+            }
+
+            var listStatus = new List<Status>
+            {
+                Status.Active,
+                Status.Inactive
+            };
+
+            ViewData["StatusList"] = new SelectList(listStatus);
+            var product = await _client.GetAsync(new GetSizeById
+            {
+                SizeId = id
+            });
+            return View(product);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> EditSize(SizeViewModel request)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(request);
+            }
+
+            var result = await _client.PutAsync(new PutUpdateSize
+            {
+                SizeType = request.SizeType,
+                Status = request.Status,
+                Id = request.Id
+            });
+
+            if (result.StatusCode == Common.Enums.StatusCode.Success)
+            {
+                TempData["SuccessMess"] = "Update successfully!";
+                return RedirectToAction("ManageSize");
+            }
+            TempData["ErrorMess"] = $"Update fail! {result.ErrorMessage}";
+            return View(request);
+        }
+
+        public async Task<IActionResult> DeleteSize(int id)
+        {
+            var result = await _client.DeleteAsync(new DeleteSize
+            {
+                SizeId = id,
+                IsHardDelete = true
+            });
+            if (result.StatusCode == Common.Enums.StatusCode.Success)
+            {
+                TempData["SuccessMess"] = "Delete successfully!";
+                return RedirectToAction("ManageSize");
+            }
+            TempData["ErrorMess"] = $"Delete fail! {result.ErrorMessage}";
+            return RedirectToAction("ManageSize");
         }
     }
 }
