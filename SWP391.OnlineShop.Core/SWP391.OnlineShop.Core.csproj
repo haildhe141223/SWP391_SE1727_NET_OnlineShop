@@ -8,7 +8,6 @@
 
   <ItemGroup>
     <Folder Include="Cores\Infrastructures\" />
-    <Folder Include="Cores\IRepositories\" />
     <Folder Include="Cores\UnitOfWork\" />
     <Folder Include="Migrations\" />
     <Folder Include="Models\Settings\" />

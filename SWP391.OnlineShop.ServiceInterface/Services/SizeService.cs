@@ -1,35 +1,42 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Identity;
 using SWP391.OnlineShop.Core.Cores.UnitOfWork;
 using SWP391.OnlineShop.Core.Models.Entities;
+using SWP391.OnlineShop.Core.Models.Identities;
 using SWP391.OnlineShop.ServiceInterface.BaseServices;
 using SWP391.OnlineShop.ServiceInterface.Interfaces;
 using SWP391.OnlineShop.ServiceInterface.Loggers;
 using SWP391.OnlineShop.ServiceModel.Results;
 using SWP391.OnlineShop.ServiceModel.ServiceModels;
-using SWP391.OnlineShop.ServiceModel.ViewModels.Settings;
+using SWP391.OnlineShop.ServiceModel.ViewModels.Products;
 
 namespace SWP391.OnlineShop.ServiceInterface.Services
 {
-    public class SliderService : BaseService, ISliderService
+    public class SizeService : BaseService, ISizeService
     {
-
         private readonly IMapper _mapper;
         private readonly IUnitOfWork _unitOfWork;
         private readonly ILoggerService _logger;
+        private readonly UserManager<User> _userManager;
 
-        public SliderService(IMapper mapper, IUnitOfWork unitOfWork, ILoggerService logger)
+        public SizeService(
+            IMapper mapper,
+            IUnitOfWork unitOfWork,
+            ILoggerService logger,
+            UserManager<User> userManager)
         {
             _mapper = mapper;
             _unitOfWork = unitOfWork;
             _logger = logger;
+            _userManager = userManager;
         }
 
-        public async Task<BaseResultModel> Delete(SliderModel.DeleteSlider request)
+        public async Task<BaseResultModel> Delete(DeleteSize request)
         {
             var result = new BaseResultModel();
             try
             {
-                _unitOfWork.Sliders.Delete(request.SliderId, request.IsHardDelete);
+                _unitOfWork.Sizes.Delete(request.SizeId, request.IsHardDelete);
                 var rows = await _unitOfWork.CompleteAsync();
                 if (rows > 0)
                 {
@@ -41,63 +48,75 @@ namespace SWP391.OnlineShop.ServiceInterface.Services
             }
             catch (Exception ex)
             {
-                //TODO: SangDN logger should have key to double check in log. Check AccountService for example
                 _logger.LogError(ex.Message);
             }
             return result;
         }
 
-        public List<SliderViewModel> Get(SliderModel.GetAllSlider request)
+        public List<SizeViewModel> Get(GetAllSize request)
         {
-            var result = new List<SliderViewModel>();
+            var result = new List<SizeViewModel>();
             try
             {
-                var sliders = _unitOfWork.Sliders.GetAll().ToList();
-                foreach (var slider in sliders)
-                {
-                    var sliderVm = _mapper.Map<SliderViewModel>(slider);
-                    result.Add(sliderVm);
-                }
+                var sizes = _unitOfWork.Sizes.GetAll()
+                    .OrderByDescending(x => x.CreatedDateTime).ToList();
+                result = _mapper.Map<List<SizeViewModel>>(sizes);
                 return result;
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Slider Service - GetAllSlider()");
+                _logger.LogError(ex.Message);
             }
             return result;
         }
 
-        public SliderViewModel Get(SliderModel.GetSliderById request)
+        public List<SizeViewModel> Get(GetAllActiveSize request)
         {
-            var result = new SliderViewModel();
+            var result = new List<SizeViewModel>();
             try
             {
-                var appendix = _unitOfWork.Sliders.GetById(request.SliderId);
-                if (appendix != null)
+                var sizes = _unitOfWork.Sizes.GetAll().Where(x => x.Status == Core.Models.Enums.Status.Active)
+                    .OrderBy(x => x.SizeType).ToList();
+                result = _mapper.Map<List<SizeViewModel>>(sizes);
+                return result;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message);
+            }
+            return result;
+        }
+
+        public SizeViewModel Get(GetSizeById request)
+        {
+            var result = new SizeViewModel();
+            try
+            {
+                var size = _unitOfWork.Sizes.GetById(request.SizeId);
+                if (size != null)
                 {
-                    result = _mapper.Map<SliderViewModel>(appendix);
+                    result = _mapper.Map<SizeViewModel>(size);
                 }
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Slider Service - GetSliderById()");
+                _logger.LogError(ex.Message);
             }
             return result;
         }
 
-        public async Task<BaseResultModel> Post(SliderModel.PostAddSlider request)
+        public async Task<BaseResultModel> Post(PostAddSize request)
         {
             var result = new BaseResultModel();
             try
             {
-                var slider = new Slider()
+                var size = new Size()
                 {
-                    Title = request.Title,
-                    Image = request.Image,
-                    BlackLink = request.BlackLink,
-                    SliderStatus = Core.Models.Enums.Status.Active
+                    SizeType = request.SizeType,
+                    Status = Core.Models.Enums.Status.Active,
+                    CreatedDateTime = DateTime.Now
                 };
-                await _unitOfWork.Sliders.AddAsync(slider);
+                await _unitOfWork.Sizes.AddAsync(size);
                 int rows = await _unitOfWork.CompleteAsync();
                 if (rows > 0)
                 {
@@ -106,31 +125,30 @@ namespace SWP391.OnlineShop.ServiceInterface.Services
                 }
                 result.StatusCode = Common.Enums.StatusCode.InternalServerError;
                 result.ErrorMessage = "Error";
-
             }
             catch (Exception ex)
             {
-                //TODO: SangDN logger should have key to double check in log. Check AccountService for example
-                _logger.LogError(ex.Message);
+                _logger.LogError("Error PostAddSize" + ex.Message);
             }
             return result;
         }
 
-        public async Task<BaseResultModel> Put(SliderModel.PutUpdateSlider request)
+        public async Task<BaseResultModel> Put(PutUpdateSize request)
         {
             var result = new BaseResultModel();
             try
             {
-                var slider = await _unitOfWork.Sliders.GetByIdAsync(request.Id);
+                var size = await _unitOfWork.Sizes.GetByIdAsync(request.Id);
 
-                if (slider != null)
+                if (size != null)
                 {
-                    slider.Title = request.Title;
-                    slider.Image = request.Image;
-                    slider.BlackLink = request.BlackLink;
-                    slider.Status = request.Status;
+                    if (!string.IsNullOrEmpty(request.SizeType))
+                    {
+                        size.SizeType = request.SizeType;
+                    }
+                    size.Status = request.Status;
 
-                    _unitOfWork.Sliders.Update(slider);
+                    _unitOfWork.Sizes.Update(size);
                     int rows = await _unitOfWork.CompleteAsync();
                     if (rows > 0)
                     {
@@ -140,11 +158,11 @@ namespace SWP391.OnlineShop.ServiceInterface.Services
                     result.StatusCode = Common.Enums.StatusCode.InternalServerError;
                     result.ErrorMessage = "Error";
                 }
+
             }
             catch (Exception ex)
             {
-                //TODO: SangDN logger should have key to double check in log. Check AccountService for example
-                _logger.LogError(ex.Message);
+                _logger.LogError("Error PutUpdateSize" + ex.Message);
             }
             return result;
         }
