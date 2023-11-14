@@ -43,7 +43,7 @@ namespace SWP391.OnlineShop.Portal.Controllers
                 LatestProducts = latestProducts ?? new List<ProductViewModel>(),
                 HotDealProduct = hotDealProduct ?? new List<ProductViewModel>(),
                 ProductsOfWeek = dealProductOfWeeks ?? new List<ProductViewModel>(),
-                Categories = categories
+                Sliders = sliders
             };
 
             return View(products);
