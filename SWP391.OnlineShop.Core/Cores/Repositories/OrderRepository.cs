@@ -87,10 +87,7 @@ public class OrderRepository : GenericRepository<Order, int>, IOrderRepository
 			Include(o => o.OrderDetails.Where(od => od.Status == Status.Active)).
 			ThenInclude(o => o.Product).ThenInclude(p => p.ProductSizes).
 			Include(o => o.User).
-			Where(o => o.OrderStatus != OrderStatus.InCartDetail
-			&& o.OrderStatus != OrderStatus.InCartContact
-			&& o.OrderStatus != OrderStatus.InCartCompletion
-			 && o.Status == Status.Active
+			Where(o => o.Status == Status.Active
 			&& o.User.Email.Equals(email)).
 			ToList();
 		return result;
