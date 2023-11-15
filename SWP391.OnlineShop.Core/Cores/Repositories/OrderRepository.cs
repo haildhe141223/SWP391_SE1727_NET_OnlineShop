@@ -19,7 +19,7 @@ public class OrderRepository : GenericRepository<Order, int>, IOrderRepository
             .Include(o => o.OrderDetails.Where(od => od.Status == Status.Active)).
             ThenInclude(od => od.Product).ThenInclude(p => p.ProductSizes).
             Include(o => o.User)
-            .Include(o => o.OrderVouchers).
+            .Include(o => o.OrderVouchers.Where(ov => ov.Status == Status.Active)).
             Where(o => o.OrderStatus == OrderStatus.InCartCompletion
             && o.Status == Status.Active
             && o.User.Email.Equals(email)).
@@ -33,7 +33,7 @@ public class OrderRepository : GenericRepository<Order, int>, IOrderRepository
             Include(o => o.OrderDetails.Where(od => od.Status == Status.Active)).
             ThenInclude(od => od.Product).ThenInclude(p => p.ProductSizes).
             Include(o => o.User).
-            Include(o => o.OrderVouchers).
+            Include(o => o.OrderVouchers.Where(ov => ov.Status == Status.Active)).
             Where(o => o.OrderStatus == OrderStatus.InCartContact
               && o.Status == Status.Active
             && o.User.Email.Equals(email)).
@@ -46,7 +46,7 @@ public class OrderRepository : GenericRepository<Order, int>, IOrderRepository
         var query = Context.Orders.
             Include(o => o.OrderDetails.Where(od => od.Status == Status.Active)).
             ThenInclude(od => od.Product).ThenInclude(p => p.ProductSizes).
-            Include(o => o.OrderVouchers).
+            Include(o => o.OrderVouchers.Where(ov => ov.Status == Status.Active)).
             Include(o => o.User);
         var result = query.Where(o => o.OrderStatus == OrderStatus.InCartDetail
             && o.Status == Status.Active
@@ -78,7 +78,7 @@ public class OrderRepository : GenericRepository<Order, int>, IOrderRepository
         var result = Context.Orders
             .Include(o => o.OrderDetails.Where(od => od.Status == Status.Active)).
             ThenInclude(od => od.Product).ThenInclude(p => p.ProductSizes).
-            Include(o => o.OrderVouchers).
+            Include(o => o.OrderVouchers.Where(ov => ov.Status == Status.Active)).
             Where(o => o.OrderStatus == status
             && o.Status == Status.Active)
             .ToList();
@@ -91,7 +91,7 @@ public class OrderRepository : GenericRepository<Order, int>, IOrderRepository
             Include(o => o.OrderDetails.Where(od => od.Status == Status.Active)).
             ThenInclude(o => o.Product).ThenInclude(p => p.ProductSizes).
             Include(o => o.User).
-            Include(o => o.OrderVouchers).
+            Include(o => o.OrderVouchers.Where(ov => ov.Status == Status.Active)).
             Where(o => o.Status == Status.Active
             && o.User.Email.Equals(email)).
             ToList();
@@ -115,7 +115,7 @@ public class OrderRepository : GenericRepository<Order, int>, IOrderRepository
         var result = Context.Orders
             .Include(o => o.OrderDetails.Where(od => od.Status == Status.Active))
             .ThenInclude(o => o.Product).ThenInclude(p => p.Category).
-            Include(o => o.OrderVouchers).
+            Include(o => o.OrderVouchers.Where(ov => ov.Status == Status.Active)).
             Include(o => o.OrderDetails.Where(od => od.Status == Status.Active))
             .ThenInclude(o => o.Product).ThenInclude(p => p.ProductSizes).FirstOrDefault(o => o.Id == id && o.Status == Status.Active);
         return result;
@@ -133,7 +133,7 @@ public class OrderRepository : GenericRepository<Order, int>, IOrderRepository
            Include(o => o.OrderDetails.Where(od => od.Status == Status.Active)).
            ThenInclude(o => o.Product).ThenInclude(p => p.ProductSizes).
            Include(o => o.User).
-           Include(o => o.OrderVouchers).
+           Include(o => o.OrderVouchers.Where(ov => ov.Status == Status.Active)).
            Where(o => o.OrderStatus != OrderStatus.InCartDetail
            && o.OrderStatus != OrderStatus.InCartContact
            && o.OrderStatus != OrderStatus.InCartCompletion

@@ -69,5 +69,11 @@ namespace SWP391.OnlineShop.ServiceInterface.Interfaces
 		/// <returns>API Status Code</returns>
 		Task<BaseResultModel> Post(PostAddVoucherToOrder request);
 
-    }
+		/// <summary>
+		/// Delete Voucher of User
+		/// </summary>
+		/// <param name="request"></param>
+		/// <returns>API Status Code</returns>
+		Task<BaseResultModel> Delete(DeleteUserVoucher request);
+	}
 }
