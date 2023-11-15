@@ -110,7 +110,7 @@ namespace SWP391.OnlineShop.ServiceInterface.Services
             }
             return result;
         }
-        
+
         public List<VoucherViewModels> Get(GetAllAvailableVoucher request)
         {
             var result = new List<VoucherViewModels>();
@@ -132,46 +132,47 @@ namespace SWP391.OnlineShop.ServiceInterface.Services
             }
             return result;
         }
-public async Task<BaseResultModel> Post(PostAddVoucher request)
-		{
-			var result = new BaseResultModel();
-			try
-			{
-				var user = await _userManager.FindByEmailAsync(request.Email);
-				if (user == null)
-				{
-					result.StatusCode = Common.Enums.StatusCode.BadRequest;
-					result.ErrorMessage = "User doesn't exist";
-					return result;
-				}
-				var voucher = new Voucher()
-				{
-					Amount = request.Amount,
-					CreatedBy = user.Id,
-					EndDateTime = request.EndDateTime,
-					StartDateTime = request.StartDateTime,
-					Status = Core.Models.Enums.Status.Active,
-					VoucherCode = request.VoucherCode,
-					VoucherName = request.VoucherName,
-					Type = request.Type,
-					Value = request.Value,
-				};
-				_unitOfWork.Vouchers.Add(voucher);
-				int rows = await _unitOfWork.CompleteAsync();
-				if (rows > 0)
-				{
+
+        public async Task<BaseResultModel> Post(PostAddVoucher request)
+        {
+            var result = new BaseResultModel();
+            try
+            {
+                var user = await _userManager.FindByEmailAsync(request.Email);
+                if (user == null)
+                {
+                    result.StatusCode = Common.Enums.StatusCode.BadRequest;
+                    result.ErrorMessage = "User doesn't exist";
+                    return result;
+                }
+                var voucher = new Voucher()
+                {
+                    Amount = request.Amount,
+                    CreatedBy = user.Id,
+                    EndDateTime = request.EndDateTime,
+                    StartDateTime = request.StartDateTime,
+                    Status = Core.Models.Enums.Status.Active,
+                    VoucherCode = request.VoucherCode,
+                    VoucherName = request.VoucherName,
+                    Type = request.Type,
+                    Value = request.Value,
+                };
+                await _unitOfWork.Vouchers.AddAsync(voucher);
+                int rows = await _unitOfWork.CompleteAsync();
+                if (rows > 0)
+                {
                     result.StatusCode = Common.Enums.StatusCode.Success;
-					return result;
-				}
-				result.StatusCode = Common.Enums.StatusCode.InternalServerError;
-				result.ErrorMessage = "Error";
-			}
-			catch (Exception ex)
-			{
-				_logger.LogError($"PostAddVoucher error: {ex}");
-			}
-			return result;
-		}
+                    return result;
+                }
+                result.StatusCode = Common.Enums.StatusCode.InternalServerError;
+                result.ErrorMessage = "Error";
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"PostAddVoucher error: {ex}");
+            }
+            return result;
+        }
 
         public async Task<BaseResultModel> Post(PostAddVoucherToUser request)
         {
