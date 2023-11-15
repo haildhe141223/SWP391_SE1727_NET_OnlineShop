@@ -44,6 +44,16 @@ namespace SWP391.OnlineShop.Portal.Areas.Managements.Controllers
                 return RedirectToAction("Login", "Account", new { area = "" });
             }
 
+            var listProductType = new List<ProductType>
+            {
+                ProductType.InStock,
+                ProductType.SoldOut,
+                ProductType.InComing,
+                ProductType.Event
+            };
+
+            ViewData["ProductTypeList"] = new SelectList(listProductType);
+
             ViewData["GenreList"] = new SelectList(await _client.GetAsync(new GetAllCategory
             {
                 CategoryType = CategoryType.ProductCategory
@@ -59,9 +69,27 @@ namespace SWP391.OnlineShop.Portal.Areas.Managements.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> AddProduct(ProductViewModel request, List<string> size, List<int> quantity)
         {
+            var listProductType = new List<ProductType>
+            {
+                ProductType.InStock,
+                ProductType.SoldOut,
+                ProductType.InComing,
+                ProductType.Event
+            };
+
+            ViewData["ProductTypeList"] = new SelectList(listProductType);
+
+            ViewData["GenreList"] = new SelectList(await _client.GetAsync(new GetAllCategory
+            {
+                CategoryType = CategoryType.ProductCategory
+            }), "Id", "CategoryName");
+
+            var sizeList = await _client.GetAsync(new GetAllActiveSize());
+            ViewData["SizeList"] = sizeList;
+
             if (!ModelState.IsValid)
             {
-                return View(request);
+				return View(request);
             }
 
             if (request.SalePrice > request.Price)
@@ -92,13 +120,14 @@ namespace SWP391.OnlineShop.Portal.Areas.Managements.Controllers
             {
                 ProductName = request.ProductName,
                 Description = request.Description,
-                //Amount = request.Amount,
                 Price = request.Price,
                 SalePrice = request.SalePrice,
                 Thumbnail = imageLink,
                 CategoryId = request.CategoryId,
+                Tag = request.Tag,
                 Sizes = size,
-                Quantities = quantity
+                Quantities = quantity,
+                ProductType = request.ProductType
             });
 
             if (result.StatusCode == Common.Enums.StatusCode.Success)
@@ -112,6 +141,16 @@ namespace SWP391.OnlineShop.Portal.Areas.Managements.Controllers
 
         public async Task<IActionResult> ViewProduct(int id)
         {
+            var listProductType = new List<ProductType>
+            {
+                ProductType.InStock,
+                ProductType.SoldOut,
+                ProductType.InComing,
+                ProductType.Event
+            };
+
+            ViewData["ProductTypeList"] = new SelectList(listProductType);
+
             var listStatus = new List<Status>
             {
                 Status.Active,
@@ -139,6 +178,16 @@ namespace SWP391.OnlineShop.Portal.Areas.Managements.Controllers
                 return RedirectToAction("Login", "Account", new { area = "" });
             }
 
+            var listProductType = new List<ProductType>
+            {
+                ProductType.InStock,
+                ProductType.SoldOut,
+                ProductType.InComing,
+                ProductType.Event
+            };
+
+            ViewData["ProductTypeList"] = new SelectList(listProductType);
+
             var listStatus = new List<Status>
             {
                 Status.Active,
@@ -158,6 +207,26 @@ namespace SWP391.OnlineShop.Portal.Areas.Managements.Controllers
         [HttpPost]
         public async Task<IActionResult> EditProduct(ProductViewModel request, List<string> size, List<int> quantity)
         {
+            var listProductType = new List<ProductType>
+            {
+                ProductType.InStock,
+                ProductType.SoldOut,
+                ProductType.InComing,
+                ProductType.Event
+            };
+
+            ViewData["ProductTypeList"] = new SelectList(listProductType);
+
+            var listStatus = new List<Status>
+            {
+                Status.Active,
+                Status.Inactive
+            };
+
+            ViewData["GenreList"] = new SelectList(await _client.GetAsync(
+                new GetAllCategory { CategoryType = CategoryType.ProductCategory }), "Id", "CategoryName");
+            ViewData["StatusList"] = new SelectList(listStatus);
+
             if (!ModelState.IsValid)
             {
                 return View(request);
@@ -165,6 +234,12 @@ namespace SWP391.OnlineShop.Portal.Areas.Managements.Controllers
 
             if (request.SalePrice > request.Price)
             {
+                var product = await _client.GetAsync(new GetProductById
+                {
+                    ProductId = request.Id
+                });
+                request.ProductSizes = product.ProductSizes;
+
                 TempData["ErrorMess"] = "Sale Price must smaller than Price";
                 return View(request);
             }
@@ -199,7 +274,9 @@ namespace SWP391.OnlineShop.Portal.Areas.Managements.Controllers
                 Status = request.Status,
                 Id = request.Id,
                 Quantities = quantity,
-                Sizes = size
+                Sizes = size,
+                Tag = request.Tag,
+                ProductType = request.ProductType
             });
 
             if (result.StatusCode == Common.Enums.StatusCode.Success)
@@ -258,6 +335,11 @@ namespace SWP391.OnlineShop.Portal.Areas.Managements.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> AddPost(PostViewModel request)
         {
+            ViewData["GenreList"] = new SelectList(await _client.GetAsync(new GetAllCategory
+            {
+                CategoryType = CategoryType.PostCategory
+            }), "Id", "CategoryName");
+
             if (!ModelState.IsValid)
             {
                 return View(request);
@@ -289,6 +371,7 @@ namespace SWP391.OnlineShop.Portal.Areas.Managements.Controllers
                 Thumbnail = imageLink,
                 Author = request.Author,
                 CategoryId = request.CategoryId,
+                Tag = request.Tag
             });
 
             if (result.StatusCode == Common.Enums.StatusCode.Success)
@@ -351,6 +434,19 @@ namespace SWP391.OnlineShop.Portal.Areas.Managements.Controllers
         [HttpPost]
         public async Task<IActionResult> EditPost(PostViewModel request)
         {
+            var listStatus = new List<Status>
+            {
+                Status.Active,
+                Status.Inactive
+            };
+
+            ViewData["GenreList"] = new SelectList(await _client.GetAsync(new GetAllCategory
+            {
+                CategoryType = CategoryType.PostCategory
+            }), "Id", "CategoryName");
+
+            ViewData["StatusList"] = new SelectList(listStatus);
+
             if (!ModelState.IsValid)
             {
                 return View(request);
@@ -384,7 +480,8 @@ namespace SWP391.OnlineShop.Portal.Areas.Managements.Controllers
                 Thumbnail = string.IsNullOrEmpty(imageLink) ? request.Thumbnail : imageLink,
                 Author = request.Author,
                 CategoryId = request.CategoryId,
-                Status = request.Status
+                Status = request.Status,
+                Tag = request.Tag
             });
 
             if (result.StatusCode == Common.Enums.StatusCode.Success)

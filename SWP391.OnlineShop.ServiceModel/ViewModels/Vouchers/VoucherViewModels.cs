@@ -1,6 +1,5 @@
 ﻿using SWP391.OnlineShop.Core.Models.Enums;
 using SWP391.OnlineShop.ServiceModel.Results;
-using SWP391.OnlineShop.ServiceModel.ViewModels.Accounts;
 using SWP391.OnlineShop.ServiceModel.ViewModels.Users;
 using System.ComponentModel.DataAnnotations;
 
@@ -27,8 +26,6 @@ namespace SWP391.OnlineShop.ServiceModel.ViewModels.Vouchers
         public VoucherType Type { get; set; }
         [Required(ErrorMessage = "Voucher Value is required")]
         public decimal Value { get; set; }
-		[Required(ErrorMessage = "Please choose product to apply")]
-		public List<int> ProductIds { get; set; }
-        public List<ProductVoucherViewModel> ProductVouchers { get; set; }
+        public List<OrderVoucherViewModel> OrderVouchers { get; set; }
     }
 }

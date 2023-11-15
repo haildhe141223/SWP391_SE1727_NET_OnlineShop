@@ -80,6 +80,7 @@ namespace SWP391.OnlineShop.ServiceModel.ServiceModels
             public OrderStatus OrderStatus { get; set; }
             public string Address { get; set; }
             public string OrderNotes { get; set; }
+            public string PhoneNumber { get; set; }
         }
 
         [Route("/Order/PutUpdateQuantity", "PUT")]
@@ -112,6 +113,6 @@ namespace SWP391.OnlineShop.ServiceModel.ServiceModels
 		[Route("/Order/GetAllOrder", "GET")]
 		public class GetAllOrder : IReturn<List<OrderViewModels>>
 		{
-		}
+		}		
 	}
 }

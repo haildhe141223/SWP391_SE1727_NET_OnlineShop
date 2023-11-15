@@ -2,6 +2,7 @@
 @{
     var genreList = ViewData["GenreList"] as SelectList;
     var statusList = ViewData["StatusList"] as SelectList;
+    var productTypeList = ViewData["ProductTypeList"] as SelectList;
     var errorMess = TempData["ErrorMess"] as string;
     var successMess = TempData["SuccessMess"] as string;
 }
@@ -84,6 +85,15 @@
                             <br />
                         }
                     }
+                </div>
+                <div class="mb-3">
+                    <label asp-for="Tag" class="form-label">Product Tags (separate by ;)</label>
+                    <input type="text" class="form-control" asp-for="Tag">
+                    <span asp-validation-for="Tag" class="r-error d-block text-danger"></span>
+                </div>
+                <div class="mb-3">
+                    <label asp-for="ProductType" class="form-label">Product Type</label><br />
+                    <select asp-for="ProductType" class="form-control" asp-items="@productTypeList"></select>
                 </div>
                 <div class="mb-3">
                     <label asp-for="Status" class="form-label">Status</label><br />

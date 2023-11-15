@@ -4,23 +4,22 @@
 @{
     var errorMess = TempData["ErrorMess"] as string;
     var successMess = TempData["SuccessMess"] as string;
-    var productList = ViewData["ProductList"] as SelectList;
 }
 
 <div class="container-fluid">
- <!-- Page Heading -->
+    <!-- Page Heading -->
     <h1 class="h3 mb-2 text-gray-800">Voucher Containers</h1>
     <p class="mb-4 d-none">
         DataTables is a third party plugin that is used to generate the demo table below.
-        For more information about DataTables, please visit the 
-       <a target="_blank" href="#">official DataTables documentation</a>.
+        For more information about DataTables, please visit the
+        <a target="_blank" href="#">official DataTables documentation</a>.
     </p>
 
     @if (!string.IsNullOrWhiteSpace(errorMess))
     {
-            <div class="alert alert-danger my-2 text-center">
-            @errorMess 
-            </div>	
+        <div class="alert alert-danger my-2 text-center">
+            @errorMess
+        </div>
     }
     @if (!string.IsNullOrWhiteSpace(successMess))
     {
@@ -39,22 +38,22 @@
                 </div>
                 <div class="mb-3">
                     <label asp-for="VoucherCode" class="form-label">Voucher Code</label>
-                    <input type="text" class="form-control" asp-for="VoucherCode" id="code" required>
+                    <input type="text" class="form-control" asp-for="VoucherCode" id="code" required readonly>
                     <span asp-validation-for="VoucherCode" class="r-error d-block text-danger"></span>
                 </div>
                 <div class="mb-3">
-                    <label asp-for="VoucherName" class="form-label" >Voucher Name</label>
+                    <label asp-for="VoucherName" class="form-label">Voucher Name</label>
                     <input asp-for="VoucherName" type="text" class="form-control" id="name" required>
                     <span asp-validation-for="VoucherName" class="r-error d-block text-danger"></span>
                 </div>
                 <div class="mb-3">
-                    <label asp-for="Amount" class="form-label" >Amount</label>
+                    <label asp-for="Amount" class="form-label">Amount</label>
                     <input asp-for="Amount" type="number" min="1" class="form-control" required>
                     <span asp-validation-for="Amount" class="r-error d-block text-danger"></span>
                 </div>
                 <div class="mb-3">
                     <label asp-for="StartDateTime" class="form-label">Start Date Time</label>
-                    <input asp-for="StartDateTime" type="datetime" class="form-control" id="startDate" required/>
+                    <input asp-for="StartDateTime" type="datetime" class="form-control" id="startDate" required />
                     <span asp-validation-for="StartDateTime" class="r-error d-block text-danger"></span>
                 </div>
                 <div class="mb-3">
@@ -63,7 +62,7 @@
                     <span asp-validation-for="EndDateTime" class="r-error d-block text-danger"></span>
                 </div>
                 <div class="mb-3">
-                    <label asp-for="Type" class="form-label" >Type</label>
+                    <label asp-for="Type" class="form-label">Type</label>
                     <select asp-for="Type" class="form-control" asp-items="@Html.GetEnumSelectList<VoucherType>()"></select>
                 </div>
                 <div class="mb-3">
@@ -71,11 +70,6 @@
                     <input asp-for="Value" type="number" min="1" class="form-control" required>
                     <span asp-validation-for="Value" class="r-error d-block text-danger"></span>
                 </div>
-                <div class="mb-3">
-                    <label asp-for="ProductIds" class="form-label">Product</label>
-                    <select asp-for="ProductIds" class="form-control" asp-items="@productList"></select>
-                </div>
-               
                 <a type="button" class="btn btn-secondary" asp-action="">Back</a>
                 <button type="reset" class="btn btn-info">Reset</button>
                 <button type="submit" class="btn btn-primary">Submit</button>
@@ -83,4 +77,22 @@
         </div>
     </div>
 </div>
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('#code').val('KM' + generateRandomString(4));
+    });
+
+    function generateRandomString(length) {
+        const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+        let randomString = '';
+
+        for (let i = 0; i < length; i++) {
+            const randomIndex = Math.floor(Math.random() * chars.length);
+            randomString += chars.charAt(randomIndex);
+        }
+
+        return randomString;
+    }
+
+</script>
 

@@ -13,7 +13,7 @@
 
     var isSuccess = !string.IsNullOrEmpty(successMessage);
 }
-<div class="tab-pane fade tab-content-item tab-content-secu" id="v-pills-addr">
+<div class="tab-pane fade tab-content-item tab-content-secu" id="v-pills-address">
     <div class="secu-title">
         <span>Choose your addresses</span>
         <p>
@@ -88,15 +88,15 @@
                 <div class="modal-body">
                     <div class="mb-3">
                         <input type="text" class="form-control" asp-for="ProfileTab" hidden readonly>
-                        <label asp-for="FullName" class="form-label">Full Name</label>
+                        <label asp-for="FullName" class="form-label">Full Name <span class="validate-asterisk">*</span></label>
                         <input type="text" class="form-control" asp-for="FullName">
                     </div>
                     <div class="mb-3">
-                        <label asp-for="PhoneNumber" class="form-label">Phone Number</label>
+                        <label asp-for="PhoneNumber" class="form-label">Phone Number <span class="validate-asterisk">*</span></label>
                         <input type="text" class="form-control" asp-for="PhoneNumber">
                     </div>
                     <div class="mb-3">
-                        <label asp-for="Address" class="form-label">Address</label>
+                        <label asp-for="Address" class="form-label">Address <span class="validate-asterisk">*</span></label>
                         <textarea class="form-control" asp-for="Address" rows="2"></textarea>
                     </div>
                     <div class="mb-3">
@@ -125,15 +125,15 @@
                 <div class="modal-body">
                     <div class="mb-3">
                         <input type="text" class="form-control" id="u-address-id" hidden readonly>
-                        <label for="u-address-fullname" class="form-label">Full Name</label>
+                        <label for="u-address-fullname" class="form-label">Full Name <span class="validate-asterisk">*</span></label>
                         <input type="text" class="form-control" id="u-address-fullname">
                     </div>
                     <div class="mb-3">
-                        <label for="u-address-phone" class="form-label">Phone Number</label>
+                        <label for="u-address-phone" class="form-label">Phone Number <span class="validate-asterisk">*</span></label>
                         <input type="text" class="form-control" id="u-address-phone">
                     </div>
                     <div class="mb-3">
-                        <label for="u-address-address" class="form-label">Address</label>
+                        <label for="u-address-address" class="form-label">Address <span class="validate-asterisk">*</span></label>
                         <textarea class="form-control" id="u-address-address" rows="2"></textarea>
                     </div>
                     <div class="mb-3">

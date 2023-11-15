@@ -16,7 +16,12 @@ public interface IProfileService
     Task<BaseResultModel> Put(PutUpdateUserAddress request);
 
     Task<BaseResultModel> Delete(DeleteUserAddress request);
+
     Task<BaseResultModel> Post(PostAddUserAddress request);
+    Task<BaseResultModel> Post(PostBecomeRequestMarketer request);
+    Task<BaseResultModel> Post(PostBecomeRequestSaleManager request);
+
+    Task<List<RequestDataViewModel>> Get(GetUserRequests request);
     Task<List<AddressViewModel>> Get(GetUserAddresses request);
     List<UserVoucherViewModel> Get(GetUserVouchers request);
 }

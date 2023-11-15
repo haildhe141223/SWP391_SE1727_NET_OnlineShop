@@ -4,6 +4,8 @@ using ServiceStack;
 using SWP391.OnlineShop.Core.Models.Identities;
 using SWP391.OnlineShop.ServiceInterface.Loggers;
 using System.Security.Claims;
+using static SWP391.OnlineShop.ServiceModel.ServiceModels.OrderModels;
+using static SWP391.OnlineShop.ServiceModel.ServiceModels.ProfileModels;
 using static SWP391.OnlineShop.ServiceModel.ServiceModels.VoucherModels;
 
 namespace SWP391.OnlineShop.Portal.Controllers
@@ -60,6 +62,70 @@ namespace SWP391.OnlineShop.Portal.Controllers
 				return Ok();
 			}
 			return StatusCode(500, "Add Failed");
+		}
+
+		public async Task<IActionResult> GetUserVoucher(string code, int orderId)
+		{
+            var email = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Email)?.Value;
+            if (string.IsNullOrEmpty(email))
+            {
+                return RedirectToAction("Login", "Account");
+            }
+            var user = await _userManager.FindByEmailAsync(email);
+            if (user == null)
+            {
+                return RedirectToAction("Login", "Account");
+            }
+            var cartDetailOrders = await _client.GetAsync(new GetCartInfo
+            {
+                Id = orderId
+            });
+			if(cartDetailOrders.OrderVouchers.Any())
+			{
+				return StatusCode(500, "This order already apply a voucher");
+			}
+            var vouchers = await _client.GetAsync(new GetUserVouchers()
+			{
+				UserId = user.Id
+			});
+			foreach (var item in vouchers)
+			{
+				if(item.VoucherCode == code) {
+					return Ok(item);
+				}
+			}
+			return StatusCode(500,"Voucher Not Found OR Expired");
+		}
+
+		public async Task<IActionResult> AddVoucherToOrder(int voucherId,int orderId,decimal total)
+		{
+			var email = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Email)?.Value;
+			if (string.IsNullOrEmpty(email))
+			{
+				return RedirectToAction("Login", "Account");
+			}
+			var user = await _userManager.FindByEmailAsync(email);
+			if (user == null)
+			{
+				return RedirectToAction("Login", "Account");
+			}
+			var api = await _client.PutAsync(new PutUpdateCartToContact()
+			{
+				Id = orderId,
+				OrderStatus = Core.Models.Enums.OrderStatus.InCartContact,
+				TotalCost = total
+			});
+			var addVoucherOrder = await _client.PostAsync(new PostAddVoucherToOrder()
+			{
+				OrderId = orderId,
+				VoucherId = voucherId
+			});
+			var deleteOrderVoucher = await _client.DeleteAsync(new DeleteUserVoucher()
+			{
+				VoucherId = voucherId,
+				UserId = user.Id
+			});
+			return Ok();
 		}
 	}
 }

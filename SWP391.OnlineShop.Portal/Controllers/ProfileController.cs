@@ -66,7 +66,14 @@ namespace SWP391.OnlineShop.Portal.Controllers
                 UserId = user.Id
             });
 
+            // Address
             var addresses = await _client.GetAsync(new GetUserAddresses
+            {
+                UserId = user.Id
+            });
+
+            // Collaboration
+            var requests = await _client.GetAsync(new GetUserRequests
             {
                 UserId = user.Id
             });
@@ -79,7 +86,11 @@ namespace SWP391.OnlineShop.Portal.Controllers
                 {
                     AddressViewModelList = addresses
                 },
-                VoucherViewModels = vouchers ?? new List<UserVoucherViewModel>()
+                VoucherViewModels = vouchers ?? new List<UserVoucherViewModel>(),
+                RequestViewModel = new RequestViewModels
+                {
+                    RequestDataViewModels = requests
+                }
             };
 
             // Request Tab
@@ -221,7 +232,7 @@ namespace SWP391.OnlineShop.Portal.Controllers
 
             await using Stream fileStream = new FileStream(avatarLink, FileMode.Create);
             await updateAvatar.CopyToAsync(fileStream);
-            var imageLink = $"~/uploads/users/{user.Id}/{updateAvatar.FileName}";
+            var imageLink = $"/uploads/users/{user.Id}/{updateAvatar.FileName}";
 
             var isUpdateName = await _client.PutAsync(new PutUpdateUserAvatar
             {
@@ -549,6 +560,150 @@ namespace SWP391.OnlineShop.Portal.Controllers
         #endregion
 
         #region Collaboration
+
+        [HttpPost]
+        public async Task<IActionResult> RequestToBecomeMarketer(ProfileViewModels request)
+        {
+            if (request.RequestViewModel.ProfileTab == ProfileTab.Collaboration)
+            {
+                TempData["RequestTab"] = ProfileConstraints.CollaborationTab;
+            }
+
+            var userEmail = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Email)?.Value;
+            var user = await _userManager.FindByEmailAsync(userEmail);
+
+            ModelState.Remove("RequestViewModel.RequestSaleManagerViewModel.Name");
+            ModelState.Remove("RequestViewModel.RequestSaleManagerViewModel.Email");
+            ModelState.Remove("RequestViewModel.RequestSaleManagerViewModel.Reason");
+            ModelState.Remove("RequestViewModel.RequestSaleManagerViewModel.FullAddress");
+            ModelState.Remove("RequestViewModel.RequestSaleManagerViewModel.PhoneNumber");
+            ModelState.Remove("RequestViewModel.RequestSaleManagerViewModel.BackOfIdentityCard");
+            ModelState.Remove("RequestViewModel.RequestSaleManagerViewModel.FrontOfIdentityCard");
+            ModelState.Remove("RequestViewModel.RequestSaleManagerViewModel.BusinessRegistrationCertificate");
+
+            if (!ModelState.IsValid)
+            {
+                var errors = ModelState.Values.SelectMany(x => x.Errors).Select(x => x.ErrorMessage);
+                var modelError = $"{string.Join(", </br>", errors)}";
+
+                TempData["IsCollaborationError"] = "true";
+                TempData["ErrorCollaborationMess"] = $"{modelError}. Please re-enter";
+                return RedirectToAction(nameof(Index), new { userId = user.Id });
+            }
+
+            var name = request.RequestViewModel.RequestMarketingViewModel.Name;
+            var email = request.RequestViewModel.RequestMarketingViewModel.Email.Trim();
+            var phone = request.RequestViewModel.RequestMarketingViewModel.Phone.Trim();
+            var author = request.RequestViewModel.RequestMarketingViewModel.Author.Trim();
+            var samplePostLink = request.RequestViewModel.RequestMarketingViewModel.SamplePostLink;
+
+            var isRequestMarketer = await _client.PostAsync(new PostBecomeRequestMarketer
+            {
+                UserId = user.Id,
+                PhoneNumber = phone,
+                FullName = name,
+                Author = author,
+                Email = email,
+                SamplePostLink = samplePostLink
+            });
+
+            if (isRequestMarketer.StatusCode != Common.Enums.StatusCode.Success)
+            {
+                TempData["IsCollaborationError"] = "true";
+                TempData["ErrorCollaborationMess"] = $"Error while request to become blogger/marketer. {isRequestMarketer.ErrorMessage}.";
+                return RedirectToAction(nameof(Index), new { userId = user.Id });
+            }
+
+            TempData["SuccessCollaborationMess"] = "Request to become blogger/marketer. Admin will view and report back later.";
+            return RedirectToAction(nameof(Index), new { userId = user.Id });
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> RequestToBecomeSaleManager(ProfileViewModels request)
+        {
+            if (request.RequestViewModel.ProfileTab == ProfileTab.Collaboration)
+            {
+                TempData["RequestTab"] = ProfileConstraints.CollaborationTab;
+            }
+
+            var userEmail = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Email)?.Value;
+            var user = await _userManager.FindByEmailAsync(userEmail);
+
+            ModelState.Remove("RequestViewModel.RequestMarketingViewModel.Name");
+            ModelState.Remove("RequestViewModel.RequestMarketingViewModel.Email");
+            ModelState.Remove("RequestViewModel.RequestMarketingViewModel.Phone");
+            ModelState.Remove("RequestViewModel.RequestMarketingViewModel.Author");
+
+            if (!ModelState.IsValid)
+            {
+                var errors = ModelState.Values.SelectMany(x => x.Errors).Select(x => x.ErrorMessage);
+                var modelError = $"{string.Join(", </br>", errors)}";
+
+                TempData["IsCollaborationError"] = "true";
+                TempData["ErrorCollaborationMess"] = $"{modelError}. Please re-enter";
+                return RedirectToAction(nameof(Index), new { userId = user.Id });
+            }
+
+            var name = request.RequestViewModel.RequestSaleManagerViewModel.Name.Trim();
+            var email = request.RequestViewModel.RequestSaleManagerViewModel.Email.Trim();
+            var phone = request.RequestViewModel.RequestSaleManagerViewModel.PhoneNumber.Trim();
+            var address = request.RequestViewModel.RequestSaleManagerViewModel.FullAddress.Trim().ReplaceSpecialCharacters();
+            var reason = request.RequestViewModel.RequestSaleManagerViewModel.Reason.Trim().ReplaceSpecialCharacters();
+            var businessCertificate = request.RequestViewModel.RequestSaleManagerViewModel.BusinessRegistrationCertificate;
+            var frontOfIdentityCard = request.RequestViewModel.RequestSaleManagerViewModel.FrontOfIdentityCard;
+            var backOfIdentityCard = request.RequestViewModel.RequestSaleManagerViewModel.BackOfIdentityCard;
+
+            var identityCardFolderLink = $"{Convert.ToString(Directory.GetCurrentDirectory())}\\wwwroot\\uploads\\users\\{user.Id}\\identities\\card";
+            if (!Directory.Exists(identityCardFolderLink))
+            {
+                Directory.CreateDirectory(identityCardFolderLink);
+            }
+
+            var userCertificateFolderLink = $"{Convert.ToString(Directory.GetCurrentDirectory())}\\wwwroot\\uploads\\users\\{user.Id}\\identities\\certificate";
+            if (!Directory.Exists(userCertificateFolderLink))
+            {
+                Directory.CreateDirectory(userCertificateFolderLink);
+            }
+
+            var businessCertificateLink = Path.Combine(userCertificateFolderLink, businessCertificate.FileName);
+            await using Stream fileStream = new FileStream(businessCertificateLink, FileMode.Create);
+            await businessCertificate.CopyToAsync(fileStream);
+            var businessCertificateSaveLink = $"/uploads/users/{user.Id}/identities/certificate/{businessCertificate.FileName}";
+
+            var frontOfIdentityCardLink = Path.Combine(identityCardFolderLink, frontOfIdentityCard.FileName);
+            await using Stream fileStreamFrontCard = new FileStream(frontOfIdentityCardLink, FileMode.Create);
+            await frontOfIdentityCard.CopyToAsync(fileStreamFrontCard);
+            var frontOfIdentityCardSaveLink = $"/uploads/users/{user.Id}/identities/card/{frontOfIdentityCard.FileName}";
+
+            var backOfIdentityCardLink = Path.Combine(identityCardFolderLink, backOfIdentityCard.FileName);
+            await using Stream fileStreamBackCard = new FileStream(backOfIdentityCardLink, FileMode.Create);
+            await backOfIdentityCard.CopyToAsync(fileStreamBackCard);
+            var backOfIdentityCardSaveLink = $"/uploads/users/{user.Id}/identities/card/{backOfIdentityCard.FileName}";
+
+            var isRequestSaleManager = await _client.PostAsync(new PostBecomeRequestSaleManager
+            {
+                UserId = user.Id,
+                FullAddress = address,
+                FullName = name,
+                Email = email,
+                BusinessCertificateLink = businessCertificateSaveLink,
+                FrontOfIdentityCardLink = frontOfIdentityCardSaveLink,
+                BackOfIdentityCardLink = backOfIdentityCardSaveLink,
+                PhoneNumber = phone,
+                Reason = reason
+            });
+
+            if (isRequestSaleManager.StatusCode != Common.Enums.StatusCode.Success)
+            {
+                TempData["IsCollaborationError"] = "true";
+                TempData["ErrorCollaborationMess"] = $"Error while request to become sale/sale manager. {isRequestSaleManager.ErrorMessage}.";
+                return RedirectToAction(nameof(Index), new { userId = user.Id });
+            }
+
+            TempData["SuccessCollaborationMess"] = "Request to become sale/sale manager. Admin will view and report back later.";
+            return RedirectToAction(nameof(Index), new { userId = user.Id });
+        }
+
         #endregion
     }
 }

@@ -29,17 +29,17 @@ public class TagRepository : GenericRepository<Tag, int>, ITagRepository
 
 
 
-    public Task<List<Tag>> GetTagByName(string name)
+    public Tag GetTagByName(string name)
     {
-        var result = new List<Tag>();
-        if (Context.Tags == null) return Task.FromResult(result);
+        var result = new Tag();
+        if (Context.Tags == null) return result;
 
-        var tags = Context.Tags.Where(x => x.TagName.ToLower().Contains(name.ToLower()))
-            .ToList();
+        var tag = Context.Tags.Include(x => x.ProductTags).Where(x => x.TagName.ToLower().Equals(name.ToLower()))
+            .FirstOrDefault();
 
-        result = tags.ToList();
+        result = tag;
 
-        return Task.FromResult(result);
+        return result;
     }
 
 
@@ -98,5 +98,45 @@ public class TagRepository : GenericRepository<Tag, int>, ITagRepository
         result = tags.ToList();
 
         return Task.FromResult(result);
+    }
+
+    public List<Tag> GetallTags()
+    {
+        var result = new List<Tag>();
+        if (Context.Tags == null) return result;
+
+        var tags = Context.Tags.Include(x => x.ProductTags).ThenInclude(a => a.Product)
+            .ToList();
+
+        result = tags.ToList();
+
+        return result;
+    }
+
+    public IEnumerable<int> AddTagByString(string tags)
+    {
+        var tagsName = tags.Split(';');
+        foreach (var item in tagsName)
+        {
+            var tagExist = Context.Tags.Where(t => t.TagName.Trim().ToLower() == item.Trim().ToLower()).Count();
+            if (tagExist == 0)
+            {
+                var tag = new Tag()
+                {
+                    TagName = item,
+                };
+                Context.Tags.Add(tag);
+            }
+        }
+        Context.SaveChanges();
+
+        foreach (var item in tagsName)
+        {
+            var tagExist = Context.Tags.FirstOrDefault(t => t.TagName.Trim().ToLower() == item.Trim().ToLower());
+            if (tagExist != null)
+            {
+                yield return tagExist.Id;
+            }
+        }
     }
 }

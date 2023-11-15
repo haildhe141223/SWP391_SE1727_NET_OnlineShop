@@ -1,5 +1,6 @@
 ﻿@using SWP391.OnlineShop.ServiceModel.ViewModels.Users
 @using SWP391.OnlineShop.Common.Constraints
+@using SWP391.OnlineShop.Core.Models.Enums
 @model List<UserViewModel>
 
 @{
@@ -25,7 +26,9 @@
         </div>
     }
     <div>
-        <a class="btn btn-outline-primary my-3" asp-action="Add">Add New User</a>
+        @*<a class="btn btn-outline-primary my-3" asp-action="Add">Add New User</a>*@
+        &nbsp;
+        <a class="btn btn-outline-primary my-3" asp-action="LockoutUser">View Locked Users</a>
     </div>
 
     <!-- DataTales Example -->
@@ -38,9 +41,7 @@
                 <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                     <thead>
                         <tr>
-                            <th>Avatar</th>
                             <th>UserName</th>
-                            <th>Email</th>
                             <th>PhoneNumber</th>
                             <th>Gender</th>
                             <th>Default Address</th>
@@ -52,37 +53,12 @@
                         @foreach (var user in Model)
                         {
                             <tr>
-                                <td>
-                                    @{
-                                        var avatar = user.Avatar;
-                                        if (!string.IsNullOrEmpty(user.Avatar) && user.Avatar.Contains('~'))
-                                        {
-                                            avatar = user.Avatar[1..];
-                                        }
-                                    }
-                                    @if (string.IsNullOrEmpty(user.Avatar))
-                                    {
-                                        <img src="~/template/img/settings/admins/anonymous_user.jpg" alt="" width="50"/>
-                                    }
-                                    else
-                                    {
-                                        <img src="@avatar" alt="" width="50" />
-                                    }
-                                </td>
-                                <td>@user.UserName</td>
-                                <td>@user.Email</td>
+                                <td class="text-capitalize">@user.UserName</td>
                                 <td>@user.PhoneNumber</td>
-                                <td>
-                                    @if (user.Gender == 0)
-                                    {
-                                        <span>Female</span>
-                                    }
-                                    else
-                                    {
-                                        <span>Male</span>
-                                    }
+                                <td>@Enum.GetName(typeof(Gender), user.Gender)</td>
+                                <td style="max-width: 100px;overflow: hidden;text-overflow: ellipsis; white-space: nowrap;">
+                                    @user.Address
                                 </td>
-                                <td>@user.Address</td>
                                 <td>@string.Join(", ", user.Role)</td>
                                 <td>
                                     <a class="mx-1 btn btn-outline-info" asp-route-id="@user.Id" asp-action="Details">View</a>

@@ -99,12 +99,23 @@ namespace SWP391.OnlineShop.Core.Cores.Repositories
                 {
                     var data = userRoles[i];
                     var role = Context.Roles.FirstOrDefault(r => r.Id == data.RoleId);
-                    if(role != null)
+                    if (role != null)
                         roles.Add(role.Name);
                 }
             }
 
             return roles;
+        }
+
+        public string GetDefaultAddressByUserId(int userId)
+        {
+            var user = Context.Users.FirstOrDefault(u => u.Id == userId);
+            if (user != null)
+            {
+                var address = Context.Addresses.FirstOrDefault(r => r.UserId == userId && r.IsDefault);
+                if (address != null) return address.FullAddress;
+            }
+            return string.Empty;
         }
 
         #endregion

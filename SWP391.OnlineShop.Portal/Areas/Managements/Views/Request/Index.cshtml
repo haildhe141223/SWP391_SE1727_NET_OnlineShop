@@ -1,0 +1,67 @@
+﻿@using Microsoft.AspNetCore.Mvc.TagHelpers
+@using SWP391.OnlineShop.Core.Models.Enums
+@model List<SWP391.OnlineShop.ServiceModel.ViewModels.Requests.RequestManageViewModel>
+
+@{
+    var successMess = TempData["SuccessMess"] as string;
+    var errorMess = TempData["ErrorMess"] as string;
+}
+
+<div class="container-fluid">
+    <!-- Page Heading -->
+    <h1 class="h3 mb-2 text-gray-800">Request Containers</h1>
+    <p class="mb-4">
+    </p>
+    @if (!string.IsNullOrWhiteSpace(errorMess))
+    {
+        <div class="alert alert-danger my-2 text-center">
+            @errorMess
+        </div>
+    }
+    @if (!string.IsNullOrWhiteSpace(successMess))
+    {
+        <div class="alert alert-success my-2 text-center">
+            @successMess
+        </div>
+    }
+    <div>
+        <a class="btn btn-outline-primary my-3" asp-action="ProcessedRequests">View Processed Requests</a>
+    </div>
+
+    <!-- DataTales Example -->
+    <div class="card shadow mb-4">
+        <div class="card-header py-3">
+            <h6 class="m-0 font-weight-bold text-primary">Request DataTables</h6>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                    <thead>
+                        <tr>
+                            <th>Request Type</th>
+                            <th>Request Status</th>
+                            <th>Request User</th>
+                            <th>Created Date</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+                                <td>@Enum.GetName(typeof(RequestType), item.RequestType)</td>
+                                <td>@Enum.GetName(typeof(RequestStatus), item.RequestStatus)</td>
+                                <td>@item.User</td>
+                                <td>@item.CreatedDateTime.ToString("dd/MM/yyyy - hh:mm:ss tt")</td>
+                                <td>
+                                    <a class="mx-1 btn btn-outline-info" asp-route-id="@item.Id" asp-action="Details">View</a>
+                                    <a class="mx-1 btn btn-outline-danger btn-delete" asp-route-id="@item.Id" asp-action="Delete">Delete</a>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
