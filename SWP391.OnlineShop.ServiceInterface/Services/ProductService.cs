@@ -217,7 +217,7 @@ namespace SWP391.OnlineShop.ServiceInterface.Services
                                 SizeId = ps.SizeId,
                                 Quantity = ps.Quantity,
                             };
-                if(query != null)
+                if (query != null)
                 {
                     return query.First();
                 }
@@ -345,7 +345,7 @@ namespace SWP391.OnlineShop.ServiceInterface.Services
                     product.Status = request.Status;
 
                     var listProductSize = product.ProductSizes.OrderBy(x => x.Size.SizeType).ToList();
-                    
+
                     for (int i = 0; i < listProductSize.Count; i++)
                     {
                         listProductSize[i].Quantity = request.Quantities[i];

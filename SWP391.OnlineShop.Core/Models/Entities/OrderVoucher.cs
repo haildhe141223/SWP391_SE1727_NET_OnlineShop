@@ -2,11 +2,11 @@
 
 namespace SWP391.OnlineShop.Core.Models.Entities;
 
-public class ProductVoucher : BaseEntity<int>
+public class OrderVoucher : BaseEntity<int>
 {
-    public int ProductId { get; set; }
+    public int OrderId { get; set; }
     public int VoucherId { get; set; }
 
-    public Product Product { get; set; }
+    public Order Order { get; set; }
     public Voucher Voucher { get; set; }
 }

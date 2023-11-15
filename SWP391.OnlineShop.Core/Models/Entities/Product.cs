@@ -10,7 +10,6 @@ public class Product : BaseEntity<int>
         ProductTags = new HashSet<ProductTag>();
         FeedBacks = new HashSet<FeedBack>();
         OrderDetails = new HashSet<OrderDetail>();
-        ProductVouchers = new HashSet<ProductVoucher>();
         ProductSizes = new HashSet<ProductSize>();
     }
 
@@ -27,6 +26,5 @@ public class Product : BaseEntity<int>
     public ICollection<FeedBack> FeedBacks { get; set; }
     public ICollection<OrderDetail> OrderDetails { get; set; }
     public ICollection<ProductTag> ProductTags { get; set; }
-    public ICollection<ProductVoucher> ProductVouchers { get; set; }
     public ICollection<ProductSize> ProductSizes { get; set; }
 }

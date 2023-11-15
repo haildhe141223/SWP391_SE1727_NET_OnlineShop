@@ -54,6 +54,9 @@ public class AutoMapperConfigs : Profile
         //// Contact
         CreateMap<Email, EmailContactViewModel>().ReverseMap();
 
+        //// Request
+        CreateMap<Request, RequestDataViewModel>().ReverseMap();
+
         if (unitOfWork != null)
         {
             //// User

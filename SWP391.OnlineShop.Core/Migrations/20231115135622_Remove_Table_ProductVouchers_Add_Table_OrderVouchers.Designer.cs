@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SWP391.OnlineShop.Core.Contexts;
 
@@ -11,9 +12,10 @@ using SWP391.OnlineShop.Core.Contexts;
 namespace SWP391.OnlineShop.Core.Migrations
 {
     [DbContext(typeof(OnlineShopContext))]
-    partial class OnlineShopContextModelSnapshot : ModelSnapshot
+    [Migration("20231115135622_Remove_Table_ProductVouchers_Add_Table_OrderVouchers")]
+    partial class Remove_Table_ProductVouchers_Add_Table_OrderVouchers
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

@@ -28,7 +28,7 @@
                     <span>Security</span>
                 </div>
             </button>
-            <button class="tab-header-items" data-bs-toggle="pill" data-bs-target="#v-pills-addr" type="button" id="tab-address">
+            <button class="tab-header-items" data-bs-toggle="pill" data-bs-target="#v-pills-address" type="button" id="tab-address">
                 <div class="header-item-content">
                     <i class="fa-solid fa-map-location-dot"></i>
                     <span>Addresses</span>
@@ -76,7 +76,7 @@
             @*tab orders*@
             <partial name="ProfilePartial/_OrderPartial" />
             @*tab requests*@
-            <partial name="ProfilePartial/_RequestPartial" />
+            <partial name="ProfilePartial/_RequestPartial" for="RequestViewModel" />
         </div>
     </div>
 </div>

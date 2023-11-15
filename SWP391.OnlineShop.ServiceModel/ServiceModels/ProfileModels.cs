@@ -79,6 +79,12 @@ public class ProfileModels
         public int UserId { get; set; }
     }
 
+    [Route("/Profile/GetUserRequests", "GET")]
+    public class GetUserRequests : IReturn<List<RequestDataViewModel>>
+    {
+        public int UserId { get; set; }
+    }
+
     [Route("/Profile/PostAddUserAddress", "POST")]
     public class PostAddUserAddress : IReturn<BaseResultModel>
     {
@@ -87,5 +93,30 @@ public class ProfileModels
         public string PhoneNumber { get; set; }
         public string Address { get; set; }
         public bool IsDefault { get; set; }
+    }
+
+    [Route("/Profile/PostBecomeRequestMarketer", "POST")]
+    public class PostBecomeRequestMarketer : IReturn<BaseResultModel>
+    {
+        public int UserId { get; set; }
+        public string FullName { get; set; }
+        public string PhoneNumber { get; set; }
+        public string Author { get; set; }
+        public string Email { get; set; }
+        public string SamplePostLink { get; set; }
+    }
+
+    [Route("/Profile/PostBecomeRequestSaleManager", "POST")]
+    public class PostBecomeRequestSaleManager : IReturn<BaseResultModel>
+    {
+        public int UserId { get; set; }
+        public string FullName { get; set; }
+        public string PhoneNumber { get; set; }
+        public string FullAddress { get; set; }
+        public string Email { get; set; }
+        public string Reason { get; set; }
+        public string BusinessCertificateLink { get; set; }
+        public string FrontOfIdentityCardLink { get; set; }
+        public string BackOfIdentityCardLink { get; set; }
     }
 }
