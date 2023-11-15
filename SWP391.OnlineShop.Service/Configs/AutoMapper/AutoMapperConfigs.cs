@@ -42,7 +42,7 @@ public class AutoMapperConfigs : Profile
 
         //// Voucher
         CreateMap<Voucher, VoucherViewModels>().ReverseMap();
-        CreateMap<ProductVoucherViewModel, ProductVoucher>().ReverseMap();
+        CreateMap<OrderVoucherViewModel, OrderVoucher>().ReverseMap();
         CreateMap<Voucher, UserVoucherViewModel>().ReverseMap();
 
         //// Slider

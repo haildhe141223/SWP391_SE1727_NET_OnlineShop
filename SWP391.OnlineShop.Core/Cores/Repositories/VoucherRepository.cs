@@ -3,7 +3,6 @@ using SWP391.OnlineShop.Core.Contexts;
 using SWP391.OnlineShop.Core.Cores.Infrastructures;
 using SWP391.OnlineShop.Core.Cores.IRepositories;
 using SWP391.OnlineShop.Core.Models.Entities;
-using SWP391.OnlineShop.Core.Models.Identities;
 
 namespace SWP391.OnlineShop.Core.Cores.Repositories;
 
@@ -57,7 +56,7 @@ public class VoucherRepository : GenericRepository<Voucher, int>, IVoucherReposi
     public Voucher GetVoucherInfo(int voucherId)
     {
         var result = new Voucher();
-        var voucher = Context.Vouchers.Include(v => v.ProductVouchers).ThenInclude(p => p.Product).Where(v => v.Id == voucherId && v.Status == Models.Enums.Status.Active).FirstOrDefault();
+        var voucher = Context.Vouchers.Include(v => v.OrderVouchers).ThenInclude(p => p.Order).Where(v => v.Id == voucherId && v.Status == Models.Enums.Status.Active).FirstOrDefault();
         if (voucher == null)
         {
             return result;
@@ -68,7 +67,7 @@ public class VoucherRepository : GenericRepository<Voucher, int>, IVoucherReposi
     public IEnumerable<Voucher> GetVouchersCreatedUser(int userId)
     {
         var result = new List<Voucher>();
-        var vouchers = Context.Vouchers.Include(v => v.ProductVouchers).ThenInclude(p => p.Product).Where(v => v.CreatedBy == userId && v.Status == Models.Enums.Status.Active).ToList();
+        var vouchers = Context.Vouchers.Include(v => v.OrderVouchers).ThenInclude(p => p.Order).Where(v => v.CreatedBy == userId && v.Status == Models.Enums.Status.Active).ToList();
         if (!vouchers.Any())
         {
             return result;

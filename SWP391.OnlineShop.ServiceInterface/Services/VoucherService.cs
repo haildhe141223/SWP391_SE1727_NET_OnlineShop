@@ -161,18 +161,6 @@ namespace SWP391.OnlineShop.ServiceInterface.Services
 				int rows = await _unitOfWork.CompleteAsync();
 				if (rows > 0)
 				{
-					var listProductVouchers = new List<ProductVoucher>();
-					foreach (var productId in request.ProductId)
-					{
-                        var productVoucher = new ProductVoucher()
-                        {
-                            ProductId = productId,
-                            VoucherId = voucher.Id
-                        };
-						listProductVouchers.Add(productVoucher);
-                    }
-                    _unitOfWork.Context.ProductVouchers.AddRange(listProductVouchers);
-                    await _unitOfWork.CompleteAsync();
                     result.StatusCode = Common.Enums.StatusCode.Success;
 					return result;
 				}

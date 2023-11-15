@@ -233,12 +233,14 @@
                 }, 1000);
             },
             failure: function (failed) {
-                alert(failed.responseText);
-                //$.toaster({ priority: 'warning', title: 'Warning', message: failed.responseText });
+                $.toaster({ priority: 'warning', title: 'Warning', message: failed.responseText });
             },
             error: function (error) {
-                alert(error.responseText);
-                //$.toaster({ priority: 'danger', title: 'Error', message: error.responseText });
+                if(error.status == 401){
+                    window.location.href = '@Url.Action("Login","Account")'
+                }else{
+                    $.toaster({ priority: 'danger', title: 'Error', message: error.responseText });
+                }
             }
         });
     }

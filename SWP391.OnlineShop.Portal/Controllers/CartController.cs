@@ -1,4 +1,5 @@
 ﻿using BraintreeHttp;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
@@ -20,7 +21,8 @@ using static SWP391.OnlineShop.ServiceModel.ServiceModels.OrderModels;
 
 namespace SWP391.OnlineShop.Portal.Controllers
 {
-	public class CartController : BaseController
+    [Authorize]
+    public class CartController : BaseController
 	{
 		private readonly IJsonServiceClient _client;
 		private readonly ILoggerService _logger;
@@ -444,6 +446,10 @@ namespace SWP391.OnlineShop.Portal.Controllers
 		public async Task<IActionResult> AddToCard(int productId, decimal price, int quantity, int sizeId)
 		{
 			var email = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Email)?.Value;
+			if (string.IsNullOrEmpty(email))
+			{
+                return RedirectToAction("Login", "Account");
+            }
 			var user = await _userManager.FindByEmailAsync(email);
 			if (user == null)
 			{

@@ -99,8 +99,8 @@ namespace SWP391.OnlineShop.ServiceModel.ServiceModels
         public int ProductID { get; set; }
     }
 
-	[Route("/Product/GetProductOfVoucher", "GET")]
-	public class GetProductOfVoucher : IReturn<List<ProductViewModel>>
+	[Route("/Product/GetOrderWithVoucher", "GET")]
+	public class GetOrderWithVoucher : IReturn<List<ProductViewModel>>
 	{
         public int VoucherId { get; set; }
     }
