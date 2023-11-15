@@ -123,9 +123,8 @@
                                     </td>
                                     <td>
                                         <div class="cupon_text d-flex align-items-center">
-                                            <input type="text" placeholder="Coupon Code">
-                                            <a class="btn primary-btn" href="#">Apply</a>
-                                            <a class="btn gray_btn" href="#">Close Coupon</a>
+                                            <input type="text" placeholder="Coupon Code" id="coupon-code">
+                                            <a class="btn primary-btn" href="#" onclick="AddCoupon()">Apply</a>
                                         </div>
                                     </td>
                                 </tr>
@@ -730,4 +729,28 @@ else
             });
         }
     });
+    function AddCoupon(){
+        let couponCode = $('#coupon-code').val();
+        if(couponCode || couponCode == ''){
+            $.toaster({ priority: 'warning', title: 'Warning', message: 'Please enter counpon code' });
+        }else{
+             const data = {
+                code: couponCode,
+            };
+            $.ajax({
+                url: '@Url.Action("GetUserVoucher","Voucher")',
+                type: 'POST',
+                data: data,
+                success: function (response) {
+                  // TODO DatHM: hanlde this when data is ok
+                },
+                failure: function (failed) {
+                    $.toaster({ priority: 'warning', title: 'Warning', message: failed.responseText });
+                },
+                error: function (error) {
+                    $.toaster({ priority: 'danger', title: 'Error', message: error.responseText });
+                }
+            });
+        }
+    }
 </script>

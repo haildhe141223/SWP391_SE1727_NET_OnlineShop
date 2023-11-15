@@ -4,6 +4,7 @@ using ServiceStack;
 using SWP391.OnlineShop.Core.Models.Identities;
 using SWP391.OnlineShop.ServiceInterface.Loggers;
 using System.Security.Claims;
+using static SWP391.OnlineShop.ServiceModel.ServiceModels.ProfileModels;
 using static SWP391.OnlineShop.ServiceModel.ServiceModels.VoucherModels;
 
 namespace SWP391.OnlineShop.Portal.Controllers
@@ -60,6 +61,31 @@ namespace SWP391.OnlineShop.Portal.Controllers
 				return Ok();
 			}
 			return StatusCode(500, "Add Failed");
+		}
+
+		public async Task<IActionResult> GetUserVoucher(string code)
+		{
+            var email = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Email)?.Value;
+            if (string.IsNullOrEmpty(email))
+            {
+                return RedirectToAction("Login", "Account");
+            }
+            var user = await _userManager.FindByEmailAsync(email);
+            if (user == null)
+            {
+                return RedirectToAction("Login", "Account");
+            }
+			var vouchers = await _client.GetAsync(new GetUserVouchers()
+			{
+				UserId = user.Id
+			});
+			foreach (var item in vouchers)
+			{
+				if(item.VoucherCode == code) {
+					return Ok(item);
+				}
+			}
+			return Ok();
 		}
 	}
 }
