@@ -43,7 +43,7 @@ namespace SWP391.OnlineShop.Portal.Controllers
 
             var products = new HomeViewModels
             {
-                IncomingProduct = comingProducts
+                IncomingProduct = comingProducts,
                 LatestProducts = latestProducts ?? new List<ProductViewModel>(),
                 HotDealProduct = hotDealProduct ?? new List<ProductViewModel>(),
                 ProductsOfWeek = dealProductOfWeeks ?? new List<ProductViewModel>(),
