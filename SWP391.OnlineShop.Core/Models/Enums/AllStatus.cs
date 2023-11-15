@@ -61,7 +61,7 @@ public enum RequestType
 {
     RequestToBecomeSale,
     RequestToBecomeSaleManager,
-    RequestToBecomeSaleMarketing,
+    RequestToBecomeMarketing,
 }
 
 public enum RequestStatus

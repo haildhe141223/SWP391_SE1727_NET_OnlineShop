@@ -180,18 +180,19 @@ namespace SWP391.OnlineShop.ServiceInterface.Services
         {
             try
             {
-                var query = from p in _unitOfWork.Context.Products
-                            join pv in _unitOfWork.Context.ProductVouchers
-                            on p.Id equals pv.ProductId
-                            join v in _unitOfWork.Context.Vouchers
-                            on pv.VoucherId equals v.Id
-                            where v.Id == request.VoucherId
-                            select p;
-                var result = query.ToList();
-                if (result.Any())
-                {
-                    return _mapper.Map<List<ProductViewModel>>(result);
-                }
+                //TODO: DatHM review this one
+                //var query = from p in _unitOfWork.Context.Products
+                //            join pv in _unitOfWork.Context.ProductVouchers
+                //            on p.Id equals pv.ProductId
+                //            join v in _unitOfWork.Context.Vouchers
+                //            on pv.VoucherId equals v.Id
+                //            where v.Id == request.VoucherId
+                //            select p;
+                //var result = query.ToList();
+                //if (result.Any())
+                //{
+                //    return _mapper.Map<List<ProductViewModel>>(result);
+                //}
             }
             catch (Exception ex)
             {
@@ -216,7 +217,7 @@ namespace SWP391.OnlineShop.ServiceInterface.Services
                                 SizeId = ps.SizeId,
                                 Quantity = ps.Quantity,
                             };
-                if(query != null)
+                if (query != null)
                 {
                     return query.First();
                 }
@@ -344,7 +345,7 @@ namespace SWP391.OnlineShop.ServiceInterface.Services
                     product.Status = request.Status;
 
                     var listProductSize = product.ProductSizes.OrderBy(x => x.Size.SizeType).ToList();
-                    
+
                     for (int i = 0; i < listProductSize.Count; i++)
                     {
                         listProductSize[i].Quantity = request.Quantities[i];

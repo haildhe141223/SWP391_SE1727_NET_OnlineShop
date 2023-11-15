@@ -71,7 +71,7 @@
             $(".tab-content-item").removeClass('active');
             $(".tab-content-item").removeClass('show');
             $(".tab-header-items").removeClass('active');
-            $("#v-pills-addr").addClass('active show');
+            $("#v-pills-address").addClass('active show');
             $("#tab-address").addClass('active');
         </script>
     }
@@ -83,6 +83,16 @@
             $(".tab-header-items").removeClass('active');
             $("#v-pills-security").addClass('active show');
             $("#tab-security").addClass('active');
+        </script>
+    }
+    @if (Model.RequestTab == ProfileTab.Collaboration)
+    {
+        <script>
+            $(".tab-content-item").removeClass('active');
+            $(".tab-content-item").removeClass('show');
+            $(".tab-header-items").removeClass('active');
+            $("#v-pills-request").addClass('active show');
+            $("#tab-request").addClass('active');
         </script>
     }
 </body>

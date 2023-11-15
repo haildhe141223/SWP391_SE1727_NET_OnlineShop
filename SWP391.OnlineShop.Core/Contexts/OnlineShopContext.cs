@@ -31,7 +31,7 @@ public class OnlineShopContext : IdentityDbContext<User, Role, int>
     public DbSet<OrderDetail> OrderDetails { get; set; }
     public DbSet<PostTag> PostTags { get; set; }
     public DbSet<ProductTag> ProductTags { get; set; }
-    public DbSet<ProductVoucher> ProductVouchers { get; set; }
+    public DbSet<OrderVoucher> OrderVouchers { get; set; }
     public DbSet<UserVoucher> UserVouchers { get; set; }
     public DbSet<Setting> Settings { get; set; }
     public DbSet<Slider> Sliders { get; set; }
@@ -55,7 +55,7 @@ public class OnlineShopContext : IdentityDbContext<User, Role, int>
         builder.ApplyConfiguration(new PostTagConfigs());
         builder.ApplyConfiguration(new ProductConfigs());
         builder.ApplyConfiguration(new ProductTagConfigs());
-        builder.ApplyConfiguration(new ProductVoucherConfigs());
+        builder.ApplyConfiguration(new OrderVoucherConfigs());
         builder.ApplyConfiguration(new UserVoucherConfigs());
         builder.ApplyConfiguration(new VoucherConfigs());
         builder.ApplyConfiguration(new AddressConfigs());
