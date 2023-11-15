@@ -97,6 +97,13 @@ namespace SWP391.OnlineShop.ServiceInterface.Interfaces
         /// <param name="request"></param>
         /// <returns>product of voucher</returns>
         List<OrderViewModels> Get(GetOrderWithVoucher request);
+
+		/// <summary>
+		/// Update Product
+		/// </summary>
+		/// <param name="request"></param>
+		/// <returns>Product</returns>
+		Task<BaseResultModel> Put(PutUpdateProductSize request);
 	}
 }
 

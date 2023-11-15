@@ -61,5 +61,13 @@ namespace SWP391.OnlineShop.ServiceInterface.Interfaces
         /// <param name="request"></param>
         /// <returns>API Status Code</returns>
         Task<BaseResultModel> Put(PutUpdateVoucherAmount request);
-	}
+
+        /// <summary>
+		/// Add Voucher To Order
+		/// </summary>
+		/// <param name="request"></param>
+		/// <returns>API Status Code</returns>
+		Task<BaseResultModel> Post(PostAddVoucherToOrder request);
+
+    }
 }

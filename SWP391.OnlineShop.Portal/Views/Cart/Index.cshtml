@@ -159,25 +159,104 @@
 			}
 			else if (order.OrderStatus == SWP391.OnlineShop.Core.Models.Enums.OrderStatus.InCartContact)
 			{
-				<section class="cart_area">
-					<div class="container">
-						<div class="cart_inner">
-							<span>This Cart is in Cart Contact</span>
-							<a asp-action="CartContact" asp-controller="Cart" asp-route-id="@order.Id">Continue Buying</a>
+				@foreach (var detail in order.OrderDetails)
+				{
+					<div class="row">
+						<div class="col-xxl-8 col-12">
+							<!-- card -->
+							<div class="card" style=" width: 100%; margin-left: 22%;">
+								<!-- card body-->
+								<div class="card-body">
+									<div class="mb-6">
+										<div class="mb-8">
+											<div class="row justify-content-between align-items-center">
+												<!-- col -->
+
+												<div class="col-lg-8 col-12">
+													<div class="d-md-flex">
+														<div>
+															<!-- img -->
+															<img src="@detail.Product.Thumbnail" style="max-height: 101.6px;max-width:151.6px" alt="" class="img-4by3-xl rounded">
+														</div>
+														<div class="ms-md-4 mt-2 mt-lg-0">
+															<!-- heading -->
+															<h5 class="mb-1">
+																@detail.Product.ProductName
+															</h5>
+															<!-- text -->
+															<span>
+																Quantity:<span class="text-dark"> @detail.Quantity</span>
+															</span>
+															<!-- text -->
+															<div class="mt-3">
+																<h4>$ @detail.UnitPrice</h4>
+															</div>
+														</div>
+													</div>
+												</div>
+												<!-- button -->
+												<div class="col-lg-3 col-12 d-grid">
+													<a class="btn btn-primary" style="background-color:#FFBA00" asp-action="CartContact" asp-controller="Cart" asp-route-id="@order.Id">Continue Buying</a>
+													<a class="btn btn-primary" style="background-color: #e8f0f2" onclick="cancelCart(@order.Id)">Cancel Cart</a>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
 						</div>
 					</div>
-				</section>
+				}
 			}
 			else
 			{
-				<section class="cart_area">
-					<div class="container">
-						<div class="cart_inner">
-							<span>This Cart is in Cart Complete</span>
-							<a asp-action="Checkout" asp-controller="Cart" asp-route-id="@order.Id">Continue Checkout</a>
+				@foreach (var detail in order.OrderDetails)
+				{
+					<div class="row">
+						<div class="col-xxl-8 col-12">
+							<!-- card -->
+							<div class="card" style=" width: 100%; margin-left: 22%;">
+								<!-- card body-->
+								<div class="card-body">
+									<div class="mb-6">
+										<div class="mb-8">
+											<div class="row justify-content-between align-items-center">
+												<!-- col -->
+												<div class="col-lg-8 col-12">
+													<div class="d-md-flex">
+														<div>
+															<!-- img -->
+															<img src="@detail.Product.Thumbnail" style="max-height: 101.6px;max-width:151.6px" alt="" class="img-4by3-xl rounded">
+														</div>
+														<div class="ms-md-4 mt-2 mt-lg-0">
+															<!-- heading -->
+															<h5 class="mb-1">
+																@detail.Product.ProductName
+															</h5>
+															<!-- text -->
+															<span>
+																Quantity:<span class="text-dark"> @detail.Quantity</span>
+															</span>
+															<!-- text -->
+															<div class="mt-3">
+																<h4>$ @detail.UnitPrice</h4>
+															</div>
+														</div>
+													</div>
+												</div>
+												<!-- button -->
+												<div class="col-lg-3 col-12 d-grid">
+													<a class="btn btn-primary" style="background-color:#FFBA00" asp-action="Checkout" asp-controller="Cart" asp-route-id="@order.Id">Continue Checkout</a>
+													<a class="btn btn-primary" style="background-color: #e8f0f2" onclick="cancelCart(@order.Id)">Cancel Cart</a>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
 						</div>
 					</div>
-				</section>
+				}
 			}
 		}
 	}
@@ -640,9 +719,34 @@ else
 			type: 'POST',
 			data: data,
 			success: function (response) {
-				$.toaster({ priority: 'success', title: 'Created', message: "Add To Cart Contact Successfully" });
+				//$.toaster({ priority: 'success', title: 'Created', message: "Add To Cart Contact Successfully" });
 				setTimeout(function () {
-					window.location.href = "/cart/cartcontact/"+id;
+					window.location.href = "/cart/cartcontact/" + id;
+				}, 1000);
+			},
+			failure: function (failed) {
+				$.toaster({ priority: 'warning', title: 'Warning', message: failed.responseText });
+			},
+			error: function (error) {
+				$.toaster({ priority: 'danger', title: 'Error', message: error.responseText });
+			}
+		});
+	}
+
+
+	function cancelCart(id) {
+		const data = {
+			orderId: id,
+		};
+		$.ajax({
+			url: '@Url.Action("CancelCart","Cart")',
+			type: 'POST',
+			data: data,
+			success: function (response) {
+				window.location.href = "@Url.Action("Index","Home")";
+				//$.toaster({ priority: 'success', title: 'Created', message: "Back To Cart Detail Successfully" });
+				setTimeout(function () {
+					window.location.reload();
 				}, 1000);
 			},
 			failure: function (failed) {

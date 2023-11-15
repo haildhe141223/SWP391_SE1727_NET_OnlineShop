@@ -81,7 +81,16 @@ namespace SWP391.OnlineShop.ServiceModel.ServiceModels
         public List<int> Quantities { get; set; }
     }
 
-    [Route("/Product/DeleteProduct", "DELETE")]
+
+	[Route("/Product/PutUpdateProductSize", "PUT")]
+	public class PutUpdateProductSize : IReturn<BaseResultModel>
+	{
+		public int Id { get; set; }
+        public int Quantity { get; set; }
+        public int SizeId { get; set; }
+    }
+
+	[Route("/Product/DeleteProduct", "DELETE")]
     public class DeleteProduct : IReturn<BaseResultModel>
     {
         public int ProductId { get; set; }
