@@ -169,10 +169,24 @@ public class ProductRepository : GenericRepository<Product, int>, IProductReposi
 
         var products = Context.Products
             .Where(x => x.Id == productId).Include(x => x.Category).Include(x => x.FeedBacks).ThenInclude(f => f.User)
-            .Include(x => x.ProductSizes).ThenInclude(s => s.Size).FirstOrDefault();
+            .Include(x => x.ProductSizes).ThenInclude(s => s.Size).Include(x => x.ProductTags).ThenInclude(p => p.Tag).FirstOrDefault();
 
         result = products;
 
         return result;
     }
+
+	public List<Product> GetProductByTagId(int tagId)
+	{
+		var result = new List<Product>();
+		if (Context.Products == null) return result;
+
+		var products = Context.Products.Include(x => x.ProductTags)
+			.Where(x => x.ProductTags.Any(x => x.TagId == tagId) && x.Status == Models.Enums.Status.Active)
+			.ToList();
+
+		result = products.ToList();
+
+		return result;
+	}
 }

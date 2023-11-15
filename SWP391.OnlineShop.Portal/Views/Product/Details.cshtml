@@ -33,17 +33,28 @@
                     <h2>@Model.ProductDetail?.SalePrice</h2>
                     <ul class="list">
                         <li><a class="active" href="#"><span>Category</span> : @Model.ProductDetail?.Category?.CategoryName</a></li>
-                        @if (Model.ProductDetail?.ProductSizes.FirstOrDefault()?.Quantity > 0)
-                        {
-                            <li><span>Availability</span> : In Stock</li>
-                        }
-                        else
-                        {
-                            <li><span>Availability</span> : Sold Out</li>
-                        }
-                        <li><select name="sizeList" id="sizeList" class="" style="width:20% !important" asp-items="@(new SelectList(ViewBag.SizeLists, "Value", "Text"))"></select></li>
+                        <li>
+                            <span>Availability</span> :
+                            @if (Model.ProductDetail?.ProductType == SWP391.OnlineShop.Core.Models.Enums.ProductType.InStock)
+                            {
+                                @Convert.ToString("In Stock")
+                            }
+                            else if (Model.ProductDetail?.ProductType == SWP391.OnlineShop.Core.Models.Enums.ProductType.InComing)
+                            {
+                                @Convert.ToString("In Coming")
+                            }
+                            else if (Model.ProductDetail?.ProductType == SWP391.OnlineShop.Core.Models.Enums.ProductType.SoldOut)
+                            {
+                                @Convert.ToString("Sold Out")
+                            }
+                            else
+                            {
+                                @Convert.ToString("Event")
+                            }
+                        </li>
+                        <li><select name="sizeList" class="" style="width:20% !important" asp-items="@(new SelectList(ViewBag.SizeLists, "Value", "Text"))"></select></li>
                     </ul>
-                    <br/><br/>
+                    <br /><br />
                     <div class="product_count">
                         <label for="qty">Quantity:</label>
                         <input type="text" name="qty" id="sst" maxlength="12" value="1" title="Quantity:" class="input-text qty">
@@ -57,8 +68,15 @@
                         </button>
                     </div>
                     <div class="card_area d-flex align-items-center">
-                        <a class="primary-btn" onclick="AddToCart(@Model.ProductDetail?.Id,@Model.ProductDetail?.Price)">Add to Cart</a>
-                    </div>
+						@if (Model.ProductDetail?.SalePrice > 0)
+						{
+							<a class="primary-btn" onclick="AddToCart(@Model.ProductDetail?.Id,@Model.ProductDetail?.SalePrice)">Add to Cart</a>
+						}
+						else
+						{
+							<a class="primary-btn" onclick="AddToCart(@Model.ProductDetail?.Id,@Model.ProductDetail?.Price)">Add to Cart</a>
+						}
+					</div>
                 </div>
             </div>
         </div>
@@ -72,10 +90,6 @@
             <li class="nav-item">
                 <a class="nav-link" id="home-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home" aria-selected="true">Description</a>
             </li>
-            @* <li class="nav-item">
-            <a class="nav-link" id="profile-tab" data-toggle="tab" href="#profile" role="tab" aria-controls="profile"
-            aria-selected="false">Specification</a>
-            </li> *@
             <li class="nav-item">
                 <a class="nav-link active" id="contact-tab" data-toggle="tab" href="#contact" role="tab" aria-controls="contact"
                    aria-selected="false">Comments</a>
@@ -106,12 +120,11 @@
                                             </div>
                                             <div class="media-body">
                                                 <h4>@feedback.User.UserName</h4>
-                                                @*@for (int i = 0; i < Convert.ToInt32(feedback.RatedStar); i++)
-                                        {
-                                        <i class="fa fa-star"></i>
-                                        }*@
+                                                @for (int i = 0; i < Convert.ToInt32(feedback.RatedStar); i++)
+                                                {
+                                                    <i class="fa fa-star"></i>
+                                                }
                                                 <h5>@feedback.CreatedDateTime</h5>
-                                                <a class="reply_btn" href="#">Reply</a>
                                             </div>
                                         </div>
                                         <p>
@@ -129,27 +142,27 @@
                             <form asp-controller="Product" asp-action="AddComment" asp-route-productID="@Model.ProductDetail?.Id" class="row contact_form" method="post" id="contactForm" novalidate="novalidate">
                                 <div class="col-md-12">
                                     <div class="form-group">
-                                        <input type="text" class="form-control" id="name" name="name" placeholder="Your Full name">
+                                        <label>Full Name: </label><input type="text" class="form-control" id="name" name="name" placeholder="Your Full name">
                                     </div>
                                 </div>
                                 <div class="col-md-12">
                                     <div class="form-group">
-                                        <input type="email" class="form-control" id="email" name="email" placeholder="Email Address">
+                                        <label>Email: </label><input type="email" class="form-control" id="email" name="email" placeholder="Email Address">
                                     </div>
                                 </div>
                                 <div class="col-md-12">
                                     <div class="form-group">
-                                        <input type="text" class="form-control" id="number" name="number" placeholder="Phone Number">
+                                        <label>Phone Number: </label><input type="text" class="form-control" id="number" name="number" placeholder="Phone Number">
                                     </div>
                                 </div>
                                 <div class="col-md-12">
                                     <div class="form-group">
-                                        <input type="number" step="1" min="1" max="10" class="form-control" id="point" name="point" placeholder="Rate Point">
+                                        <label>Rate Point: </label><input type="number" step="1" min="1" max="10" class="form-control" id="point" name="point" placeholder="Rate Point">
                                     </div>
                                 </div>
                                 <div class="col-md-12">
                                     <div class="form-group">
-                                        <textarea class="form-control" name="message" id="message" rows="3" placeholder="Message"></textarea>
+                                        <label>Message: </label><textarea class="form-control" name="message" id="message" rows="3" placeholder="Message"></textarea>
                                     </div>
                                 </div>
                                 <div class="col-md-12 text-right">
@@ -166,80 +179,79 @@
 <!--================End Product Description Area =================-->
 <!-- Start related-product Area -->
 <section class="related-product-area section_gap_bottom">
-    <div class="container">
-        <div class="row justify-content-center">
-            <div class="col-lg-6 text-center">
-                <div class="section-title">
-                    <h1>Deals of the Week</h1>
-                    <p>
-                        Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore
-                        magna aliqua.
-                    </p>
-                </div>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-lg-9">
-                <div class="row">
-                    @if (Model.ProductsOfWeek != null)
-                    {
-                        @foreach (var productOfWeek in Model.ProductsOfWeek)
-                        {
-                            <div class="col-lg-4 col-md-4 col-sm-6 mb-20">
-                                <div class="single-related-product d-flex">
-                                    <a href="#"><img src="@productOfWeek.Thumbnail" width="70" height="70" alt=""></a>
-                                    <div class="desc">
-                                        <a asp-controller="Product" asp-action="Details" asp-route-id="@productOfWeek.Id" class="title">@productOfWeek.ProductName</a>
-                                        <div class="price">
-                                            <h6>@productOfWeek.SalePrice</h6>
-                                            <h6 class="l-through">@productOfWeek.SalePrice</h6>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        }
-                    }
-                </div>
-            </div>
-            <div class="col-lg-3">
-                <div class="ctg-right">
-                    <a href="#" target="_blank">
-                        <img class="img-fluid d-block mx-auto" src="~/template/img/category/c5.jpg" alt="">
-                    </a>
-                </div>
-            </div>
-        </div>
-    </div>
+	<div class="container">
+		<div class="row justify-content-center">
+			<div class="col-lg-6 text-center">
+				<div class="section-title">
+					<h1>Deals of the Week</h1>
+					<p>
+						Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore
+						magna aliqua.
+					</p>
+				</div>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-lg-9">
+				<div class="row">
+					@if (Model.ProductsOfWeek != null)
+					{
+						@foreach (var productOfWeek in Model.ProductsOfWeek)
+						{
+							<div class="col-lg-4 col-md-4 col-sm-6 mb-20">
+								<div class="single-related-product d-flex">
+									<a href="#"><img src="@productOfWeek.Thumbnail" width="70" height="70" alt=""></a>
+									<div class="desc">
+										<a asp-controller="Product" asp-action="Details" asp-route-id="@productOfWeek.Id" class="title">@productOfWeek.ProductName</a>
+										<div class="price">
+											<h6>@productOfWeek.SalePrice</h6>
+											<h6 class="l-through">@productOfWeek.SalePrice</h6>
+										</div>
+									</div>
+								</div>
+							</div>
+						}
+					}
+				</div>
+			</div>
+			<div class="col-lg-3">
+				<div class="ctg-right">
+					<a href="#" target="_blank">
+						<img class="img-fluid d-block mx-auto" src="~/template/img/category/c5.jpg" alt="">
+					</a>
+				</div>
+			</div>
+		</div>
+	</div>
 </section>
 <!-- End related-product Area -->
 
 <script type="text/javascript">
-    function AddToCart(productId, productPrice) {
-        var sizeId = $("#sizeList").val();
-        const data = {
-            productId: productId,
-            price: productPrice,
-            quantity: $('#sst').val(),
-            sizeId: sizeId
-        };
-        $.ajax({
-            url: '@Url.Action("AddToCard","Cart")',
-            type: 'POST',
-            data: data,
-            success: function (response) {
-                $.toaster({ priority: 'success', title: 'Created', message: "Back To Cart Detail Succesfully" });
-                setTimeout(function () {
-                    window.location.reload();
-                }, 1000);
-            },
-            failure: function (failed) {
-                alert(failed.responseText);
-                //$.toaster({ priority: 'warning', title: 'Warning', message: failed.responseText });
-            },
-            error: function (error) {
-                alert(error.responseText);
-                //$.toaster({ priority: 'danger', title: 'Error', message: error.responseText });
-            }
-        });
-    }
+	function AddToCart(productId, productPrice) {
+		var sizeId = $("#sizeList").val();
+		const data = {
+			productId: productId,
+			price: productPrice,
+			quantity: $('#sst').val(),
+			sizeId: sizeId
+		};
+		$.ajax({
+			url: '@Url.Action("AddToCard","Cart")',
+			type: 'POST',
+			data: data,
+			success: function (response) {
+				$.toaster({ priority: 'success', title: 'Created', message: "Back To Cart Detail Succesfully" });
+			},
+			failure: function (failed) {
+				$.toaster({ priority: 'warning', title: 'Warning', message: failed.responseText });
+			},
+			error: function (error) {
+				if (error.status == 401) {
+					window.location.href = '@Url.Action("Login","Account")'
+				} else {
+					$.toaster({ priority: 'danger', title: 'Error', message: error.responseText });
+				}
+			}
+		});
+	}
 </script>

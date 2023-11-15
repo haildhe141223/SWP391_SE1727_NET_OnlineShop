@@ -8,7 +8,8 @@ public interface IProductRepository : IGenericRepository<Product, int>
     Task<int> GetProductIdByProductName(string productName);
     Task<string> GetProductNameByProductId(int productId);
     List<Product> GetProductByCategoryId(int categoryId);
-    Task<List<Product>> GetProductsByName(string productName);
+	List<Product> GetProductByTagId(int tagId);
+	Task<List<Product>> GetProductsByName(string productName);
     Task<List<Product>> GetProductsByStatus(string status);
     Task<List<Product>> GetProductsWithPaging(int skip, int take);
     Task<List<Product>> GetHotDealProduct();

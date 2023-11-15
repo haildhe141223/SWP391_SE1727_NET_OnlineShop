@@ -1,7 +1,9 @@
 @using System.Security.Claims
 @using SWP391.OnlineShop.Common.Constraints
 @{
-    var role = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Role)?.Value;
+    var roles = User.Claims.Where(c => c.Type == ClaimTypes.Role);
+    var role = string.Join(CommonConstraints.JoinCharacter, roles.Select(x => x.Value));
+
     var id = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
 }
 
@@ -53,7 +55,7 @@
                                     <li class="nav-item"><a asp-action="Logout" asp-controller="Account" class="nav-link">Logout</a></li>
                                     @*<li class="nav-item"><a asp-action="Tracking" asp-controller="Product" class="nav-link">Tracking</a></li>*@
 
-                                    @if (role == RoleConstraints.Admin)
+                                    @if (role.Contains(RoleConstraints.Admin))
                                     {
                                         @*<li class="nav-item"><a asp-action="Index" asp-controller="Element" class="nav-link">Elements</a></li>*@
                                     }
@@ -65,7 +67,7 @@
                                 }
                             </ul>
                         </li>
-                        @if (role == RoleConstraints.Admin)
+                        @if (role.Contains(RoleConstraints.Admin))
                         {
                             <li class="nav-item"><a asp-action="Index" asp-controller="Dashboard" asp-area="Managements" class="nav-link">Managements</a></li>
                         }

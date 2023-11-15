@@ -2,6 +2,7 @@
 @model SWP391.OnlineShop.ServiceModel.ViewModels.Products.ProductViewModel
 @{
     var genreList = ViewData["GenreList"] as SelectList;
+    var productTypeList = ViewData["ProductTypeList"] as SelectList;
     var errorMess = TempData["ErrorMess"] as string;
     var successMess = TempData["SuccessMess"] as string;
     var sizeList = (List<SizeViewModel>?)ViewData["SizeList"];
@@ -69,9 +70,18 @@
                     @foreach (var item in sizeList.OrderBy(x => x.SizeType))
                     {
                         <label>Size: </label><input readonly name="size" type="text" value="@item.SizeType" />
-                        <input type="number" name="quantity" min="0" /><br/>
+                        <label>Quantity: </label><input type="number" name="quantity" min="0" value="0" /><br/>
                     }
                 }
+            </div>
+            <div class="mb-3">
+                <label asp-for="Tag" class="form-label">Product Tags (separate by ;)</label>
+                <input type="text" class="form-control" asp-for="Tag" id="name">
+                <span asp-validation-for="Tag" class="r-error d-block text-danger"></span>
+            </div>
+            <div class="mb-3">
+                <label asp-for="ProductType" class="form-label">Product Type</label><br />
+                <select asp-for="ProductType" class="form-control" asp-items="@productTypeList"></select>
             </div>
             <div class="mb-3">
                 <a type="button" class="btn btn-secondary" asp-action="">Back</a>

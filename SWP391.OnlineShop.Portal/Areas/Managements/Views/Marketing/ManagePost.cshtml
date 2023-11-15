@@ -40,7 +40,6 @@
                                 <th>Brief</th>
                                 <th>Featured</th>
                                 <th>Thumbnail</th>
-                                <th>Description</th>
                                 <th>Author</th>
                                 <th>Status</th>
                                 <th>Action</th>
@@ -52,7 +51,6 @@
                                 <th>Brief</th>
                                 <th>Featured</th>
                                 <th>Thumbnail</th>
-                                <th>Description</th>
                                 <th>Author</th>
                                 <th>Status</th>
                                 <th>Action</th>
@@ -62,13 +60,30 @@
                             @foreach (var postViewModel in Model)
                             {
                                 <tr>
-                                    <td>@postViewModel.Title</td>
-                                    <td>@postViewModel.Brief</td>
-                                    <td>@postViewModel.Featured</td>
+                                    <td>@(postViewModel.Title.Length > 20 ? postViewModel.Title.Substring(0, 20) + "..." : postViewModel.Title)</td>
+                                    <td>
+                                        @if (postViewModel.Brief != null)
+                                        {
+                                            @((postViewModel.Brief.Length > 20) ? postViewModel.Brief.Substring(0, 20) + "..." : postViewModel.Brief)
+                                        }
+                                        else
+                                        {
+                                            @string.Empty;
+                                        }
+                                    </td>
+                                    <td>
+                                        @if (postViewModel.Featured != null)
+                                        {
+                                            @((postViewModel.Featured.Length > 20) ? postViewModel.Featured.Substring(0, 20) + "..." : postViewModel.Featured)
+                                        }
+                                        else
+                                        {
+                                            @string.Empty;
+                                        }
+                                    </td>
                                     <td>
                                         <img width="60" src="@postViewModel.Thumbnail" alt="">
                                     </td>
-                                    <td>@Html.Raw(@postViewModel.Description)</td>
                                     <td>@postViewModel.Author</td>
                                     @if (postViewModel.Status == Status.Active)
                                     {
@@ -81,11 +96,11 @@
                                     <td>
                                         <div class="table-action">
                                             <a class="m-1 btn btn-outline-info" asp-area="Managements" asp-controller="Marketing"
-                                           asp-action="ViewPost" asp-route-id="@postViewModel.Id">View</a>
+                                               asp-action="ViewPost" asp-route-id="@postViewModel.Id">View</a>
                                             <a class="m-1 btn btn-outline-success" asp-area="Managements" asp-controller="Marketing"
-                                           asp-action="EditPost" asp-route-id="@postViewModel.Id">Edit</a>
+                                               asp-action="EditPost" asp-route-id="@postViewModel.Id">Edit</a>
                                             <a class="m-1 btn btn-outline-danger btn-delete" asp-area="Managements" asp-controller="Marketing"
-                                           asp-action="DeletePost" asp-route-id="@postViewModel.Id">Delete</a>
+                                               asp-action="DeletePost" asp-route-id="@postViewModel.Id">Delete</a>
                                         </div>
                                     </td>
                                 </tr>

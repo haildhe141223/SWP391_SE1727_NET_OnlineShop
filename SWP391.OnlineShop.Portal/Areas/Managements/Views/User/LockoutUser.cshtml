@@ -1,0 +1,83 @@
+﻿@using Microsoft.AspNetCore.Mvc.TagHelpers
+@using SWP391.OnlineShop.Common.Constraints
+@using SWP391.OnlineShop.Core.Models.Enums
+@using SWP391.OnlineShop.ServiceModel.ViewModels.Users;
+@model List<UserViewModel>
+
+@{
+    var successMess = TempData["SuccessMess"] as string;
+    var errorMess = TempData["ErrorMess"] as string;
+}
+
+<div class="container-fluid">
+    <!-- Page Heading -->
+    <h1 class="h3 mb-2 text-gray-800">User Containers</h1>
+    <p class="mb-4">
+    </p>
+    @if (!string.IsNullOrWhiteSpace(errorMess))
+    {
+        <div class="alert alert-danger my-2 text-center">
+            @errorMess
+        </div>
+    }
+    @if (!string.IsNullOrWhiteSpace(successMess))
+    {
+        <div class="alert alert-success my-2 text-center">
+            @successMess
+        </div>
+    }
+    
+    <div>
+        <a class="btn btn-outline-primary my-3" asp-action="">Back</a>
+    </div>
+
+    <!-- DataTales Example -->
+    <div class="card shadow mb-4">
+        <div class="card-header py-3">
+            <h6 class="m-0 font-weight-bold text-primary">Locked User DataTables</h6>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                    <thead>
+                        <tr>
+                            <th>UserName</th>
+                            <th>PhoneNumber</th>
+                            <th>Gender</th>
+                            <th>Roles</th>
+                            <th>Status</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var user in Model)
+                        {
+                            <tr>
+                                <td class="text-capitalize">@user.UserName</td>
+                                <td>@user.PhoneNumber</td>
+                                <td>@Enum.GetName(typeof(Gender), user.Gender)</td>
+                                <td>@string.Join(", ", user.Role)</td>
+                                <td>
+                                    @if (user.LockoutEnabled)
+                                    {
+                                        <span>Locked</span>
+                                    }
+                                    else
+                                    {
+                                        <span>Unlocked</span>
+                                    }
+                                </td>
+                                <td>
+                                    @if (!user.Role.Contains(RoleConstraints.Admin))
+                                    {
+                                        <a class="mx-1 btn btn-outline-success" asp-route-id="@user.Id" asp-action="Unlock">Unlock</a>
+                                    }
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

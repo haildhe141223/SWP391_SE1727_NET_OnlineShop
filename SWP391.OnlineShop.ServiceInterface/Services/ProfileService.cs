@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
 using SWP391.OnlineShop.Common.Enums;
 using SWP391.OnlineShop.Core.Cores.UnitOfWork;
 using SWP391.OnlineShop.Core.Models.Entities;
@@ -83,6 +84,15 @@ public class ProfileService : BaseService, IProfileService
         return new List<AddressViewModel>();
     }
 
+    public async Task<List<RequestDataViewModel>> Get(GetUserRequests request)
+    {
+        var requests = await _unitOfWork.Context.Requests
+            .Where(r => r.UserId == request.UserId)
+            .ToListAsync();
+
+        return _mapper.Map<List<RequestDataViewModel>>(requests);
+    }
+
     public List<UserVoucherViewModel> Get(GetUserVouchers request)
     {
         var vouchers = _unitOfWork.Vouchers.GetAvailableVouchersOfUser(request.UserId);
@@ -135,6 +145,105 @@ public class ProfileService : BaseService, IProfileService
         catch (Exception ex)
         {
             _logger.LogError($"PostAddUserAddress request - {ex}");
+            return new BaseResultModel
+            {
+                ErrorMessage = ex.Message,
+                StatusCode = StatusCode.InternalServerError
+            };
+        }
+    }
+
+    public async Task<BaseResultModel> Post(PostBecomeRequestMarketer request)
+    {
+        try
+        {
+            var user = await _userManager.FindByIdAsync(request.UserId.ToString());
+            if (user != null)
+            {
+                var viewModel = new RequestMarketingViewModel
+                {
+                    Author = request.Author,
+                    Email = request.Email,
+                    Name = request.FullName,
+                    Phone = request.PhoneNumber,
+                    SamplePostLink = request.SamplePostLink
+                };
+
+                var data = JsonConvert.SerializeObject(viewModel);
+
+                var requestData = new Request
+                {
+                    RequestStatus = Core.Models.Enums.RequestStatus.Submitted,
+                    RequestType = Core.Models.Enums.RequestType.RequestToBecomeMarketing,
+                    UserId = user.Id,
+                    RequestData = data
+                };
+
+                await _unitOfWork.Context.AddAsync(requestData);
+                await _unitOfWork.CompleteAsync();
+
+                return new BaseResultModel
+                {
+                    StatusCode = StatusCode.Success
+                };
+            }
+
+            throw new Exception("User does not exist. Please re-check");
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError($"PostBecomeRequestMarketer request - {ex}");
+            return new BaseResultModel
+            {
+                ErrorMessage = ex.Message,
+                StatusCode = StatusCode.InternalServerError
+            };
+        }
+    }
+
+    public async Task<BaseResultModel> Post(PostBecomeRequestSaleManager request)
+    {
+        try
+        {
+            var user = await _userManager.FindByIdAsync(request.UserId.ToString());
+            if (user != null)
+            {
+                var viewModel = new RequestSaleManagerViewModel
+                {
+                    Email = request.Email,
+                    Name = request.FullName,
+                    PhoneNumber = request.PhoneNumber,
+                    FullAddress = request.FullAddress,
+                    BusinessRegistrationCertificateImage = request.BusinessCertificateLink,
+                    FrontOfIdentityCardImage = request.FrontOfIdentityCardLink,
+                    BackOfIdentityCardImage = request.BackOfIdentityCardLink,
+                    Reason = request.Reason,
+                };
+
+                var data = JsonConvert.SerializeObject(viewModel);
+
+                var requestData = new Request
+                {
+                    RequestStatus = Core.Models.Enums.RequestStatus.Submitted,
+                    RequestType = Core.Models.Enums.RequestType.RequestToBecomeSaleManager,
+                    UserId = user.Id,
+                    RequestData = data
+                };
+
+                await _unitOfWork.Context.AddAsync(requestData);
+                await _unitOfWork.CompleteAsync();
+
+                return new BaseResultModel
+                {
+                    StatusCode = StatusCode.Success
+                };
+            }
+
+            throw new Exception("User does not exist. Please re-check");
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError($"PostBecomeRequestSaleManager request - {ex}");
             return new BaseResultModel
             {
                 ErrorMessage = ex.Message,

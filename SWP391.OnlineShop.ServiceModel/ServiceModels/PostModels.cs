@@ -32,6 +32,12 @@ namespace SWP391.OnlineShop.ServiceModel.ServiceModels
         public int CategoryId { get; set; }
     }
 
+    [Route("/Post/GetPostByTag", "GET")]
+    public class GetPostByTag : IReturn<List<PostViewModel>>
+    {
+        public int TagId { get; set; }
+    }
+
     [Route("/Post/GetPostByAuthor", "GET")]
     public class GetPostByAuthor : IReturn<List<PostViewModel>>
     {
@@ -62,6 +68,7 @@ namespace SWP391.OnlineShop.ServiceModel.ServiceModels
         public string Description { get; set; }
         public string Thumbnail { get; set; }
         public string Author { get; set; }
+        public string Tag { get; set; }
         public int? CategoryId { get; set; }
 
     }
@@ -75,6 +82,7 @@ namespace SWP391.OnlineShop.ServiceModel.ServiceModels
         public string Description { get; set; }
         public string Thumbnail { get; set; }
         public string Author { get; set; }
+        public string Tag { get; set; }
         public int? CategoryId { get; set; }
         public int Id { get; set; }
         public Status Status { get; set; }

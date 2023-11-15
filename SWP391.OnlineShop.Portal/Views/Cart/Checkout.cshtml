@@ -27,7 +27,7 @@
 					</div>
 					<div class="col-md-6 form-group p_star">
 						<label for="number">Phone Number</label>
-						<input type="text" class="form-control" id="number" disabled name="number" value="@Model.CustomerPhoneNumber">
+						<input type="text" class="form-control" id="number" disabled name="number" value="@Model.CustomerPhone">
 					</div>
 					<div class="col-md-6 form-group p_star">
 						<label for="email">Email Address</label>
@@ -53,6 +53,7 @@
 							@foreach (var order in Model.OrderDetails)
 							{
 								<li><a href="#">@order.Product.ProductName <span class="middle">x @order.Quantity</span> <span class="last">$ @(order.UnitPrice * order.Quantity)</span></a></li>
+								<li><a href="#">Voucher Discount <span id="total-cost">$ @((order.UnitPrice * order.Quantity) - Model.TotalCost)</span></a></li>
 							}
 						</ul>
 						<ul class="list list_2">

@@ -48,14 +48,46 @@ public class AccountService : BaseService, IAccountService
         // Descending
         if (request.IsDesc)
         {
-            var users = await _userManager.Users.OrderByDescending(x => x.Id).Take(request.Size).ToListAsync();
-            return _mapper.Map<List<UserViewModel>>(users);
+            if (request.LockoutEnabled)
+            {
+                var users = await _userManager.Users
+                    .Where(u => u.LockoutEnabled)
+                    .OrderByDescending(x => x.Id)
+                    .Take(request.Size)
+                    .ToListAsync();
+                return _mapper.Map<List<UserViewModel>>(users);
+            }
+            else
+            {
+                var users = await _userManager.Users
+                    .Where(u => !u.LockoutEnabled)
+                    .OrderByDescending(x => x.Id)
+                    .Take(request.Size)
+                    .ToListAsync();
+                return _mapper.Map<List<UserViewModel>>(users);
+            }
         }
         // Ascending
         else
         {
-            var users = await _userManager.Users.Take(request.Size).ToListAsync();
-            return _mapper.Map<List<UserViewModel>>(users);
+            if (request.LockoutEnabled)
+            {
+                var users = await _userManager.Users
+                    .Where(u => u.LockoutEnabled)
+                    .Take(request.Size)
+                    .ToListAsync();
+
+                return _mapper.Map<List<UserViewModel>>(users);
+            }
+            else
+            {
+                var users = await _userManager.Users
+                    .Where(u => !u.LockoutEnabled)
+                    .Take(request.Size)
+                    .ToListAsync();
+
+                return _mapper.Map<List<UserViewModel>>(users);
+            }
         }
     }
 
@@ -165,6 +197,77 @@ public class AccountService : BaseService, IAccountService
                 ErrorMessage = $"Login fail. Found some problems while logging in with {providerDisplayName}. " +
                                "Please contact admin."
             };
+        }
+    }
+
+    public async Task<UserPermissionViewModel> Get(GetUserInPermissionTab request)
+    {
+        var user = await _userManager.FindByIdAsync(request.UserId);
+        if (user != null)
+        {
+            var roleVms = new List<RoleViewModel>();
+
+            var roles = await _unitOfWork.Context.Roles
+                .Where(r => r.Name == RoleConstraints.Customer ||
+                            r.Name == RoleConstraints.Marketing ||
+                            r.Name == RoleConstraints.SaleManager)
+                .ToListAsync();
+
+            if (roles.Any())
+            {
+                foreach (var role in roles)
+                {
+                    var roleVm = new RoleViewModel
+                    {
+                        Id = role.Id,
+                        IsChecked = false,
+                        LabelName = role.Name
+                    };
+                    roleVms.Add(roleVm);
+                }
+            }
+
+            var userRoles = await _userManager.GetRolesAsync(user);
+            foreach (var roleViewModel in roleVms)
+            {
+                foreach (var userRole in userRoles)
+                {
+                    if (userRole.Equals(roleViewModel.LabelName))
+                    {
+                        roleViewModel.IsChecked = true;
+                    }
+                }
+            }
+
+            var permissionVm = new UserPermissionViewModel
+            {
+                AvatarLink = user.Image,
+                Gender = user.Gender,
+                RoleViewModels = roleVms
+            };
+
+            return permissionVm;
+
+        }
+
+        return new UserPermissionViewModel();
+    }
+
+    public async Task<List<UserViewModel>> Get(GetCustomers request)
+    {
+        // Descending
+        if (request.IsDesc)
+        {
+            var customers = await _userManager.GetUsersInRoleAsync(RoleConstraints.Customer);
+            customers = customers.OrderByDescending(x => x.Id).ToList();
+            return _mapper.Map<List<UserViewModel>>(customers);
+        }
+        // Ascending
+        else
+        {
+            var customers = await _userManager.GetUsersInRoleAsync(RoleConstraints.Customer);
+            customers = customers.ToList();
+            return _mapper.Map<List<UserViewModel>>(customers);
         }
     }
 
@@ -343,23 +446,6 @@ public class AccountService : BaseService, IAccountService
     }
 
 
-    public async Task<List<UserViewModel>> Get(GetCustomers request)
-    {
-        // Descending
-        if (request.IsDesc)
-        {
-            var customers = await _userManager.GetUsersInRoleAsync(RoleConstraints.Customer);
-            customers = customers.OrderByDescending(x => x.Id).ToList();
-            return _mapper.Map<List<UserViewModel>>(customers);
-        }
-        // Ascending
-        else
-        {
-            var customers = await _userManager.GetUsersInRoleAsync(RoleConstraints.Customer);
-            customers = customers.ToList();
-            return _mapper.Map<List<UserViewModel>>(customers);
-        }
-    }
 
     public async Task<BaseResultModel> Put(UpdateCustomer request)
     {
@@ -387,7 +473,34 @@ public class AccountService : BaseService, IAccountService
                 ErrorMessage = e.Message
             };
         }
+    }
 
+    public async Task<BaseResultModel> Put(PutUnlockUser request)
+    {
+        try
+        {
+            var user = await _userManager.FindByIdAsync(request.UserId.ToString());
+            if (user != null)
+            {
+                user.LockoutEnabled = false;
+                await _userManager.UpdateAsync(user);
+            }
+
+            return new BaseResultModel
+            {
+                StatusCode = StatusCode.Success,
+                SuccessMessage = "Unlock user success"
+            };
+        }
+        catch (Exception e)
+        {
+            _logger.LogError($"Error in PutUnlockUser request - {e}");
+            return new BaseResultModel
+            {
+                StatusCode = StatusCode.InternalServerError,
+                ErrorMessage = e.Message
+            };
+        }
     }
 
     public async Task<BaseResultModel> Delete(DeleteUser request)
@@ -398,6 +511,68 @@ public class AccountService : BaseService, IAccountService
             if (user != null)
             {
                 await _userManager.SetLockoutEnabledAsync(user, true);
+            }
+
+            return new BaseResultModel
+            {
+                StatusCode = StatusCode.Success
+            };
+        }
+        catch (Exception ex)
+        {
+            return new BaseResultModel
+            {
+                ErrorMessage = $"DeleteUser request - {ex}",
+                StatusCode = StatusCode.InternalServerError
+            };
+        }
+    }
+
+    public async Task<BaseResultModel> Put(PutUserInPermissionTab request)
+    {
+        try
+        {
+            var user = await _userManager.FindByIdAsync(request.UserId);
+            if (user != null)
+            {
+                var isUpdate = false;
+                if (!string.IsNullOrEmpty(request.ImageLink))
+                {
+                    user.Image = request.ImageLink;
+                    isUpdate = true;
+                }
+
+                if (request.Gender != user.Gender)
+                {
+                    user.Gender = request.Gender;
+                    isUpdate = true;
+                }
+
+                if (isUpdate)
+                {
+                    await _userManager.UpdateAsync(user);
+                    await _unitOfWork.CompleteAsync();
+                }
+
+                foreach (var model in request.RoleViewModels)
+                {
+                    if (model.IsChecked)
+                    {
+                        var isInRole = await _userManager.IsInRoleAsync(user, model.LabelName);
+                        if (!isInRole)
+                        {
+                            await _userManager.AddToRoleAsync(user, model.LabelName);
+                        }
+                    }
+                    else
+                    {
+                        var isInRole = await _userManager.IsInRoleAsync(user, model.LabelName);
+                        if (isInRole)
+                        {
+                            await _userManager.RemoveFromRoleAsync(user, model.LabelName);
+                        }
+                    }
+                }
             }
 
             return new BaseResultModel

@@ -1,4 +1,5 @@
 ﻿using ServiceStack;
+using SWP391.OnlineShop.Core.Models.Enums;
 using SWP391.OnlineShop.ServiceModel.Results;
 using SWP391.OnlineShop.ServiceModel.ViewModels.Accounts;
 using SWP391.OnlineShop.ServiceModel.ViewModels.Users;
@@ -11,6 +12,7 @@ public class AccountModels
     public class GetUsers : IReturn<List<UserViewModel>>
     {
         public bool IsDesc { get; set; }
+        public bool LockoutEnabled { get; set; }
         public int Size { get; set; }
     }
 
@@ -43,6 +45,27 @@ public class AccountModels
         public string ProviderKey { get; set; }
     }
 
+    [Route("/Account/GetCustomers", "GET")]
+    public class GetCustomers : IReturn<List<UserViewModel>>
+    {
+        public bool IsDesc { get; set; }
+    }
+
+    [Route("/Account/GetUserInPermissionTab", "GET")]
+    public class GetUserInPermissionTab : IReturn<UserPermissionViewModel>
+    {
+        public string UserId { get; set; }
+    }
+
+    [Route("/Account/PutUserInPermissionTab", "PUT")]
+    public class PutUserInPermissionTab : IReturn<BaseResultModel>
+    {
+        public string UserId { get; set; }
+        public string ImageLink { get; set; }
+        public Gender Gender { get; set; }
+        public List<RoleViewModel> RoleViewModels { get; set; }
+    }
+
     [Route("/Account/RegisterAccount", "POST")]
     public class PostRegisterAccount : IReturn<BaseResultModel>
     {
@@ -65,17 +88,17 @@ public class AccountModels
         public string LinkResetPassword { get; set; }
     }
 
-    [Route("/Account/GetCustomers", "GET")]
-    public class GetCustomers : IReturn<List<UserViewModel>>
-    {
-        public bool IsDesc { get; set; }
-    }
-
     [Route("/Account/UpdateCustomer", "PUT")]
     public class UpdateCustomer : IReturn<BaseResultModel>
     {
         public int Id { get; set; }
         public bool LockoutEnabled { get; set; }
+    }
+
+    [Route("/Account/PutUnlockUser", "PUT")]
+    public class PutUnlockUser : IReturn<BaseResultModel>
+    {
+        public int UserId { get; set; }
     }
 
     [Route("/Account/DeleteUser", "DELETE")]

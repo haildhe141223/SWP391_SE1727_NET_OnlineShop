@@ -18,8 +18,8 @@
 
     var isSuccess = !string.IsNullOrEmpty(successMessage);
 
-    var role = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Role)?.Value;
-
+    var roles = User.Claims.Where(c => c.Type == ClaimTypes.Role);
+    var role = string.Join(CommonConstraints.JoinCharacter, roles.Select(x => x.Value));
 
     var userEmail = User.Claims.FirstOrDefault(u => u.Type == ClaimTypes.Email)?.Value;
     var user = UserManager.FindByEmailAsync(userEmail).Result;

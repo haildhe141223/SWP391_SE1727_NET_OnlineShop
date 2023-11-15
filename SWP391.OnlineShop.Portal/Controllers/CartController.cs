@@ -1,4 +1,5 @@
 ﻿using BraintreeHttp;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
@@ -17,9 +18,11 @@ using System.Security.Claims;
 using static SWP391.OnlineShop.ServiceModel.ServiceModels.AddressModel;
 using static SWP391.OnlineShop.ServiceModel.ServiceModels.EmailModel;
 using static SWP391.OnlineShop.ServiceModel.ServiceModels.OrderModels;
+using static SWP391.OnlineShop.ServiceModel.ServiceModels.VoucherModels;
 
 namespace SWP391.OnlineShop.Portal.Controllers
 {
+	[Authorize]
 	public class CartController : BaseController
 	{
 		private readonly IJsonServiceClient _client;
@@ -53,7 +56,7 @@ namespace SWP391.OnlineShop.Portal.Controllers
 			{
 				Email = email
 			});
-			return View(orders);
+			return View(orders.OrderBy(o => o.Id).ToList());
 		}
 
 		public async Task<IActionResult> Index()
@@ -99,7 +102,7 @@ namespace SWP391.OnlineShop.Portal.Controllers
 					{
 						item.CustomerAddress = userAddress.FullAddress;
 						item.AddressId = userAddress.Id;
-						item.CustomerPhoneNumber = user.PhoneNumber;
+						item.CustomerPhone = string.IsNullOrEmpty(item.CustomerPhone) ? user.PhoneNumber : item.CustomerPhone;
 						item.Provinces = province;
 						result.Add(item);
 					}
@@ -113,7 +116,7 @@ namespace SWP391.OnlineShop.Portal.Controllers
 					{
 						item.CustomerAddress = userAddress.FullAddress;
 						item.AddressId = userAddress.Id;
-						item.CustomerPhoneNumber = user.PhoneNumber;
+						item.CustomerPhone = string.IsNullOrEmpty(item.CustomerPhone) ? user.PhoneNumber : item.CustomerPhone;
 						item.Provinces = province;
 						result.Add(item);
 					}
@@ -127,7 +130,7 @@ namespace SWP391.OnlineShop.Portal.Controllers
 					{
 						item.CustomerAddress = userAddress.FullAddress;
 						item.AddressId = userAddress.Id;
-						item.CustomerPhoneNumber = user.PhoneNumber;
+						item.CustomerPhone = string.IsNullOrEmpty(item.CustomerPhone) ? user.PhoneNumber : item.CustomerPhone;
 						item.Provinces = province;
 						result.Add(item);
 					}
@@ -159,7 +162,7 @@ namespace SWP391.OnlineShop.Portal.Controllers
 			});
 			cartDetailOrders.CustomerAddress = userAddress.FullAddress;
 			cartDetailOrders.AddressId = userAddress.Id;
-			cartDetailOrders.CustomerPhoneNumber = user.PhoneNumber;
+			cartDetailOrders.CustomerPhone = string.IsNullOrEmpty(cartDetailOrders.CustomerPhone) ? user.PhoneNumber : cartDetailOrders.CustomerPhone;
 			var province = await _client.GetAsync(new GetAllProvince());
 			cartDetailOrders.Provinces = province;
 			cartDetailOrders.Sliders = productSlider.Take(8).ToList();
@@ -190,7 +193,7 @@ namespace SWP391.OnlineShop.Portal.Controllers
 				cartCompleteOrders.CustomerAddress = userAddress.FullAddress;
 			}
 			cartCompleteOrders.AddressId = userAddress.Id;
-			cartCompleteOrders.CustomerPhoneNumber = user.PhoneNumber;
+			cartCompleteOrders.CustomerPhone = string.IsNullOrEmpty(cartCompleteOrders.CustomerPhone) ? user.PhoneNumber : cartCompleteOrders.CustomerPhone;
 			cartCompleteOrders.CustomerEmail = email;
 			cartCompleteOrders.Sliders = productSlider.Take(8).ToList();
 			return View(cartCompleteOrders);
@@ -213,7 +216,7 @@ namespace SWP391.OnlineShop.Portal.Controllers
 			{
 				return RedirectToAction("Login", "Account");
 			}
-			order.CustomerPhoneNumber = user.PhoneNumber;
+			order.CustomerPhone = string.IsNullOrEmpty(order.CustomerPhone) ? user.PhoneNumber: order.CustomerPhone;
 
 			if (string.IsNullOrEmpty(order.CustomerAddress))
 			{
@@ -260,10 +263,11 @@ namespace SWP391.OnlineShop.Portal.Controllers
 						SizeId = item.Product.ProductSizes.First().SizeId
 					});
 					var quantity = product.Quantity - item.Quantity;
-					await _client.PutAsync(new PutUpdateProduct()
+					await _client.PutAsync(new PutUpdateProductSize()
 					{
-						Amount = quantity,
-						Id = product.ProductId
+						Quantity = quantity,
+						Id = product.ProductId,
+						SizeId = item.Product.ProductSizes.First().SizeId
 					});
 				}
 				var api = await _client.PutAsync(new PutUpdateCartStatus()
@@ -389,14 +393,15 @@ namespace SWP391.OnlineShop.Portal.Controllers
 		}
 
 		[HttpPost]
-		public async Task<IActionResult> UpdateCartToComplete(int orderId, decimal total, string address)
+		public async Task<IActionResult> UpdateCartToComplete(int orderId, decimal total, string address, string phone)
 		{
 			var api = await _client.PutAsync(new PutUpdateCartToContact
 			{
 				Id = orderId,
 				OrderStatus = Core.Models.Enums.OrderStatus.InCartCompletion,
 				TotalCost = total,
-				Address = address
+				Address = address,
+				PhoneNumber = phone
 			});
 			if (api.StatusCode == Common.Enums.StatusCode.Success)
 			{
@@ -444,6 +449,10 @@ namespace SWP391.OnlineShop.Portal.Controllers
 		public async Task<IActionResult> AddToCard(int productId, decimal price, int quantity, int sizeId)
 		{
 			var email = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Email)?.Value;
+			if (string.IsNullOrEmpty(email))
+			{
+				return RedirectToAction("Login", "Account");
+			}
 			var user = await _userManager.FindByEmailAsync(email);
 			if (user == null)
 			{
@@ -530,8 +539,33 @@ namespace SWP391.OnlineShop.Portal.Controllers
 					Tax = "0"
 				};
 				itemList.Items.Add(item);
+
 			}
 			var paypalOrderId = Guid.NewGuid();
+			var discount = 0m;
+			var total = 0m;
+			if (model.OrderVouchers.Any())
+			{
+				var orderVoucher = model.OrderVouchers.First();
+				var voucher = await _client.GetAsync(new GetVoucherById()
+				{
+					Id = orderVoucher.VoucherId
+				});
+				if (voucher.Type == Core.Models.Enums.VoucherType.Money)
+				{
+					discount = (voucher.Value);
+					total = (model.TotalCost + voucher.Value);
+				}
+				else
+				{
+					total = ((model.TotalCost * 100) / (100 - voucher.Value));
+					discount = (((model.TotalCost * 100) / (100 - voucher.Value)) - model.TotalCost);
+				}
+			}
+			else
+			{
+				total = model.TotalCost;
+			}
 			var hostname = $"{HttpContext.Request.Scheme}://{HttpContext.Request.Host}";
 			var payment = new Payment()
 			{
@@ -542,18 +576,18 @@ namespace SWP391.OnlineShop.Portal.Controllers
 					{
 						Amount = new Amount()
 						{
-							Total = model.TotalCost.ToString(CultureInfo.InvariantCulture),
+							Total = total.ToString(),
 							Currency = "USD",
 							Details = new AmountDetails
 							{
 								Tax = "0",
 								Shipping = "0",
-								Subtotal = model.TotalCost.ToString(CultureInfo.InvariantCulture)
+								Subtotal = total.ToString(),
 							}
 						},
 						ItemList = itemList,
 						Description = $"Invoice #{paypalOrderId}",
-						InvoiceNumber = paypalOrderId.ToString()
+						InvoiceNumber = paypalOrderId.ToString(),
 					}
 				},
 				RedirectUrls = new RedirectUrls()

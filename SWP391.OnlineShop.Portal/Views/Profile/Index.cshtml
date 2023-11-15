@@ -5,7 +5,8 @@
     ViewBag.Title = "Profile";
     var homeUrl = Url.Action("Index", "Home");
     var managementUrl = Url.Action("Index", "Dashboard", new { area = "Managements" });
-    var userRoles = User.Claims.FirstOrDefault(u => u.Type == ClaimTypes.Role)?.Value;
+    var roles = User.Claims.Where(u => u.Type == ClaimTypes.Role).ToList();
+    var userRoles = string.Join(CommonConstraints.JoinCharacter, roles.Select(x => x.Value));
 }
 <div class="profile-container">
     <div class="d-flex align-items-start">
@@ -28,7 +29,7 @@
                     <span>Security</span>
                 </div>
             </button>
-            <button class="tab-header-items" data-bs-toggle="pill" data-bs-target="#v-pills-addr" type="button" id="tab-address">
+            <button class="tab-header-items" data-bs-toggle="pill" data-bs-target="#v-pills-address" type="button" id="tab-address">
                 <div class="header-item-content">
                     <i class="fa-solid fa-map-location-dot"></i>
                     <span>Addresses</span>
@@ -76,7 +77,7 @@
             @*tab orders*@
             <partial name="ProfilePartial/_OrderPartial" />
             @*tab requests*@
-            <partial name="ProfilePartial/_RequestPartial" />
+            <partial name="ProfilePartial/_RequestPartial" for="RequestViewModel" />
         </div>
     </div>
 </div>

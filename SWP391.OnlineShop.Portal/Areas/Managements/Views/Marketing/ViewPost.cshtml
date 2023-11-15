@@ -52,8 +52,11 @@
                 <label asp-for="CategoryId" class="form-label">Category</label><br />
                 <select disabled asp-for="CategoryId" class="form-control" asp-items="@genreList"></select>
             </div>
-            <br />
-            <br />
+            <div class="mb-3">
+                <label asp-for="Tag" class="form-label">Post Tags</label>
+                <input disabled type="text" class="form-control" asp-for="Tag">
+                <span asp-validation-for="Tag" class="r-error d-block text-danger"></span>
+            </div>
             <div class="mb-3">
                 <label asp-for="Status" class="form-label">Status</label><br />
                 <select disabled asp-for="Status" class="form-control" asp-items="@statusList"></select>
