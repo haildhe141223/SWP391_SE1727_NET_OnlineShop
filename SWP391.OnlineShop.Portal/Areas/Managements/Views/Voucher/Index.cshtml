@@ -44,7 +44,6 @@
 							<th>EndDateTime</th>
 							<th>Type</th>
 							<th>Value</th>
-							<th>Product</th>
 							<th>Action</th>
 						</tr>
 					</thead>
@@ -57,7 +56,6 @@
 							<th>EndDateTime</th>
 							<th>Type</th>
 							<th>Value</th>
-							<th>Product</th>
 							<th>Action</th>
 						</tr>
 					</tfoot>
@@ -76,12 +74,6 @@
 									<td>@voucher.EndDateTime.ToString("dd/MMM/yyyy")</td>
 									<td>@voucher.Type</td>
 									<td>@voucher.Value</td>
-									<td>
-										@foreach (var item in voucher.ProductVouchers)
-										{
-											@(item.Product.ProductName)  <br />
-										}
-									</td>
 									<td>
 										<a class="mx-1 btn btn-outline-info" asp-route-id="@voucher.Id"
 								   asp-action="Update">Update</a>

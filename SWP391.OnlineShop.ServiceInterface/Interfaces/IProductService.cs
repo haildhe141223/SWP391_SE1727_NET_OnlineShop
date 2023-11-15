@@ -1,5 +1,6 @@
 ﻿using SWP391.OnlineShop.ServiceModel.Results;
 using SWP391.OnlineShop.ServiceModel.ServiceModels;
+using SWP391.OnlineShop.ServiceModel.ViewModels.Carts;
 using SWP391.OnlineShop.ServiceModel.ViewModels.Products;
 
 namespace SWP391.OnlineShop.ServiceInterface.Interfaces
@@ -95,7 +96,7 @@ namespace SWP391.OnlineShop.ServiceInterface.Interfaces
         /// </summary>
         /// <param name="request"></param>
         /// <returns>product of voucher</returns>
-        List<ProductViewModel> Get(GetProductOfVoucher request);
+        List<OrderViewModels> Get(GetOrderWithVoucher request);
 	}
 }
 

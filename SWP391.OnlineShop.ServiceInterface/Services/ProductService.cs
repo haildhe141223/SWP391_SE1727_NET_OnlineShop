@@ -8,6 +8,7 @@ using SWP391.OnlineShop.ServiceInterface.Interfaces;
 using SWP391.OnlineShop.ServiceInterface.Loggers;
 using SWP391.OnlineShop.ServiceModel.Results;
 using SWP391.OnlineShop.ServiceModel.ServiceModels;
+using SWP391.OnlineShop.ServiceModel.ViewModels.Carts;
 using SWP391.OnlineShop.ServiceModel.ViewModels.Products;
 
 namespace SWP391.OnlineShop.ServiceInterface.Services
@@ -176,29 +177,28 @@ namespace SWP391.OnlineShop.ServiceInterface.Services
             return result;
         }
 
-        public List<ProductViewModel> Get(GetProductOfVoucher request)
+        public List<OrderViewModels> Get(GetOrderWithVoucher request)
         {
             try
             {
-                //TODO: DatHM review this one
-                //var query = from p in _unitOfWork.Context.Products
-                //            join pv in _unitOfWork.Context.ProductVouchers
-                //            on p.Id equals pv.ProductId
-                //            join v in _unitOfWork.Context.Vouchers
-                //            on pv.VoucherId equals v.Id
-                //            where v.Id == request.VoucherId
-                //            select p;
-                //var result = query.ToList();
-                //if (result.Any())
-                //{
-                //    return _mapper.Map<List<ProductViewModel>>(result);
-                //}
+                var query = from o in _unitOfWork.Context.Orders
+                            join pv in _unitOfWork.Context.OrderVouchers
+                            on o.Id equals pv.OrderId
+                            join v in _unitOfWork.Context.Vouchers
+                            on pv.VoucherId equals v.Id
+                            where v.Id == request.VoucherId
+                            select o;
+                var result = query.ToList();
+                if (result.Any())
+                {
+                    return _mapper.Map<List<OrderViewModels>>(result);
+                }
             }
             catch (Exception ex)
             {
-                _logger.LogError($"GetProductOfVoucher error {ex.Message}");
+                _logger.LogError($"GetOrderWithVoucher error {ex.Message}");
             }
-            return new List<ProductViewModel>();
+            return new List<OrderViewModels>();
         }
 
         public ProductSizeViewModel Get(GetProductByIdAndSizeId request)

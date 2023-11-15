@@ -38,10 +38,6 @@
                                         Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et
                                         dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation.
                                     </p>
-                                    <div class="add-bag d-flex align-items-center">
-                                        <a class="add-btn" href=""><span class="lnr lnr-cross"></span></a>
-                                        <span class="add-text text-uppercase">Add to Bag</span>
-                                    </div>
                                 </div>
                             </div>
                             <div class="col-lg-7">
@@ -162,16 +158,9 @@
                                         <h6 class="l-through">@product.Price</h6>
                                     </div>
                                     <div class="prd-bottom">
-                                        <a href="" class="social-info">
+                                        <a asp-action="Details" asp-controller="Product" asp-route-id="@product.Id" class="social-info">
                                             <span class="ti-bag"></span>
-                                            @if (product.SalePrice == 0)
-                                            {
-                                                <p class="hover-text" onclick="AddToCart(@product.Id,@product.Price)">add to bag</p>
-                                            }
-                                            else
-                                            {
-                                                <p class="hover-text" onclick="AddToCart(@product.Id,@product.SalePrice)">add to bag</p>
-                                            }
+                                                <p class="hover-text">add to bag</p>
                                         </a>
                                         <a asp-action="Details" asp-controller="Product" asp-route-id="@product.Id" class="social-info">
                                             <span class="lnr lnr-move"></span>
@@ -504,15 +493,9 @@
                                         @item.ProductName
                                     </h4>
                                     <div class="add-bag d-flex align-items-center justify-content-center">
-                                        <a class="add-btn" href=""><span class="ti-bag"></span></a>
-                                        @if (item.SalePrice == 0)
-                                        {
-                                            <span class="add-text text-uppercase" onclick="AddToCart(@item.Id,@item.Price)">Add to Bag</span>
-                                        }
-                                        else
-                                        {
-                                            <span class="add-text text-uppercase" onclick="AddToCart(@item.Id,@item.SalePrice)">Add to Bag</span>
-                                        }
+                                        <a class="add-btn" asp-action="Details" asp-controller="Product" asp-route-id="@item.Id"><span class="ti-bag"></span>
+                                        <span class="add-text text-uppercase">Add to Bag</span>
+                                        </a>
                                     </div>
                                 </div>
                             </div>
@@ -595,32 +578,3 @@
     </div>
 </section>
 <!-- End related-product Area -->
-
-<script type="text/javascript">
-    function AddToCart(productId, productPrice) {
-        const data = {
-            productId: productId,
-            price: productPrice,
-            quantity: $('#sst').val(),
-        };
-        $.ajax({
-            url: '@Url.Action("AddToCard","Cart")',
-            type: 'POST',
-            data: data,
-            success: function (response) {
-                $.toaster({ priority: 'success', title: 'Created', message: "Add To Cart Detail Successfully" });
-                setTimeout(function () {
-                    window.location.reload();
-                }, 1000);
-            },
-            failure: function (failed) {
-                alert(failed.responseText);
-                //$.toaster({ priority: 'warning', title: 'Warning', message: failed.responseText });
-            },
-            error: function (error) {
-                alert(error.responseText);
-                //$.toaster({ priority: 'danger', title: 'Error', message: error.responseText });
-            }
-        });
-    }
-</script>
