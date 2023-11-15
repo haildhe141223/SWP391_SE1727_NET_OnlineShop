@@ -113,6 +113,6 @@ namespace SWP391.OnlineShop.ServiceModel.ServiceModels
 		[Route("/Order/GetAllOrder", "GET")]
 		public class GetAllOrder : IReturn<List<OrderViewModels>>
 		{
-		}
+		}		
 	}
 }

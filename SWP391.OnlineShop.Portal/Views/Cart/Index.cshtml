@@ -743,8 +743,7 @@ else
 			type: 'POST',
 			data: data,
 			success: function (response) {
-				window.location.href = "@Url.Action("Index","Home")";
-				//$.toaster({ priority: 'success', title: 'Created', message: "Back To Cart Detail Successfully" });
+				$.toaster({ priority: 'success', title: 'Created', message: "Canceled Cart Successfully" });
 				setTimeout(function () {
 					window.location.reload();
 				}, 1000);

@@ -76,5 +76,12 @@ namespace SWP391.OnlineShop.ServiceModel.ServiceModels
 		{
 			public int Id { get; set; }
 		}
+
+		[Route("/Voucher/DeleteUserVoucher", "DELETE")]
+		public class DeleteUserVoucher : IReturn<BaseResultModel>
+		{
+			public int VoucherId { get; set; }
+			public int UserId { get; set; }
+		}
 	}
 }

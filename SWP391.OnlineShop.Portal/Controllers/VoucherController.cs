@@ -99,6 +99,16 @@ namespace SWP391.OnlineShop.Portal.Controllers
 
 		public async Task<IActionResult> AddVoucherToOrder(int voucherId,int orderId,decimal total)
 		{
+			var email = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Email)?.Value;
+			if (string.IsNullOrEmpty(email))
+			{
+				return RedirectToAction("Login", "Account");
+			}
+			var user = await _userManager.FindByEmailAsync(email);
+			if (user == null)
+			{
+				return RedirectToAction("Login", "Account");
+			}
 			var api = await _client.PutAsync(new PutUpdateCartToContact()
 			{
 				Id = orderId,
@@ -109,6 +119,11 @@ namespace SWP391.OnlineShop.Portal.Controllers
 			{
 				OrderId = orderId,
 				VoucherId = voucherId
+			});
+			var deleteOrderVoucher = await _client.DeleteAsync(new DeleteUserVoucher()
+			{
+				VoucherId = voucherId,
+				UserId = user.Id
 			});
 			return Ok();
 		}

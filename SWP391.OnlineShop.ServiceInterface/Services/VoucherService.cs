@@ -63,7 +63,41 @@ namespace SWP391.OnlineShop.ServiceInterface.Services
             return result;
         }
 
-        public async Task<List<VoucherViewModels>> Get(GetAllVoucherByUser request)
+		public async Task<BaseResultModel> Delete(DeleteUserVoucher request)
+		{
+			var result = new BaseResultModel();
+			try
+			{
+                var userVoucher = (from v in _unitOfWork.Context.Vouchers
+                                  join uv in _unitOfWork.Context.UserVouchers
+                                  on v.Id equals uv.VoucherId
+                                  where v.Id == request.VoucherId
+                                  && uv.UserId == request.UserId
+                                  select uv).FirstOrDefault();
+				if (userVoucher == null)
+				{
+					result.StatusCode = Common.Enums.StatusCode.NotFound;
+					result.ErrorMessage = "User Voucher doesn't exist";
+					return result;
+				}
+				_unitOfWork.Context.UserVouchers.Remove(userVoucher);
+				int rows = await _unitOfWork.CompleteAsync();
+				if (rows > 0)
+				{
+					result.StatusCode = Common.Enums.StatusCode.Success;
+					return result;
+				}
+				result.StatusCode = Common.Enums.StatusCode.InternalServerError;
+				result.ErrorMessage = "Delete Failed";
+			}
+			catch (Exception ex)
+			{
+				_logger.LogError($"DeleteUserVoucher error: {ex}");
+			}
+			return result;
+		}
+
+		public async Task<List<VoucherViewModels>> Get(GetAllVoucherByUser request)
         {
             var result = new List<VoucherViewModels>();
             try
