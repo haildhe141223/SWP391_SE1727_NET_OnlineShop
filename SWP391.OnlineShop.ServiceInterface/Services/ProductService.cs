@@ -129,8 +129,8 @@ namespace SWP391.OnlineShop.ServiceInterface.Services
                 var products = _unitOfWork.Products.GetDealProductOfWeek();
                 foreach (var product in products)
                 {
-                    var procustVm = _mapper.Map<ProductViewModel>(product);
-                    result.Add(procustVm);
+                    var productVm = _mapper.Map<ProductViewModel>(product);
+                    result.Add(productVm);
                 }
                 return result;
             }
@@ -217,10 +217,7 @@ namespace SWP391.OnlineShop.ServiceInterface.Services
                                 SizeId = ps.SizeId,
                                 Quantity = ps.Quantity,
                             };
-                if (query != null)
-                {
-                    return query.First();
-                }
+                return query.First();
             }
             catch (Exception ex)
             {

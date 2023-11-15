@@ -228,7 +228,7 @@ namespace SWP391.OnlineShop.ServiceInterface.Services
             var result = new BaseResultModel();
             try
             {
-                var post = _unitOfWork.Posts.GetById(request.Id);
+                var post = await _unitOfWork.Posts.GetByIdAsync(request.Id);
 
                 if (post != null)
                 {
