@@ -116,7 +116,7 @@
                     <a class="collapse-item" asp-area="Managements" asp-action="Index" asp-controller="Order">Orders</a>
                     <a class="collapse-item" asp-area="Managements" asp-action="Index" asp-controller="Voucher">Vouchers</a>
                     <a class="collapse-item" asp-area="Managements" asp-controller="Marketing" asp-action="Index">Products</a>
-                    <a class="collapse-item" asp-area="Managements" asp-controller="Marketing" asp-action="ManageSlider">Sliders</a>
+                    
 
                     if (userRole.Contains(RoleConstraints.Admin))
                     {
@@ -134,9 +134,10 @@
 
                 @if (!string.IsNullOrEmpty(userRole) && userRole.Contains(RoleConstraints.Admin))
                 {
-                    <a class="collapse-item" asp-area="Managements" asp-action="ManageTag" asp-controller="Marketing">Tags</a>
+                    @* <a class="collapse-item" asp-area="Managements" asp-action="ManageTag" asp-controller="Marketing">Tags</a> *@
+                    <a class="collapse-item" asp-area="Managements" asp-controller="Marketing" asp-action="ManageSize">Sizes</a>
                     <a class="collapse-item" asp-area="Managements" asp-action="Index" asp-controller="Category">Categories</a>
-                    <a class="collapse-item">Comments</a>
+                    <a class="collapse-item" asp-area="Managements" asp-controller="Marketing" asp-action="ManageFeedback">Comments</a>
                     <a class="collapse-item" asp-area="Managements" asp-action="Index" asp-controller="Contact">Contacts</a>
                     <a class="collapse-item">Other</a>
                 }
@@ -157,7 +158,7 @@
 
                 @if (!string.IsNullOrEmpty(userRole) && (userRole.Contains(RoleConstraints.Admin) || userRole.Contains(RoleConstraints.Marketing)))
                 {
-                    <a class="collapse-item">Sliders</a>
+                    <a class="collapse-item" asp-area="Managements" asp-controller="Marketing" asp-action="ManageSlider">Sliders</a>
                 }
             </div>
         </div>

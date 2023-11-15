@@ -378,7 +378,11 @@ namespace SWP391.OnlineShop.ServiceInterface.Services
                 {
                     order.OrderNotes = request.OrderNotes;
                 }
-                _unitOfWork.Orders.Update(order);
+				if (!string.IsNullOrEmpty(request.PhoneNumber))
+				{
+					order.CustomerPhone = request.PhoneNumber;
+				}
+				_unitOfWork.Orders.Update(order);
                 var rows = await _unitOfWork.CompleteAsync();
                 result.StatusCode = rows > 0 ? StatusCode.Success : StatusCode.InternalServerError;
             }

@@ -11,104 +11,114 @@ using System.Security.Claims;
 
 namespace SWP391.OnlineShop.Portal.Controllers
 {
-    public class ProductController : BaseController
-    {
-        private readonly IJsonServiceClient _client;
-        private readonly ILoggerService _logger;
-        private readonly UserManager<User> _userManager;
-        public ProductController(IJsonServiceClient client,
-           ILoggerService logger,
-           UserManager<User> userManager)
-        {
-            _client = client;
-            _logger = logger;
-            _userManager = userManager;
-        }
+	public class ProductController : BaseController
+	{
+		private readonly IJsonServiceClient _client;
+		private readonly ILoggerService _logger;
+		private readonly UserManager<User> _userManager;
+		public ProductController(IJsonServiceClient client,
+		   ILoggerService logger,
+		   UserManager<User> userManager)
+		{
+			_client = client;
+			_logger = logger;
+			_userManager = userManager;
+		}
 
-        public async Task<IActionResult> Index(int categoryId, int page = 1)
-        {
-            List<ProductViewModel> latestProducts;
-            if (categoryId == 0)
-            {
-                //Get all active products
-                latestProducts = await _client.GetAsync(new GetAllActiveProduct());
-            }
-            else
-            {
-                //Get all products
-                latestProducts = await _client.GetAsync(new GetProductByCategoryId
-                {
-                    CategoryId = categoryId
-                });
-            }
+		public async Task<IActionResult> Index(int categoryId, int tagId, int page = 1)
+		{
+			List<ProductViewModel> latestProducts = new List<ProductViewModel>();
+			if (categoryId != 0 && tagId == 0)
+			{
+				//Get all products by categoryId
+				latestProducts = await _client.GetAsync(new GetProductByCategoryId
+				{
+					CategoryId = categoryId
+				});
+			}
+			else if (categoryId == 0 && tagId != 0)
+			{
+				latestProducts = await _client.GetAsync(new GetProductByTagId
+				{
+					TagId = tagId
+				});
+			}
+			else
+			{
+				//Get all active products
+				latestProducts = await _client.GetAsync(new GetAllActiveProduct());
+			}
 
-            ViewBag.Pages = latestProducts.Count / 9 + 1;
-            ViewBag.CurrentPage = page;
+			ViewBag.Pages = latestProducts.Count / 9 + 1;
+			ViewBag.CurrentPage = page;
 
-            //Get all categories
-            var categories = await _client.GetAsync(new GetAllCategory());
+			//Get all categories
+			var categories = await _client.GetAsync(new GetAllCategory());
 
-            //Get deal product of week
-            var dealProductOfWeeks = await _client.GetAsync(new GetDealProductOfWeek());
+			//Get deal product of week
+			var dealProductOfWeeks = await _client.GetAsync(new GetDealProductOfWeek());
 
-            var productCategories = new ProductCategoryViewModel
-            {
-                LatestProducts = latestProducts.Skip((page - 1) * 9).Take(9).ToList(),
-                Categories = categories,
-                ProductsOfWeek = dealProductOfWeeks
-            };
-            return View(productCategories);
-        }
+			var tags = await _client.GetAsync(new GetAllProductTag());
 
-        public async Task<IActionResult> Details(int id)
-        {
-            //Get product detail
-            var product = await _client.GetAsync(new GetProductFeedbackById
-            {
-                ProductId = id
-            });
+			var productCategories = new ProductCategoryViewModel
+			{
+				LatestProducts = latestProducts.Skip((page - 1) * 9).Take(9).ToList(),
+				Categories = categories,
+				ProductsOfWeek = dealProductOfWeeks,
+				Tags = tags
+			};
+			return View(productCategories);
+		}
 
-            //Get deal product of week
-            var dealProductOfWeeks = await _client.GetAsync(new GetDealProductOfWeek());
+		public async Task<IActionResult> Details(int id)
+		{
+			//Get product detail
+			var product = await _client.GetAsync(new GetProductFeedbackById
+			{
+				ProductId = id
+			});
 
-            var productDetail = new HomeViewModels
-            {
-                ProductDetail = product,
-                ProductsOfWeek = dealProductOfWeeks
-            };
+			//Get deal product of week
+			var dealProductOfWeeks = await _client.GetAsync(new GetDealProductOfWeek());
 
-            var sizeList = product.ProductSizes.Select
-            (x => new SelectListItem { Value = Convert.ToString(x.Size.Id), Text = x.Size.SizeType }).ToList();
-            ViewBag.SizeLists = sizeList;
+			var productDetail = new HomeViewModels
+			{
+				ProductDetail = product,
+				ProductsOfWeek = dealProductOfWeeks
+			};
 
-            return View(productDetail);
-        }
+			var sizeList = product.ProductSizes.OrderBy(x => x.Size.SizeType).Select
+			(x => new SelectListItem { Value = Convert.ToString(x.Size.Id), Text = x.Size.SizeType }).ToList();
+			ViewBag.SizeLists = sizeList;
 
-        [HttpPost]
-        public async Task<IActionResult> AddComment(
-            string name,
-            string email,
-            string number,
-            double point,
-            string message,
-            int productId)
-        {
+			return View(productDetail);
+		}
 
-            await _client.PostAsync(new Comment
-            {
-                Email = email,
-                Message = message,
-                Name = name,
-                Phone = number,
-                Point = point,
-                ProductID = productId
-            });
-            return RedirectToAction("Details", new { id = productId });
-        }
+		[HttpPost]
+		public async Task<IActionResult> AddComment(
+			string name,
+			string email,
+			string number,
+			double point,
+			string message,
+			int productId)
+		{
 
-        public IActionResult Tracking()
-        {
-            return View();
-        }
-    }
+			await _client.PostAsync(new Comment
+			{
+				Email = email,
+				Message = message,
+				Name = name,
+				Phone = number,
+				Point = point,
+				ProductID = productId
+			});
+			return RedirectToAction("Details", new { id = productId });
+		}
+
+		public IActionResult Tracking()
+		{
+			return View();
+		}
+	}
 }

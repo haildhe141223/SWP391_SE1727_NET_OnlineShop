@@ -2,6 +2,7 @@
 @{
     var genreList = ViewData["GenreList"] as SelectList;
     var statusList = ViewData["StatusList"] as SelectList;
+    var productTypeList = ViewData["ProductTypeList"] as SelectList;
 }
 
 <!-- DataTales Example -->
@@ -66,6 +67,15 @@
                         <br />
                     }
                 }
+            </div>
+            <div class="mb-3">
+                <label asp-for="Tag" class="form-label">Product Tags</label>
+                <input disabled type="text" class="form-control" asp-for="Tag" id="name">
+                <span asp-validation-for="Tag" class="r-error d-block text-danger"></span>
+            </div>
+            <div class="mb-3">
+                <label asp-for="ProductType" class="form-label">Product Type</label><br />
+                <select disabled asp-for="ProductType" class="form-control" asp-items="@productTypeList"></select>
             </div>
             <div class="mb-3">
                 <label asp-for="Status" class="form-label">Status</label><br />

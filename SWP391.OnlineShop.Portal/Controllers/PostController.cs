@@ -21,19 +21,32 @@ namespace SWP391.OnlineShop.Portal.Controllers
             _logger = logger;
             _userManager = userManager;
         }
-        public async Task<IActionResult> Index(string search, int page = 1)
+        public async Task<IActionResult> Index(string search, int categoryId, int tagId, int page = 1)
         {
             var posts = new List<PostViewModel>();
-            if (string.IsNullOrEmpty(search))
-            {
-                //get all post
-                posts = await _client.GetAsync(new GetAllPost());
-            } else
+            if (!string.IsNullOrEmpty(search) && categoryId == 0 && tagId == 0)
             {
                 posts = await _client.GetAsync(new GetPostByTitle
                 {
                     Title = search
                 });
+            } else if (string.IsNullOrEmpty(search) && categoryId != 0 && tagId == 0)
+            {
+                posts = await _client.GetAsync(new GetPostByCategory
+                {
+                    CategoryId = categoryId
+                });
+
+            } else if (string.IsNullOrEmpty(search) && categoryId == 0 && tagId != 0)
+            {
+                posts = await _client.GetAsync(new GetPostByTag
+                {
+                    TagId = tagId
+                });
+            } else
+            {
+                //get all post
+                posts = await _client.GetAsync(new GetAllPost());
             }
 
             ViewBag.Pages = posts.Count % 5 == 0 ? posts.Count / 5 : posts.Count / 5 + 1;

@@ -64,10 +64,24 @@ namespace SWP391.OnlineShop.ServiceModel.ServiceModels
 			public int UserId { get; set; }
 		}
 
+		[Route("/Voucher/PostAddVoucherToOrder", "POST")]
+		public class PostAddVoucherToOrder : IReturn<BaseResultModel>
+		{
+			public int VoucherId { get; set; }
+			public int OrderId { get; set; }
+		}
+
 		[Route("/Voucher/PutUpdateVoucherAmount", "PUT")]
 		public class PutUpdateVoucherAmount : IReturn<BaseResultModel>
 		{
 			public int Id { get; set; }
+		}
+
+		[Route("/Voucher/DeleteUserVoucher", "DELETE")]
+		public class DeleteUserVoucher : IReturn<BaseResultModel>
+		{
+			public int VoucherId { get; set; }
+			public int UserId { get; set; }
 		}
 	}
 }

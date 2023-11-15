@@ -10,6 +10,7 @@ using SWP391.OnlineShop.ServiceModel.Results;
 using SWP391.OnlineShop.ServiceModel.ServiceModels;
 using SWP391.OnlineShop.ServiceModel.ViewModels.Carts;
 using SWP391.OnlineShop.ServiceModel.ViewModels.Products;
+using System.Diagnostics;
 
 namespace SWP391.OnlineShop.ServiceInterface.Services
 {
@@ -89,6 +90,24 @@ namespace SWP391.OnlineShop.ServiceInterface.Services
             return result;
         }
 
+        public List<ProductViewModel> Get(GetAllComingProduct request)
+        {
+            var result = new List<ProductViewModel>();
+            try
+            {
+                var product = _unitOfWork.Products.GetAll()
+                    .Where(x => x.ProductType == Core.Models.Enums.ProductType.InComing && x.Status == Core.Models.Enums.Status.Active)
+                    .OrderByDescending(x => x.CreatedDateTime).ToList();
+                result = _mapper.Map<List<ProductViewModel>>(product);
+                return result;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message);
+            }
+            return result;
+        }
+
         public List<ProductViewModel> Get(GetHotDealProduct request)
         {
             var result = new List<ProductViewModel>();
@@ -150,6 +169,7 @@ namespace SWP391.OnlineShop.ServiceInterface.Services
                 if (product != null)
                 {
                     result = _mapper.Map<ProductViewModel>(product);
+                    result.Tag = string.Join(';', product.ProductTags.Select(x => x.Tag.TagName));
                 }
             }
             catch (Exception ex)
@@ -226,9 +246,38 @@ namespace SWP391.OnlineShop.ServiceInterface.Services
             return result;
         }
 
+        public List<ProductViewModel> Get(GetProductByTagId request)
+        {
+            var result = new List<ProductViewModel>();
+            try
+            {
+                var product = _unitOfWork.Products.GetProductByTagId(Convert.ToInt32(request.TagId));
+                result = _mapper.Map<List<ProductViewModel>>(product);
+                return result;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message);
+            }
+            return result;
+        }
+
         public async Task<BaseResultModel> Post(PostAddProduct request)
         {
             var result = new BaseResultModel();
+
+            var tagIds = _unitOfWork.Tags.AddTagByString(request.Tag);
+
+            var productTags = new List<ProductTag>();
+            foreach (var item in tagIds)
+            {
+                var productTag = new ProductTag()
+                {
+                    TagId = item
+                };
+                productTags.Add(productTag);
+            }
+
             try
             {
                 //TODO: PhuongNL amount error
@@ -243,6 +292,8 @@ namespace SWP391.OnlineShop.ServiceInterface.Services
                     CategoryId = request.CategoryId,
                     Status = Core.Models.Enums.Status.Active,
                     CreatedDateTime = DateTime.Now,
+                    ProductTags = productTags,
+                    ProductType = request.ProductType
                 };
                 await _unitOfWork.Products.AddAsync(product);
                 int rows = await _unitOfWork.CompleteAsync();
@@ -264,11 +315,12 @@ namespace SWP391.OnlineShop.ServiceInterface.Services
                         };
                         listProductSize.Add(productSize);
                     }
+
                     if (lastestProduct != null)
                     {
                         lastestProduct.ProductSizes = listProductSize;
                         _unitOfWork.Products.Update(lastestProduct);
-                        await _unitOfWork.CompleteAsync();
+                        _unitOfWork.Complete();
                     }
 
                     result.StatusCode = Common.Enums.StatusCode.Success;
@@ -302,6 +354,19 @@ namespace SWP391.OnlineShop.ServiceInterface.Services
         public async Task<BaseResultModel> Put(PutUpdateProduct request)
         {
             var result = new BaseResultModel();
+
+            var tagIds = _unitOfWork.Tags.AddTagByString(request.Tag);
+
+            var productTags = new List<ProductTag>();
+            foreach (var item in tagIds)
+            {
+                var productTag = new ProductTag()
+                {
+                    TagId = item
+                };
+                productTags.Add(productTag);
+            }
+
             try
             {
                 var product = _unitOfWork.Products.GetProductFeedbackById(request.Id);
@@ -339,7 +404,11 @@ namespace SWP391.OnlineShop.ServiceInterface.Services
                         product.Description = request.Description;
                     }
 
+                    product.ProductTags = productTags;
+
                     product.Status = request.Status;
+
+                    product.ProductType = request.ProductType;
 
                     var listProductSize = product.ProductSizes.OrderBy(x => x.Size.SizeType).ToList();
 
@@ -366,5 +435,33 @@ namespace SWP391.OnlineShop.ServiceInterface.Services
             }
             return result;
         }
-    }
+
+		public async Task<BaseResultModel> Put(PutUpdateProductSize request)
+		{
+			var result = new BaseResultModel();
+			try
+			{
+                var query = from p in _unitOfWork.Context.Products
+                            join ps in _unitOfWork.Context.ProductSizes
+                            on p.Id equals ps.ProductId
+                            where ps.ProductId == request.Id
+                            && ps.SizeId == request.SizeId
+                            select ps;
+                var productSize = query.First();
+                productSize.Quantity = request.Quantity;
+                int row = await _unitOfWork.CompleteAsync();
+                if(row > 0)
+                {
+                    result.StatusCode = Common.Enums.StatusCode.Success;
+                    return result;
+                }
+                result.StatusCode = Common.Enums.StatusCode.InternalServerError;
+			}
+			catch (Exception ex)
+			{
+				_logger.LogError($"PutUpdateProductSize error {ex.Message}");
+			}
+			return result;
+		}
+	}
 }
