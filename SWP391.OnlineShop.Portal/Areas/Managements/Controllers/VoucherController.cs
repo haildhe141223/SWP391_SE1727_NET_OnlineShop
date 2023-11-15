@@ -51,11 +51,6 @@ namespace SWP391.OnlineShop.Portal.Areas.Managements.Controllers
             {
                 Id = id
             });
-            var products = await _client.GetAsync(new GetProductOfVoucher
-            {
-                VoucherId = voucher.Id
-            });
-            ViewData["ProductList"] = new SelectList(products.OrderBy(p => p.Id), "Id", "ProductName");
             return View(voucher);
         }
 
@@ -158,7 +153,6 @@ namespace SWP391.OnlineShop.Portal.Areas.Managements.Controllers
                 Amount = request.Amount,
                 Email = email,
                 EndDateTime = request.EndDateTime,
-                ProductId = request.ProductIds,
                 StartDateTime = request.StartDateTime,
                 Type = request.Type,
                 Value = request.Value,

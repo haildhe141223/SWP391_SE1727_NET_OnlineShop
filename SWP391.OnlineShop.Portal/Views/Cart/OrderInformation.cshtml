@@ -150,11 +150,7 @@
 	<div class="container">
 		<div class="breadcrumb-banner d-flex flex-wrap align-items-center justify-content-end">
 			<div class="col-first">
-				<h1>Checkout</h1>
-				<nav class="d-flex align-items-center">
-					<a asp-action="Index" asp-controller="Home">Home<span class="lnr lnr-arrow-right"></span></a>
-					<a href="single-product.html">Checkout</a>
-				</nav>
+				<h1>Order Information</h1>
 			</div>
 		</div>
 	</div>
@@ -296,8 +292,8 @@
 															|| Model.OrderStatus == SWP391.OnlineShop.Core.Models.Enums.OrderStatus.InCartCompletion)
 													{
 														<a class="btn primary-btn" id="update-cart-info">Update Cart</a>
+														<a class="btn gray_btn" id="cancel-cart">Cancel Cart</a>
 													}
-													<a class="btn gray_btn" id="cancel-cart">Cancel Cart</a>
 												</div>
 											</td>
 										</tr>
@@ -314,7 +310,7 @@
 					<ul class="list">
 						<li><a href="#">Name <span>@Model.CustomerName</span></a></li>
 						<li><a href="#">Email <span>@Model.CustomerEmail</span></a></li>
-						<li><a href="#">Phone Number <span>@Model.CustomerPhoneNumber</span></a></li>
+						<li><a href="#">Phone Number <span>@Model.CustomerPhone</span></a></li>
 					</ul>
 					<ul class="list list_2">
 						<li><a href="#">Order Total <span>$ @Model.TotalCost</span></a></li>
@@ -475,8 +471,7 @@
 				type: 'POST',
 				data: data,
 				success: function (response) {
-					window.location.href = "@Url.Action("Index","Home")";
-					//$.toaster({ priority: 'success', title: 'Created', message: "Back To Cart Detail Successfully" });
+					$.toaster({ priority: 'success', title: 'Created', message: "Canceled Cart Successfully" });
 					setTimeout(function () {
 						window.location.reload();
 					}, 1000);

@@ -89,20 +89,16 @@ namespace SWP391.OnlineShop.ServiceInterface.Services
             }
             return result;
         }
-        public OrderViewModels Get(GetCartDetailByUser request)
+        public List<OrderViewModels> Get(GetCartDetailByUser request)
         {
-            var result = new OrderViewModels();
+            var result = new List<OrderViewModels>();
             _logger.LogInfo("Get Cart Detail By User");
             try
             {
                 var model = _unitOfWork.Orders.GetCartDetailByUser(request.Email)
                      .OrderByDescending(o => o.OrderDateTime)
-                     .ToList()
-                     .FirstOrDefault();
-                if (model is not null)
-                {
-                    result = _mapper.Map<OrderViewModels>(model);
-                }
+                     .ToList();
+                result = _mapper.Map<List<OrderViewModels>>(model);
             }
             catch (Exception ex)
             {
@@ -111,20 +107,16 @@ namespace SWP391.OnlineShop.ServiceInterface.Services
             return result;
         }
 
-        public OrderViewModels Get(GetCartContactByUser request)
+        public List<OrderViewModels> Get(GetCartContactByUser request)
         {
-            var result = new OrderViewModels();
+            var result = new List<OrderViewModels>();
             _logger.LogInfo("Get Cart Contact By User");
             try
             {
                 var model = _unitOfWork.Orders.GetCartContactByUser(request.Email)
                    .OrderByDescending(o => o.OrderDateTime)
-                   .ToList()
-                   .FirstOrDefault();
-                if (model is not null)
-                {
-                    result = _mapper.Map<OrderViewModels>(model);
-                }
+                   .ToList();
+                result = _mapper.Map<List<OrderViewModels>>(model);
             }
             catch (Exception ex)
             {
@@ -133,20 +125,16 @@ namespace SWP391.OnlineShop.ServiceInterface.Services
             return result;
         }
 
-        public OrderViewModels Get(GetCartCompletionByUser request)
+        public List<OrderViewModels> Get(GetCartCompletionByUser request)
         {
-            var result = new OrderViewModels();
+            var result = new List<OrderViewModels>();
             _logger.LogInfo("Get Cart Completion By User");
             try
             {
                 var model = _unitOfWork.Orders.GetCartCompletionByUser(request.Email)
                     .OrderByDescending(o => o.OrderDateTime)
-                    .ToList()
-                    .FirstOrDefault();
-                if (model is not null)
-                {
-                    result = _mapper.Map<OrderViewModels>(model);
-                }
+                    .ToList();
+                result = _mapper.Map<List<OrderViewModels>>(model);
             }
             catch (Exception ex)
             {
@@ -201,29 +189,29 @@ namespace SWP391.OnlineShop.ServiceInterface.Services
             return result;
         }
 
-		public List<OrderViewModels> Get(GetAllOrder request)
-		{
-			var result = new List<OrderViewModels>();
-			_logger.LogInfo("GetAllOrder");
-			try
-			{
-				var listModel = _unitOfWork.Orders.GetAllOrders()
-					 .OrderByDescending(o => o.OrderDateTime)
-					 .ToList();
-				foreach (var item in listModel)
-				{
-					var order = _mapper.Map<OrderViewModels>(item);
-					result.Add(order);
-				}
-			}
-			catch (Exception ex)
-			{
-				_logger.LogError($"GetAllOrder error {ex.Message}");
-			}
-			return result;
-		}
+        public List<OrderViewModels> Get(GetAllOrder request)
+        {
+            var result = new List<OrderViewModels>();
+            _logger.LogInfo("GetAllOrder");
+            try
+            {
+                var listModel = _unitOfWork.Orders.GetAllOrders()
+                     .OrderByDescending(o => o.OrderDateTime)
+                     .ToList();
+                foreach (var item in listModel)
+                {
+                    var order = _mapper.Map<OrderViewModels>(item);
+                    result.Add(order);
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"GetAllOrder error {ex.Message}");
+            }
+            return result;
+        }
 
-		public async Task<OrderViewModels> Post(PostAddToCart request)
+        public async Task<OrderViewModels> Post(PostAddToCart request)
         {
             var result = new OrderViewModels();
             try
@@ -235,7 +223,7 @@ namespace SWP391.OnlineShop.ServiceInterface.Services
                 }
                 var orderInCartDetail = _unitOfWork.Context.Orders.Include(o => o.OrderDetails).ThenInclude(o => o.Product).Where(o =>
                 o.OrderStatus == Core.Models.Enums.OrderStatus.InCartDetail
-                && o.Status == Core.Models.Enums.Status.Active).OrderByDescending(o => o.OrderDateTime).FirstOrDefault();
+                && o.Status == Core.Models.Enums.Status.Active).OrderByDescending(o => o.Id).FirstOrDefault();
                 if (orderInCartDetail is null)
                 {
                     var order = new Order()
@@ -276,8 +264,24 @@ namespace SWP391.OnlineShop.ServiceInterface.Services
                     {
                         if (item.ProductId == request.ProductId && item.Status == Core.Models.Enums.Status.Active)
                         {
+                            var existedProduct = from p in _unitOfWork.Context.Products
+                                                 join ps in _unitOfWork.Context.ProductSizes
+                                                 on p.Id equals ps.ProductId
+                                                 join od in _unitOfWork.Context.OrderDetails
+                                                 on p.Id equals od.ProductId
+                                                 where p.Id == item.ProductId
+                                                 && ps.SizeId == request.SizeId
+                                                 select ps.Quantity;
+                            var productQuantity = -1;
+                            productQuantity = existedProduct.First();
                             isProductExist = true;
                             quantity = item.Quantity + request.Quantity;
+                            if (productQuantity != -1 && quantity > productQuantity)
+                            {
+                                result.StatusCode = StatusCode.InternalServerError;
+                                result.ErrorMessage = "There's not enough product in store";
+                                return result;
+                            }
                             orderInCartDetail.TotalCost += request.Price * request.Quantity;
 
                             break;
@@ -292,7 +296,6 @@ namespace SWP391.OnlineShop.ServiceInterface.Services
                             orderDetail.Quantity = quantity;
                             _unitOfWork.Context.OrderDetails.Update(orderDetail);
                             await _unitOfWork.CompleteAsync();
-
                         }
                     }
                     else
@@ -375,7 +378,11 @@ namespace SWP391.OnlineShop.ServiceInterface.Services
                 {
                     order.OrderNotes = request.OrderNotes;
                 }
-                _unitOfWork.Orders.Update(order);
+				if (!string.IsNullOrEmpty(request.PhoneNumber))
+				{
+					order.CustomerPhone = request.PhoneNumber;
+				}
+				_unitOfWork.Orders.Update(order);
                 var rows = await _unitOfWork.CompleteAsync();
                 result.StatusCode = rows > 0 ? StatusCode.Success : StatusCode.InternalServerError;
             }

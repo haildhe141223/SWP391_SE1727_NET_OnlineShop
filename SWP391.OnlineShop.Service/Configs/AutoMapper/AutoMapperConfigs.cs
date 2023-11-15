@@ -42,7 +42,8 @@ public class AutoMapperConfigs : Profile
 
         //// Voucher
         CreateMap<Voucher, VoucherViewModels>().ReverseMap();
-        CreateMap<ProductVoucherViewModel, ProductVoucher>().ReverseMap();
+        CreateMap<OrderVoucherViewModel, OrderVoucher>().ReverseMap();
+        CreateMap<Voucher, UserVoucherViewModel>().ReverseMap();
 
         //// Slider
         CreateMap<Slider, SliderViewModel>().ReverseMap();
@@ -52,6 +53,9 @@ public class AutoMapperConfigs : Profile
 
         //// Contact
         CreateMap<Email, EmailContactViewModel>().ReverseMap();
+
+        //// Request
+        CreateMap<Request, RequestDataViewModel>().ReverseMap();
 
         if (unitOfWork != null)
         {

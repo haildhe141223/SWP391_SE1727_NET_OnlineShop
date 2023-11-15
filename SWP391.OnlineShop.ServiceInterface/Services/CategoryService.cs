@@ -90,7 +90,7 @@ namespace SWP391.OnlineShop.ServiceInterface.Services
             var result = new List<CategoryViewModel>();
             try
             {
-                var categories = _unitOfWork.Categories.GetAll();
+                var categories = _unitOfWork.Categories.GetAll().Where(x => x.Status == Core.Models.Enums.Status.Active);
                 foreach (var item in categories)
                 {
                     var categoryVm = _mapper.Map<CategoryViewModel>(item);

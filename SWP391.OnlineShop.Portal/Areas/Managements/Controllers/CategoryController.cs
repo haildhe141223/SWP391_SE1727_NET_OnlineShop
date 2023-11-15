@@ -1,13 +1,10 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using static ServiceStack.Diagnostics.Events;
-using SWP391.OnlineShop.ServiceModel.ServiceModels;
 using ServiceStack;
 using SWP391.OnlineShop.Core.Models.Identities;
 using SWP391.OnlineShop.ServiceInterface.Loggers;
+using SWP391.OnlineShop.ServiceModel.ServiceModels;
 using SWP391.OnlineShop.ServiceModel.ViewModels.Categories;
-using static SWP391.OnlineShop.ServiceModel.ServiceModels.VoucherModels;
-using SWP391.OnlineShop.Core.Models.Entities;
 
 namespace SWP391.OnlineShop.Portal.Areas.Managements.Controllers
 {

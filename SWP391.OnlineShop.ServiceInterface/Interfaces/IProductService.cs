@@ -1,5 +1,6 @@
 ﻿using SWP391.OnlineShop.ServiceModel.Results;
 using SWP391.OnlineShop.ServiceModel.ServiceModels;
+using SWP391.OnlineShop.ServiceModel.ViewModels.Carts;
 using SWP391.OnlineShop.ServiceModel.ViewModels.Products;
 
 namespace SWP391.OnlineShop.ServiceInterface.Interfaces
@@ -62,6 +63,13 @@ namespace SWP391.OnlineShop.ServiceInterface.Interfaces
 		/// <returns>Product</returns>
 		ProductViewModel Get(GetProductById request);
 
+        /// <summary>
+        /// Get Product By Id and SizeId
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns>Product</returns>
+        ProductSizeViewModel Get(GetProductByIdAndSizeId request);
+
 		/// <summary>
 		/// Get product's feedback by id
 		/// </summary>
@@ -102,7 +110,14 @@ namespace SWP391.OnlineShop.ServiceInterface.Interfaces
         /// </summary>
         /// <param name="request"></param>
         /// <returns>product of voucher</returns>
-        List<ProductViewModel> Get(GetProductOfVoucher request);
+        List<OrderViewModels> Get(GetOrderWithVoucher request);
+
+		/// <summary>
+		/// Update Product
+		/// </summary>
+		/// <param name="request"></param>
+		/// <returns>Product</returns>
+		Task<BaseResultModel> Put(PutUpdateProductSize request);
 	}
 }
 

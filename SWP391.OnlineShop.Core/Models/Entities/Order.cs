@@ -9,6 +9,7 @@ public class Order : BaseEntity<int>
     public Order()
     {
         OrderDetails = new HashSet<OrderDetail>();
+        OrderVouchers = new HashSet<OrderVoucher>();
     }
 
     public DateTime OrderDateTime { get; set; }
@@ -24,4 +25,5 @@ public class Order : BaseEntity<int>
     public string OrderNotes { get; set; }
 
     public ICollection<OrderDetail> OrderDetails { get; set; }
+    public ICollection<OrderVoucher> OrderVouchers { get; set; }
 }

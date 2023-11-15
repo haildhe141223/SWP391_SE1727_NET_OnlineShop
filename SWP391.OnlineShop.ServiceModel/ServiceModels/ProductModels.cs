@@ -49,8 +49,14 @@ namespace SWP391.OnlineShop.ServiceModel.ServiceModels
     {
         public int ProductId { get; set; }
     }
+	[Route("/Product/GetProductByIdAndSizeId", "GET")]
+	public class GetProductByIdAndSizeId : IReturn<ProductSizeViewModel>
+	{
+		public int ProductId { get; set; }
+        public int SizeId { get; set; }
+    }
 
-    [Route("/Product/GetProductFeedbackById", "GET")]
+	[Route("/Product/GetProductFeedbackById", "GET")]
     public class GetProductFeedbackById : IReturn<ProductViewModel>
     {
         public int ProductId { get; set; }
@@ -90,7 +96,16 @@ namespace SWP391.OnlineShop.ServiceModel.ServiceModels
         public ProductType ProductType { get; set; }
     }
 
-    [Route("/Product/DeleteProduct", "DELETE")]
+
+	[Route("/Product/PutUpdateProductSize", "PUT")]
+	public class PutUpdateProductSize : IReturn<BaseResultModel>
+	{
+		public int Id { get; set; }
+        public int Quantity { get; set; }
+        public int SizeId { get; set; }
+    }
+
+	[Route("/Product/DeleteProduct", "DELETE")]
     public class DeleteProduct : IReturn<BaseResultModel>
     {
         public int ProductId { get; set; }
@@ -108,9 +123,9 @@ namespace SWP391.OnlineShop.ServiceModel.ServiceModels
         public int ProductID { get; set; }
     }
 
-    [Route("/Product/GetProductOfVoucher", "GET")]
-    public class GetProductOfVoucher : IReturn<List<ProductViewModel>>
-    {
+	[Route("/Product/GetOrderWithVoucher", "GET")]
+	public class GetOrderWithVoucher : IReturn<List<ProductViewModel>>
+	{
         public int VoucherId { get; set; }
     }
 }

@@ -8,6 +8,7 @@ using SWP391.OnlineShop.ServiceInterface.Interfaces;
 using SWP391.OnlineShop.ServiceInterface.Loggers;
 using SWP391.OnlineShop.ServiceModel.Results;
 using SWP391.OnlineShop.ServiceModel.ServiceModels;
+using SWP391.OnlineShop.ServiceModel.ViewModels.Carts;
 using SWP391.OnlineShop.ServiceModel.ViewModels.Products;
 using System.Diagnostics;
 
@@ -147,8 +148,8 @@ namespace SWP391.OnlineShop.ServiceInterface.Services
                 var products = _unitOfWork.Products.GetDealProductOfWeek();
                 foreach (var product in products)
                 {
-                    var procustVm = _mapper.Map<ProductViewModel>(product);
-                    result.Add(procustVm);
+                    var productVm = _mapper.Map<ProductViewModel>(product);
+                    result.Add(productVm);
                 }
                 return result;
             }
@@ -196,28 +197,53 @@ namespace SWP391.OnlineShop.ServiceInterface.Services
             return result;
         }
 
-        public List<ProductViewModel> Get(GetProductOfVoucher request)
+        public List<OrderViewModels> Get(GetOrderWithVoucher request)
         {
             try
             {
-                var query = from p in _unitOfWork.Context.Products
-                            join pv in _unitOfWork.Context.ProductVouchers
-                            on p.Id equals pv.ProductId
+                var query = from o in _unitOfWork.Context.Orders
+                            join pv in _unitOfWork.Context.OrderVouchers
+                            on o.Id equals pv.OrderId
                             join v in _unitOfWork.Context.Vouchers
                             on pv.VoucherId equals v.Id
                             where v.Id == request.VoucherId
-                            select p;
+                            select o;
                 var result = query.ToList();
                 if (result.Any())
                 {
-                    return _mapper.Map<List<ProductViewModel>>(result);
+                    return _mapper.Map<List<OrderViewModels>>(result);
                 }
             }
             catch (Exception ex)
             {
-                _logger.LogError($"GetProductOfVoucher error {ex.Message}");
+                _logger.LogError($"GetOrderWithVoucher error {ex.Message}");
             }
-            return new List<ProductViewModel>();
+            return new List<OrderViewModels>();
+        }
+
+        public ProductSizeViewModel Get(GetProductByIdAndSizeId request)
+        {
+            var result = new ProductSizeViewModel();
+            try
+            {
+                var query = from p in _unitOfWork.Context.Products
+                            join ps in _unitOfWork.Context.ProductSizes
+                            on p.Id equals ps.ProductId
+                            where ps.ProductId == request.ProductId
+                            && ps.SizeId == request.SizeId
+                            select new ProductSizeViewModel()
+                            {
+                                ProductId = ps.ProductId,
+                                SizeId = ps.SizeId,
+                                Quantity = ps.Quantity,
+                            };
+                return query.First();
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"GetProductByIdAndSizeId error {ex.Message}");
+            }
+            return result;
         }
 
         public List<ProductViewModel> Get(GetProductByTagId request)
@@ -409,5 +435,33 @@ namespace SWP391.OnlineShop.ServiceInterface.Services
             }
             return result;
         }
-    }
+
+		public async Task<BaseResultModel> Put(PutUpdateProductSize request)
+		{
+			var result = new BaseResultModel();
+			try
+			{
+                var query = from p in _unitOfWork.Context.Products
+                            join ps in _unitOfWork.Context.ProductSizes
+                            on p.Id equals ps.ProductId
+                            where ps.ProductId == request.Id
+                            && ps.SizeId == request.SizeId
+                            select ps;
+                var productSize = query.First();
+                productSize.Quantity = request.Quantity;
+                int row = await _unitOfWork.CompleteAsync();
+                if(row > 0)
+                {
+                    result.StatusCode = Common.Enums.StatusCode.Success;
+                    return result;
+                }
+                result.StatusCode = Common.Enums.StatusCode.InternalServerError;
+			}
+			catch (Exception ex)
+			{
+				_logger.LogError($"PutUpdateProductSize error {ex.Message}");
+			}
+			return result;
+		}
+	}
 }

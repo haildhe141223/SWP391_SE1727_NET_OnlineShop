@@ -68,8 +68,15 @@
                         </button>
                     </div>
                     <div class="card_area d-flex align-items-center">
-                        <a class="primary-btn" onclick="AddToCart(@Model.ProductDetail?.Id,@Model.ProductDetail?.Price)">Add to Cart</a>
-                    </div>
+						@if (Model.ProductDetail?.SalePrice > 0)
+						{
+							<a class="primary-btn" onclick="AddToCart(@Model.ProductDetail?.Id,@Model.ProductDetail?.SalePrice)">Add to Cart</a>
+						}
+						else
+						{
+							<a class="primary-btn" onclick="AddToCart(@Model.ProductDetail?.Id,@Model.ProductDetail?.Price)">Add to Cart</a>
+						}
+					</div>
                 </div>
             </div>
         </div>
@@ -172,78 +179,79 @@
 <!--================End Product Description Area =================-->
 <!-- Start related-product Area -->
 <section class="related-product-area section_gap_bottom">
-    <div class="container">
-        <div class="row justify-content-center">
-            <div class="col-lg-6 text-center">
-                <div class="section-title">
-                    <h1>Deals of the Week</h1>
-                    <p>
-                        Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore
-                        magna aliqua.
-                    </p>
-                </div>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-lg-9">
-                <div class="row">
-                    @if (Model.ProductsOfWeek != null)
-                    {
-                        @foreach (var productOfWeek in Model.ProductsOfWeek)
-                        {
-                            <div class="col-lg-4 col-md-4 col-sm-6 mb-20">
-                                <div class="single-related-product d-flex">
-                                    <a href="#"><img src="@productOfWeek.Thumbnail" width="70" height="70" alt=""></a>
-                                    <div class="desc">
-                                        <a asp-controller="Product" asp-action="Details" asp-route-id="@productOfWeek.Id" class="title">@productOfWeek.ProductName</a>
-                                        <div class="price">
-                                            <h6>@productOfWeek.SalePrice</h6>
-                                            <h6 class="l-through">@productOfWeek.SalePrice</h6>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        }
-                    }
-                </div>
-            </div>
-            <div class="col-lg-3">
-                <div class="ctg-right">
-                    <a href="#" target="_blank">
-                        <img class="img-fluid d-block mx-auto" src="~/template/img/category/c5.jpg" alt="">
-                    </a>
-                </div>
-            </div>
-        </div>
-    </div>
+	<div class="container">
+		<div class="row justify-content-center">
+			<div class="col-lg-6 text-center">
+				<div class="section-title">
+					<h1>Deals of the Week</h1>
+					<p>
+						Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore
+						magna aliqua.
+					</p>
+				</div>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-lg-9">
+				<div class="row">
+					@if (Model.ProductsOfWeek != null)
+					{
+						@foreach (var productOfWeek in Model.ProductsOfWeek)
+						{
+							<div class="col-lg-4 col-md-4 col-sm-6 mb-20">
+								<div class="single-related-product d-flex">
+									<a href="#"><img src="@productOfWeek.Thumbnail" width="70" height="70" alt=""></a>
+									<div class="desc">
+										<a asp-controller="Product" asp-action="Details" asp-route-id="@productOfWeek.Id" class="title">@productOfWeek.ProductName</a>
+										<div class="price">
+											<h6>@productOfWeek.SalePrice</h6>
+											<h6 class="l-through">@productOfWeek.SalePrice</h6>
+										</div>
+									</div>
+								</div>
+							</div>
+						}
+					}
+				</div>
+			</div>
+			<div class="col-lg-3">
+				<div class="ctg-right">
+					<a href="#" target="_blank">
+						<img class="img-fluid d-block mx-auto" src="~/template/img/category/c5.jpg" alt="">
+					</a>
+				</div>
+			</div>
+		</div>
+	</div>
 </section>
 <!-- End related-product Area -->
 
 <script type="text/javascript">
-    function AddToCart(productId, productPrice) {
-        const data = {
-            productId: productId,
-            price: productPrice,
-            quantity: $('#sst').val()
-        };
-        $.ajax({
-            url: '@Url.Action("AddToCard","Cart")',
-            type: 'POST',
-            data: data,
-            success: function (response) {
-                $.toaster({ priority: 'success', title: 'Created', message: "Back To Cart Detail Succesfully" });
-                setTimeout(function () {
-                    window.location.reload();
-                }, 1000);
-            },
-            failure: function (failed) {
-                alert(failed.responseText);
-                //$.toaster({ priority: 'warning', title: 'Warning', message: failed.responseText });
-            },
-            error: function (error) {
-                alert(error.responseText);
-                //$.toaster({ priority: 'danger', title: 'Error', message: error.responseText });
-            }
-        });
-    }
+	function AddToCart(productId, productPrice) {
+		var sizeId = $("#sizeList").val();
+		const data = {
+			productId: productId,
+			price: productPrice,
+			quantity: $('#sst').val(),
+			sizeId: sizeId
+		};
+		$.ajax({
+			url: '@Url.Action("AddToCard","Cart")',
+			type: 'POST',
+			data: data,
+			success: function (response) {
+				$.toaster({ priority: 'success', title: 'Created', message: "Back To Cart Detail Succesfully" });
+			},
+			failure: function (failed) {
+				$.toaster({ priority: 'warning', title: 'Warning', message: failed.responseText });
+			},
+			error: function (error) {
+				if (error.status == 401) {
+					window.location.href = '@Url.Action("Login","Account")'
+				} else {
+					$.toaster({ priority: 'danger', title: 'Error', message: error.responseText });
+				}
+			}
+		});
+	}
 </script>

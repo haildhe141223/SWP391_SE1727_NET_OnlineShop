@@ -56,3 +56,18 @@ public enum ProductType
     InComing = 2,
     Event = 3
 }
+
+public enum RequestType
+{
+    RequestToBecomeSale,
+    RequestToBecomeSaleManager,
+    RequestToBecomeMarketing,
+}
+
+public enum RequestStatus
+{
+    Submitted,
+    Pending,
+    Approved,
+    Rejected
+}

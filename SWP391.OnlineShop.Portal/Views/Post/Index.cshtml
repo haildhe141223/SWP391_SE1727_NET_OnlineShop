@@ -6,7 +6,6 @@
     var existedCategory = new List<int>();
     var existedCategoryRightSide = new List<int>();
     var allTags = ViewData["AllTags"] as List<TagViewModel>;
-    var latestPosts = ViewData["LastesPost"] as List<PostViewModel>;
     var pagesNumber = (int)ViewBag.Pages;
     var currentNumber = (int)ViewBag.CurrentPage;
 }
@@ -107,7 +106,7 @@
                                     </a>
                                 </li>
                             }
-                            @for (int i = 1; i <= pagesNumber; i++)
+                            @for (var i = 1; i <= pagesNumber; i++)
                             {
                                 if (i == currentNumber)
                                 {
@@ -171,7 +170,7 @@
                         @foreach (var post in Model.OrderByDescending(p => p.CreatedDateTime))
                         {
                             <div class="media post_item">
-                                <img src=@post.Thumbnail width="50" height="50" alt="post">
+                                @*<img src=@post.Thumbnail width="50" height="50" alt="post">*@
                                 <div class="media-body">
                                     <a asp-action="Details" asp-controller="Post" asp-route-id="@post.Id">
                                         <h3>@post.Title</h3>

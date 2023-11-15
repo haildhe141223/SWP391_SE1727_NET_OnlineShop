@@ -14,19 +14,19 @@ namespace SWP391.OnlineShop.ServiceModel.ServiceModels
             public string Email { get; set; }
         }
         [Route("/Order/GetCartDetailByUser", "GET")]
-        public class GetCartDetailByUser : IReturn<OrderViewModels>
+        public class GetCartDetailByUser : IReturn<List<OrderViewModels>>
         {
             public string Email { get; set; }
         }
 
         [Route("/Order/GetCartContactByUser", "GET")]
-        public class GetCartContactByUser : IReturn<OrderViewModels>
+        public class GetCartContactByUser : IReturn<List<OrderViewModels>>
         {
             public string Email { get; set; }
         }
 
         [Route("/Order/GetCartCompletionByUser", "GET")]
-        public class GetCartCompletionByUser : IReturn<OrderViewModels>
+        public class GetCartCompletionByUser : IReturn<List<OrderViewModels>>
         {
             public string Email { get; set; }
         }
@@ -49,6 +49,7 @@ namespace SWP391.OnlineShop.ServiceModel.ServiceModels
             public string CustomerEmail { get; set; }
             public decimal TotalCost { get; set; }
             public OrderStatus OrderStatus { get; set; }
+            public int SizeId { get; set; }
         }
 
         [Route("/Order/PutUpdateCart", "PUT")]
@@ -79,6 +80,7 @@ namespace SWP391.OnlineShop.ServiceModel.ServiceModels
             public OrderStatus OrderStatus { get; set; }
             public string Address { get; set; }
             public string OrderNotes { get; set; }
+            public string PhoneNumber { get; set; }
         }
 
         [Route("/Order/PutUpdateQuantity", "PUT")]
@@ -111,6 +113,6 @@ namespace SWP391.OnlineShop.ServiceModel.ServiceModels
 		[Route("/Order/GetAllOrder", "GET")]
 		public class GetAllOrder : IReturn<List<OrderViewModels>>
 		{
-		}
+		}		
 	}
 }

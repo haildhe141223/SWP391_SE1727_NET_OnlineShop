@@ -417,6 +417,38 @@ namespace SWP391.OnlineShop.Core.Migrations
                     b.ToTable("OrderDetails");
                 });
 
+            modelBuilder.Entity("SWP391.OnlineShop.Core.Models.Entities.OrderVoucher", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<DateTime>("CreatedDateTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("ModifiedDateTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("OrderId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
+
+                    b.Property<int>("VoucherId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("OrderId");
+
+                    b.HasIndex("VoucherId");
+
+                    b.ToTable("OrderVouchers");
+                });
+
             modelBuilder.Entity("SWP391.OnlineShop.Core.Models.Entities.Post", b =>
                 {
                     b.Property<int>("Id")
@@ -608,38 +640,6 @@ namespace SWP391.OnlineShop.Core.Migrations
                     b.ToTable("ProductTags");
                 });
 
-            modelBuilder.Entity("SWP391.OnlineShop.Core.Models.Entities.ProductVoucher", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
-
-                    b.Property<DateTime>("CreatedDateTime")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime>("ModifiedDateTime")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("ProductId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("Status")
-                        .HasColumnType("int");
-
-                    b.Property<int>("VoucherId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ProductId");
-
-                    b.HasIndex("VoucherId");
-
-                    b.ToTable("ProductVouchers");
-                });
-
             modelBuilder.Entity("SWP391.OnlineShop.Core.Models.Entities.Province", b =>
                 {
                     b.Property<int>("Id")
@@ -663,6 +663,45 @@ namespace SWP391.OnlineShop.Core.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Provinces");
+                });
+
+            modelBuilder.Entity("SWP391.OnlineShop.Core.Models.Entities.Request", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<DateTime>("CreatedDateTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("ModifiedDateTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Reply")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("RequestData")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("RequestStatus")
+                        .HasColumnType("int");
+
+                    b.Property<int>("RequestType")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Requests");
                 });
 
             modelBuilder.Entity("SWP391.OnlineShop.Core.Models.Entities.Setting", b =>
@@ -1111,6 +1150,23 @@ namespace SWP391.OnlineShop.Core.Migrations
                     b.Navigation("Product");
                 });
 
+            modelBuilder.Entity("SWP391.OnlineShop.Core.Models.Entities.OrderVoucher", b =>
+                {
+                    b.HasOne("SWP391.OnlineShop.Core.Models.Entities.Order", "Order")
+                        .WithMany("OrderVouchers")
+                        .HasForeignKey("OrderId")
+                        .IsRequired();
+
+                    b.HasOne("SWP391.OnlineShop.Core.Models.Entities.Voucher", "Voucher")
+                        .WithMany("OrderVouchers")
+                        .HasForeignKey("VoucherId")
+                        .IsRequired();
+
+                    b.Navigation("Order");
+
+                    b.Navigation("Voucher");
+                });
+
             modelBuilder.Entity("SWP391.OnlineShop.Core.Models.Entities.Post", b =>
                 {
                     b.HasOne("SWP391.OnlineShop.Core.Models.Entities.Category", "Category")
@@ -1188,23 +1244,15 @@ namespace SWP391.OnlineShop.Core.Migrations
                     b.Navigation("Tag");
                 });
 
-            modelBuilder.Entity("SWP391.OnlineShop.Core.Models.Entities.ProductVoucher", b =>
+            modelBuilder.Entity("SWP391.OnlineShop.Core.Models.Entities.Request", b =>
                 {
-                    b.HasOne("SWP391.OnlineShop.Core.Models.Entities.Product", "Product")
-                        .WithMany("ProductVouchers")
-                        .HasForeignKey("ProductId")
+                    b.HasOne("SWP391.OnlineShop.Core.Models.Identities.User", "User")
+                        .WithMany("Requests")
+                        .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("SWP391.OnlineShop.Core.Models.Entities.Voucher", "Voucher")
-                        .WithMany("ProductVouchers")
-                        .HasForeignKey("VoucherId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Product");
-
-                    b.Navigation("Voucher");
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("SWP391.OnlineShop.Core.Models.Entities.UserVoucher", b =>
@@ -1263,6 +1311,8 @@ namespace SWP391.OnlineShop.Core.Migrations
             modelBuilder.Entity("SWP391.OnlineShop.Core.Models.Entities.Order", b =>
                 {
                     b.Navigation("OrderDetails");
+
+                    b.Navigation("OrderVouchers");
                 });
 
             modelBuilder.Entity("SWP391.OnlineShop.Core.Models.Entities.Post", b =>
@@ -1279,8 +1329,6 @@ namespace SWP391.OnlineShop.Core.Migrations
                     b.Navigation("ProductSizes");
 
                     b.Navigation("ProductTags");
-
-                    b.Navigation("ProductVouchers");
                 });
 
             modelBuilder.Entity("SWP391.OnlineShop.Core.Models.Entities.Province", b =>
@@ -1302,7 +1350,7 @@ namespace SWP391.OnlineShop.Core.Migrations
 
             modelBuilder.Entity("SWP391.OnlineShop.Core.Models.Entities.Voucher", b =>
                 {
-                    b.Navigation("ProductVouchers");
+                    b.Navigation("OrderVouchers");
 
                     b.Navigation("UserVouchers");
                 });
@@ -1314,6 +1362,8 @@ namespace SWP391.OnlineShop.Core.Migrations
                     b.Navigation("FeedBacks");
 
                     b.Navigation("Orders");
+
+                    b.Navigation("Requests");
 
                     b.Navigation("UserVouchers");
 

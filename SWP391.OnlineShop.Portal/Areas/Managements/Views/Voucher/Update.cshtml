@@ -71,11 +71,6 @@
                     <input asp-for="Value" type="number" min="1" class="form-control" required>
                     <span asp-validation-for="Value" class="r-error d-block text-danger"></span>
                 </div>
-                <div class="mb-3">
-                    <label asp-for="ProductIds" class="form-label">Product</label>
-                    <select asp-for="ProductIds" class="form-control" asp-items="@productList" disabled></select>
-                </div>
-
                 <a type="button" class="btn btn-secondary" asp-action="">Back</a>
                 <button type="reset" class="btn btn-info">Reset</button>
                 <button type="submit" class="btn btn-primary">Submit</button>

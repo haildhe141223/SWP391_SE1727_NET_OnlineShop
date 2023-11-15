@@ -1,4 +1,21 @@
-﻿<div class="tab-pane fade tab-content-item tab-content-secu" id="v-pills-request">
+﻿@using SWP391.OnlineShop.Core.Models.Enums;
+@using SWP391.OnlineShop.ServiceModel.ViewModels.Profiles;
+@model RequestViewModels
+
+@{
+    var isError = false;
+    var errorMessage = TempData["ErrorCollaborationMess"] as string;
+    var successMessage = TempData["SuccessCollaborationMess"] as string;
+
+    if (TempData["IsCollaborationError"] != null)
+    {
+        isError = bool.Parse(TempData["IsCollaborationError"] as string ?? string.Empty);
+    }
+
+    var isSuccess = !string.IsNullOrEmpty(successMessage);
+}
+
+<div class="tab-pane fade tab-content-item tab-content-secu" id="v-pills-request">
     <div class="secu-title">
         <span>Request to become Collaborators</span>
         <p>
@@ -7,27 +24,138 @@
             <a href="https://www.termsfeed.com/live/e3c51e1f-dd04-4568-ba9d-617bca9d4c5d" title="">Terms of Service</a>
         </p>
     </div>
-    <div class="address-container">
-        <div class="address-content">
-            <div class="address-left">
-                <p class="add-l-info">
-                    <span class="add-l-name">Lục Dương Hải</span>
-                    <span class="add-l-phone">| 0911000426</span>
-                </p>
-                <p class="add-l-address">
-                    Ký Túc Xá Khu A Đại Học Quốc Gia Cổng Chính
-                    Phường Đông Hòa, Thành Phố Dĩ An, Bình Dương
-                </p>
-                <div>
-                    <button type="button" class="btn btn-outline-danger">Default</button>
+    @if (isSuccess)
+    {
+        <div class="alert-success" style="padding: 10px;margin: 15px;text-align: center;">@Html.Raw(successMessage)</div>
+    }
+    @if (isError)
+    {
+        <div class="wrong-login alert-danger" style="padding: 10px;margin: 15px;text-align: center;">@Html.Raw(errorMessage)</div>
+    }
+    <div class="request-container">
+        <div class="request-header">
+            <div class="request-h-head">
+                Request Table
+            </div>
+            <div class="request-h-body">
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th scope="col">Request Type</th>
+                            <th scope="col">Created Date</th>
+                            <th scope="col">Status</th>
+                            <th scope="col">Admin Reply</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model.RequestDataViewModels)
+                        {
+                            <tr>
+                                <td>@Enum.GetName(typeof(RequestType), item.RequestType)</td>
+                                <td>@item.CreatedDateTime.ToString("dd/MM/yyyy")</td>
+                                <td>@Enum.GetName(typeof(RequestStatus), item.RequestStatus)</td>
+                                <td>@Html.Raw(item.Reply)</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="request-body">
+            <div class="request-to-sale-manager">
+                <div style="padding-bottom: 20px">
+                    <button class="btn btn-outline-primary" type="button" data-bs-toggle="collapse" data-bs-target="#saleCollapse" aria-expanded="false" aria-controls="collapseExample">
+                        Sale/Sale Manager
+                    </button>
+                </div>
+                <div class="collapse" id="saleCollapse">
+                    <div class="request-b-head">
+                        Request to become Sale Manager
+                    </div>
+                    <div>
+                        <form asp-action="RequestToBecomeSaleManager" method="post" enctype="multipart/form-data">
+                            <div class="mb-3">
+                                <label asp-for="RequestSaleManagerViewModel.Name" class="form-label">Full Name <span class="validate-asterisk">*</span></label>
+                                <input type="text" class="form-control" asp-for="RequestSaleManagerViewModel.Name">
+                            </div>
+                            <div class="mb-3">
+                                <label asp-for="RequestSaleManagerViewModel.PhoneNumber" class="form-label">PhoneNumber <span class="validate-asterisk">*</span></label>
+                                <input type="text" class="form-control" asp-for="RequestSaleManagerViewModel.PhoneNumber">
+                            </div>
+                            <div class="mb-3">
+                                <label asp-for="RequestSaleManagerViewModel.Email" class="form-label">Email <span class="validate-asterisk">*</span></label>
+                                <input type="email" class="form-control" asp-for="RequestSaleManagerViewModel.Email">
+                            </div>
+                            <div class="mb-3">
+                                <label asp-for="RequestSaleManagerViewModel.FullAddress" class="form-label">Address <span class="validate-asterisk">*</span></label>
+                                <textarea class="form-control" asp-for="RequestSaleManagerViewModel.FullAddress" rows="3"></textarea>
+                            </div>
+                            <div class="mb-3">
+                                <label asp-for="RequestSaleManagerViewModel.BusinessRegistrationCertificate" class="form-label">
+                                    Business Registration Certificate <span class="validate-asterisk">*</span>
+                                </label>
+                                <input class="form-control" asp-for="RequestSaleManagerViewModel.BusinessRegistrationCertificate">
+                            </div>
+                            <div class="mb-3">
+                                <label asp-for="RequestSaleManagerViewModel.FrontOfIdentityCard" class="form-label">
+                                    Front of IdentityCard <span class="validate-asterisk">*</span>
+                                </label>
+                                <input class="form-control" asp-for="RequestSaleManagerViewModel.FrontOfIdentityCard">
+                            </div>
+                            <div class="mb-3">
+                                <label asp-for="RequestSaleManagerViewModel.BackOfIdentityCard" class="form-label">
+                                    Back of IdentityCard <span class="validate-asterisk">*</span>
+                                </label>
+                                <input class="form-control" asp-for="RequestSaleManagerViewModel.BackOfIdentityCard">
+                            </div>
+                            <div class="mb-3">
+                                <label asp-for="RequestSaleManagerViewModel.Reason" class="form-label">Request Reason</label>
+                                <textarea class="form-control" asp-for="RequestSaleManagerViewModel.Reason" rows="3"></textarea>
+                            </div>
+                            <button type="submit" class="btn btn-outline-secondary">Submit</button>
+                        </form>
+                    </div>
                 </div>
             </div>
-            <div class="address-right">
-                <div>
-                    <a class="btn btn-outline-info">Edit</a>
+            <div class="request-to-marketing">
+                <div style="padding-bottom: 20px">
+                    <button class="btn btn-outline-primary" type="button" data-bs-toggle="collapse" data-bs-target="#marketingCollapse" aria-expanded="false" aria-controls="collapseExample">
+                        Marketing/Blogger
+                    </button>
                 </div>
-                <div>
-                    <a class="btn btn-outline-secondary">Set as Default</a>
+                <div class="collapse" id="marketingCollapse">
+                    <div class="request-b-head">
+                        Request to become Marketing - Blogger
+                    </div>
+                    <div>
+                        <form asp-action="RequestToBecomeMarketer" method="post">
+                            <div class="mb-3">
+                                <label asp-for="RequestMarketingViewModel.Name" class="form-label">
+                                    Full Name <span class="validate-asterisk">*</span>
+                                </label>
+                                <input type="text" class="form-control" asp-for="RequestMarketingViewModel.Name">
+                            </div>
+                            <div class="mb-3">
+                                <label asp-for="RequestMarketingViewModel.Email" class="form-label">
+                                    Email <span class="validate-asterisk">*</span>
+                                </label>
+                                <input type="email" class="form-control" asp-for="RequestMarketingViewModel.Email">
+                            </div>
+                            <div class="mb-3">
+                                <label asp-for="RequestMarketingViewModel.Phone" class="form-label">Phone</label>
+                                <input type="text" class="form-control" asp-for="RequestMarketingViewModel.Phone">
+                            </div>
+                            <div class="mb-3">
+                                <label asp-for="RequestMarketingViewModel.Author" class="form-label">Author</label>
+                                <input type="text" class="form-control" asp-for="RequestMarketingViewModel.Author">
+                            </div>
+                            <div class="mb-3">
+                                <label asp-for="RequestMarketingViewModel.SamplePostLink" class="form-label"></label>
+                                <input type="text" class="form-control" asp-for="RequestMarketingViewModel.SamplePostLink">
+                            </div>
+                            <button type="submit" class="btn btn-outline-secondary">Submit</button>
+                        </form>
+                    </div>
                 </div>
             </div>
         </div>
