@@ -36,6 +36,13 @@ namespace SWP391.OnlineShop.ServiceInterface.Interfaces
         List<PostViewModel> Get(GetPostByCategory request);
 
         /// <summary>
+        /// Get Post By Tag
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns>Get Post By Category</returns>
+        List<PostViewModel> Get(GetPostByTag request);
+
+        /// <summary>
         /// Get Post By Author
         /// </summary>
         /// <param name="request"></param>

@@ -1,62 +1,73 @@
 ﻿@model SWP391.OnlineShop.ServiceModel.ViewModels.Products.HomeViewModels
 <!-- Start Banner Area -->
 <section class="banner-area organic-breadcrumb">
-	<div class="container">
-		<div class="breadcrumb-banner d-flex flex-wrap align-items-center justify-content-end">
-			<div class="col-first">
-				<h1>Product Details Page</h1>
-			</div>
-		</div>
-	</div>
+    <div class="container">
+        <div class="breadcrumb-banner d-flex flex-wrap align-items-center justify-content-end">
+            <div class="col-first">
+                <h1>Product Details Page</h1>
+            </div>
+        </div>
+    </div>
 </section>
 <!-- End Banner Area -->
 <!--================Single Product Area =================-->
 <div class="product_image_area">
-	<div class="container">
-		<div class="row s_product_inner">
-			<div class="col-lg-6">
-				<div class="s_Product_carousel">
-					<div class="single-prd-item">
-						<img class="img-fluid" src="@Model.ProductDetail.Thumbnail" alt="">
-					</div>
-					<div class="single-prd-item">
-						<img class="img-fluid" src="@Model.ProductDetail.Thumbnail" alt="">
-					</div>
-					<div class="single-prd-item">
-						<img class="img-fluid" src="@Model.ProductDetail.Thumbnail" alt="">
-					</div>
-				</div>
-			</div>
-			<div class="col-lg-5 offset-lg-1">
-				<div class="s_product_text">
-					<h3>@Model.ProductDetail?.ProductName</h3>
-					<h2>@Model.ProductDetail?.SalePrice</h2>
-					<ul class="list">
-						<li><a class="active" href="#"><span>Category</span> : @Model.ProductDetail?.Category?.CategoryName</a></li>
-						@if (Model.ProductDetail?.ProductSizes.FirstOrDefault()?.Quantity > 0)
-						{
-							<li><span>Availability</span> : In Stock</li>
-						}
-						else
-						{
-							<li><span>Availability</span> : Sold Out</li>
-						}
-						<li><select name="sizeList" id="sizeList" class="" style="width:20% !important" asp-items="@(new SelectList(ViewBag.SizeLists, "Value", "Text"))"></select></li>
-					</ul>
-					<br /><br />
-					<div class="product_count">
-						<label for="qty">Quantity:</label>
-						<input type="text" name="qty" id="sst" maxlength="12" value="1" title="Quantity:" class="input-text qty">
-						<button onclick="var result = document.getElementById('sst'); var sst = result.value; if( !isNaN( sst )) result.value++;return false;"
-								class="increase items-count" type="button">
-							<i class="lnr lnr-chevron-up"></i>
-						</button>
-						<button onclick="var result = document.getElementById('sst'); var sst = result.value; if( !isNaN( sst ) &amp;&amp; sst > 0 ) result.value--;return false;"
-								class="reduced items-count" type="button">
-							<i class="lnr lnr-chevron-down"></i>
-						</button>
-					</div>
-					<div class="card_area d-flex align-items-center">
+    <div class="container">
+        <div class="row s_product_inner">
+            <div class="col-lg-6">
+                <div class="s_Product_carousel">
+                    <div class="single-prd-item">
+                        <img class="img-fluid" src="@Model.ProductDetail.Thumbnail" alt="">
+                    </div>
+                    <div class="single-prd-item">
+                        <img class="img-fluid" src="@Model.ProductDetail.Thumbnail" alt="">
+                    </div>
+                    <div class="single-prd-item">
+                        <img class="img-fluid" src="@Model.ProductDetail.Thumbnail" alt="">
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-5 offset-lg-1">
+                <div class="s_product_text">
+                    <h3>@Model.ProductDetail?.ProductName</h3>
+                    <h2>@Model.ProductDetail?.SalePrice</h2>
+                    <ul class="list">
+                        <li><a class="active" href="#"><span>Category</span> : @Model.ProductDetail?.Category?.CategoryName</a></li>
+                        <li>
+                            <span>Availability</span> :
+                            @if (Model.ProductDetail?.ProductType == SWP391.OnlineShop.Core.Models.Enums.ProductType.InStock)
+                            {
+                                @Convert.ToString("In Stock")
+                            }
+                            else if (Model.ProductDetail?.ProductType == SWP391.OnlineShop.Core.Models.Enums.ProductType.InComing)
+                            {
+                                @Convert.ToString("In Coming")
+                            }
+                            else if (Model.ProductDetail?.ProductType == SWP391.OnlineShop.Core.Models.Enums.ProductType.SoldOut)
+                            {
+                                @Convert.ToString("Sold Out")
+                            }
+                            else
+                            {
+                                @Convert.ToString("Event")
+                            }
+                        </li>
+                        <li><select name="sizeList" class="" style="width:20% !important" asp-items="@(new SelectList(ViewBag.SizeLists, "Value", "Text"))"></select></li>
+                    </ul>
+                    <br /><br />
+                    <div class="product_count">
+                        <label for="qty">Quantity:</label>
+                        <input type="text" name="qty" id="sst" maxlength="12" value="1" title="Quantity:" class="input-text qty">
+                        <button onclick="var result = document.getElementById('sst'); var sst = result.value; if( !isNaN( sst )) result.value++;return false;"
+                                class="increase items-count" type="button">
+                            <i class="lnr lnr-chevron-up"></i>
+                        </button>
+                        <button onclick="var result = document.getElementById('sst'); var sst = result.value; if( !isNaN( sst ) &amp;&amp; sst > 0 ) result.value--;return false;"
+                                class="reduced items-count" type="button">
+                            <i class="lnr lnr-chevron-down"></i>
+                        </button>
+                    </div>
+                    <div class="card_area d-flex align-items-center">
 						@if (Model.ProductDetail?.SalePrice > 0)
 						{
 							<a class="primary-btn" onclick="AddToCart(@Model.ProductDetail?.Id,@Model.ProductDetail?.SalePrice)">Add to Cart</a>
@@ -66,109 +77,104 @@
 							<a class="primary-btn" onclick="AddToCart(@Model.ProductDetail?.Id,@Model.ProductDetail?.Price)">Add to Cart</a>
 						}
 					</div>
-				</div>
-			</div>
-		</div>
-	</div>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 <!--================End Single Product Area =================-->
 <!--================Product Description Area =================-->
 <section class="product_description_area">
-	<div class="container">
-		<ul class="nav nav-tabs" id="myTab" role="tablist">
-			<li class="nav-item">
-				<a class="nav-link" id="home-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home" aria-selected="true">Description</a>
-			</li>
-			@* <li class="nav-item">
-			<a class="nav-link" id="profile-tab" data-toggle="tab" href="#profile" role="tab" aria-controls="profile"
-			aria-selected="false">Specification</a>
-			</li> *@
-			<li class="nav-item">
-				<a class="nav-link active" id="contact-tab" data-toggle="tab" href="#contact" role="tab" aria-controls="contact"
-				   aria-selected="false">Comments</a>
-			</li>
-			@* <li class="nav-item">
-			<a class="nav-link active" id="review-tab" data-toggle="tab" href="#review" role="tab" aria-controls="review"
-			aria-selected="false">Reviews</a>
-			</li> *@
-		</ul>
-		<div class="tab-content" id="myTabContent">
-			<div class="tab-pane fade" id="home" role="tabpanel" aria-labelledby="home-tab">
-				<p>
-					@Model.ProductDetail?.Description
-				</p>
-			</div>
-			<div class="tab-pane fade show active" id="contact" role="tabpanel" aria-labelledby="contact-tab">
-				<div class="row">
-					<div class="col-lg-6">
-						<div class="comment_list">
-							@if (Model.ProductDetail?.FeedBacks != null)
-							{
-								@foreach (var feedback in Model.ProductDetail.FeedBacks)
-								{
-									<div class="review_item">
-										<div class="media">
-											<div class="d-flex">
-												<img src="@feedback.User.Avatar" width="50" height="50" alt="">
-											</div>
-											<div class="media-body">
-												<h4>@feedback.User.UserName</h4>
-												@*@for (int i = 0; i < Convert.ToInt32(feedback.RatedStar); i++)
-										{
-										<i class="fa fa-star"></i>
-										}*@
-												<h5>@feedback.CreatedDateTime</h5>
-												<a class="reply_btn" href="#">Reply</a>
-											</div>
-										</div>
-										<p>
-											@feedback.Comment
-										</p>
-									</div>
-								}
-							}
+    <div class="container">
+        <ul class="nav nav-tabs" id="myTab" role="tablist">
+            <li class="nav-item">
+                <a class="nav-link" id="home-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home" aria-selected="true">Description</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link active" id="contact-tab" data-toggle="tab" href="#contact" role="tab" aria-controls="contact"
+                   aria-selected="false">Comments</a>
+            </li>
+            @* <li class="nav-item">
+            <a class="nav-link active" id="review-tab" data-toggle="tab" href="#review" role="tab" aria-controls="review"
+            aria-selected="false">Reviews</a>
+            </li> *@
+        </ul>
+        <div class="tab-content" id="myTabContent">
+            <div class="tab-pane fade" id="home" role="tabpanel" aria-labelledby="home-tab">
+                <p>
+                    @Model.ProductDetail?.Description
+                </p>
+            </div>
+            <div class="tab-pane fade show active" id="contact" role="tabpanel" aria-labelledby="contact-tab">
+                <div class="row">
+                    <div class="col-lg-6">
+                        <div class="comment_list">
+                            @if (Model.ProductDetail?.FeedBacks != null)
+                            {
+                                @foreach (var feedback in Model.ProductDetail.FeedBacks)
+                                {
+                                    <div class="review_item">
+                                        <div class="media">
+                                            <div class="d-flex">
+                                                <img src="@feedback.User.Avatar" width="50" height="50" alt="">
+                                            </div>
+                                            <div class="media-body">
+                                                <h4>@feedback.User.UserName</h4>
+                                                @for (int i = 0; i < Convert.ToInt32(feedback.RatedStar); i++)
+                                                {
+                                                    <i class="fa fa-star"></i>
+                                                }
+                                                <h5>@feedback.CreatedDateTime</h5>
+                                            </div>
+                                        </div>
+                                        <p>
+                                            @feedback.Comment
+                                        </p>
+                                    </div>
+                                }
+                            }
 
-						</div>
-					</div>
-					<div class="col-lg-6">
-						<div class="review_box">
-							<h4>Post a comment</h4>
-							<form asp-controller="Product" asp-action="AddComment" asp-route-productID="@Model.ProductDetail?.Id" class="row contact_form" method="post" id="contactForm" novalidate="novalidate">
-								<div class="col-md-12">
-									<div class="form-group">
-										<input type="text" class="form-control" id="name" name="name" placeholder="Your Full name">
-									</div>
-								</div>
-								<div class="col-md-12">
-									<div class="form-group">
-										<input type="email" class="form-control" id="email" name="email" placeholder="Email Address">
-									</div>
-								</div>
-								<div class="col-md-12">
-									<div class="form-group">
-										<input type="text" class="form-control" id="number" name="number" placeholder="Phone Number">
-									</div>
-								</div>
-								<div class="col-md-12">
-									<div class="form-group">
-										<input type="number" step="1" min="1" max="10" class="form-control" id="point" name="point" placeholder="Rate Point">
-									</div>
-								</div>
-								<div class="col-md-12">
-									<div class="form-group">
-										<textarea class="form-control" name="message" id="message" rows="3" placeholder="Message"></textarea>
-									</div>
-								</div>
-								<div class="col-md-12 text-right">
-									<button type="submit" value="submit" class="btn primary-btn">Submit Now</button>
-								</div>
-							</form>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
-	</div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="review_box">
+                            <h4>Post a comment</h4>
+                            <form asp-controller="Product" asp-action="AddComment" asp-route-productID="@Model.ProductDetail?.Id" class="row contact_form" method="post" id="contactForm" novalidate="novalidate">
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        <label>Full Name: </label><input type="text" class="form-control" id="name" name="name" placeholder="Your Full name">
+                                    </div>
+                                </div>
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        <label>Email: </label><input type="email" class="form-control" id="email" name="email" placeholder="Email Address">
+                                    </div>
+                                </div>
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        <label>Phone Number: </label><input type="text" class="form-control" id="number" name="number" placeholder="Phone Number">
+                                    </div>
+                                </div>
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        <label>Rate Point: </label><input type="number" step="1" min="1" max="10" class="form-control" id="point" name="point" placeholder="Rate Point">
+                                    </div>
+                                </div>
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        <label>Message: </label><textarea class="form-control" name="message" id="message" rows="3" placeholder="Message"></textarea>
+                                    </div>
+                                </div>
+                                <div class="col-md-12 text-right">
+                                    <button type="submit" value="submit" class="btn primary-btn">Submit Now</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </section>
 <!--================End Product Description Area =================-->
 <!-- Start related-product Area -->

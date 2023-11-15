@@ -62,6 +62,11 @@
                 <select asp-for="CategoryId" class="form-control" asp-items="@genreList"></select><br />
             </div><br />
             <div class="mb-3">
+                <label asp-for="Tag" class="form-label">Post Tags (separate by ;)</label>
+                <input type="text" class="form-control" asp-for="Tag">
+                <span asp-validation-for="Tag" class="r-error d-block text-danger"></span>
+            </div>
+            <div class="mb-3">
                 <a type="button" class="btn btn-secondary" asp-action="">Back</a>
                 <button type="submit" class="btn btn-primary">Submit</button>
             </div>

@@ -29,17 +29,21 @@ namespace SWP391.OnlineShop.Portal.Controllers
             //Get all active products
             var latestProducts = await _client.GetAsync(new GetAllActiveProduct());
 
+            //Get all incoming products
+            var comingProducts = await _client.GetAsync(new GetAllComingProduct());
+
             //Get hot deal product
             var hotDealProduct = await _client.GetAsync(new GetHotDealProduct());
 
             //Get deal product of week
             var dealProductOfWeeks = await _client.GetAsync(new GetDealProductOfWeek());
 
-            //Get all categories
+            //Get all sliders
             var sliders = await _client.GetAsync(new GetAllSlider());
 
             var products = new HomeViewModels
             {
+                IncomingProduct = comingProducts
                 LatestProducts = latestProducts ?? new List<ProductViewModel>(),
                 HotDealProduct = hotDealProduct ?? new List<ProductViewModel>(),
                 ProductsOfWeek = dealProductOfWeeks ?? new List<ProductViewModel>(),

@@ -22,11 +22,25 @@ namespace SWP391.OnlineShop.ServiceInterface.Interfaces
         List<ProductViewModel> Get(GetAllActiveProduct request);
 
         /// <summary>
+        /// Get all coming products
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns>Products</returns>
+        List<ProductViewModel> Get(GetAllComingProduct request);
+
+        /// <summary>
         /// Get product by category id
         /// </summary>
         /// <param name="request"></param>
         /// <returns>Product</returns>
         List<ProductViewModel> Get(GetProductByCategoryId request);
+
+		/// <summary>
+		/// Get product by tag id
+		/// </summary>
+		/// <param name="request"></param>
+		/// <returns>Product</returns>
+		List<ProductViewModel> Get(GetProductByTagId request);
 
 		/// <summary>
 		/// Get hot deals products

@@ -75,7 +75,6 @@
                                     <ul class="blog_meta list">
                                         <li><a href="#">@post.Author<i class="lnr lnr-user"></i></a></li>
                                         <li><a href="#">@post.CreatedDateTime<i class="lnr lnr-calendar-full"></i></a></li>
-                                        <li><a href="#">06 Comments<i class="lnr lnr-bubble"></i></a></li>
                                     </ul>
                                 </div>
                             </div>
@@ -145,23 +144,27 @@
                             <div class="br"></div>
                         </form>
                     </aside>
-                    <aside class="single_sidebar_widget author_widget">
-                        <img class="author_img rounded-circle" src="~/template/img/blog/author.png" alt="">
-                        <h4>Charlie Barber</h4>
-                        <p>Senior blog writer</p>
-                        <div class="social_icon">
-                            <a href="#"><i class="fa-brands fa-facebook"></i></a>
-                            <a href="#"><i class="fa-brands fa-twitter"></i></a>
-                            <a href="#"><i class="fa-brands fa-github"></i></a>
-                            <a href="#"><i class="fa-brands fa-behance"></i></a>
-                        </div>
-                        <p>
-                            Boot camps have its supporters andit sdetractors. Some people do not understand why you
-                            should have to spend money on boot camp when you can get. Boot camps have itssuppor
-                            ters andits detractors.
-                        </p>
-                        <div class="br"></div>
-                    </aside>
+                    @if(Model.LastOrDefault() != null)
+                    {
+                        <aside class="single_sidebar_widget author_widget">
+                            <img class="author_img rounded-circle" width="120" height="120" src="@Model.LastOrDefault()?.Thumbnail" alt="">
+                            <h4>@Model.LastOrDefault()?.Title</h4>
+                            <p>@Model.LastOrDefault()?.Author</p>
+                            @* <div class="social_icon">
+                                <a href="#"><i class="fa-brands fa-facebook"></i></a>
+                                <a href="#"><i class="fa-brands fa-twitter"></i></a>
+                                <a href="#"><i class="fa-brands fa-github"></i></a>
+                                <a href="#"><i class="fa-brands fa-behance"></i></a>
+                            </div> *@
+                            <p>
+                                @Model.LastOrDefault()?.Brief
+                            </p>
+                            <p>
+                                @Model.LastOrDefault()?.Featured
+                            </p>
+                            <div class="br"></div>
+                        </aside>
+                    }
                     <aside class="single_sidebar_widget popular_post_widget">
                         <h3 class="widget_title">Popular Posts</h3>
                         @foreach (var post in Model.OrderByDescending(p => p.CreatedDateTime))
@@ -178,10 +181,10 @@
                         }
                         <div class="br"></div>
                     </aside>
-                    <aside class="single_sidebar_widget ads_widget">
+                    @* <aside class="single_sidebar_widget ads_widget">
                          <a href="#"><img class="img-fluid" src="~/template/img/blog/add.jpg" alt=""></a> 
                         <div class="br"></div>
-                    </aside>
+                    </aside> *@
                     <aside class="single_sidebar_widget post_category_widget">
                         <h4 class="widget_title">Post Categories</h4>
                         <ul class="list cat-list">
@@ -192,7 +195,7 @@
                                     if ((!existedCategoryRightSide.Contains(item.Category.Id)))
                                     {
                                         <li>
-                                            <a href="#" class="d-flex justify-content-between">
+                                            <a asp-controller="Post" asp-action="Index" asp-route-categoryId="@item.Category.Id" class="d-flex justify-content-between">
                                                 <p>@item.Category.CategoryName</p>
                                                 @*<p>37</p>*@
                                             </a>
@@ -204,7 +207,7 @@
                         </ul>
                         <div class="br"></div>
                     </aside>
-                    <aside class="single-sidebar-widget newsletter_widget">
+                    @* <aside class="single-sidebar-widget newsletter_widget">
                         <h4 class="widget_title">Newsletter</h4>
                         <p>
                             Here, I focus on a range of items and features that we use in life without
@@ -222,7 +225,7 @@
                         </div>
                         <p class="text-bottom">You can unsubscribe at any time</p>
                         <div class="br"></div>
-                    </aside>
+                    </aside> *@
                     <aside class="single-sidebar-widget tag_cloud_widget">
                         @if (allTags != null)
                         {
@@ -230,7 +233,7 @@
                             <ul class="list">
                                 @foreach (var tag in allTags)
                                 {
-                                    <li><a href="#">@tag.TagName</a></li>
+                                    <li><a asp-controller="Post" asp-action="Index" asp-route-tagId="@tag.Id">@tag.TagName</a></li>
                                 }
                             </ul>
                         }
