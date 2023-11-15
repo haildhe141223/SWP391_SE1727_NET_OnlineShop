@@ -28,6 +28,7 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
     <PackageReference Include="Microsoft.Extensions.Identity.Core" Version="6.0.22" />
+    <PackageReference Include="Microsoft.TestPlatform.TestHost" Version="17.1.0" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="6.0.16" />
     <PackageReference Include="NLog" Version="5.2.4" />
     <PackageReference Include="ServiceStack" Version="6.10.0" />
@@ -45,6 +46,9 @@
 
   <ItemGroup>
     <_ContentIncludedByDefault Remove="Areas\Files\Views\FileManager\Index.cshtml" />
+    <_ContentIncludedByDefault Remove="Areas\Managements\Views\Request\Index.cshtml" />
+    <_ContentIncludedByDefault Remove="Areas\Managements\Views\Request\ProcessedRequests.cshtml" />
+    <_ContentIncludedByDefault Remove="Areas\Managements\Views\Request\RequestMarketing.cshtml" />
     <_ContentIncludedByDefault Remove="Areas\Managements\Views\Shared\AdminPartial\_AdminFooterPartial.cshtml" />
     <_ContentIncludedByDefault Remove="Areas\Managements\Views\Shared\_AdminLayout.cshtml" />
     <_ContentIncludedByDefault Remove="Views\Account\ConfirmResetPassword.cshtml" />
@@ -86,6 +90,18 @@
 
   <ItemGroup>
     <UpToDateCheckInput Remove="Views\Profile\ProfilePartial\_AddressPartial.cshtml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <UpToDateCheckInput Remove="Areas\Managements\Views\Request\Index.cshtml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <UpToDateCheckInput Remove="Areas\Managements\Views\Request\RequestMarketing.cshtml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <UpToDateCheckInput Remove="Areas\Managements\Views\Request\ProcessedRequests.cshtml" />
   </ItemGroup>
 
 </Project>

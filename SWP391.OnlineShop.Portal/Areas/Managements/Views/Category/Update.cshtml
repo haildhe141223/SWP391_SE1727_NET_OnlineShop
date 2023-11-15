@@ -5,7 +5,6 @@
 @{
     var errorMess = TempData["ErrorMess"] as string;
     var successMess = TempData["SuccessMess"] as string;
-    var productList = ViewData["ProductList"] as SelectList;
 }
 
 <div class="container-fluid">
@@ -48,8 +47,8 @@
                     <select asp-for="CategoryType" class="form-control" asp-items="@Html.GetEnumSelectList<CategoryType>()"></select>
                 </div>
                 <a type="button" class="btn btn-secondary" asp-action="">Back</a>
-                <button type="reset" class="btn btn-info">Reset</button>
-                <button type="submit" class="btn btn-primary">Submit</button>
+                <button type="reset" class="btn btn-outline-info">Reset</button>
+                <button type="submit" class="btn btn-outline-primary">Submit</button>
             </form>
         </div>
     </div>

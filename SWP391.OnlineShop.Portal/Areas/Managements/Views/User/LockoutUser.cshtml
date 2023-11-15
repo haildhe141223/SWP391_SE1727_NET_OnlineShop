@@ -1,6 +1,7 @@
-﻿@using SWP391.OnlineShop.ServiceModel.ViewModels.Users
+﻿@using Microsoft.AspNetCore.Mvc.TagHelpers
 @using SWP391.OnlineShop.Common.Constraints
 @using SWP391.OnlineShop.Core.Models.Enums
+@using SWP391.OnlineShop.ServiceModel.ViewModels.Users;
 @model List<UserViewModel>
 
 @{
@@ -25,16 +26,15 @@
             @successMess
         </div>
     }
+    
     <div>
-        @*<a class="btn btn-outline-primary my-3" asp-action="Add">Add New User</a>*@
-        &nbsp;
-        <a class="btn btn-outline-primary my-3" asp-action="LockoutUser">View Locked Users</a>
+        <a class="btn btn-outline-primary my-3" asp-action="">Back</a>
     </div>
 
     <!-- DataTales Example -->
     <div class="card shadow mb-4">
         <div class="card-header py-3">
-            <h6 class="m-0 font-weight-bold text-primary">User DataTables</h6>
+            <h6 class="m-0 font-weight-bold text-primary">Locked User DataTables</h6>
         </div>
         <div class="card-body">
             <div class="table-responsive">
@@ -44,8 +44,8 @@
                             <th>UserName</th>
                             <th>PhoneNumber</th>
                             <th>Gender</th>
-                            <th>Default Address</th>
                             <th>Roles</th>
+                            <th>Status</th>
                             <th>Action</th>
                         </tr>
                     </thead>
@@ -56,15 +56,21 @@
                                 <td class="text-capitalize">@user.UserName</td>
                                 <td>@user.PhoneNumber</td>
                                 <td>@Enum.GetName(typeof(Gender), user.Gender)</td>
-                                <td style="max-width: 100px;overflow: hidden;text-overflow: ellipsis; white-space: nowrap;">
-                                    @user.Address
-                                </td>
                                 <td>@string.Join(", ", user.Role)</td>
                                 <td>
-                                    <a class="mx-1 btn btn-outline-info" asp-route-id="@user.Id" asp-action="Details">View</a>
+                                    @if (user.LockoutEnabled)
+                                    {
+                                        <span>Locked</span>
+                                    }
+                                    else
+                                    {
+                                        <span>Unlocked</span>
+                                    }
+                                </td>
+                                <td>
                                     @if (!user.Role.Contains(RoleConstraints.Admin))
                                     {
-                                        <a class="mx-1 btn btn-outline-danger btn-delete" asp-route-id="@user.Id" asp-action="Delete">Delete</a>
+                                        <a class="mx-1 btn btn-outline-success" asp-route-id="@user.Id" asp-action="Unlock">Unlock</a>
                                     }
                                 </td>
                             </tr>

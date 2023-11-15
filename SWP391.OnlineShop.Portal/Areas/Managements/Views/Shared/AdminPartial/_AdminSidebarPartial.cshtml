@@ -2,7 +2,8 @@
 @using Microsoft.AspNetCore.Mvc.TagHelpers
 @using SWP391.OnlineShop.Common.Constraints
 @{
-    var userRole = User.Claims.FirstOrDefault(u => u.Type == ClaimTypes.Role)?.Value;
+    var roles = User.Claims.Where(u => u.Type == ClaimTypes.Role);
+    var userRole = string.Join(CommonConstraints.JoinCharacter, roles.Select(x => x.Value));
     var id = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
 }
 <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
@@ -35,15 +36,29 @@
         </a>
     </li>
 
-    <hr class="sidebar-divider my-0">
+    @if (!string.IsNullOrEmpty(userRole) &&
+    userRole.Contains(RoleConstraints.Admin))
+    {
+        <hr class="sidebar-divider my-0">
 
-    <!-- Nav Item - Dashboard -->
-    <li class="nav-item active">
-        <a class="nav-link" asp-action="JobSchedule" asp-controller="Dashboard" asp-area="Managements">
-            <i class="fa-solid fa-screwdriver-wrench"></i>
-            <span>Job Schedule</span>
-        </a>
-    </li>
+        <!-- Nav Item - Dashboard -->
+        <li class="nav-item active">
+            <a class="nav-link" onclick="openWindow('Job')" style="cursor: pointer">
+                <i class="fa-solid fa-screwdriver-wrench"></i>
+                <span>Job Schedule</span>
+            </a>
+        </li>
+
+        <hr class="sidebar-divider my-0">
+
+        <!-- Nav Item - Dashboard -->
+        <li class="nav-item active">
+            <a class="nav-link" onclick="openWindow('File')" style="cursor: pointer">
+                <i class="fa-regular fa-folder"></i>
+                <span>Folder Management</span>
+            </a>
+        </li>
+    }
 
     <!-- Divider -->
     <hr class="sidebar-divider">
@@ -68,11 +83,13 @@
                 @if (!string.IsNullOrEmpty(userRole) &&
                 userRole.Contains(RoleConstraints.Admin))
                 {
+                    <a class="collapse-item" asp-area="Managements" asp-action="Index" asp-controller="Request">Requests</a>
                     <a class="collapse-item" asp-area="Managements" asp-action="Index" asp-controller="User">Users</a>
                 }
-                
+
                 @if (!string.IsNullOrEmpty(userRole) &&
-                     userRole.Contains(RoleConstraints.Marketing))
+                userRole.Contains(RoleConstraints.Marketing) &&
+                !userRole.Contains(RoleConstraints.Admin))
                 {
                     <a class="collapse-item" asp-area="Managements" asp-action="ManageCustomer" asp-controller="Marketing">Customers</a>
                 }
@@ -92,9 +109,9 @@
                 <h6 class="collapse-header">Custom Components:</h6>
 
                 @if (!string.IsNullOrEmpty(userRole) && (
-                    userRole.Contains(RoleConstraints.Admin) ||
-                    userRole.Contains(RoleConstraints.Sale) ||
-                    userRole.Contains(RoleConstraints.SaleManager)))
+                userRole.Contains(RoleConstraints.Admin) ||
+                userRole.Contains(RoleConstraints.Sale) ||
+                userRole.Contains(RoleConstraints.SaleManager)))
                 {
                     <a class="collapse-item" asp-area="Managements" asp-action="Index" asp-controller="Order">Orders</a>
                     <a class="collapse-item" asp-area="Managements" asp-action="Index" asp-controller="Voucher">Vouchers</a>
@@ -107,8 +124,9 @@
                     }
                 }
 
-                @if (!string.IsNullOrEmpty(userRole) && (
-                    userRole.Contains(RoleConstraints.Marketing)))
+                @if (!string.IsNullOrEmpty(userRole) &&
+                userRole.Contains(RoleConstraints.Marketing) &&
+                !userRole.Contains(RoleConstraints.Admin))
                 {
                     <a class="collapse-item" asp-area="Managements" asp-controller="Marketing" asp-action="Index">Products</a>
                     <a class="collapse-item" asp-area="Managements" asp-controller="Marketing" asp-action="ManagePost">Posts</a>
@@ -153,3 +171,18 @@
         <button class="rounded-circle border-0" id="sidebarToggle"></button>
     </div>
 </ul>
+
+<script>
+    function openWindow(type) {
+        if (type != undefined) {
+            $.ajax({
+                type: "GET",
+                data: { type: type },
+                url: '@Url.Action("ViewTab", "Dashboard", new { Area = "Managements" })',
+                success: function(result) {
+                    window.open(result.url, "", "width=1100,height=800");
+                }
+            });
+        }
+    }
+</script>

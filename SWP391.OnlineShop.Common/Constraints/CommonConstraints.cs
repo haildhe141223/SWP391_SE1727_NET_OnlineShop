@@ -7,4 +7,6 @@ public class CommonConstraints
         "\'",
         "\""
     };
+
+    public const string JoinCharacter = "; ";
 }

@@ -6,7 +6,9 @@
 @inject UserManager<User> UserManager;
 
 @{
-    var userRole = User.Claims.FirstOrDefault(u => u.Type == ClaimTypes.Role)?.Value;
+    var roles = User.Claims.Where(u => u.Type == ClaimTypes.Role);
+
+    var userRole = string.Join(CommonConstraints.JoinCharacter, roles.Select(x => x.Value));
 
     var userEmail = User.Claims.FirstOrDefault(u => u.Type == ClaimTypes.Email)?.Value;
     var user = UserManager.FindByEmailAsync(userEmail).Result;

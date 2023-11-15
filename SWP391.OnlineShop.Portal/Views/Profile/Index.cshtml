@@ -5,7 +5,8 @@
     ViewBag.Title = "Profile";
     var homeUrl = Url.Action("Index", "Home");
     var managementUrl = Url.Action("Index", "Dashboard", new { area = "Managements" });
-    var userRoles = User.Claims.FirstOrDefault(u => u.Type == ClaimTypes.Role)?.Value;
+    var roles = User.Claims.Where(u => u.Type == ClaimTypes.Role).ToList();
+    var userRoles = string.Join(CommonConstraints.JoinCharacter, roles.Select(x => x.Value));
 }
 <div class="profile-container">
     <div class="d-flex align-items-start">

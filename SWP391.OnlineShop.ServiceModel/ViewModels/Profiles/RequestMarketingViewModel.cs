@@ -4,6 +4,8 @@ namespace SWP391.OnlineShop.ServiceModel.ViewModels.Profiles
 {
     public class RequestMarketingViewModel
     {
+        public int Id { get; set; }
+
         public string Name { get; set; }
 
         [Required(ErrorMessage = "Request to become Blogger/Marketer - Please provide your author nickname.")]
