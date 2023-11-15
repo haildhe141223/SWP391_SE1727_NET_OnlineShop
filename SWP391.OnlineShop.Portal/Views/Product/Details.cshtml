@@ -5,11 +5,6 @@
         <div class="breadcrumb-banner d-flex flex-wrap align-items-center justify-content-end">
             <div class="col-first">
                 <h1>Product Details Page</h1>
-                <nav class="d-flex align-items-center">
-                    <a asp-action="Index" asp-controller="Home">Home<span class="lnr lnr-arrow-right"></span></a>
-                    <a asp-action="Index" asp-controller="Product">Shop<span class="lnr lnr-arrow-right"></span></a>
-                    <a href="single-product.html">product-details</a>
-                </nav>
             </div>
         </div>
     </div>
@@ -38,17 +33,28 @@
                     <h2>@Model.ProductDetail?.SalePrice</h2>
                     <ul class="list">
                         <li><a class="active" href="#"><span>Category</span> : @Model.ProductDetail?.Category?.CategoryName</a></li>
-                        @if (Model.ProductDetail?.Amount > 0)
-                        {
-                            <li><span>Availability</span> : In Stock</li>
-                        }
-                        else
-                        {
-                            <li><span>Availability</span> : Sold Out</li>
-                        }
+                        <li>
+                            <span>Availability</span> :
+                            @if (Model.ProductDetail?.ProductType == SWP391.OnlineShop.Core.Models.Enums.ProductType.InStock)
+                            {
+                                @Convert.ToString("In Stock")
+                            }
+                            else if (Model.ProductDetail?.ProductType == SWP391.OnlineShop.Core.Models.Enums.ProductType.InComing)
+                            {
+                                @Convert.ToString("In Coming")
+                            }
+                            else if (Model.ProductDetail?.ProductType == SWP391.OnlineShop.Core.Models.Enums.ProductType.SoldOut)
+                            {
+                                @Convert.ToString("Sold Out")
+                            }
+                            else
+                            {
+                                @Convert.ToString("Event")
+                            }
+                        </li>
                         <li><select name="sizeList" class="" style="width:20% !important" asp-items="@(new SelectList(ViewBag.SizeLists, "Value", "Text"))"></select></li>
                     </ul>
-                    <br/><br/>
+                    <br /><br />
                     <div class="product_count">
                         <label for="qty">Quantity:</label>
                         <input type="text" name="qty" id="sst" maxlength="12" value="1" title="Quantity:" class="input-text qty">
@@ -77,10 +83,6 @@
             <li class="nav-item">
                 <a class="nav-link" id="home-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home" aria-selected="true">Description</a>
             </li>
-            @* <li class="nav-item">
-            <a class="nav-link" id="profile-tab" data-toggle="tab" href="#profile" role="tab" aria-controls="profile"
-            aria-selected="false">Specification</a>
-            </li> *@
             <li class="nav-item">
                 <a class="nav-link active" id="contact-tab" data-toggle="tab" href="#contact" role="tab" aria-controls="contact"
                    aria-selected="false">Comments</a>
@@ -111,12 +113,11 @@
                                             </div>
                                             <div class="media-body">
                                                 <h4>@feedback.User.UserName</h4>
-                                                @*@for (int i = 0; i < Convert.ToInt32(feedback.RatedStar); i++)
-                                        {
-                                        <i class="fa fa-star"></i>
-                                        }*@
+                                                @for (int i = 0; i < Convert.ToInt32(feedback.RatedStar); i++)
+                                                {
+                                                    <i class="fa fa-star"></i>
+                                                }
                                                 <h5>@feedback.CreatedDateTime</h5>
-                                                <a class="reply_btn" href="#">Reply</a>
                                             </div>
                                         </div>
                                         <p>
@@ -134,27 +135,27 @@
                             <form asp-controller="Product" asp-action="AddComment" asp-route-productID="@Model.ProductDetail?.Id" class="row contact_form" method="post" id="contactForm" novalidate="novalidate">
                                 <div class="col-md-12">
                                     <div class="form-group">
-                                        <input type="text" class="form-control" id="name" name="name" placeholder="Your Full name">
+                                        <label>Full Name: </label><input type="text" class="form-control" id="name" name="name" placeholder="Your Full name">
                                     </div>
                                 </div>
                                 <div class="col-md-12">
                                     <div class="form-group">
-                                        <input type="email" class="form-control" id="email" name="email" placeholder="Email Address">
+                                        <label>Email: </label><input type="email" class="form-control" id="email" name="email" placeholder="Email Address">
                                     </div>
                                 </div>
                                 <div class="col-md-12">
                                     <div class="form-group">
-                                        <input type="text" class="form-control" id="number" name="number" placeholder="Phone Number">
+                                        <label>Phone Number: </label><input type="text" class="form-control" id="number" name="number" placeholder="Phone Number">
                                     </div>
                                 </div>
                                 <div class="col-md-12">
                                     <div class="form-group">
-                                        <input type="number" step="1" min="1" max="10" class="form-control" id="point" name="point" placeholder="Rate Point">
+                                        <label>Rate Point: </label><input type="number" step="1" min="1" max="10" class="form-control" id="point" name="point" placeholder="Rate Point">
                                     </div>
                                 </div>
                                 <div class="col-md-12">
                                     <div class="form-group">
-                                        <textarea class="form-control" name="message" id="message" rows="3" placeholder="Message"></textarea>
+                                        <label>Message: </label><textarea class="form-control" name="message" id="message" rows="3" placeholder="Message"></textarea>
                                     </div>
                                 </div>
                                 <div class="col-md-12 text-right">

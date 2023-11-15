@@ -40,7 +40,7 @@
                                 <th>Product Name</th>
                                 <th>Image</th>
                                 <th>Description</th>
-                                <th>Amount</th>
+                                @* <th>Amount</th> *@
                                 <th>Price</th>
                                 <th>Sale Price</th>
                                 <th>Status</th>
@@ -52,7 +52,7 @@
                                 <th>Product Name</th>
                                 <th>Image</th>
                                 <th>Description</th>
-                                <th>Amount</th>
+                                @* <th>Amount</th> *@
                                 <th>Price</th>
                                 <th>Sale Price</th>
                                 <th>Status</th>
@@ -67,8 +67,16 @@
                                     <td>
                                         <img width="60" src="@productViewModel.Thumbnail" alt="">
                                     </td>
-                                    <td>@productViewModel.Description</td>
-                                    <td>@productViewModel.Amount</td>
+                                    <td>
+                                        @if(productViewModel.Description != null)
+                                        {
+                                            @((productViewModel.Description.Length > 20) ? productViewModel.Description.Substring(0, 20) + "..." : productViewModel.Description)
+                                        } else
+                                        {
+                                            @string.Empty;
+                                        }
+                                    </td>
+                                    @* <td>@productViewModel.Amount</td> *@
                                     <td>@productViewModel.Price</td>
                                     <td>@productViewModel.SalePrice</td>
                                     @if (productViewModel.Status == Status.Active)

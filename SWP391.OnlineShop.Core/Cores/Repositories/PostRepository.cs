@@ -52,17 +52,18 @@ public class PostRepository : GenericRepository<Post, int>, IPostRepository
 		return result ?? string.Empty;
 	}
 
-	public Task<List<Post>> GetPostsByCategoryId(int categoryId)
+	public List<Post> GetPostsByCategoryId(int categoryId)
 	{
 		var result = new List<Post>();
-		if (Context.Posts == null) return Task.FromResult(result);
+		if (Context.Posts == null) return result;
 
-		var posts = Context.Posts.Where(x => x.CategoryId == categoryId)
-			.ToList();
+		var posts = Context.Posts.Where(x => x.CategoryId == categoryId && x.Status == Models.Enums.Status.Active)
+			.Include(p => p.PostTags).ThenInclude(p => p.Tag).Include(p => p.Category)
+            .ToList();
 
 		result = posts.ToList();
 
-		return Task.FromResult(result);
+		return result;
 	}
 
 	public Task<List<Post>> GetPostWithPaging(int skip, int take)
@@ -121,16 +122,31 @@ public class PostRepository : GenericRepository<Post, int>, IPostRepository
 		return result;
 	}
 
-	public Task<Post> GetPostById(int id)
+	public Post GetPostById(int id)
 	{
 		var result = new Post();
-		if (Context.Posts == null) return Task.FromResult(result);
+		if (Context.Posts == null) return result;
 
 		var posts = Context.Posts.Include(p => p.PostTags).ThenInclude(p => p.Tag).Include(p => p.Category)
 			.Where(p => p.Id == id);
 
 		result = posts.FirstOrDefault();
 
-		return Task.FromResult(result);
+		return result;
 	}
+
+    public List<Post> GetPostsTagId(int tagId)
+    {
+        var result = new List<Post>();
+        if (Context.Posts == null) return result;
+
+        var posts = Context.Posts
+            .Include(p => p.PostTags).ThenInclude(p => p.Tag).Include(p => p.Category)
+            .Where(x => x.PostTags.Any(x => x.TagId == tagId) && x.Status == Models.Enums.Status.Active)
+            .ToList();
+
+        result = posts.ToList();
+
+        return result;
+    }
 }

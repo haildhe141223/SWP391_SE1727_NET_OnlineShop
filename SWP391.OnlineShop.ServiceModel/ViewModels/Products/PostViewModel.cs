@@ -25,6 +25,7 @@ namespace SWP391.OnlineShop.ServiceModel.ViewModels.Products
         [Required(ErrorMessage = "Author is required")]
         [MaxLength(200, ErrorMessage = "Author is no longer than 200 characters")]
         public string Author { get; set; }
+        public string Tag { get; set; }
         public int? CategoryId { get; set; }
         public Status Status { get; set; }
 		public CategoryViewModel Category { get; set; }
