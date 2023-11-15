@@ -2,7 +2,6 @@
 @using SWP391.OnlineShop.ServiceModel.ViewModels.Tags;
 @model PostViewModel
 @{
-    var existedCategoryRightSide = new List<int>();
     var allTags = ViewData["AllTags"] as List<TagViewModel>;
 }
 <!-- Start Banner Area -->
@@ -11,10 +10,6 @@
         <div class="breadcrumb-banner d-flex flex-wrap align-items-center justify-content-end">
             <div class="col-first">
                 <h1>Blog Page</h1>
-                <nav class="d-flex align-items-center">
-                    <a asp-action="Index" asp-controller="Home">Home<span class="lnr lnr-arrow-right"></span></a>
-                    <a asp-action="Index" asp-controller="Post">Blog</a>
-                </nav>
             </div>
         </div>
     </div>

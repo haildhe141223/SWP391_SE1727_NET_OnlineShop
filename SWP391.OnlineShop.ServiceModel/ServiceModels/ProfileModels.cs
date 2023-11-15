@@ -2,6 +2,7 @@
 using SWP391.OnlineShop.Core.Models.Enums;
 using SWP391.OnlineShop.ServiceModel.Results;
 using SWP391.OnlineShop.ServiceModel.ViewModels.Profiles;
+using SWP391.OnlineShop.ServiceModel.ViewModels.Vouchers;
 
 namespace SWP391.OnlineShop.ServiceModel.ServiceModels;
 
@@ -47,6 +48,29 @@ public class ProfileModels
     {
         public int UserId { get; set; }
         public int AddressId { get; set; }
+    }
+
+    [Route("/Profile/PutUpdateUserAddress", "PUT")]
+    public class PutUpdateUserAddress : IReturn<BaseResultModel>
+    {
+        public int UserId { get; set; }
+        public string AddressId { get; set; }
+        public string FullName { get; set; }
+        public string PhoneNumber { get; set; }
+        public string Address { get; set; }
+        public bool IsDefault { get; set; }
+    }
+
+    [Route("/Profile/DeleteUserAddress", "DELETE")]
+    public class DeleteUserAddress : IReturn<BaseResultModel>
+    {
+        public int AddressId { get; set; }
+    }
+
+    [Route("/Profile/GetUserVouchers", "GET")]
+    public class GetUserVouchers : IReturn<List<UserVoucherViewModel>>
+    {
+        public int UserId { get; set; }
     }
 
     [Route("/Profile/GetUserAddresses", "GET")]

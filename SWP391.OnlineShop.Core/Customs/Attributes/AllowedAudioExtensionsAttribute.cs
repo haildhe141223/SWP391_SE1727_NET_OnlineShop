@@ -9,15 +9,14 @@ namespace SWP391.OnlineShop.Core.Customs.Attributes
 
         public AllowedAudioExtensionsAttribute()
         {
-            _extensions = AudioConstraints.audioExtentionLists.ToArray();
+            _extensions = AudioConstraints.AudioExtensionLists.ToArray();
         }
 
         protected override ValidationResult IsValid(object value, ValidationContext validationContext)
         {
             //Should insert library to apply for IFormFile - Http.Features
             //var file = value as IFormFile;
-            var file = value as string;
-            if (file != null)
+            if (value is string file)
             {
                 var extension = Path.GetExtension(file);
                 if (!_extensions.Contains(extension.ToLower()))
@@ -31,7 +30,7 @@ namespace SWP391.OnlineShop.Core.Customs.Attributes
 
         public string GetErrorMessage()
         {
-            return $"This audio extension is not allowed!";
+            return "This audio extension is not allowed!";
         }
     }
 }

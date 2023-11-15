@@ -16,10 +16,12 @@ public class User : IdentityUser<int>
         UserVouchers = new HashSet<UserVoucher>();
         Vouchers = new HashSet<Voucher>();
         Addresses = new HashSet<Address>();
+        Requests = new HashSet<Request>();
     }
     public ICollection<FeedBack> FeedBacks { get; set; }
     public ICollection<Order> Orders { get; set; }
     public ICollection<UserVoucher> UserVouchers { get; set; }
     public ICollection<Voucher> Vouchers { get; set; }
     public ICollection<Address> Addresses { get; set; }
+    public ICollection<Request> Requests { get; set; }
 }

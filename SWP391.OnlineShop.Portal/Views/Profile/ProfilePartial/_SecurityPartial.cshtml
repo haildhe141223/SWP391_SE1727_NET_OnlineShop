@@ -22,11 +22,11 @@
     </div>
     @if (isSuccess)
     {
-        <div class="alert-success" style="padding: 10px;margin: 15px;text-align: center;">@successMessage</div>
+        <div class="alert-success" style="padding: 10px;margin: 15px;text-align: center;">@Html.Raw(successMessage)</div>
     }
     @if (isError)
     {
-        <div class="wrong-login alert-danger" style="padding: 10px;margin: 15px;text-align: center;">@errorMessage</div>
+        <div class="wrong-login alert-danger" style="padding: 10px;margin: 15px;text-align: center;">@Html.Raw(errorMessage)</div>
     }
     <div class="row-pricing" style="margin: 0">
         <div class="col-card-6 col-c-md-12 col-c-sm-12">
