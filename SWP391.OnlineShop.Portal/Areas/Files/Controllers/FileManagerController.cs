@@ -42,17 +42,16 @@ namespace SWP391.OnlineShop.Portal.Areas.Files.Controllers
         private Connector GetConnector()
         {
             // Thư mục gốc lưu trữ là wwwwroot/files (đảm bảo có tạo thư mục này)
-            var pathRoot = "Uploads";
-            var requestUrl = "uploads";
+            var pathRoot = "uploads";
 
             var driver = new FileSystemDriver();
 
             var absoluteUrl = UriHelper.BuildAbsolute(Request.Scheme, Request.Host);
             var uri = new Uri(absoluteUrl);
 
-            // /Uploads
-            var rootDirectory = Path.Combine(_env.ContentRootPath, pathRoot);
-            var url = $"{uri.Scheme}://{uri.Authority}/{requestUrl}/";
+            // .. ... wwww/files
+            var rootDirectory = Path.Combine(_env.WebRootPath, pathRoot);
+            var url = $"{uri.Scheme}://{uri.Authority}/{pathRoot}/";
             var urlThumb = $"{uri.Scheme}://{uri.Authority}/file-manager-thumb/";
 
 

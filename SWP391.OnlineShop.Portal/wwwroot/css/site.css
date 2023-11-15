@@ -36,6 +36,10 @@ body {
   margin-bottom: 60px;
 }
 
+.validate-asterisk {
+    color: red;
+}
+
 /* Profile */
 .profile-container {
   position: relative;

@@ -1,0 +1,75 @@
+﻿@model SWP391.OnlineShop.ServiceModel.ViewModels.Profiles.RequestMarketingViewModel
+@{
+    var errorMess = TempData["ErrorMess"] as string;
+    var successMess = TempData["SuccessMess"] as string;
+}
+
+<div class="container-fluid">
+    <!-- Page Heading -->
+    <h1 class="h3 mb-2 text-gray-800">Request Containers</h1>
+    <p class="mb-4 d-none">
+        DataTables is a third party plugin that is used to generate the demo table below.
+        For more information about DataTables, please visit the
+        <a target="_blank" href="#">official DataTables documentation</a>.
+    </p>
+
+    @if (!string.IsNullOrWhiteSpace(errorMess))
+    {
+        <div class="alert alert-danger my-2 text-center">
+            @errorMess
+        </div>
+    }
+    @if (!string.IsNullOrWhiteSpace(successMess))
+    {
+        <div class="alert alert-success my-2 text-center">
+            @successMess
+        </div>
+    }
+    <!-- DataTales Example -->
+    <div class="card shadow mb-4">
+        <div class="card-header py-3">
+            <h6 class="m-0 font-weight-bold text-primary">Request Details</h6>
+        </div>
+        <div class="card-body">
+            <div class="mb-3">
+                <label asp-for="Name" class="form-label">Full Name</label>
+                <input type="text" class="form-control" asp-for="Name" disabled="">
+            </div>
+            <div class="mb-3">
+                <label asp-for="Author" class="form-label">Author</label>
+                <input type="text" class="form-control" asp-for="Author" disabled="">
+            </div>
+            <div class="mb-3">
+                <label asp-for="Email" class="form-label">Email</label>
+                <input type="text" class="form-control" asp-for="Email" disabled="">
+            </div>
+            <div class="mb-3">
+                <label asp-for="Phone" class="form-label">Phone</label>
+                <input type="text" class="form-control" asp-for="Phone" disabled="">
+            </div>
+            <div class="mb-3">
+                <label asp-for="SamplePostLink" class="form-label">Sample-Post Link - Admin should based on this link to provide result.</label>
+                <input type="text" class="form-control" asp-for="SamplePostLink" readonly="">
+            </div>
+            <a type="button" class="btn btn-outline-secondary" asp-action="">Back</a>
+            <button class="btn btn-outline-primary" type="button" data-bs-toggle="collapse" data-bs-target="#marketingCollapse" aria-expanded="false" aria-controls="collapseExample">
+                Reply
+            </button>
+            <div style="padding: 20px" class="collapse" id="marketingCollapse">
+                <form asp-action="Reply" method="post" enctype="multipart/form-data">
+                    <div class="mb-3">
+                        <label class="form-label">Reason - Please provide reason why this request can be approve. [Optional] </label>
+                        <input type="number" class="form-control" name="replyId" value="@Model.Id" hidden="">
+                        <textarea type="text" name="replyData" class="form-control" rows="3"></textarea>
+                    </div>
+                    <div class="m-2">
+                        <input type="submit" class="btn btn-outline-success" name="button" value="Approve">
+                        <input type="submit" class="btn btn-outline-secondary" name="button" value="Pending">
+                        <input type="submit" class="btn btn-outline-danger" name="button" value="Reject">
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+

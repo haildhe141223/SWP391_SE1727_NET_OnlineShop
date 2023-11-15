@@ -8,8 +8,8 @@ public class Voucher : BaseEntity<int>
 {
     public Voucher()
     {
-        ProductVouchers = new HashSet<ProductVoucher>();
         UserVouchers = new HashSet<UserVoucher>();
+        OrderVouchers = new HashSet<OrderVoucher>();
     }
 
     public string VoucherName { get; set; }
@@ -21,6 +21,6 @@ public class Voucher : BaseEntity<int>
     public DateTime EndDateTime { get; set; }
     public VoucherType Type { get; set; }
     public decimal Value { get; set; }
-    public ICollection<ProductVoucher> ProductVouchers { get; set; }
+    public ICollection<OrderVoucher> OrderVouchers { get; set; }
     public ICollection<UserVoucher> UserVouchers { get; set; }
 }

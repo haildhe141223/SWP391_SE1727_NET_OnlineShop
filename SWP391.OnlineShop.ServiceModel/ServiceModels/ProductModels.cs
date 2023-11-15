@@ -17,10 +17,21 @@ namespace SWP391.OnlineShop.ServiceModel.ServiceModels
     {
     }
 
+    [Route("/Product/GetAllComingProduct", "GET")]
+    public class GetAllComingProduct : IReturn<List<ProductViewModel>>
+    {
+    }
+
     [Route("/Product/GetProductByCategoryId", "GET")]
     public class GetProductByCategoryId : IReturn<List<ProductViewModel>>
     {
         public int? CategoryId { get; set; }
+    }
+
+    [Route("/Product/GetProductByTagId", "GET")]
+    public class GetProductByTagId : IReturn<List<ProductViewModel>>
+    {
+        public int? TagId { get; set; }
     }
 
     [Route("/Product/GetHotDealProduct", "GET")]
@@ -61,6 +72,8 @@ namespace SWP391.OnlineShop.ServiceModel.ServiceModels
         public decimal Price { get; set; }
         public decimal SalePrice { get; set; }
         public int? CategoryId { get; set; }
+        public string Tag { get; set; }
+        public ProductType ProductType { get; set; }
         public List<string> Sizes { get; set; }
         public List<int> Quantities { get; set; }
     }
@@ -79,9 +92,20 @@ namespace SWP391.OnlineShop.ServiceModel.ServiceModels
         public Status Status { get; set; }
         public List<string> Sizes { get; set; }
         public List<int> Quantities { get; set; }
+        public string Tag { get; set; }
+        public ProductType ProductType { get; set; }
     }
 
-    [Route("/Product/DeleteProduct", "DELETE")]
+
+	[Route("/Product/PutUpdateProductSize", "PUT")]
+	public class PutUpdateProductSize : IReturn<BaseResultModel>
+	{
+		public int Id { get; set; }
+        public int Quantity { get; set; }
+        public int SizeId { get; set; }
+    }
+
+	[Route("/Product/DeleteProduct", "DELETE")]
     public class DeleteProduct : IReturn<BaseResultModel>
     {
         public int ProductId { get; set; }
@@ -99,8 +123,8 @@ namespace SWP391.OnlineShop.ServiceModel.ServiceModels
         public int ProductID { get; set; }
     }
 
-	[Route("/Product/GetProductOfVoucher", "GET")]
-	public class GetProductOfVoucher : IReturn<List<ProductViewModel>>
+	[Route("/Product/GetOrderWithVoucher", "GET")]
+	public class GetOrderWithVoucher : IReturn<List<ProductViewModel>>
 	{
         public int VoucherId { get; set; }
     }

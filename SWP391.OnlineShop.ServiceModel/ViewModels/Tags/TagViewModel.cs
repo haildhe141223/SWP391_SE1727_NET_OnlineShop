@@ -1,4 +1,5 @@
-﻿using SWP391.OnlineShop.Core.Models.Enums;
+﻿using SWP391.OnlineShop.Core.Models.Entities;
+using SWP391.OnlineShop.Core.Models.Enums;
 
 namespace SWP391.OnlineShop.ServiceModel.ViewModels.Tags
 {
@@ -6,7 +7,7 @@ namespace SWP391.OnlineShop.ServiceModel.ViewModels.Tags
 	{
 		public int Id { get; set; }
 		public int PostId { get; set; }
-		public string TagName { get; set; }
+        public string TagName { get; set; }
         public Status Status { get; set; }
-    }
+	}
 }

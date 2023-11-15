@@ -59,7 +59,7 @@ namespace SWP391.OnlineShop.Portal.Areas.Managements.Controllers
             });
             var productSlider = await _client.GetAsync(new GetAllProduct());
 
-            order.CustomerPhoneNumber = user.PhoneNumber;
+            order.CustomerPhone = user.PhoneNumber;
 
             if (string.IsNullOrEmpty(order.CustomerAddress))
             {

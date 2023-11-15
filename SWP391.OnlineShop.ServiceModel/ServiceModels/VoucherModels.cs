@@ -30,7 +30,6 @@ namespace SWP391.OnlineShop.ServiceModel.ServiceModels
 			public DateTime EndDateTime { get; set; }
 			public VoucherType Type { get; set; }
 			public decimal Value { get; set; }
-            public List<int> ProductId { get; set; }
         }
 
 		[Route("/Voucher/PutUpdateVoucher", "PUT")]
@@ -65,10 +64,24 @@ namespace SWP391.OnlineShop.ServiceModel.ServiceModels
 			public int UserId { get; set; }
 		}
 
+		[Route("/Voucher/PostAddVoucherToOrder", "POST")]
+		public class PostAddVoucherToOrder : IReturn<BaseResultModel>
+		{
+			public int VoucherId { get; set; }
+			public int OrderId { get; set; }
+		}
+
 		[Route("/Voucher/PutUpdateVoucherAmount", "PUT")]
 		public class PutUpdateVoucherAmount : IReturn<BaseResultModel>
 		{
 			public int Id { get; set; }
+		}
+
+		[Route("/Voucher/DeleteUserVoucher", "DELETE")]
+		public class DeleteUserVoucher : IReturn<BaseResultModel>
+		{
+			public int VoucherId { get; set; }
+			public int UserId { get; set; }
 		}
 	}
 }

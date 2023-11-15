@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.EntityFrameworkCore;
 using SWP391.OnlineShop.Common.Enums;
 using SWP391.OnlineShop.Core.Cores.UnitOfWork;
 using SWP391.OnlineShop.Core.Models.Entities;
@@ -79,10 +80,11 @@ namespace SWP391.OnlineShop.ServiceInterface.Services
             var result = new PostViewModel();
             try
             {
-                var post = _unitOfWork.Posts.GetById(request.PostId);
+                var post = _unitOfWork.Posts.GetPostById(request.PostId);
                 if (post != null)
                 {
                     result = _mapper.Map<PostViewModel>(post);
+                    result.Tag = string.Join(';', post.PostTags.Select(x => x.Tag.TagName));
                 }
             }
             catch (Exception ex)
@@ -118,6 +120,25 @@ namespace SWP391.OnlineShop.ServiceInterface.Services
             {
                 var post = _unitOfWork.Posts
                     .GetPostsByCategoryId(request.CategoryId);
+                if (post != null)
+                {
+                    result = _mapper.Map<List<PostViewModel>>(post);
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message);
+            }
+            return result;
+        }
+
+        public List<PostViewModel> Get(GetPostByTag request)
+        {
+            var result = new List<PostViewModel>();
+            try
+            {
+                var post = _unitOfWork.Posts
+                    .GetPostsTagId(request.TagId);
                 if (post != null)
                 {
                     result = _mapper.Map<List<PostViewModel>>(post);
@@ -191,6 +212,19 @@ namespace SWP391.OnlineShop.ServiceInterface.Services
         public async Task<BaseResultModel> Post(PostAddPost request)
         {
             var result = new BaseResultModel();
+
+            var tagIds = _unitOfWork.Tags.AddTagByString(request.Tag);
+
+            var postTags = new List<PostTag>();
+            foreach (var item in tagIds)
+            {
+                var postTag = new PostTag()
+                {
+                    TagId = item
+                };
+                postTags.Add(postTag);
+            }
+
             try
             {
                 var post = new Post()
@@ -203,7 +237,8 @@ namespace SWP391.OnlineShop.ServiceInterface.Services
                     Featured = request.Featured,
                     CategoryId = request.CategoryId,
                     Status = Core.Models.Enums.Status.Active,
-                    CreatedDateTime = DateTime.Now
+                    CreatedDateTime = DateTime.Now,
+                    PostTags = postTags
                 };
                 await _unitOfWork.Posts.AddAsync(post);
                 int rows = await _unitOfWork.CompleteAsync();
@@ -226,9 +261,22 @@ namespace SWP391.OnlineShop.ServiceInterface.Services
         public async Task<BaseResultModel> Put(PutUpdatePost request)
         {
             var result = new BaseResultModel();
+
+            var tagIds = _unitOfWork.Tags.AddTagByString(request.Tag);
+
+            var postTags = new List<PostTag>();
+            foreach (var item in tagIds)
+            {
+                var postTag = new PostTag()
+                {
+                    TagId = item
+                };
+                postTags.Add(postTag);
+            }
+
             try
             {
-                var post = _unitOfWork.Posts.GetById(request.Id);
+                var post = _unitOfWork.Posts.GetPostById(request.Id);
 
                 if (post != null)
                 {
@@ -240,6 +288,7 @@ namespace SWP391.OnlineShop.ServiceInterface.Services
                     post.Featured = request.Featured;
                     post.CategoryId = request.CategoryId;
                     post.Status = request.Status;
+                    post.PostTags = postTags;
 
                     _unitOfWork.Posts.Update(post);
                     int rows = await _unitOfWork.CompleteAsync();
@@ -300,7 +349,7 @@ namespace SWP391.OnlineShop.ServiceInterface.Services
 
             try
             {
-                var query = _unitOfWork.Context.Tags;
+                var query = _unitOfWork.Context.Tags.Include(x => x.PostTags).Where(x => x.PostTags.Any(p => p.TagId != 0));
                 var listTag = query.ToList();
                 if (listTag.Any())
                 {

@@ -15,7 +15,7 @@ public class ProductTagConfigs : IEntityTypeConfiguration<ProductTag>
 
         builder.HasOne<Tag>(pt => pt.Tag)
             .WithMany(t => t.ProductTags)
-            .HasForeignKey(pt => pt.ProductId)
+            .HasForeignKey(pt => pt.TagId)
             .OnDelete(DeleteBehavior.Cascade);
     }
 }
