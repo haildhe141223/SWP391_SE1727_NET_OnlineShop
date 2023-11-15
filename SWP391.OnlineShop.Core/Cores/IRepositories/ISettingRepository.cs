@@ -13,5 +13,6 @@ namespace SWP391.OnlineShop.Core.Cores.IRepositories
 
         // User Settings
         List<string> GetRolesByUserId(int userId);
+        string GetDefaultAddressByUserId(int userId);
     }
 }

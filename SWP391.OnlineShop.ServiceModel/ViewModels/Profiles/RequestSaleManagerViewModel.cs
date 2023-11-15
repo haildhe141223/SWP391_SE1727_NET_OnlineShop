@@ -5,13 +5,17 @@ namespace SWP391.OnlineShop.ServiceModel.ViewModels.Profiles
 {
     public class RequestSaleManagerViewModel
     {
+        public int Id { get; set; }
+
         [Required(ErrorMessage = "Request to become Sale Manager - Please enter name field.")]
         public string Name { get; set; }
 
-        [Phone(ErrorMessage = "Request to become Sale Manager - Please enter phone field.")]
+        [Phone(ErrorMessage = "Request to become Sale Manager - Invalid phone input.")]
+        [Required(ErrorMessage = "Request to become Sale Manager - Please enter phone field.")]
         public string PhoneNumber { get; set; }
 
-        [EmailAddress(ErrorMessage = "Request to become Sale Manager - Please enter email field.")]
+        [EmailAddress(ErrorMessage = "Request to become Sale Manager - Invalid email input.")]
+        [Required(ErrorMessage = "Request to become Sale Manager - Please enter email field.")]
         public string Email { get; set; }
 
         [Required(ErrorMessage = "Request to become Sale Manager - Please enter address field.")]

@@ -40,5 +40,25 @@ namespace SWP391.OnlineShop.Portal.Areas.Managements.Controllers
             var redirect = $"{hangFireService}?email={email}&isPersistent=true";
             return Redirect(redirect);
         }
+
+        public IActionResult ViewTab(string type)
+        {
+            if (type == "File")
+            {
+                return Json(new { url = Url.Action("Index", "FileManager", new { Area = "Files" }) });
+            }
+
+            var hangFireService = _config["HangFireService"];
+
+            if (string.IsNullOrEmpty(hangFireService))
+            {
+                return RedirectToAction("ErrorNotFound", "Account");
+            }
+
+            var email = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Email)?.Value;
+            var redirect = $"{hangFireService}?email={email}&isPersistent=true";
+
+            return Json(new { url = redirect });
+        }
     }
 }
