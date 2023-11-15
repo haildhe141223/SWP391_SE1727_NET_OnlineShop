@@ -201,6 +201,34 @@ namespace SWP391.OnlineShop.ServiceInterface.Services
             return result;
         }
 
+        public async Task<BaseResultModel> Post(PostAddVoucherToOrder request)
+        {
+
+            var result = new BaseResultModel();
+            try
+            {
+                var orderVoucher = new OrderVoucher()
+                {
+                    OrderId = request.OrderId,
+                    VoucherId = request.VoucherId
+                };
+                _unitOfWork.Context.OrderVouchers.Add(orderVoucher);
+                int rows = await _unitOfWork.CompleteAsync();
+                if (rows > 0)
+                {
+                    result.StatusCode = Common.Enums.StatusCode.Success;
+                    return result;
+                }
+                result.StatusCode = Common.Enums.StatusCode.InternalServerError;
+                result.ErrorMessage = "Error";
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"PostAddVoucherToUser error: {ex}");
+            }
+            return result;
+        }
+
         public async Task<BaseResultModel> Put(PutUpdateVoucher request)
         {
             var result = new BaseResultModel();

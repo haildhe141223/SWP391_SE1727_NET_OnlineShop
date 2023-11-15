@@ -366,5 +366,33 @@ namespace SWP391.OnlineShop.ServiceInterface.Services
             }
             return result;
         }
-    }
+
+		public async Task<BaseResultModel> Put(PutUpdateProductSize request)
+		{
+			var result = new BaseResultModel();
+			try
+			{
+                var query = from p in _unitOfWork.Context.Products
+                            join ps in _unitOfWork.Context.ProductSizes
+                            on p.Id equals ps.ProductId
+                            where ps.ProductId == request.Id
+                            && ps.SizeId == request.SizeId
+                            select ps;
+                var productSize = query.First();
+                productSize.Quantity = request.Quantity;
+                int row = await _unitOfWork.CompleteAsync();
+                if(row > 0)
+                {
+                    result.StatusCode = Common.Enums.StatusCode.Success;
+                    return result;
+                }
+                result.StatusCode = Common.Enums.StatusCode.InternalServerError;
+			}
+			catch (Exception ex)
+			{
+				_logger.LogError($"PutUpdateProductSize error {ex.Message}");
+			}
+			return result;
+		}
+	}
 }
