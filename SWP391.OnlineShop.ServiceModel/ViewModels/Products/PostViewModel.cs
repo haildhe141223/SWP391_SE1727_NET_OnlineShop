@@ -13,7 +13,7 @@ namespace SWP391.OnlineShop.ServiceModel.ViewModels.Products
         [Required(ErrorMessage = "Post Title is required")]
         [MaxLength(300, ErrorMessage = "Post Title is no longer than 300 characters")]
         public string Title { get; set; }
-        
+
         public string Featured { get; set; }
         public string Brief { get; set; }
 
@@ -26,11 +26,13 @@ namespace SWP391.OnlineShop.ServiceModel.ViewModels.Products
         [MaxLength(200, ErrorMessage = "Author is no longer than 200 characters")]
         public string Author { get; set; }
         public string Tag { get; set; }
+
+        [Required(ErrorMessage = "Category is required")]
         public int? CategoryId { get; set; }
         public Status Status { get; set; }
-		public CategoryViewModel Category { get; set; }
-		public List<TagViewModel> Tags { get; set; }
-		public DateTime CreatedDateTime { get; set; }
-		public DateTime ModifiedDateTime { get; set; }
-	}
+        public CategoryViewModel Category { get; set; }
+        public List<TagViewModel> Tags { get; set; }
+        public DateTime CreatedDateTime { get; set; }
+        public DateTime ModifiedDateTime { get; set; }
+    }
 }

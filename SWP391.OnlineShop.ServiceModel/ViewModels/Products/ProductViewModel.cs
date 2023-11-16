@@ -10,6 +10,8 @@ namespace SWP391.OnlineShop.ServiceModel.ViewModels.Products
     {
         public int Id { get; set; }
         public Status Status { get; set; }
+
+        [Required(ErrorMessage = "Category is required")]
         public int? CategoryId { get; set; }
 
         [Required(ErrorMessage = "Product Name is required")]
@@ -29,6 +31,8 @@ namespace SWP391.OnlineShop.ServiceModel.ViewModels.Products
         [Range(0, double.MaxValue, ErrorMessage = "Sale Price must greater than 0")]
         public decimal SalePrice { get; set; }
         public ProductType ProductType { get; set; }
+
+
         public CategoryViewModel Category { get; set; }
         public string Tag { get; set; }
         public List<FeedbackViewModels> FeedBacks { get; set; }

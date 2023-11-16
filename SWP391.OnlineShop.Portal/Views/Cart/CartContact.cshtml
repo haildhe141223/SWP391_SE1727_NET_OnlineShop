@@ -737,7 +737,7 @@ else
 				type: 'POST',
 				data: data,
 				success: function (response) {
-					$.toaster({ priority: 'success', title: 'Created', message: "Add To Cart Complete Successfully" });
+					//$.toaster({ priority: 'success', title: 'Created', message: "Add To Cart Complete Successfully" });
 					setTimeout(function () {
 						window.location.href = "/cart/checkout/" + @Model.Id
 					}, 1000);

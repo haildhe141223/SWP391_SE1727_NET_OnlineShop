@@ -5,35 +5,9 @@
         <div class="row fullscreen align-items-center justify-content-start">
             <div class="col-lg-12">
                 <div class="active-banner-slider owl-carousel">
-                    @* @if (Model.Sliders.Any())
+                    @if (Model.Sliders.Any())
                     {
-                    @foreach (var item in Model.Sliders.Take(3))
-                    {
-                    <!-- single-slide -->
-                    <div class="row single-slide align-itesms-center d-flex">
-                    <div class="col-lg-5 col-md-6">
-                    <div class="banner-content">
-                    <h1>New <br>Collection!</h1>
-                    <p>
-                    @item.Title
-                    </p>
-                    <div class="add-bag d-flex align-items-center">
-                    <a class="add-btn" href=""><span class="lnr lnr-cross"></span></a>
-                    <span class="add-text text-uppercase">Add to Bag</span>
-                    </div>
-                    </div>
-                    </div>
-                    <div class="col-lg-7">
-                    <div class="banner-img">
-                    <img class="img-fluid" src="@item.Image" alt="">
-                    </div>
-                    </div>
-                    </div>
-                    }
-                    } *@
-                    @if (Model.LatestProducts.Any())
-                    {
-                        @foreach (var item in Model.LatestProducts.Take(3))
+                        @foreach (var item in Model.Sliders.Take(3))
                         {
                             <!-- single-slide -->
                             <div class="row single-slide align-itesms-center d-flex">
@@ -41,9 +15,9 @@
                                     <div class="banner-content">
                                         <h1>New <br>Collection!</h1>
                                         <p>
-                                            @item.ProductName
+                                            @item.Title
                                         </p>
-                                        <div class="add-bag d-flex align-items-center">
+                                        <div class="add-bag d-flex align-items-center d-none">
                                             <a class="add-btn" href=""><span class="lnr lnr-cross"></span></a>
                                             <span class="add-text text-uppercase">Add to Bag</span>
                                         </div>
@@ -51,31 +25,11 @@
                                 </div>
                                 <div class="col-lg-7">
                                     <div class="banner-img">
-                                        <img class="img-fluid" src="@item.Thumbnail" alt="">
+                                        <img width="650" style="object-fit: cover" class="img-fluid" src="@item.Image" alt="">
                                     </div>
                                 </div>
                             </div>
                         }
-                    }
-                    else
-                    {
-                        <!-- single-slide -->
-                        <div class="row single-slide align-items-center d-flex">
-                            <div class="col-lg-5 col-md-6">
-                                <div class="banner-content">
-                                    <h1>New <br>Collection!</h1>
-                                    <p>
-                                        Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et
-                                        dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation.
-                                    </p>
-                                </div>
-                            </div>
-                            <div class="col-lg-7">
-                                <div class="banner-img">
-                                    <img class="img-fluid" src="~/template/img/banner/banner-img.png" alt="">
-                                </div>
-                            </div>
-                        </div>
                     }
                 </div>
             </div>
@@ -168,7 +122,7 @@
                                     <div class="prd-bottom">
                                         <a asp-action="Details" asp-controller="Product" asp-route-id="@product.Id" class="social-info">
                                             <span class="ti-bag"></span>
-                                                <p class="hover-text">add to bag</p>
+                                            <p class="hover-text">add to bag</p>
                                         </a>
                                         <a asp-action="Details" asp-controller="Product" asp-route-id="@product.Id" class="social-info">
                                             <span class="lnr lnr-move"></span>
@@ -253,8 +207,9 @@
                                         @item.ProductName
                                     </h4>
                                     <div class="add-bag d-flex align-items-center justify-content-center">
-                                        <a class="add-btn" asp-action="Details" asp-controller="Product" asp-route-id="@item.Id"><span class="ti-bag"></span>
-                                        <span class="add-text text-uppercase">Add to Bag</span>
+                                        <a class="add-btn" asp-action="Details" asp-controller="Product" asp-route-id="@item.Id">
+                                            <span class="ti-bag"></span>
+                                            <span class="add-text text-uppercase">Add to Bag</span>
                                         </a>
                                     </div>
                                 </div>

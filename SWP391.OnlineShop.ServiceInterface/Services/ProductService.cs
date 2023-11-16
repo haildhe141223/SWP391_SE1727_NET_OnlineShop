@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Identity;
 using SWP391.OnlineShop.Core.Cores.UnitOfWork;
 using SWP391.OnlineShop.Core.Models.Entities;
+using SWP391.OnlineShop.Core.Models.Enums;
 using SWP391.OnlineShop.Core.Models.Identities;
 using SWP391.OnlineShop.ServiceInterface.BaseServices;
 using SWP391.OnlineShop.ServiceInterface.Interfaces;
@@ -10,7 +11,6 @@ using SWP391.OnlineShop.ServiceModel.Results;
 using SWP391.OnlineShop.ServiceModel.ServiceModels;
 using SWP391.OnlineShop.ServiceModel.ViewModels.Carts;
 using SWP391.OnlineShop.ServiceModel.ViewModels.Products;
-using System.Diagnostics;
 
 namespace SWP391.OnlineShop.ServiceInterface.Services
 {
@@ -78,7 +78,7 @@ namespace SWP391.OnlineShop.ServiceInterface.Services
             try
             {
                 var product = _unitOfWork.Products.GetAll()
-                    .Where(x => x.Status == Core.Models.Enums.Status.Active)
+                    .Where(x => x.Status == Core.Models.Enums.Status.Active && x.ProductType == ProductType.InStock)
                     .OrderByDescending(x => x.CreatedDateTime).ToList();
                 result = _mapper.Map<List<ProductViewModel>>(product);
                 return result;
@@ -266,16 +266,24 @@ namespace SWP391.OnlineShop.ServiceInterface.Services
         {
             var result = new BaseResultModel();
 
-            var tagIds = _unitOfWork.Tags.AddTagByString(request.Tag);
-
             var productTags = new List<ProductTag>();
-            foreach (var item in tagIds)
+
+            if (!string.IsNullOrEmpty(request.Tag))
             {
-                var productTag = new ProductTag()
+                var tagIds = _unitOfWork.Tags.AddTagByString(request.Tag);
+
+                var re = tagIds as int[] ?? tagIds.ToArray();
+                if (tagIds != null && re.Any())
                 {
-                    TagId = item
-                };
-                productTags.Add(productTag);
+                    foreach (var item in re)
+                    {
+                        var productTag = new ProductTag()
+                        {
+                            TagId = item
+                        };
+                        productTags.Add(productTag);
+                    }
+                }
             }
 
             try
@@ -354,17 +362,24 @@ namespace SWP391.OnlineShop.ServiceInterface.Services
         public async Task<BaseResultModel> Put(PutUpdateProduct request)
         {
             var result = new BaseResultModel();
-
-            var tagIds = _unitOfWork.Tags.AddTagByString(request.Tag);
-
             var productTags = new List<ProductTag>();
-            foreach (var item in tagIds)
+
+            if (!string.IsNullOrEmpty(request.Tag))
             {
-                var productTag = new ProductTag()
+                var tagIds = _unitOfWork.Tags.AddTagByString(request.Tag);
+
+                var re = tagIds as int[] ?? tagIds.ToArray();
+                if (tagIds != null && re.Any())
                 {
-                    TagId = item
-                };
-                productTags.Add(productTag);
+                    foreach (var item in re)
+                    {
+                        var productTag = new ProductTag()
+                        {
+                            TagId = item
+                        };
+                        productTags.Add(productTag);
+                    }
+                }
             }
 
             try
@@ -436,11 +451,11 @@ namespace SWP391.OnlineShop.ServiceInterface.Services
             return result;
         }
 
-		public async Task<BaseResultModel> Put(PutUpdateProductSize request)
-		{
-			var result = new BaseResultModel();
-			try
-			{
+        public async Task<BaseResultModel> Put(PutUpdateProductSize request)
+        {
+            var result = new BaseResultModel();
+            try
+            {
                 var query = from p in _unitOfWork.Context.Products
                             join ps in _unitOfWork.Context.ProductSizes
                             on p.Id equals ps.ProductId
@@ -450,18 +465,18 @@ namespace SWP391.OnlineShop.ServiceInterface.Services
                 var productSize = query.First();
                 productSize.Quantity = request.Quantity;
                 int row = await _unitOfWork.CompleteAsync();
-                if(row > 0)
+                if (row > 0)
                 {
                     result.StatusCode = Common.Enums.StatusCode.Success;
                     return result;
                 }
                 result.StatusCode = Common.Enums.StatusCode.InternalServerError;
-			}
-			catch (Exception ex)
-			{
-				_logger.LogError($"PutUpdateProductSize error {ex.Message}");
-			}
-			return result;
-		}
-	}
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"PutUpdateProductSize error {ex.Message}");
+            }
+            return result;
+        }
+    }
 }

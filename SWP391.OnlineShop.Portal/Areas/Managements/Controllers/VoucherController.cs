@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using ServiceStack;
+using SWP391.OnlineShop.Core.Models.Enums;
 using SWP391.OnlineShop.Core.Models.Identities;
 using SWP391.OnlineShop.ServiceInterface.Loggers;
 using SWP391.OnlineShop.ServiceModel.ServiceModels;
@@ -80,6 +81,14 @@ namespace SWP391.OnlineShop.Portal.Areas.Managements.Controllers
                 TempData["ErrorMess"] = "End Time must be greater than today";
                 return View(request);
             }
+            if (request.Type == VoucherType.Percent)
+            {
+                if (request.Value > 100)
+                {
+                    TempData["ErrorMess"] = "Can't not create a voucher with more then 100% discount";
+                    return View(request);
+                }
+            }
             var api = await _client.PutAsync(new PutUpdateVoucher()
             {
                 Id = request.Id,
@@ -147,6 +156,15 @@ namespace SWP391.OnlineShop.Portal.Areas.Managements.Controllers
             {
                 TempData["ErrorMess"] = "End Time must be greater than today";
                 return View(request);
+            }
+
+            if (request.Type == VoucherType.Percent)
+            {
+                if (request.Value > 100)
+                {
+                    TempData["ErrorMess"] = "Can't not create a voucher with more then 100% discount";
+                    return View(request);
+                }
             }
             var api = await _client.PostAsync(new PostAddVoucher()
             {

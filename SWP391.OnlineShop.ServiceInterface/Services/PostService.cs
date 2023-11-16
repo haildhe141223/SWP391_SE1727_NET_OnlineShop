@@ -212,17 +212,20 @@ namespace SWP391.OnlineShop.ServiceInterface.Services
         public async Task<BaseResultModel> Post(PostAddPost request)
         {
             var result = new BaseResultModel();
-
-            var tagIds = _unitOfWork.Tags.AddTagByString(request.Tag);
-
             var postTags = new List<PostTag>();
-            foreach (var item in tagIds)
+
+            if (!string.IsNullOrEmpty(request.Tag))
             {
-                var postTag = new PostTag()
+                var tagIds = _unitOfWork.Tags.AddTagByString(request.Tag);
+
+                foreach (var item in tagIds)
                 {
-                    TagId = item
-                };
-                postTags.Add(postTag);
+                    var postTag = new PostTag()
+                    {
+                        TagId = item
+                    };
+                    postTags.Add(postTag);
+                }
             }
 
             try
@@ -261,17 +264,20 @@ namespace SWP391.OnlineShop.ServiceInterface.Services
         public async Task<BaseResultModel> Put(PutUpdatePost request)
         {
             var result = new BaseResultModel();
-
-            var tagIds = _unitOfWork.Tags.AddTagByString(request.Tag);
-
             var postTags = new List<PostTag>();
-            foreach (var item in tagIds)
+
+            if (!string.IsNullOrEmpty(request.Tag))
             {
-                var postTag = new PostTag()
+                var tagIds = _unitOfWork.Tags.AddTagByString(request.Tag);
+
+                foreach (var item in tagIds)
                 {
-                    TagId = item
-                };
-                postTags.Add(postTag);
+                    var postTag = new PostTag()
+                    {
+                        TagId = item
+                    };
+                    postTags.Add(postTag);
+                }
             }
 
             try
